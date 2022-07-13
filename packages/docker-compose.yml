@@ -1,0 +1,40 @@
+version: "3.2"
+
+services:
+  api_bo:
+    image: denoland/deno:debian-1.23.4
+    volumes:
+      - type: bind
+        source: ./api_bo/src
+        target: /usr/src
+    ports:
+      - 6005:3000
+    command: bash -c "cd /usr/src && deno run -A app.ts"
+    depends_on:
+      - mongo_db
+    environment:
+      - MONGO_URL=mongodb://mongo_db:27017/api_bo
+
+  api_m:
+    image: denoland/deno:debian-1.23.4
+    volumes:
+      - type: bind
+        source: ./api_m/src
+        target: /usr/src
+    ports:
+      - 6010:3000
+    command: bash -c "cd /usr/src && deno run -A app.ts"
+    depends_on:
+      - mongo_db
+    environment:
+      - MONGO_URL=mongodb://mongo_db:27017/api_m
+
+  mongo_db:
+    image: mongo:5
+    environment:
+      - MONGO_DATA_DIR=/data/db
+    volumes:
+      - ./data:/data/db
+    command: mongod --logpath=/dev/null
+    ports:
+      - 27017:27017

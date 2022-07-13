@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+packages/**/*.tgz
+.vscode/
+.env
+/data
+yarn-error.log
+bitbloq3-contacts.json
+google-application-credentials.json
+.DS_Store
