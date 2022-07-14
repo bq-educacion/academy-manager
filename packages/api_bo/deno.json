@@ -1,19 +1,21 @@
 {
-    "compilerOptions": {
-      "allowJs": false,
-      "strict": true
+  "compilerOptions": {
+    "allowJs": false,
+    "strict": true
+  },
+  "lint": {
+    "files": {
+      "include": ["src/"]
     },
-    "lint": {
-      "files": {
-        "include": ["src/"]
-      },
-      "rules": {
-        "tags": ["recommended"],
-        "include": ["ban-untagged-todo"],
-        "exclude": ["no-unused-vars", "no-debugger", "no-console", "impicit-any"]
-      }
-    },
-    "tasks": {
-      "start": "deno run -A --watch=static/,routes/ src/app.ts"
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["ban-untagged-todo"],
+      "exclude": ["no-unused-vars", "no-debugger", "no-console", "impicit-any"]
     }
-  }
+  },
+  "tasks": {
+    "start": "deno run -A --watch=src/, src/app.ts",
+    "inspect": "deno run --inspect-brk --allow-net src/app.ts"
+  },
+  "importMap": "./import_map.json"
+}

@@ -1,3 +1,5 @@
 export const Query = {
-    hello: () => `Hello World!`
-}
+  hello: (_: unknown, __: unknown, ctx: any) => {
+    return "hello world";
+  },
+};
