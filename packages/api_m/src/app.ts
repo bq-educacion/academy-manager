@@ -12,31 +12,35 @@ const resolvers = {
   Mutation,
 };
 
-//const MONGO_URL = "mongodb://localhost:27017";
-//const DB_NAME = "test";
+const MONGO_URL = "mongodb://mongo_db:27017/academy_db";
+const DB_NAME = "academy_db";
 
-// const client = new MongoClient();
-// await client.connect(MONGO_URL);
-// const db = client.database(DB_NAME);
+const client = new MongoClient();
+try {
+  await client.connect(MONGO_URL);
+  console.log("Mongo DB connected");
 
-const handler = async (req: Request) => {
-  const { pathname } = new URL(req.url);
-  //const context = { db };
+  const handler = async (req: Request) => {
+    const { pathname } = new URL(req.url);
 
-  return pathname === "/graphql"
-    ? await GraphQLHTTP<any>({
-        schema: makeExecutableSchema({ resolvers, typeDefs }),
-        graphiql: true,
-        context: (req:Request) => {
-          return { request: req };
-        },
-      })(req)
-    : new Response("Not Found", { status: 404 });
-};
-const port = 4000;
-const server = new Server({ handler });
-const listener = Deno.listen({ port });
+    return pathname === "/graphql"
+      ? await GraphQLHTTP<any>({
+          schema: makeExecutableSchema({ resolvers, typeDefs }),
+          graphiql: true,
+          context: () => {
+            return { db: client.database(DB_NAME) };
+          },
+        })(req)
+      : new Response("Not Found", { status: 404 });
+  };
 
-console.log("Listening on", listener.addr);
+  const port = 4000;
+  const server = new Server({ handler });
+  const listener = Deno.listen({ port });
 
-await server.serve(listener);
+  console.log("Listening on", listener.addr);
+
+  await server.serve(listener);
+} catch (e) {
+  console.error(e);
+}

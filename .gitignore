@@ -6,6 +6,5 @@ packages/**/*.tgz
 .env
 /data
 yarn-error.log
-bitbloq3-contacts.json
 google-application-credentials.json
 .DS_Store

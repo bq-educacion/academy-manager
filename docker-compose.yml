@@ -13,7 +13,7 @@ services:
     depends_on:
       - mongo_db
     environment:
-      - MONGO_URL=mongodb://mongo_db:27017/api_bo
+      - MONGO_URL=mongodb://mongo_db:27017/academy_db
 
   api_m:
     image: denoland/deno:debian-1.23.4
@@ -27,7 +27,7 @@ services:
     depends_on:
       - mongo_db
     environment:
-      - MONGO_URL=mongodb://mongo_db:27017/api_m
+      - MONGO_URL=mongodb://mongo_db:27017/academy_db
 
   mongo_db:
     image: mongo:5

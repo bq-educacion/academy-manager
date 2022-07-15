@@ -3,5 +3,3 @@ export const Query = {
     return "hello world";
   },
 };
-
-
