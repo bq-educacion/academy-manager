@@ -22,7 +22,7 @@ const resolvers = {
 const handler = async (req: Request) => {
   const { pathname } = new URL(req.url);
   //const context = { db };
-  
+
   return pathname === "/graphql"
     ? await GraphQLHTTP<any>({
         schema: makeExecutableSchema({ resolvers, typeDefs }),

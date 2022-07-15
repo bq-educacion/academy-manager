@@ -5,7 +5,7 @@ services:
     image: denoland/deno:debian-1.23.4
     volumes:
       - type: bind
-        source: ./api_bo
+        source: ./packages/api_bo
         target: /usr/src
     ports:
       - 6005:3000
@@ -19,11 +19,11 @@ services:
     image: denoland/deno:debian-1.23.4
     volumes:
       - type: bind
-        source: ./api_m/src
+        source: ./packages/api_m
         target: /usr/src
     ports:
       - 6010:4000
-    command: bash -c "cd /usr/src && deno run -A app.ts"
+    command: bash -c "cd /usr/src && deno task start"
     depends_on:
       - mongo_db
     environment:
