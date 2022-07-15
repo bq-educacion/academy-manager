@@ -1,31 +1,46 @@
-import { Server } from 'https://deno.land/std@0.107.0/http/server.ts'
-import { GraphQLHTTP } from 'https://deno.land/x/gql@1.1.1/mod.ts'
-import { makeExecutableSchema } from 'https://deno.land/x/graphql_tools@0.0.2/mod.ts'
+import { Server } from "std/http/server.ts";
+import { makeExecutableSchema } from "graphql-tools";
+import { gql } from "graphql-tag";
+import { GraphQLHTTP } from "gql";
+import { Bson, MongoClient } from "mongo";
 import { Query } from "./resolvers/query.ts";
-import { Mutation} from "./resolvers/mutation.ts"
+import { Mutation } from "./resolvers/mutation.ts";
 import { typeDefs } from "./schema.ts";
 
 const resolvers = {
   Query,
-  Mutation
-}
+  Mutation,
+};
 
-const s = new Server({
-    handler: async (req) => {
-      const { pathname } = new URL(req.url)
-      return pathname === '/graphql'
-        ? await GraphQLHTTP<Request>({
-            schema: makeExecutableSchema({resolvers,typeDefs}),
-            graphiql: true,
-            // context: (request) => {
-            //   return{
-            //     request
-            //   }
-            // }
+const MONGO_URL = "mongodb://mongo_db:27017/academy_db";
+const DB_NAME = "academy_db";
+
+const client = new MongoClient();
+try {
+  await client.connect(MONGO_URL);
+  console.log("Mongo DB connected");
+
+  const handler = async (req: Request) => {
+    const { pathname } = new URL(req.url);
+
+    return pathname === "/graphql"
+      ? await GraphQLHTTP<any>({
+          schema: makeExecutableSchema({ resolvers, typeDefs }),
+          graphiql: true,
+          context: () => {
+            return { db: client.database(DB_NAME) };
+          },
         })(req)
-        : new Response('Not Found', { status: 404 })
-    },
-    addr: ':3000'
-  })
-  
-  s.listenAndServe()
+      : new Response("Not Found", { status: 404 });
+  };
+
+  const port = 3000;
+  const server = new Server({ handler });
+  const listener = Deno.listen({ port });
+
+  console.log("Listening on", listener.addr);
+
+  await server.serve(listener);
+} catch (e) {
+  console.error(e);
+}
