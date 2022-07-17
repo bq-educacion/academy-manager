@@ -9,7 +9,7 @@
     },
     "rules": {
       "tags": ["recommended"],
-      "include": ["ban-untagged-todo"],
+      "include": ["ban-untagged-todo", "no-explicit-any", "no-implicit-any"],
       "exclude": ["no-debugger", "no-console"]
     }
   },
@@ -17,5 +17,5 @@
     "start": "deno run -A --watch src/app.ts",
     "inspect": "deno run -A --inspect-brk src/app.ts"
   },
-  "importMap": "./import_map.json"
+  "importMap": "../../import_map.json"
 }

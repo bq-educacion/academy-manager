@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+deno lint
+deno fmt packages/api_bo
+deno fmt packages/api_m

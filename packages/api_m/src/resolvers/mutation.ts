@@ -1,5 +1,5 @@
 export const Mutation = {
-  addSentence: (parent: any, { sentence }: { sentence: string }) => {
-    return sentence;
+  addSentence: (_: unknown, args: { sentence: string }): string => {
+    return args.sentence;
   },
 };
