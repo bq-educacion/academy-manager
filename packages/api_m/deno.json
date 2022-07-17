@@ -9,7 +9,12 @@
     },
     "rules": {
       "tags": ["recommended"],
-      "include": ["ban-untagged-todo", "no-explicit-any", "no-implicit-any"],
+      "include": [
+        "ban-untagged-todo",
+        "no-explicit-any",
+        "no-implicit-any",
+        "explicit-function-return-type"
+      ],
       "exclude": ["no-debugger", "no-console"]
     }
   },
