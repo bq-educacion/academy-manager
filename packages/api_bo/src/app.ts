@@ -24,7 +24,7 @@ try {
     const { pathname } = new URL(req.url);
 
     return pathname === "/graphql"
-      ? await GraphQLHTTP<any>({
+      ? await GraphQLHTTP<Request>({
           schema: makeExecutableSchema({ resolvers, typeDefs }),
           graphiql: true,
           context: () => {

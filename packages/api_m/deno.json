@@ -1,5 +1,4 @@
 {
-  "$schema": "https://deno.land/x/denon@2.5.0/schema.json",
   "compilerOptions": {
     "allowJs": false,
     "strict": true
@@ -11,12 +10,12 @@
     "rules": {
       "tags": ["recommended"],
       "include": ["ban-untagged-todo"],
-      "exclude": ["no-unused-vars", "no-debugger", "no-console", "impicit-any"]
+      "exclude": ["no-debugger", "no-console"]
     }
   },
   "tasks": {
-    "start": "deno run -A --watch=src/ src/app.ts",
-    "inspect": "deno run --inspect-brk --allow-net src/app.ts"
+    "start": "deno run -A --watch src/app.ts",
+    "inspect": "deno run -A --inspect-brk src/app.ts"
   },
   "importMap": "./import_map.json"
 }
