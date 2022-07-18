@@ -29,6 +29,36 @@ services:
     environment:
       - MONGO_URL=mongodb://mongo_db:27017/academy_db
 
+  front_bo:
+    image: node:16
+    environment:
+      REACT_APP_API_URL: http://localhost:6005
+      PORT: 3000
+    volumes:
+      - type: bind
+        source: ./packages/front_bo
+        target: /usr/src
+    depends_on:
+      - api_bo
+    ports:
+      - 3000:3000
+    command: bash -c "cd /usr/src && npm install && npm run dev"
+
+  front_m:
+    image: node:16
+    environment:
+      REACT_APP_API_URL: http://localhost:6010
+      PORT: 3000
+    volumes:
+      - type: bind
+        source: ./packages/front_m
+        target: /usr/src
+    depends_on:
+      - api_m
+    ports:
+      - 8000:3000
+    command: bash -c "cd /usr/src && npm install && npm run dev"
+
   mongo_db:
     image: mongo:5
     environment:
