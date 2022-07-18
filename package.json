@@ -5,7 +5,8 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/front_bo",
+    "packages/front_m"
   ],
   "devDependencies": {
     "@graphql-codegen/cli": "^2.8.1",
