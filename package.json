@@ -1,0 +1,26 @@
+{
+  "name": "academy-manager",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.8.1",
+    "@graphql-codegen/typescript": "^2.7.1",
+    "@graphql-codegen/typescript-operations": "^2.5.1",
+    "@graphql-codegen/typescript-resolvers": "^2.7.1",
+    "graphql": "^16.5.0",
+    "graphql-codegen": "^0.4.0",
+    "husky": "^8.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "api_bo_types": "graphql-codegen generate --config codegen_api_bo.yml",
+    "api_m_types": "graphql-codegen generate --config codegen_api_m.yml",
+    "api-types": "yarn run api_bo_types && yarn run api_m_types"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bq-education/academy-manager.git"
+  }
+}

@@ -5,29 +5,33 @@ services:
     image: denoland/deno:debian-1.23.4
     volumes:
       - type: bind
-        source: ./packages/api_bo
+        source: .
         target: /usr/src
     ports:
       - 6005:3000
-    command: bash -c "cd /usr/src && deno task start"
+    command: bash -c "cd /usr/src/packages/api_bo && deno task start"
     depends_on:
       - mongo_db
     environment:
       - MONGO_URL=mongodb://mongo_db:27017/academy_db
+      - DB_NAME=academy_db
+      - PORT=3000
 
   api_m:
     image: denoland/deno:debian-1.23.4
     volumes:
       - type: bind
-        source: ./packages/api_m
+        source: .
         target: /usr/src
     ports:
-      - 6010:4000
-    command: bash -c "cd /usr/src && deno task start"
+      - 6010:3000
+    command: bash -c "cd /usr/src/packages/api_m && deno task start"
     depends_on:
       - mongo_db
     environment:
       - MONGO_URL=mongodb://mongo_db:27017/academy_db
+      - DB_NAME=academy_db
+      - PORT=3000
 
   front_bo:
     image: node:16
