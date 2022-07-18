@@ -40,13 +40,14 @@ services:
       PORT: 3000
     volumes:
       - type: bind
-        source: ./packages/front_bo
-        target: /usr/src
+        source: .
+        target: /usr/src/app
+    working_dir: /usr/src/app
     depends_on:
       - api_bo
     ports:
       - 3000:3000
-    command: bash -c "cd /usr/src && npm run dev"
+    command: bash -c "cd packages/front_bo && yarn dev"
 
   front_m:
     image: node:16
@@ -55,13 +56,14 @@ services:
       PORT: 3000
     volumes:
       - type: bind
-        source: ./packages/front_m
-        target: /usr/src
+        source: .
+        target: /usr/src/app
+    working_dir: /usr/src/app
     depends_on:
       - api_m
     ports:
       - 8000:3000
-    command: bash -c "cd /usr/src && npm run dev"
+    command: bash -c "cd packages/front_m && yarn dev"
 
   mongo_db:
     image: mongo:5
