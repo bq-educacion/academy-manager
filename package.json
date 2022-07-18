@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/front_bo",
+    "packages/front_m"
+  ],
   "devDependencies": {
     "@graphql-codegen/cli": "^2.8.1",
     "@graphql-codegen/typescript": "^2.7.1",
