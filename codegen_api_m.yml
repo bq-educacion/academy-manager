@@ -1,0 +1,17 @@
+overwrite: true
+schema: "http://localhost:6010/graphql"
+documents: null
+generates:
+  packages/api_m/src/types.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-resolvers
+    config:
+      declarationKind: "type"
+      useIndexSignature: true
+      scalars:
+        Date: Date
+        EmailAddress: string
+        Number: number
+        Upload: File
