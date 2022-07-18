@@ -5,7 +5,8 @@
   },
   "lint": {
     "files": {
-      "include": ["src/"]
+      "include": ["src/"],
+      "exclude": ["src/types.ts"]
     },
     "rules": {
       "tags": ["recommended"],

@@ -1,5 +1,7 @@
+import { MutationAddSentenceArgs } from "../types.ts";
+
 export const Mutation = {
-  addSentence: (_: unknown, { sentence }: { sentence: string }): string => {
-    return sentence;
+  addSentence: (_: unknown, args: MutationAddSentenceArgs): string => {
+    return args.sentence;
   },
 };
