@@ -1,0 +1,16 @@
+{
+  "name": "academy-manager",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "husky": "^8.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bq-education/academy-manager.git"
+  }
+}
