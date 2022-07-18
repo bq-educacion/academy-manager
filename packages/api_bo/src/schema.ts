@@ -6,6 +6,6 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addSentence(sentence: String): String
+    addSentence(sentence: String!): String!
   }
 `;
