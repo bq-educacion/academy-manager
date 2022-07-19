@@ -1,9 +1,8 @@
 import type { NextPage } from "next";
 
 const HomePage: NextPage = () => {
-
-  return(
-    <div>front MAESTROS</div>
+  return (
+    <h1>Front BACK OFFICE</h1>
   )
 }
 

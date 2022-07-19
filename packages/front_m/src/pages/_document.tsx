@@ -1,3 +1,5 @@
+import { baseStyles } from "@academy-manager/ui";
+import { Global } from "@emotion/react";
 import Document, {
   DocumentContext,
   Head,
@@ -15,9 +17,12 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html>
+        <Global styles={baseStyles} />
         <Head>
-          <link rel="icon" href="/icon.ico"/>
-          <title>Next</title>
+          <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />

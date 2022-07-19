@@ -1,12 +1,13 @@
 {
   "name": "academy-manager",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "license": "MIT",
   "private": true,
   "workspaces": [
     "packages/front_bo",
-    "packages/front_m"
+    "packages/front_m",
+    "packages/ui"
   ],
   "devDependencies": {
     "@graphql-codegen/cli": "^2.8.1",
