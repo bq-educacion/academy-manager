@@ -16,7 +16,7 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="icon" href="/submarine.ico"/>
+          <link rel="icon" href="/icon.ico"/>
           <title>Next</title>
         </Head>
         <body>
