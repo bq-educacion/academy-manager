@@ -38,12 +38,12 @@ try {
 
     return pathname === "/graphql"
       ? await GraphQLHTTP<Request, Context>({
-        schema: makeExecutableSchema({ resolvers, typeDefs }),
-        graphiql: true,
-        context: () => {
-          return { db: client.database(DB_NAME), request: req };
-        },
-      })(req)
+          schema: makeExecutableSchema({ resolvers, typeDefs }),
+          graphiql: true,
+          context: () => {
+            return { db: client.database(DB_NAME), request: req };
+          },
+        })(req)
       : new Response("Not Found", { status: 404 });
   };
 

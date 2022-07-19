@@ -1,5 +1,3 @@
 import ClosePannel from "./close-pannel.svg";
 
-export {
-  ClosePannel
-};
+export { ClosePannel };

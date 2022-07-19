@@ -11,5 +11,5 @@ export default {
   small,
   medium,
   large,
-  wide
+  wide,
 };

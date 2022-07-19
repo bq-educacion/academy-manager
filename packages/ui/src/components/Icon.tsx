@@ -26,9 +26,7 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
   }
 };
 
-const Icon: FC<IIconProps> = ({ ...props }) => (
-  <StyledIcon {...props} />
-);
+const Icon: FC<IIconProps> = ({ ...props }) => <StyledIcon {...props} />;
 
 const StyledIcon = styled(IconSVG)<{ negative?: boolean }>`
   color: ${(props) => (props.negative ? colors.white : "inherit")};
