@@ -7,8 +7,7 @@ yarn && docker-compose up
 
 ## Generate API types
 
-Run de project with `docker-compose`
-Run
+Run de project with `docker-compose` then run
 ```bash
 yarn run api-types
 ```
