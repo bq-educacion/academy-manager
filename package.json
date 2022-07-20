@@ -1,28 +1,40 @@
 {
   "name": "academy-manager",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "license": "MIT",
   "private": true,
   "workspaces": [
     "packages/front_bo",
-    "packages/front_m"
+    "packages/front_m",
+    "packages/ui"
   ],
   "devDependencies": {
     "@graphql-codegen/cli": "^2.8.1",
     "@graphql-codegen/typescript": "^2.7.1",
     "@graphql-codegen/typescript-operations": "^2.5.1",
     "@graphql-codegen/typescript-resolvers": "^2.7.1",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "graphql": "^16.5.0",
     "graphql-codegen": "^0.4.0",
-    "husky": "^8.0.1"
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
     "api_bo_types": "graphql-codegen generate --config codegen_api_bo.yml",
     "api_m_types": "graphql-codegen generate --config codegen_api_m.yml",
-    "api-types": "yarn run api_bo_types && yarn run api_m_types"
+    "api-types": "yarn run api_bo_types && yarn run api_m_types",
+    "lint": "eslint \"packages/*/src/**/*.{js,jsx,ts,tsx}\" --fix --quiet"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,jsx,scss}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
