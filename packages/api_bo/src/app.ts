@@ -46,8 +46,7 @@ try {
         })(req)
       : new Response("Not Found", { status: 404 });
   };
-  asdb;
-
+  
   const server = new Server({ handler });
   const listener = Deno.listen({ port: parseInt(PORT) });
 
