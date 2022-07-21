@@ -1,7 +1,12 @@
 import type { NextPage } from "next";
+import { LateralMenu } from "../../components/LateralMenu";
 
 const HomePage: NextPage = () => {
-  return <h1>Front BACK OFFICE</h1>;
+  return (
+    <div>
+      <LateralMenu />
+    </div>
+  );
 };
 
 export default HomePage;
