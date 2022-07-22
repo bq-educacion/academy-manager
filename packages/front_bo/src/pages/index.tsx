@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ContentStart } from "../../components/ContentStart";
 import { LateralMenu } from "../../components/LateralMenu";
 import { useCookies } from "react-cookie";
 
 const HomePage: NextPage = () => {
 
-  //Example set cookie
+  //Example cookie
   // const [cookie, setCookie, removeCookie] = useCookies(['token']);
   // setCookie('token', "NCC-1701", { path: '/' });
   // removeCookie('token', { path: '/' });
