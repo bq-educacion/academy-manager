@@ -5,6 +5,8 @@ import { A, P4 } from "@academy-manager/ui/src/theme/styles";
 import { Triangle } from "@academy-manager/ui/src/assets/icons";
 
 type LateralMenuProps = {
+  changeSection: (section: string) => void;
+  changeLabel: (label: string) => void;
   sections: {
     title: string;
     links: {
@@ -14,7 +16,7 @@ type LateralMenuProps = {
   }[];
 };
 
-export const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {
+export const LateralMenu: FC<LateralMenuProps> = ({ sections, changeLabel, changeSection }) => {
   return (
     <LateralContainer>
       <LateralMenuItem top={35} left={43} bottom={26}>
@@ -32,6 +34,8 @@ export const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {
               clicked={clicked}
               onClick={() => {
                 setClicked(!clicked);
+                changeSection(elem.title);
+                {elem.links[0] && changeLabel(elem.links[0].label);}
               }}
             >
               <P4Lateral>{elem.title}</P4Lateral>
@@ -42,7 +46,10 @@ export const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {
                 <LinksLateral top={15} left={45} bottom={15}>
                   {clicked &&
                     elem.links.map((link) => {
-                      return <ALateral href={link.href}>{link.label}</ALateral>
+                      return <ALateral onClick={()=>{
+                        changeLabel(link.label);
+                        changeSection(elem.title);
+                      }}>{link.label}</ALateral>
                     })}
                 </LinksLateral>
               )}
@@ -58,7 +65,7 @@ const LateralContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
+    height: 100vh;
     width: 250px;
     background-color: #3d3e42;
     color: #ffff;
