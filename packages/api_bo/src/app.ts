@@ -38,15 +38,15 @@ try {
 
     return pathname === "/graphql"
       ? await GraphQLHTTP<Request, Context>({
-        schema: makeExecutableSchema({ resolvers, typeDefs }),
-        graphiql: true,
-        context: () => {
-          return { db: client.database(DB_NAME), request: req };
-        },
-      })(req)
+          schema: makeExecutableSchema({ resolvers, typeDefs }),
+          graphiql: true,
+          context: () => {
+            return { db: client.database(DB_NAME), request: req };
+          },
+        })(req)
       : new Response("Not Found", { status: 404 });
   };
-
+  
   const server = new Server({ handler });
   const listener = Deno.listen({ port: parseInt(PORT) });
 
