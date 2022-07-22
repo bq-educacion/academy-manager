@@ -1,29 +1,54 @@
 import styled from "@emotion/styled";
 import { FC, useState } from "react";
 import LogoBQ from "../public/images/bq-logo.svg";
-import { P4 } from "@academy-manager/ui/src/theme/styles";
+import { A, P4 } from "@academy-manager/ui/src/theme/styles";
 import { Triangle } from "@academy-manager/ui/src/assets/icons";
 
-export const LateralMenu: FC = () => {
-  const [clicked, setClicked] = useState<boolean>(false);
+type LateralMenuProps = {
+  sections: {
+    title: string;
+    links: {
+      label: string;
+      href: string;
+    }[];
+  }[];
+};
 
+export const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {
   return (
-    <LateralContainer onClick={()=>{setClicked(!clicked)}}>
+    <LateralContainer>
       <LateralMenuItem top={35} left={43} bottom={26}>
         <LogoBQ />
       </LateralMenuItem>
-      <LateralMenuItem top={15} left={45} bottom={14}>
-        <P4Lateral>Contabilidad</P4Lateral>
-        <TriangleLateral clicked={clicked} />
-      </LateralMenuItem>
-      <LateralMenuItem top={15} left={45} bottom={14}>
-        <P4Lateral>Traducción</P4Lateral>
-        <TriangleLateral clicked={clicked} />
-      </LateralMenuItem>
-      <LateralMenuItem top={15} left={45} bottom={14}>
-        <P4Lateral>Otra sección</P4Lateral>
-        <TriangleLateral clicked={clicked} />
-      </LateralMenuItem>
+
+      {sections?.map((elem) => {
+        const [clicked, setClicked] = useState<boolean>(false);
+        return (
+          <>
+            <LateralMenuItem
+              top={15}
+              left={45}
+              bottom={14}
+              clicked={clicked}
+              onClick={() => {
+                setClicked(!clicked);
+              }}
+            >
+              <P4Lateral>{elem.title}</P4Lateral>
+              <TriangleLateral clicked={clicked} />
+            </LateralMenuItem>
+            {clicked &&
+              (
+                <LinksLateral top={15} left={45} bottom={15}>
+                  {clicked &&
+                    elem.links.map((link) => {
+                      return <ALateral href={link.href}>{link.label}</ALateral>
+                    })}
+                </LinksLateral>
+              )}
+          </>
+        );
+      })}
     </LateralContainer>
   );
 };
@@ -41,10 +66,12 @@ const LateralContainer = styled.div`
 `;
 
 const LateralMenuItem = styled.div<
-  { left: number; top: number; bottom: number }
+  { left: number; top: number; bottom: number; clicked?: boolean }
 >`
     width: 100%;
-    border-bottom: 1px solid #6d6c6c;
+    transition: border-bottom 0.3s ease-in-out;
+    border-bottom: 1px solid rgba(109, 108, 108, ${(props) =>
+  props.clicked ? 0.3 : 1});
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -58,18 +85,37 @@ const LateralMenuItem = styled.div<
 
 const P4Lateral = styled(P4)`
     color: #ffff;
+    &:hover {
+      cursor: pointer;
+    }
 `;
 
 const TriangleLateral = styled(Triangle)<{ clicked: boolean }>`
 
   transform-origin: center;
   transition: transform 0.3s ease-in-out;
+  &:hover {
+      cursor: pointer;
+    }
+  transform: ${(props) => props.clicked ? "rotate(-90deg)" : "rotate(0deg)"};
+  margin-right: 20px;
+`;
 
-    ${(props) =>
-  props.clicked
-    ? `
-        transform: rotate(-90deg);
-    `
-    : ``}
-    margin-right: 20px;
+const LinksLateral = styled.div<{ left: number; top: number; bottom: number; clicked?: boolean }>`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom: 1px solid rgba(109, 108, 108);
+    margin-top: ${(props) => props.top}px;
+    padding-bottom: ${(props) => props.bottom}px;
+    & > * {
+        margin: 5px 0 5px ${(props) => props.left}px;
+    }
+`;
+
+const ALateral = styled(A)`
+    color: #ffff;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.43;
 `;
