@@ -1,6 +1,7 @@
 import { Image404 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { NextPage } from "next";
+import { useCookies } from "react-cookie";
 
 const NotFoundPage: NextPage = () => {
   return (
