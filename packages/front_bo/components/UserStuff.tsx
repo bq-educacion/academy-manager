@@ -2,6 +2,7 @@ import { P3 } from "@academy-manager/ui/src/theme/styles";
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { MenuKebab } from "@academy-manager/ui/src/assets/icons";
+import {colors} from "@academy-manager/ui";
 
 export const UserStuff: FC<{ token: string }> = ({ token }) => {
   return (
@@ -35,7 +36,7 @@ const Circle = styled.div<{border:boolean}>`
 `
 
 const P3User = styled(P3)`
-    color: #6e7077;
+    color: ${colors.grayBlue};
 `
 
 const PUser = styled.p`
@@ -47,7 +48,7 @@ const PUser = styled.p`
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #fff;
+  color: ${colors.white};
 `
 
 const Kebabdiv = styled.div`

@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import LogoBQ from "../public/images/bq-logo.svg";
 import { A, P4 } from "@academy-manager/ui/src/theme/styles";
 import { Triangle } from "@academy-manager/ui/src/assets/icons";
+import {colors} from "@academy-manager/ui";
 
 type LateralMenuProps = {
   changeSection: (section: string) => void;
@@ -67,18 +68,15 @@ const LateralContainer = styled.div`
     align-items: center;
     height: 100vh;
     width: 250px;
-    background-color: #3d3e42;
-    color: #ffff;
+    background-color: ${colors.blackBackground};
+    color: ${colors.white};
     
 `;
 
-const LateralMenuItem = styled.div<
-  { left: number; top: number; bottom: number; clicked?: boolean }
->`
+const LateralMenuItem = styled.div<{ left: number; top: number; bottom: number; clicked?: boolean }>`
     width: 100%;
     transition: border-bottom 0.3s ease-in-out;
-    border-bottom: 1px solid rgba(109, 108, 108, ${(props) =>
-  props.clicked ? 0.3 : 1});
+    border-bottom: 1px solid rgba(109, 108, 108, ${(props) =>props.clicked ? 0.3 : 1});
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -91,7 +89,7 @@ const LateralMenuItem = styled.div<
 `;
 
 const P4Lateral = styled(P4)`
-    color: #ffff;
+    color: ${colors.white};
     &:hover {
       cursor: pointer;
     }
@@ -121,7 +119,7 @@ const LinksLateral = styled.div<{ left: number; top: number; bottom: number; cli
 `;
 
 const ALateral = styled(A)`
-    color: #ffff;
+    color: ${colors.white};
     font-size: 14px;
     font-weight: normal;
     line-height: 1.43;

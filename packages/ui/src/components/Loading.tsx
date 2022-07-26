@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { P4 } from "@academy-manager/ui/src/theme/styles";
+import {colors} from "@academy-manager/ui";
 
 export const LoadingOvercast: FC = () => {
   return (
@@ -21,7 +22,7 @@ const Blur = styled.div`
     height: 100vh;
     z-index: 1;
     backdrop-filter: blur(3px);
-    background-color: rgba(240, 240, 240, 0.1);
+    background-color: ${colors.whiteTransparent};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,6 +30,15 @@ const Blur = styled.div`
 `;
 
 const LoadingAnimation = styled.div`
+    @keyframes wave {
+        0%, 60%, 100% {
+            transform: initial;
+        }
+
+        30% {
+            transform: translateY(-15px);
+        }
+    }
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -44,21 +54,20 @@ const LoadingAnimation = styled.div`
 		height:7px;
 		border-radius:50%;
 		margin-right:7px;
-		background:#303131;
 		animation: wave 1.3s linear infinite;
 
         &:nth-child(1) {
-            background-color: #fe5000;
+            background-color: ${colors.orange};
         }
 
 		&:nth-child(2) {
 			animation-delay: -1.1s;
-            background-color: #e4002b;
+            background-color: ${colors.red};
 		}
 
 		&:nth-child(3) {
 			animation-delay: -0.9s;
-            background-color: #6d2077;
+            background-color: ${colors.purple};
 		}
 	}
     
