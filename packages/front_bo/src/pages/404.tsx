@@ -1,7 +1,7 @@
 import { Image404 } from "@academy-manager/ui";
+import {LoadingOvercast} from "@academy-manager/ui/src/components/Loading";
 import styled from "@emotion/styled";
 import { NextPage } from "next";
-import { useCookies } from "react-cookie";
 
 const NotFoundPage: NextPage = () => {
   return (
