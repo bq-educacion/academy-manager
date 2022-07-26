@@ -2,7 +2,7 @@ import { Server } from "std/http/server.ts";
 import { makeExecutableSchema } from "graphql-tools";
 import { GraphQLHTTP } from "gql";
 import { Database, MongoClient } from "mongo";
-import { Query, Center} from "./resolvers/query.ts";
+import { Center, Query } from "./resolvers/query.ts";
 import { Mutation } from "./resolvers/mutation.ts";
 import { typeDefs } from "./schema.ts";
 
@@ -39,15 +39,15 @@ try {
 
     return pathname === "/graphql"
       ? await GraphQLHTTP<Request, Context>({
-          schema: makeExecutableSchema({ resolvers, typeDefs }),
-          graphiql: true,
-          context: () => {
-            return { db: client.database(DB_NAME), request: req };
-          },
-        })(req)
+        schema: makeExecutableSchema({ resolvers, typeDefs }),
+        graphiql: true,
+        context: () => {
+          return { db: client.database(DB_NAME), request: req };
+        },
+      })(req)
       : new Response("Not Found", { status: 404 });
   };
-  
+
   const server = new Server({ handler });
   const listener = Deno.listen({ port: parseInt(PORT) });
 

@@ -152,4 +152,3 @@ export const typeDefs = gql`
     addContactCenter(idCenter:String!,name:String!,surname:String!, email:String!, phone:String!): String!
   }
 `;
-
