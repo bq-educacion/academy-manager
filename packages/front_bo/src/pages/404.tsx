@@ -7,7 +7,6 @@ import {colors} from "@academy-manager/ui";
 const NotFoundPage: NextPage = () => {
   return (
     <ErrorContainer>
-      <LoadingOvercast />
       <h1>404</h1>
       <img src={Image404.src} />
     </ErrorContainer>

@@ -1,5 +1,5 @@
 import { Lens } from "@academy-manager/ui/src/assets/icons";
-import { P1, P2 } from "@academy-manager/ui/src/theme/styles";
+import { P1, P2, RainbowDivider } from "@academy-manager/ui/src/theme/styles";
 import styled from "@emotion/styled";
 import { FC, ReactNode } from "react";
 import { UserStuff } from "./UserStuff";
@@ -47,12 +47,6 @@ const ContentHeader = styled.div`
     & > p {
         margin-left: 40px;
     }
-`
-
-const RainbowDivider = styled.div`
-    background-image: linear-gradient(to right, #44b8af, #f6a001 33%, #e4002b 67%, #6d2077);
-    width: 100%;
-    height: 1px;
 `
 
 const ContentSubHeader = styled.div`
