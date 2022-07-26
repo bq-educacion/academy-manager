@@ -124,7 +124,7 @@ const baseStyles = css`
   html,
   body {
     border: 0;
-    color: ${colors.black};
+    color: ${colors.colors.black};
     margin: 0;
     padding: 0;
     vertical-align: baseline;

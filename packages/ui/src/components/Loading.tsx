@@ -22,7 +22,7 @@ const Blur = styled.div`
     height: 100vh;
     z-index: 1;
     backdrop-filter: blur(3px);
-    background-color: ${colors.whiteTransparent};
+    background-color: ${colors.colors.whiteTransparent};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,17 +57,17 @@ const LoadingAnimation = styled.div`
 		animation: wave 1.3s linear infinite;
 
         &:nth-child(1) {
-            background-color: ${colors.orange};
+            background-color: ${colors.colors.orange80};
         }
 
 		&:nth-child(2) {
 			animation-delay: -1.1s;
-            background-color: ${colors.red};
+            background-color: ${colors.colors.red80};
 		}
 
 		&:nth-child(3) {
 			animation-delay: -0.9s;
-            background-color: ${colors.purple};
+            background-color: ${colors.colors.purple80};
 		}
 	}
     

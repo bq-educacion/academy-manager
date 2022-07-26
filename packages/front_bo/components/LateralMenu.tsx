@@ -68,8 +68,8 @@ const LateralContainer = styled.div`
     align-items: center;
     height: 100vh;
     width: 250px;
-    background-color: ${colors.blackBackground};
-    color: ${colors.white};
+    background-color: ${colors.colors.blackBackground};
+    color: ${colors.colors.white};
     
 `;
 
@@ -89,7 +89,7 @@ const LateralMenuItem = styled.div<{ left: number; top: number; bottom: number; 
 `;
 
 const P4Lateral = styled(P4)`
-    color: ${colors.white};
+    color: ${colors.colors.white};
     &:hover {
       cursor: pointer;
     }
@@ -119,7 +119,7 @@ const LinksLateral = styled.div<{ left: number; top: number; bottom: number; cli
 `;
 
 const ALateral = styled(A)`
-    color: ${colors.white};
+    color: ${colors.colors.white};
     font-size: 14px;
     font-weight: normal;
     line-height: 1.43;

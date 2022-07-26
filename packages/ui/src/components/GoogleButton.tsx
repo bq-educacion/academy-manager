@@ -17,11 +17,11 @@ const GButton = styled.button`
     align-items: center;
     width: 191px;
     height: 40px;
-    border: solid 1px ${colors.blackBackground};
+    border: solid 1px ${colors.colors.blackBackground};
     border-radius: 4px;
-    background-color: ${colors.white};
+    background-color: ${colors.colors.white};
 
     &:hover {
-        border: solid 1px ${colors.grayBlue};
+        border: solid 1px ${colors.colors.grayBlue};
     }
 `

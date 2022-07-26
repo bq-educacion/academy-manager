@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 import { P3 } from "../theme/styles";
 
 
@@ -27,15 +27,15 @@ const Circle = styled.div<{border:boolean}>`
 `
 
 const PUser = styled.p`
-  font-family: Roboto;
-  font-size: 16px;
+  ${fonts.family.roboto};
+  ${fonts.size.medium};
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: ${colors.white};
+  color: ${colors.colors.white};
 `
 
 export default UserButton;

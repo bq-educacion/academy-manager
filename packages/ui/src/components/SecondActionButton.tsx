@@ -22,15 +22,15 @@ const Circle = styled.div<{border:boolean}>`
     background-image: ${(props) => (!props.border ? "linear-gradient(225deg, #6d2077, #ff1842)" : "")};
     border: ${(props) => (props.border ? "1px solid #6e7077" : "none")};
     &:hover {
-        border: solid 1px ${colors.gray2};
+        border: solid 1px ${colors.colors.gray2};
+        & > p {
+            color: ${colors.colors.gray2};
+        }
     }
 `
 
 const P3User = styled(P3)`
-    color: ${colors.grayBlue};
-    &:hover {
-        color: ${colors.gray2};
-    }
+    color: ${colors.colors.grayBlue};
 `
 
 export default SecondActionButton;

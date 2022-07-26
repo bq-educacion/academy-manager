@@ -1,56 +1,53 @@
 import styled from "@emotion/styled";
+import fonts from "./fonts";
+import colors from "./colors";
 
 export const P1 = styled.p`
-  font-family: Roboto;
-  font-size: 25px;
+  ${fonts.family.roboto};
+  ${fonts.size.huge};
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.2;
   letter-spacing: normal;
   color: #4e4f53;
 `
 
 export const P2 = styled.p`
-  font-family: Roboto;
-  font-size: 18px;
+  ${fonts.family.roboto};
+  ${fonts.size.large};
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.39;
   letter-spacing: normal;
   color: #4e4f53;
 `
 
 export const P3 = styled.p`
-  font-family: Roboto;
-  font-size: 16px;
+  ${fonts.family.roboto};
+  ${fonts.size.medium};
   font-weight: 500;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.25;
   letter-spacing: normal;
   color: #4e4f53;
 `
 
 export const P4 = styled.p`
-  font-family: Roboto;
-  font-size: 14px;
+  ${fonts.family.roboto};
+  ${fonts.size.normal}; 
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.43;
   letter-spacing: normal;
   color: #4e4f53;
 `;
 
 export const A = styled.p`
-  font-family: Roboto;
-  font-size: 14px;
+  ${fonts.family.roboto};
+  ${fonts.size.normal};
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.43;
   letter-spacing: normal;
   color: #bdbec2;
   text-decoration: none;
@@ -64,7 +61,7 @@ export const A = styled.p`
 `
 
 export const RainbowDivider = styled.div`
-    background-image: linear-gradient(to right, #44b8af, #f6a001 33%, #e4002b 67%, #6d2077);
+    background-image: ${colors.gradient.rainbow};
     width: 100%;
     height: 1px;
 `

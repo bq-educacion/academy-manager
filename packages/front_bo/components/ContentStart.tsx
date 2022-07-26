@@ -1,7 +1,7 @@
 import { Lens } from "@academy-manager/ui/src/assets/icons";
 import { P1, P2, RainbowDivider } from "@academy-manager/ui/src/theme/styles";
 import styled from "@emotion/styled";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { UserStuff } from "./UserStuff";
 import {colors} from "@academy-manager/ui";
 
@@ -26,7 +26,7 @@ export const ContentStart : FC<{section: string, label: string}> = ({section, la
 }
 
 const ContentLayout = styled.div`
-    background-color: ${colors.grayBlueTransparent};
+    background-color: ${colors.colors.grayBlueTransparent};
     width: calc(100% - 250px);
     height: 100vh;
     padding-left: 250px;
@@ -35,7 +35,7 @@ const ContentLayout = styled.div`
 `
 
 const ContentHeader = styled.div`
-    background-color: ${colors.white};
+    background-color: ${colors.colors.white};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -50,7 +50,7 @@ const ContentHeader = styled.div`
 `
 
 const ContentSubHeader = styled.div`
-    background-color: ${colors.white};
+    background-color: ${colors.colors.white};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -67,7 +67,7 @@ const InputMail = styled.input`
     width: 22.7%;
     height: 40px;
     border-radius: 5px;
-    border: solid 1px ${colors.gray};
+    border: solid 1px ${colors.colors.gray};
     margin-right: 40px;
     &::placeholder {
         font-family: Roboto;
@@ -77,7 +77,7 @@ const InputMail = styled.input`
         font-style: italic;
         line-height: 1.07;
         letter-spacing: normal;
-        color: ${colors.gray2};
+        color: ${colors.colors.gray2};
         padding-left: 20px;
     }
 `
@@ -89,7 +89,7 @@ const LensSearch = styled(Lens)`
 `
 
 const ContentBody = styled.div`
-    background-color: ${colors.white};
+    background-color: ${colors.colors.white};
     width: calc(100% - 41px - 39px);
     height: calc(100% - 24px - 30px);
     margin: 24px 41px 30px 39px;
