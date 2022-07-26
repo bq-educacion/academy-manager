@@ -2,7 +2,7 @@ import { Server } from "std/http/server.ts";
 import { makeExecutableSchema } from "graphql-tools";
 import { GraphQLHTTP } from "gql";
 import { Database, MongoClient } from "mongo";
-import { Query } from "./resolvers/query.ts";
+import { Query, Center} from "./resolvers/query.ts";
 import { Mutation } from "./resolvers/mutation.ts";
 import { typeDefs } from "./schema.ts";
 
@@ -25,6 +25,7 @@ if (!DB_NAME) {
 
 const resolvers = {
   Query,
+  Center,
   Mutation,
 };
 
