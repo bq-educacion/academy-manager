@@ -9,7 +9,7 @@ export const P1 = styled.p`
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-  color: #4e4f53;
+  color: ${colors.colors.black};
 `
 
 export const P2 = styled.p`
@@ -19,7 +19,7 @@ export const P2 = styled.p`
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-  color: #4e4f53;
+  color: ${colors.colors.black};
 `
 
 export const P3 = styled.p`
@@ -29,7 +29,7 @@ export const P3 = styled.p`
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-  color: #4e4f53;
+  color: ${colors.colors.black};
 `
 
 export const P4 = styled.p`
@@ -39,24 +39,24 @@ export const P4 = styled.p`
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-  color: #4e4f53;
+  color: ${colors.colors.black};
 `;
 
-export const A = styled.p`
+export const A = styled.a`
   ${fonts.family.roboto};
   ${fonts.size.normal};
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   letter-spacing: normal;
-  color: #bdbec2;
+  color: ${colors.colors.gray2};
   text-decoration: none;
   &:hover {
     cursor: pointer;
-    color: #3db8b0;
+    color: ${colors.colors.blue1};
   }
   &:active {
-    color: #69c6bf;
+    color: ${colors.colors.blue60};
   }
 `
 

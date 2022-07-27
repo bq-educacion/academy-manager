@@ -62,10 +62,13 @@ blue80: "#44b8af",
 blue60: "#69c6bf",
 blue40: "#a1dbd7",
 
+blue1: "#3db8b0",
+
 brown100: "#8f7561",
 brown80: "#b29279",
 brown60: "#c1a894",
 brown40: "#d8c8bc"
+
 }
 const gradient = {
   rainbow: "linear-gradient(to right, #44b8af, #f6a001 33%, #e4002b 67%, #6d2077)",
