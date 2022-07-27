@@ -31,6 +31,7 @@ grayBlue2: "#6e7077",
 grayBlueTransparent: adjustColorOpacity("#f2f2f3", 0.5),
 gray: "#ccc",
 gray2: "#bdbec2",
+gray3: "#d7d8da",
 
 orange100: "#db4501",
 orange80: "#fe5000",

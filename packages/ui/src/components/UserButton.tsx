@@ -1,16 +1,16 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { colors, fonts } from "../theme";
-import { P3 } from "../theme/styles";
 
 
-const UserButton:FC =()=>{
+const UserButton:FC<{disable?:boolean}>=({disable})=>{
+    const disabled = disable ? true : false;
     return(
-        <Circle border={false}><PUser>JL</PUser></Circle>
+        <Circle border={false} disable={disabled}><PUser>JL</PUser></Circle>
     )
 }
 
-const Circle = styled.div<{border:boolean}>`
+const Circle = styled.div<{border:boolean, disable:boolean}>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,7 +23,17 @@ const Circle = styled.div<{border:boolean}>`
     border: ${(props) => (props.border ? `1px solid ${colors.colors.grayBlue2}` : "none")};
     &:hover {
         background-image: ${colors.gradient.yellow80};
+        cursor: pointer;
     }
+    ${(props) => (props.disable && `
+        border: none;
+        background-image: none;
+        background-color: ${colors.colors.gray3};
+        &:hover {
+            background-image: none;
+            background-color: ${colors.colors.gray3};
+        }
+    `)}
 `
 
 const PUser = styled.p`

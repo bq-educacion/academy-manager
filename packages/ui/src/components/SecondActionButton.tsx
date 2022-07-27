@@ -4,13 +4,14 @@ import { colors } from "../theme";
 import { P3 } from "../theme/styles";
 
 
-const SecondActionButton:FC =()=>{
+const SecondActionButton:FC<{disable?:boolean}> =({disable})=>{
+    const disabled = disable ? true : false;
     return(
-        <Circle border={true}><P3User>?</P3User></Circle>
+        <Circle border={true} disable={disabled}><P3User>?</P3User></Circle>
     )
 }
 
-const Circle = styled.div<{border:boolean}>`
+const Circle = styled.div<{border:boolean, disable:boolean}>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,14 +23,26 @@ const Circle = styled.div<{border:boolean}>`
     border: ${(props) => (props.border ? `1px solid ${colors.colors.grayBlue2}` : "none")};
     &:hover {
         border: solid 1px ${colors.colors.gray2};
+        cursor: pointer;
         & > p {
             color: ${colors.colors.gray2};
         }
     }
+    ${(props) => (props.disable ? `
+        border: none;
+        background-color: ${colors.colors.gray3};
+        & > p {color: ${colors.colors.gray20}}
+        &:hover {
+            border: none;
+            background-color: ${colors.colors.gray3};
+            & > p {color: ${colors.colors.gray20}}
+        }
+    }
+    ` : "")}
 `
 
 const P3User = styled(P3)`
-    color: ${colors.colors.grayBlue};
+    color: ${colors.colors.grayBlue2};
 `
 
 export default SecondActionButton;

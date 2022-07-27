@@ -16,9 +16,7 @@ const HomePage: NextPage = () => {
 
   const sections = 
   [
-    {title:"Academy", links:[{label:"Dashboard", href:"/"}, {label:"Centros", href:"/1"}, {label:"Grupos", href:"/1"}, {label:"Alumnos", href:"/1"}, {label:"Monitores", href:"/1"}]},
-    {title:"Traducción", links:[{label:"Inicio", href:"/1"},{label:"Permisos", href:""},{label:"Idiomas", href:""},{label:"Proyectos", href:""}]},
-    {title:"Otra sección", links:[]}
+    {title:"Extraescolares", links:[{label:"Dashboard", href:"/"}, {label:"Centros", href:"/1"}, {label:"Grupos", href:"/1"}, {label:"Alumnos", href:"/1"}, {label:"Monitores", href:"/1"}]},
   ]
 
   const [section, setSection] = useState<string>(sections[0].title);

@@ -19,7 +19,7 @@ export const ContentStart : FC<{section: string, label: string}> = ({section, la
                 <InputMail placeholder="    Buscar por email"></InputMail><LensSearch/>
             </ContentSubHeader>
             <ContentBody>
-                <a>Esto es un link de prueba</a>
+                
             </ContentBody>
         </ContentLayout>
     );
