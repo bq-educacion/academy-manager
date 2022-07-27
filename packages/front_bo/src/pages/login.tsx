@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { NextPage } from "next";
 import LogoBQ from "../../public/images/bq-logo-gray.svg";
 import { GoogleButton } from "@academy-manager/ui/src/components/GoogleButton";
+import { colors } from "@academy-manager/ui";
 
 const LogInPage: NextPage = () => {
   return (
@@ -33,7 +34,7 @@ const Layout = styled.div`
 `;
 
 const LogInBox = styled.div`
-    box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 60px 0 ${colors.colors.shadow1};
     display: flex;
     flex-direction: column;
     align-items: center;

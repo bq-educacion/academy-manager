@@ -8,6 +8,9 @@ export const adjustColorOpacity = (color: string, opacity: number): string => {
   return "rgba(" + r + ", " + g + ", " + b + ", " + opacity + ")";
 };
 const colors = {
+shadow5: adjustColorOpacity("#000000", 0.5),
+shadow1: adjustColorOpacity("#000000", 0.1),
+
 black: "#4e4f53",
 blackBackground: "#3d3e42",
 
@@ -21,7 +24,10 @@ gray60: "#e0e0e0",
 gray40: "#eaeae9",
 gray20: "#f5f5f5",
 
+gray80Transparent: adjustColorOpacity("#6d6c6c", 0.3),
+
 grayBlue: "#f2f2f3",
+grayBlue2: "#6e7077",
 grayBlueTransparent: adjustColorOpacity("#f2f2f3", 0.5),
 gray: "#ccc",
 gray2: "#bdbec2",

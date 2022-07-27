@@ -76,7 +76,7 @@ const LateralContainer = styled.div`
 const LateralMenuItem = styled.div<{ left: number; top: number; bottom: number; clicked?: boolean }>`
     width: 100%;
     transition: border-bottom 0.3s ease-in-out;
-    border-bottom: 1px solid rgba(109, 108, 108, ${(props) =>props.clicked ? 0.3 : 1});
+    ${(props)=>props.clicked ? `border-bottom: 1px solid ${colors.colors.gray80Transparent}` : `border-bottom: 1px solid ${colors.colors.gray80}`};
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -110,7 +110,7 @@ const LinksLateral = styled.div<{ left: number; top: number; bottom: number; cli
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-bottom: 1px solid rgba(109, 108, 108);
+    border-bottom: 1px solid ${colors.colors.gray80};
     margin-top: ${(props) => props.top}px;
     padding-bottom: ${(props) => props.bottom}px;
     & > * {

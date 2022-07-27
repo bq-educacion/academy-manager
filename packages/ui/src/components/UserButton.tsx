@@ -18,11 +18,11 @@ const Circle = styled.div<{border:boolean}>`
     height: 40px;
     border-radius: 50%;
     margin: 5px;
-    background-color: ${(props) => (props.border ? "#ffff" : "")};
-    background-image: ${(props) => (!props.border ? "linear-gradient(225deg, #6d2077, #ff1842)" : "")};
-    border: ${(props) => (props.border ? "1px solid #6e7077" : "none")};
+    background-color: ${(props) => (props.border ? `${colors.colors.white}` : "")};
+    background-image: ${colors.gradient.pink80};
+    border: ${(props) => (props.border ? `1px solid ${colors.colors.grayBlue2}` : "none")};
     &:hover {
-        background-image: linear-gradient(225deg, #fe5000, #f6a001);
+        background-image: ${colors.gradient.yellow80};
     }
 `
 
