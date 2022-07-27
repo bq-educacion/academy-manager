@@ -97,6 +97,8 @@ const P4Lateral = styled(P4)`
 
 const TriangleLateral = styled(Triangle)<{ clicked: boolean }>`
 
+
+  color: ${colors.colors.white};
   transform-origin: center;
   transition: transform 0.3s ease-in-out;
   &:hover {

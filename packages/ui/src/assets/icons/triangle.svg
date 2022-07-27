@@ -1,6 +1,6 @@
 <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
         <path fill="#3D3E42" d="M-210-127H40v720h-250z"/>
-        <path d="m7.92 10.404 4.65 3.382a.5.5 0 0 0 .794-.404V6.618a.5.5 0 0 0-.794-.404L7.92 9.596a.5.5 0 0 0 0 .808z" fill="#FFF"/>
+        <path d="m7.92 10.404 4.65 3.382a.5.5 0 0 0 .794-.404V6.618a.5.5 0 0 0-.794-.404L7.92 9.596a.5.5 0 0 0 0 .808z" fill="currentColor"/>
     </g>
 </svg>

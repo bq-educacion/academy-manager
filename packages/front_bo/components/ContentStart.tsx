@@ -83,6 +83,7 @@ const InputMail = styled.input`
 `
 
 const LensSearch = styled(Lens)`
+    color: ${colors.colors.grayBlue2};
     position: absolute;
     right: 61px;
     z-index: 1;

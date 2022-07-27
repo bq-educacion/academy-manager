@@ -26,11 +26,11 @@ const ErrorContainer = styled.div`
     font-weight: bold;
     margin-bottom: 5rem;
     color: ${colors.colors.white};
-    text-shadow: 0 0 10px ${colors.colors.shadow};
+    text-shadow: 0 0 10px ${colors.colors.shadow5};
   }
   & > img {
     width: 50%;
     height: auto;
-    box-shadow: 0 0 10px ${colors.colors.shadow};
+    box-shadow: 0 0 10px ${colors.colors.shadow5};
   }
 `

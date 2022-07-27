@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { MenuKebab } from "@academy-manager/ui/src/assets/icons";
 import styled from "@emotion/styled";
+import { colors } from "../theme";
 
 
 
@@ -11,6 +12,7 @@ const OptionsButton:FC =()=>{
 }
 
 const Kebabdiv = styled.div`
+    color: ${colors.colors.grayBlue2};
     display: flex;
     justify-content: center;
     align-items: center;
