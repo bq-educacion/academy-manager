@@ -2,7 +2,7 @@ import { ObjectId } from "https://deno.land/x/web_bson@v0.2.3/mod.ts";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import {groupCollection} from "../models/GroupModel.ts";
-import { QueryGetCenterArgs } from "../types.ts";
+import {QueryGetCenterArgs } from "../types.ts";
 
 export const Query = {
   getCenters: async (_parent: unknown, _args: unknown, ctx: Context) => {
@@ -22,7 +22,9 @@ export const Center = {
   id: (parent: CenterModel): string => {
     return String(parent._id!);
   },
-  groups: async (parent:CenterModel,ctx:Context) => {
-    return await groupCollection(ctx.db).find({_id: {$in: parent.groups}}).toArray();
+  groups: async (parent:CenterModel,ctx:Context)=> {
+    return await Promise.all(parent.groups.map(async (group:ObjectId) => {
+      return await groupCollection(ctx.db).findOne({_id:group});
+    }));
   }
 };

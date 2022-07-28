@@ -7,8 +7,9 @@ export const Mutation = {
   createCenter: async (_parent: unknown, args: MutationCreateCenterArgs, ctx: Context) => {
     const center = await centerCollection(ctx.db).findOne({ name: args.name });
     if (center) throw new Error("Center already exists");
-    const idCenter = await centerCollection(ctx.db).insertOne({...args, contacts: [], groups: [], createdAt: new Date().toLocaleDateString()});
-    return await centerCollection(ctx.db).findOne({ _id: idCenter });
+    const createdAt = new Date().toLocaleDateString();
+    const idCenter = await centerCollection(ctx.db).insertOne({...args, contacts: [], groups: [], createdAt: createdAt});
+    return {_id:idCenter,contacts:[],groups:[], createdAt:createdAt,...args};
   },
 
   addContactCenter: async (_parent: unknown, args: MutationAddContactCenterArgs, ctx: Context) => {
