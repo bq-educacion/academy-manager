@@ -1,20 +1,16 @@
 import { ObjectId } from "https://deno.land/x/web_bson@v0.2.3/mod.ts";
 import { Context } from "../app.ts";
-import { CenterModel } from "../models/models.ts";
+import { centerCollection, CenterModel } from "../models/CenterModel.ts";
+import {groupCollection} from "../models/GroupModel.ts";
+import { QueryGetCenterArgs } from "../types.ts";
 
 export const Query = {
   getCenters: async (_parent: unknown, _args: unknown, ctx: Context) => {
-    const db = ctx.db;
-    const centerCollection = db.collection<CenterModel>("centers");
-    const centers = await centerCollection.find().toArray();
-    return centers;
+    return await centerCollection(ctx.db).find().toArray();
   },
-  getCenter: async (_parent: unknown, args: { id: string }, ctx: Context) => {
-    const db = ctx.db;
-    const centerCollection = db.collection<CenterModel>("centers");
-    const center = await centerCollection.findOne({
-      _id: new ObjectId(args.id),
-    });
+
+  getCenter: async (_parent: unknown, args: QueryGetCenterArgs, ctx: Context) => {
+    const center = await centerCollection(ctx.db).findOne({_id: new ObjectId(args.id)});
     if (!center) {
       throw new Error("Center not found");
     }
@@ -26,4 +22,7 @@ export const Center = {
   id: (parent: CenterModel): string => {
     return String(parent._id!);
   },
+  groups: async (parent:CenterModel,ctx:Context) => {
+    return await groupCollection(ctx.db).find({_id: {$in: parent.groups}}).toArray();
+  }
 };
