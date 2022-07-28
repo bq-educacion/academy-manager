@@ -25,6 +25,24 @@ const baseStyles = css`
     ${fonts.size.normal}
   }
 
+  a {
+    ${fonts.family.roboto};
+    ${fonts.size.normal};
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    color: ${colors.colors.blue1};
+    text-decoration: none;
+    &:hover {
+      cursor: pointer;
+      color: ${colors.colors.blue60};
+    }
+    &:active {
+      color: ${colors.colors.gray2};
+    }
+  }
+
   /* Color */
   * {
     color: inherit;
@@ -45,7 +63,6 @@ const baseStyles = css`
   p,
   blockquote,
   pre,
-  a,
   abbr,
   acronym,
   address,
@@ -124,7 +141,7 @@ const baseStyles = css`
   html,
   body {
     border: 0;
-    color: ${colors.black};
+    color: ${colors.colors.black};
     margin: 0;
     padding: 0;
     vertical-align: baseline;
