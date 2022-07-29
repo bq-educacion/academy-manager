@@ -18,7 +18,7 @@ export const Mutation = {
       throw new Error("Center not found");
     }
 
-    const contact = await centerCollection(ctx.db).findOne({contacts: { $elemMatch: { name: args.name }}});
+    const contact = await centerCollection(ctx.db).findOne({_id:center._id, contacts: { $elemMatch: { email: args.email }}});
     if (contact) throw new Error("Contact already exists");
 
     const newContact: ContactCenter = {...args};
