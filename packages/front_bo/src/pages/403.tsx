@@ -12,7 +12,7 @@ const NotFoundPage: NextPage = () => {
   return (
     <div>
       <LateralMenu sections={sections} changeLabel={setLabel} changeSection={setSection}/>
-      <ErrorContent error={404}/>
+      <ErrorContent error={403}/>
     </div>
   );
 };

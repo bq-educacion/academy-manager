@@ -42,6 +42,12 @@ export const P4 = styled.p`
   color: ${colors.colors.black};
 `;
 
+export const PG = styled.p`
+  ${fonts.family.roboto};
+  ${fonts.size.giant};
+  color: ${colors.colors.black};
+`
+
 export const A = styled.a`
   ${fonts.family.roboto};
   ${fonts.size.normal};
