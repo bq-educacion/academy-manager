@@ -1,3 +1,4 @@
 import Icon from "./Icon";
+import Popover from "./Popover";
 
-export { Icon };
+export { Icon, Popover };

@@ -9,6 +9,7 @@ export const adjustColorOpacity = (color: string, opacity: number): string => {
 };
 const colors = {
 shadow5: adjustColorOpacity("#000000", 0.5),
+shadow2: adjustColorOpacity("#000000", 0.2),
 shadow1: adjustColorOpacity("#000000", 0.1),
 
 black: "#4e4f53",
@@ -32,6 +33,7 @@ grayBlueTransparent: adjustColorOpacity("#f2f2f3", 0.5),
 gray: "#ccc",
 gray2: "#bdbec2",
 gray3: "#d7d8da",
+gray4: "#c3c4c8",
 
 orange100: "#db4501",
 orange80: "#fe5000",
