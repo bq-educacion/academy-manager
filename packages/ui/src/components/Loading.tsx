@@ -3,7 +3,7 @@ import { FC } from "react";
 import { P4 } from "@academy-manager/ui/src/theme/styles";
 import {colors} from "@academy-manager/ui";
 
-export const LoadingOvercast: FC = () => {
+const LoadingOvercast: FC = () => {
   return (
     <Blur>
       <LoadingAnimation>
@@ -15,6 +15,8 @@ export const LoadingOvercast: FC = () => {
     </Blur>
   );
 };
+
+export default LoadingOvercast;
 
 const Blur = styled.div`
     position: fixed;

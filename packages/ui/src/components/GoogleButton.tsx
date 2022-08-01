@@ -3,13 +3,15 @@ import { FC } from "react";
 import { colors } from "../theme";
 import { ImageLogoGoogle } from "@academy-manager/ui";
 
-export const GoogleButton: FC = () => {
+const GoogleButton: FC = () => {
     return(
         <GButton>
             <ImageLogoGoogle/>
         </GButton>
     )
 }
+
+export default GoogleButton;
 
 const GButton = styled.button`
     display: flex;
