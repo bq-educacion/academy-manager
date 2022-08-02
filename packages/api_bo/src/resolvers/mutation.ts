@@ -2,12 +2,15 @@ import {
   ContactCenter,
   MutationAddContactCenterArgs,
   MutationCreateCenterArgs,
+  MutationCreateGroupArgs,
   MutationEditCenterArgs,
   MutationEditContactsCenterArgs,
 } from "../types.ts";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { ObjectId } from "objectId";
+import { groupCollection } from "../models/GroupModel.ts";
+import { instructorCollection } from "../models/InstructorModel.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -17,7 +20,7 @@ export const Mutation = {
   ):Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findOne({ name: args.name });
     if (center) throw new Error("404, Center already exists");
-    const createdAt = new Date().toLocaleDateString();
+    const createdAt = new Date().toLocaleDateString('en-GB');
     const idCenter = await centerCollection(ctx.db).insertOne({
       ...args,
       contacts: [],
@@ -112,5 +115,45 @@ export const Mutation = {
       }, { $set: { contacts: updateContacts } });
 
       return contactUpdate;
+  },
+
+  createGroup: async (
+    _parent: unknown,
+    args: MutationCreateGroupArgs,
+    ctx: Context,
+  ) => {
+    
+    const group = await groupCollection(ctx.db).findOne({center:new ObjectId(args.idCenter), name: args.name});
+    if (group) throw new Error("404, Group already exists");
+
+    const createdAt = new Date().toLocaleDateString('en-GB');
+    const id_group = (await groupCollection(ctx.db).find({center:new ObjectId(args.idCenter)}).toArray()).length +1;
+    const center = new ObjectId(args.idCenter);
+
+    const instructors = args.instructors?.map((instructor) => new ObjectId(instructor));
+    const exists = await instructorCollection(ctx.db).find({ _id: {$in: instructors} }).toArray();
+    if(!exists || (exists.length !== instructors?.length)) throw new Error('404, Instructors not found');
+
+    const idGroup = await groupCollection(ctx.db).insertOne({
+      ...args,
+      id_group:id_group,
+      center: center,
+      createdAt: createdAt,
+      instructors: instructors || [],
+      students: []
+    });
+
+    await centerCollection(ctx.db).updateOne({
+      _id: new ObjectId(args.idCenter),
+    }, { $push: { groups: { $each: [idGroup] } } });
+
+    return {
+      _id: idGroup,
+      id_group: id_group,
+      center: center,
+      students: [],
+      createdAt: createdAt,
+      ...args,
+    };
   },
 };

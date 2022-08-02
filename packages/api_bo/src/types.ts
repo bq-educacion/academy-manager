@@ -103,6 +103,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addContactCenter: ContactCenter;
   createCenter: Center;
+  createGroup: Group;
   editCenter: Center;
   editContactsCenter: ContactCenter;
 };
@@ -130,6 +131,17 @@ export type MutationCreateCenterArgs = {
   population: Scalars['String'];
   type: TypeCenter;
   typeActivities: TypeActivitiesCenter;
+};
+
+
+export type MutationCreateGroupArgs = {
+  course: Scalars['String'];
+  idCenter: Scalars['String'];
+  instructors?: InputMaybe<Array<Scalars['String']>>;
+  name: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
+  timetable: Array<Scalars['String']>;
+  type: TypeGroup;
 };
 
 
@@ -169,10 +181,17 @@ export type Query = {
   __typename?: 'Query';
   getCenter: Center;
   getCenters?: Maybe<Array<Center>>;
+  getGroup: Group;
+  getGroups?: Maybe<Array<Group>>;
 };
 
 
 export type QueryGetCenterArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetGroupArgs = {
   id: Scalars['String'];
 };
 
@@ -418,6 +437,7 @@ export type InstructorResolvers<ContextType = any, ParentType extends ResolversP
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addContactCenter?: Resolver<ResolversTypes['ContactCenter'], ParentType, ContextType, RequireFields<MutationAddContactCenterArgs, 'email' | 'idCenter' | 'name' | 'phone' | 'surname'>>;
   createCenter?: Resolver<ResolversTypes['Center'], ParentType, ContextType, RequireFields<MutationCreateCenterArgs, 'address' | 'course' | 'languages' | 'modality' | 'name' | 'nature' | 'phone' | 'population' | 'type' | 'typeActivities'>>;
+  createGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationCreateGroupArgs, 'course' | 'idCenter' | 'name' | 'timetable' | 'type'>>;
   editCenter?: Resolver<ResolversTypes['Center'], ParentType, ContextType, RequireFields<MutationEditCenterArgs, 'id'>>;
   editContactsCenter?: Resolver<ResolversTypes['ContactCenter'], ParentType, ContextType, RequireFields<MutationEditContactsCenterArgs, 'idCenter' | 'originEmail'>>;
 }>;
@@ -429,6 +449,8 @@ export interface NumberScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getCenter?: Resolver<ResolversTypes['Center'], ParentType, ContextType, RequireFields<QueryGetCenterArgs, 'id'>>;
   getCenters?: Resolver<Maybe<Array<ResolversTypes['Center']>>, ParentType, ContextType>;
+  getGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<QueryGetGroupArgs, 'id'>>;
+  getGroups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>;
 }>;
 
 export type StudentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Student'] = ResolversParentTypes['Student']> = ResolversObject<{
