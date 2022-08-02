@@ -2,7 +2,8 @@ import { Group } from "../types.ts";
 import { ObjectId } from "objectId";
 import { Database } from "mongo";
 
-export type GroupModel = & Omit<Group, "id" | "center" | "students" | "instructors">
+export type GroupModel =
+  & Omit<Group, "id" | "center" | "students" | "instructors">
   & {
     _id?: ObjectId;
     center: ObjectId;

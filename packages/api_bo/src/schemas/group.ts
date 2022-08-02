@@ -1,6 +1,11 @@
 import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
+    
+    enum TypeGroup{
+        INTERNAL
+        EXTERNAL
+    }
 
     type Group{
         id:ID

@@ -1,6 +1,17 @@
 import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
+    
+    enum StateInstructor{
+        ACTIVE
+        INACTIVE
+    }
+
+    enum TypeVehicleInstructor{
+        OWN
+        PUBLIC_TRANSPORT
+    }
+
     type Instructor{
         id: ID
         name: String

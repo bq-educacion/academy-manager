@@ -2,6 +2,11 @@ import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
 
+    enum StateStudent{
+        ACTIVE
+        WITHDRAWN
+    }
+
     type ContactStudent{
         name: String
         surname: String

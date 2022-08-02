@@ -1,11 +1,11 @@
 import { ObjectId } from "objectId";
-import { Context } from "../app.ts";
+import { Context} from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection } from "../models/GroupModel.ts";
 import { QueryGetCenterArgs } from "../types.ts";
 
 export const Query = {
-  getCenters: async (_parent: unknown, _args: unknown, ctx: Context) => {
+  getCenters: async (_parent: unknown, _args: unknown, ctx: Context):Promise<CenterModel[]> => {
     return await centerCollection(ctx.db).find().toArray();
   },
 
@@ -13,12 +13,12 @@ export const Query = {
     _parent: unknown,
     args: QueryGetCenterArgs,
     ctx: Context,
-  ) => {
+  ):Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.id),
     });
     if (!center) {
-      throw new Error("Center not found");
+      throw new Error("404, Center not found");
     }
     return center;
   },
@@ -28,9 +28,7 @@ export const Center = {
   id: (parent: CenterModel): string => {
     return String(parent._id!);
   },
-  groups: async (parent: CenterModel, ctx: Context) => {
-    return await Promise.all(parent.groups.map(async (group: ObjectId) => {
-      return await groupCollection(ctx.db).findOne({ _id: group });
-    }));
-  },
+  groups: async (parent:CenterModel, _:unknown, ctx:Context) => {
+    return await groupCollection(ctx.db).find({ _id: {$in: parent.groups} }).toArray();
+  }
 };

@@ -2,6 +2,30 @@ import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
 
+    enum TypeCenter{
+        ACADEMY
+        NO_ACADEMY
+        CAMPUS
+    }
+
+    enum TypeActivitiesCenter{
+        EXTRACURRICULAR
+        WORKSHOPS
+        OTHERS
+    }
+
+    enum ModalityCenter{
+        PRESENTIAL
+        SEMI_PRESENTIAL
+        ONLINE
+    }
+
+    enum NatureCenter{
+        PRIVATE
+        PUBLIC
+        CONCERTED
+    }
+
     type ContactCenter{
         name: String
         surname: String
