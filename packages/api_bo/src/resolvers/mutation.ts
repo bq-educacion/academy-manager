@@ -9,7 +9,7 @@ import {
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { ObjectId } from "objectId";
-import { groupCollection } from "../models/GroupModel.ts";
+import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
 
 export const Mutation = {
@@ -121,7 +121,7 @@ export const Mutation = {
     _parent: unknown,
     args: MutationCreateGroupArgs,
     ctx: Context,
-  ) => {
+  ):Promise<GroupModel> => {
     
     const group = await groupCollection(ctx.db).findOne({center:new ObjectId(args.idCenter), name: args.name});
     if (group) throw new Error("404, Group already exists");
@@ -148,12 +148,13 @@ export const Mutation = {
     }, { $push: { groups: { $each: [idGroup] } } });
 
     return {
-      _id: idGroup,
-      id_group: id_group,
-      center: center,
-      students: [],
-      createdAt: createdAt,
       ...args,
+      _id: idGroup,
+      id_group:id_group,
+      center: center,
+      students: [], 
+      instructors: instructors,
+      createdAt: createdAt,
     };
   },
 };
