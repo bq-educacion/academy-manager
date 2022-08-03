@@ -2,8 +2,7 @@ import styled from "@emotion/styled";
 import { FC, useState } from "react";
 import LogoBQ from "../public/images/bq-logo.svg";
 import { A, P4 } from "@academy-manager/ui/src/theme/styles";
-import { Triangle } from "@academy-manager/ui/src/assets/icons";
-import {colors} from "@academy-manager/ui";
+import {colors, Icon} from "@academy-manager/ui";
 
 type LateralMenuProps = {
   changeSection: (section: string) => void;
@@ -40,7 +39,7 @@ export const LateralMenu: FC<LateralMenuProps> = ({ sections, changeLabel, chang
               }}
             >
               <P4Lateral>{elem.title}</P4Lateral>
-              <TriangleLateral clicked={clicked} />
+              <TriangleLateral name="triangle" clicked={clicked} />
             </LateralMenuItem>
             {clicked &&
               (
@@ -95,7 +94,7 @@ const P4Lateral = styled(P4)`
     }
 `;
 
-const TriangleLateral = styled(Triangle)<{ clicked: boolean }>`
+const TriangleLateral = styled(Icon)<{ clicked: boolean }>`
 
 
   color: ${colors.colors.white};

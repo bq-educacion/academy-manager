@@ -2,13 +2,13 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { colors } from "../theme";
 import { P3 } from "../theme/styles";
-import { Bell } from "@academy-manager/ui/src/assets/icons";
+import Icon from "./Icon";
 
 
 const SecondActionButton:FC<{disable?:boolean}> =({disable})=>{
     const disabled = disable ? true : false;
     return(
-        <Circle border={true} disable={disabled}><Bell/></Circle>
+        <Circle border={true} disable={disabled}><Icon name="bell"/></Circle>
     )
 }
 

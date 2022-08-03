@@ -11,7 +11,7 @@ export const LoadingOvercast: FC = () => {
         <span className="dot"></span>
         <span className="dot"></span>
       </LoadingAnimation>
-      <LoadP4>Cargando</LoadP4>
+      <P4>Cargando</P4>
     </Blur>
   );
 };
@@ -71,8 +71,4 @@ const LoadingAnimation = styled.div`
 		}
 	}
     
-`;
-
-const LoadP4 = styled(P4)`
-    font-weight: normal;
 `;

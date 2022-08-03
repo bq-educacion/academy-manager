@@ -1,6 +1,10 @@
 import styled from "@emotion/styled";
 import React, { memo, FC } from "react";
 import { ClosePannel } from "../assets/icons";
+import { Bell } from "../assets/icons";
+import { MenuKebab } from "../assets/icons";
+import { Lens } from "../assets/icons";
+import { Triangle } from "../assets/icons";
 
 import { colors } from "../theme";
 
@@ -19,6 +23,14 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
   switch (name) {
     case "close-pannel":
       return <ClosePannel {...rest} />;
+    case "bell":
+      return <Bell {...rest} />;
+    case "menu-kebab":
+      return <MenuKebab {...rest} />;
+    case "lens":
+      return <Lens {...rest} />;
+    case "triangle":
+      return <Triangle {...rest} />;
     default:
       // tslint:disable-next-line:no-console
       console.warn("Icon not found");

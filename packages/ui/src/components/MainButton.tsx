@@ -28,7 +28,3 @@ const MainButton = styled.button<{width:string}>`
         border: 1px solid ${colors.colors.grayBlue};
     }
 `
-
-function useRouter() {
-    throw new Error("Function not implemented.");
-}

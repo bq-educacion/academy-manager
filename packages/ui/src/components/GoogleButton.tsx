@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { colors } from "../theme";
-import { ImageLogoGoogle } from "@academy-manager/ui";
+import { ImageLogoGoogle } from "../assets/images";
 
 export const GoogleButton: FC = () => {
     return(
