@@ -1,5 +1,5 @@
 import { Lens } from "@academy-manager/ui/src/assets/icons";
-import { P1, P2, RainbowDivider } from "@academy-manager/ui/src/theme/styles";
+import { P1, P2, RainbowDivider } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { UserStuff } from "./UserStuff";

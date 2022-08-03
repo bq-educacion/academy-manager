@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { P4 } from "@academy-manager/ui/src/theme/styles";
-import {colors} from "@academy-manager/ui";
+import { colors, P4 } from "../theme";
+
 
 export const LoadingOvercast: FC = () => {
   return (
