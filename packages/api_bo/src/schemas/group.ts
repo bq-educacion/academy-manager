@@ -7,6 +7,28 @@ export const typeDefs = gql`
         EXTERNAL
     }
 
+    enum Days{
+        MONDAY 
+        TUESDAY
+        WEDNESDAY
+        THURSDAY
+        FRIDAY
+        SATURDAY
+        SUNDAY
+    }
+
+    type Timetable{
+        day: Days
+        start: String
+        end: String
+    }
+
+    input TimetableInput{
+        day: Days
+        start: String
+        end: String
+    }
+
     type Group{
         id:ID
         id_group: Number
@@ -14,7 +36,7 @@ export const typeDefs = gql`
         type: TypeGroup
         createdAt: String
         course: String
-        timetable: [String!]
+        timetable: [Timetable!]
         notes: String
         center: Center
         instructors: [Instructor!]
@@ -28,8 +50,7 @@ export const typeDefs = gql`
     }
 
     extend type Mutation {
-        deleteGroup(id:String!):String!
-        createGroup(idCenter:String!, name: String!, type: TypeGroup!, course: String!, timetable: [String!]!, instructors:[String!], notes: String): Group!
+        createGroup(idCenter:String!, name: String!, type: TypeGroup!, course: String!, timetable: [TimetableInput!]!, instructors:[String!], notes: String): Group!
     }
 
 `;

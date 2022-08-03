@@ -3,7 +3,6 @@ import {
   MutationAddContactCenterArgs,
   MutationCreateCenterArgs,
   MutationCreateGroupArgs,
-  MutationDeleteGroupArgs,
   MutationEditCenterArgs,
   MutationEditContactsCenterArgs,
 } from "../types.ts";
@@ -117,31 +116,12 @@ export const Mutation = {
     return contactUpdate;
   },
 
-  deleteGroup: async (
-    _parent: unknown,
-    args: MutationDeleteGroupArgs,
-    ctx: Context,
-  ) => {
-    await groupCollection(ctx.db).drop();
-    const center = await centerCollection(ctx.db).findOne({
-      _id: new ObjectId(args.id),
-    });
-
-    if (!center) {
-      throw new Error("Center not found");
-    }
-
-    await centerCollection(ctx.db).updateOne({ _id: new ObjectId(args.id) }, {
-      $set: { groups: [] },
-    });
-    return "delete";
-  },
-
   createGroup: async (
     _parent: unknown,
     args: MutationCreateGroupArgs,
     ctx: Context,
   ): Promise<GroupModel> => {
+
     const group = await groupCollection(ctx.db).findOne({
       center: new ObjectId(args.idCenter),
       name: { $regex: args.name, $options: "i" },

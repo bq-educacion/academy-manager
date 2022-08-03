@@ -1,4 +1,3 @@
-import { ObjectId } from "objectId";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
@@ -40,9 +39,7 @@ export const Query = {
     args: QueryGetGroupArgs,
     ctx: Context,
   ): Promise<GroupModel> => {
-    const group = await groupCollection(ctx.db).findOne({
-      _id: new ObjectId(args.id),
-    });
+    const group = await groupCollection(ctx.db).findById(args.id);
     if (!group) {
       throw new Error("404, Group not found");
     }
