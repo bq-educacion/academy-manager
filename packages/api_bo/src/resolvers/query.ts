@@ -7,7 +7,7 @@ export const Query = {
   getCenters: async (
     _parent: unknown,
     _args: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel[]> => {
     return await centerCollection(ctx.db).find().toArray();
   },
@@ -15,7 +15,7 @@ export const Query = {
   getCenter: async (
     _parent: unknown,
     args: QueryGetCenterArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findById(args.id);
     if (!center) {

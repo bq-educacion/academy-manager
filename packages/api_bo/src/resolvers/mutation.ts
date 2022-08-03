@@ -14,7 +14,7 @@ export const Mutation = {
     _parent: unknown,
     args: MutationCreateCenterArgs,
     ctx: Context,
-  ):Promise<CenterModel> => {
+  ): Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findOne({ name: args.name });
     if (center) throw new Error("404, Center already exists");
     const createdAt = new Date().toLocaleDateString();
@@ -37,7 +37,7 @@ export const Mutation = {
     _parent: unknown,
     args: MutationAddContactCenterArgs,
     ctx: Context,
-  ):Promise<ContactCenter> => {
+  ): Promise<ContactCenter> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.idCenter),
     });
@@ -63,7 +63,7 @@ export const Mutation = {
     _parent: unknown,
     args: MutationEditCenterArgs,
     ctx: Context,
-  ):Promise<CenterModel> => {
+  ): Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.id),
     });
@@ -81,36 +81,37 @@ export const Mutation = {
     _parent: unknown,
     args: MutationEditContactsCenterArgs,
     ctx: Context,
-  ):Promise<ContactCenter> => {
-      
-      const contactsCenter = await centerCollection(ctx.db).find(
-        {
-          _id: new ObjectId(args.idCenter),
-          contacts: { $elemMatch: { email: args.originEmail } },
-        },
-        { projection: { _id: 0, contacts: 1 } },
-      ).toArray();
-      
-      if(contactsCenter.length === 0) throw new Error('404, Center or contact not found');
-      
-      let contactUpdate:ContactCenter={};
-      const updateContacts = contactsCenter[0].contacts?.map((contact) => {
-        if (contact.email === args.originEmail) {
-          contactUpdate = { 
-            name: args.name || contact.name,
-            surname: args.surname || contact.surname,
-            email: args.email || contact.email,
-            phone: args.phone || contact.phone
-          };
-          return contactUpdate;
-        }
-        return contact ;
-      }) as ContactCenter[];
-
-      await centerCollection(ctx.db).updateOne({
+  ): Promise<ContactCenter> => {
+    const contactsCenter = await centerCollection(ctx.db).find(
+      {
         _id: new ObjectId(args.idCenter),
-      }, { $set: { contacts: updateContacts } });
+        contacts: { $elemMatch: { email: args.originEmail } },
+      },
+      { projection: { _id: 0, contacts: 1 } },
+    ).toArray();
 
-      return contactUpdate;
+    if (contactsCenter.length === 0) {
+      throw new Error("404, Center or contact not found");
+    }
+
+    let contactUpdate: ContactCenter = {};
+    const updateContacts = contactsCenter[0].contacts?.map((contact) => {
+      if (contact.email === args.originEmail) {
+        contactUpdate = {
+          name: args.name || contact.name,
+          surname: args.surname || contact.surname,
+          email: args.email || contact.email,
+          phone: args.phone || contact.phone,
+        };
+        return contactUpdate;
+      }
+      return contact;
+    }) as ContactCenter[];
+
+    await centerCollection(ctx.db).updateOne({
+      _id: new ObjectId(args.idCenter),
+    }, { $set: { contacts: updateContacts } });
+
+    return contactUpdate;
   },
 };
