@@ -53,7 +53,7 @@ export const typeDefs = gql`
     }
 
     type Query {
-        getCenters:[Center!]
+        getCenters:[Center!]!
         
         getCenter(id:String!): Center!
     }

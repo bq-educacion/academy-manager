@@ -22,12 +22,13 @@ export const typeDefs = gql`
     }
 
     extend type Query {
-        getGroups:[Group!]
+        getGroups:[Group!]!
         
         getGroup(id:String!): Group!
     }
 
     extend type Mutation {
+        deleteGroup(id:String!):String!
         createGroup(idCenter:String!, name: String!, type: TypeGroup!, course: String!, timetable: [String!]!, instructors:[String!], notes: String): Group!
     }
 

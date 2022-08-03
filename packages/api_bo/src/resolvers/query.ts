@@ -25,7 +25,7 @@ export const Query = {
     return center;
   },
 
-  getGroups: async (_parent: unknown, _args: unknown, ctx: Context) => {
+  getGroups: async (_parent: unknown, _args: unknown, ctx: Context):Promise<GroupModel[]> => {
     return await groupCollection(ctx.db).find().toArray();
   },
 
@@ -33,7 +33,7 @@ export const Query = {
     _parent: unknown,
     args: QueryGetGroupArgs,
     ctx: Context,
-  ) => {
+  ): Promise<GroupModel> => {
     const group = await groupCollection(ctx.db).findOne({
       _id: new ObjectId(args.id),
     });

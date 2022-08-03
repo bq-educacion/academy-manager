@@ -9,3 +9,11 @@ export type CenterModel = Omit<Center, "id" | "groups"> & {
 
 export const centerCollection = (db: Database) =>
   db.collection<CenterModel>("centers");
+
+// export const centerCollection = (db: Database) => {
+//   const collection = db.collection<CenterModel>("centers");
+//   collection.prototype.findById = async function(id: string): Promise<CenterModel>{
+//       return await collection.findOne({_id: new ObjectId(id)}) as CenterModel;
+//   }
+//   return collection;
+// }
