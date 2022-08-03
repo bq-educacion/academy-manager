@@ -20,9 +20,7 @@ export const Query = {
     args: QueryGetCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
-    const center = await centerCollection(ctx.db).findOne({
-      _id: new ObjectId(args.id),
-    });
+    const center = await centerCollection(ctx.db).findById(args.id);
     if (!center) {
       throw new Error("404, Center not found");
     }
