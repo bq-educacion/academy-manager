@@ -23,6 +23,7 @@ const MainButton = styled.button<{width:string}>`
     border: none;
     &:hover {
         background-color: ${colors.colors.grayBlue2};
+        cursor: pointer;
     }
     &:active {
         border: 1px solid ${colors.colors.grayBlue};
