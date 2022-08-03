@@ -15,5 +15,6 @@ parserOptions:
 plugins:
   - "@typescript-eslint"
 ignorePatterns:
-  - "**/api_bo/src/types.ts"
-  - "**/api_m/src/types.ts"
+  - "packages/api_bo/src/types.ts"
+  - "packages/api_m/src/types.ts"
+
