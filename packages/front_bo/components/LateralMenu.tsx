@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
 import { FC, useState } from "react";
-import LogoBQ from "../public/images/bq-logo.svg";
-import { A, P4 } from "@academy-manager/ui/src/theme/styles";
-import {colors, Icon} from "@academy-manager/ui";
+import {BQLogo, colors, Icon, A, P4} from "@academy-manager/ui";
 
 type LateralMenuProps = {
   changeSection: (section: string) => void;
@@ -20,7 +18,7 @@ export const LateralMenu: FC<LateralMenuProps> = ({ sections, changeLabel, chang
   return (
     <LateralContainer>
       <LateralMenuItem top={35} left={43} bottom={26}>
-        <LogoBQ />
+        <BQLogo />
       </LateralMenuItem>
 
       {sections?.map((elem) => {

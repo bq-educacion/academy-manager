@@ -1,8 +1,6 @@
-import { colors } from "@academy-manager/ui";
-import { P2, P4, PG } from "@academy-manager/ui";
+import { P2, P4, PG, MButton, colors } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { MButton } from "@academy-manager/ui";
 import { useRouter } from "next/router";
 
 export const ErrorContent: FC<{ error: number }> = ({ error }) => {

@@ -5,7 +5,6 @@ import { Bell } from "../assets/icons";
 import { MenuKebab } from "../assets/icons";
 import { Lens } from "../assets/icons";
 import { Triangle } from "../assets/icons";
-
 import { colors } from "../theme";
 
 export interface IIconProps {

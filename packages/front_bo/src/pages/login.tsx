@@ -1,14 +1,11 @@
-import { P2, RainbowDivider } from "@academy-manager/ui/src/theme/styles";
 import styled from "@emotion/styled";
 import { NextPage } from "next";
-import LogoBQ from "../../public/images/bq-logo-gray.svg";
-import { GoogleButton } from "@academy-manager/ui/src/components/GoogleButton";
-import { colors } from "@academy-manager/ui";
+import { BQLogoGray, colors, GoogleButton, P2, RainbowDivider } from "@academy-manager/ui";
 
 const LogInPage: NextPage = () => {
   return (
     <Layout>
-      <LogoBQ/>
+      <BQLogoGray/>
       <LogInBox>
         <LogInP2>Inicia sesión</LogInP2>
         <RainbowDivider/>

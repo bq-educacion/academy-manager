@@ -1,9 +1,7 @@
-import { Lens } from "@academy-manager/ui/src/assets/icons";
-import { P1, P2, RainbowDivider } from "@academy-manager/ui";
+import { P1, P2, RainbowDivider, colors, Icon } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { UserStuff } from "./UserStuff";
-import {colors} from "@academy-manager/ui";
 
 
 export const ContentStart : FC<{section: string, label: string}> = ({section, label}) => {
@@ -16,7 +14,7 @@ export const ContentStart : FC<{section: string, label: string}> = ({section, la
             <RainbowDivider/>
             <ContentSubHeader>
                 <P2>{label}</P2>
-                <InputMail placeholder="    Buscar por email"></InputMail><LensSearch/>
+                <InputMail placeholder="    Buscar por email"></InputMail><LensSearch name="lens"/>
             </ContentSubHeader>
             <ContentBody>
                 
@@ -82,7 +80,7 @@ const InputMail = styled.input`
     }
 `
 
-const LensSearch = styled(Lens)`
+const LensSearch = styled(Icon)`
     color: ${colors.colors.grayBlue2};
     position: absolute;
     right: 61px;
