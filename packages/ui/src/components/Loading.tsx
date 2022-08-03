@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { colors, P4 } from "../theme";
-
+import { colors } from "../theme";
+import { P4 } from "../theme/styles";
 
 export const LoadingOvercast: FC = () => {
   return (

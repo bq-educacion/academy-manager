@@ -62,3 +62,13 @@ export const RainbowDivider = styled.div`
     width: 100%;
     height: 1px;
 `
+
+export default {
+  P1,
+  P2,
+  P3,
+  P4,
+  PG,
+  A,
+  RainbowDivider
+}

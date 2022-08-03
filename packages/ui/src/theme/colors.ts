@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 
 export const adjustColorOpacity = (color: string, opacity: number): string => {
   const r = parseInt(color.slice(1, 3), 16);

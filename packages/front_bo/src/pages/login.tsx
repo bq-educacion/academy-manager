@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
-import { BQLogoGray, colors, GoogleButton, P2, RainbowDivider } from "@academy-manager/ui";
+import { BQLogoGray, colors, GoogleButton, styles } from "@academy-manager/ui";
 
 const LogInPage: NextPage = () => {
   return (
@@ -8,7 +8,7 @@ const LogInPage: NextPage = () => {
       <BQLogoGray/>
       <LogInBox>
         <LogInP2>Inicia sesión</LogInP2>
-        <RainbowDivider/>
+        <styles.RainbowDivider/>
         <LogIn>
             <GoogleButton/>
         </LogIn>
@@ -39,7 +39,7 @@ const LogInBox = styled.div`
     width: 393px;
 `
 
-const LogInP2 = styled(P2)`
+const LogInP2 = styled(styles.P2)`
     margin: 29px 0 26px 0;
 `
 

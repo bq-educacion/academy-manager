@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { FC, useState } from "react";
-import {BQLogo, colors, Icon, A, P4} from "@academy-manager/ui";
+import {BQLogo, colors, Icon, styles} from "@academy-manager/ui";
 
 type LateralMenuProps = {
   changeSection: (section: string) => void;
@@ -85,7 +85,7 @@ const LateralMenuItem = styled.div<{ left: number; top: number; bottom: number; 
     }
 `;
 
-const P4Lateral = styled(P4)`
+const P4Lateral = styled(styles.P4)`
     color: ${colors.colors.white};
     &:hover {
       cursor: pointer;
@@ -117,7 +117,7 @@ const LinksLateral = styled.div<{ left: number; top: number; bottom: number; cli
     }
 `;
 
-const ALateral = styled(A)`
+const ALateral = styled(styles.A)`
     color: ${colors.colors.white};
     font-size: 14px;
     font-weight: normal;
