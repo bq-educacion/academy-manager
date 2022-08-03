@@ -13,8 +13,8 @@ export const Mutation = {
   createCenter: async (
     _parent: unknown,
     args: MutationCreateCenterArgs,
-    ctx: Context,
-  ):Promise<CenterModel> => {
+    ctx: Context
+  ): Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findOne({ name: args.name });
     if (center) throw new Error("404, Center already exists");
     const createdAt = new Date().toLocaleDateString();
@@ -36,8 +36,8 @@ export const Mutation = {
   addContactCenter: async (
     _parent: unknown,
     args: MutationAddContactCenterArgs,
-    ctx: Context,
-  ):Promise<ContactCenter> => {
+    ctx: Context
+  ): Promise<ContactCenter> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.idCenter),
     });
@@ -53,17 +53,20 @@ export const Mutation = {
 
     const newContact: ContactCenter = { ...args };
 
-    await centerCollection(ctx.db).updateOne({
-      _id: new ObjectId(args.idCenter),
-    }, { $push: { contacts: { $each: [newContact] } } });
+    await centerCollection(ctx.db).updateOne(
+      {
+        _id: new ObjectId(args.idCenter),
+      },
+      { $push: { contacts: { $each: [newContact] } } }
+    );
     return newContact;
   },
 
   editCenter: async (
     _parent: unknown,
     args: MutationEditCenterArgs,
-    ctx: Context,
-  ):Promise<CenterModel> => {
+    ctx: Context
+  ): Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.id),
     });
@@ -71,46 +74,55 @@ export const Mutation = {
       throw new Error("404, Center not found");
     }
 
-    await centerCollection(ctx.db).updateOne({ _id: new ObjectId(args.id) }, {
-      $set: { ...args },
-    });
+    await centerCollection(ctx.db).updateOne(
+      { _id: new ObjectId(args.id) },
+      {
+        $set: { ...args },
+      }
+    );
     return { _id: center._id, ...center, ...args };
   },
 
   editContactsCenter: async (
     _parent: unknown,
     args: MutationEditContactsCenterArgs,
-    ctx: Context,
-  ):Promise<ContactCenter> => {
-      
-      const contactsCenter = await centerCollection(ctx.db).find(
+    ctx: Context
+  ): Promise<ContactCenter> => {
+    const contactsCenter = await centerCollection(ctx.db)
+      .find(
         {
           _id: new ObjectId(args.idCenter),
           contacts: { $elemMatch: { email: args.originEmail } },
         },
-        { projection: { _id: 0, contacts: 1 } },
-      ).toArray();
-      
-      if(contactsCenter.length === 0) throw new Error('404, Center or contact not found');
-      
-      let contactUpdate:ContactCenter={};
-      const updateContacts = contactsCenter[0].contacts?.map((contact) => {
-        if (contact.email === args.originEmail) {
-          contactUpdate = { 
-            name: args.name || contact.name,
-            surname: args.surname || contact.surname,
-            email: args.email || contact.email,
-            phone: args.phone || contact.phone
-          };
-          return contactUpdate;
-        }
-        return contact ;
-      }) as ContactCenter[];
+        { projection: { _id: 0, contacts: 1 } }
+      )
+      .toArray();
 
-      await centerCollection(ctx.db).updateOne({
+    if (contactsCenter.length === 0) {
+      throw new Error("404, Center or contact not found");
+    }
+
+    let contactUpdate: ContactCenter = {};
+    const updateContacts = contactsCenter[0].contacts?.map((contact) => {
+      if (contact.email === args.originEmail) {
+        contactUpdate = {
+          name: args.name || contact.name,
+          surname: args.surname || contact.surname,
+          email: args.email || contact.email,
+          phone: args.phone || contact.phone,
+        };
+        return contactUpdate;
+      }
+      return contact;
+    }) as ContactCenter[];
+
+    await centerCollection(ctx.db).updateOne(
+      {
         _id: new ObjectId(args.idCenter),
-      }, { $set: { contacts: updateContacts } });
+      },
+      { $set: { contacts: updateContacts } }
+    );
 
-      return contactUpdate;
+    return contactUpdate;
   },
 };
