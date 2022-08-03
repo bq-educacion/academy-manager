@@ -11,6 +11,8 @@ export const GoogleButton: FC = () => {
     )
 }
 
+
+
 const GButton = styled.button`
     display: flex;
     justify-content: center;
