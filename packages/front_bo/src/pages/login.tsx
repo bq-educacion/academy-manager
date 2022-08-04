@@ -10,6 +10,7 @@ const LogInPage: NextPage = () => {
         <LogInP2>Inicia sesión</LogInP2>
         <styles.RainbowDivider />
         <LogIn>
+          <styles.P4>Accede con tu cuenta BQ</styles.P4>
           <GoogleButton />
         </LogIn>
       </LogInBox>
@@ -26,7 +27,7 @@ const Layout = styled.div`
   align-items: center;
 
   & > svg {
-    margin: 75px 0 40px 0;
+    margin: 105px 0 80px 0;
   }
 `;
 
@@ -35,18 +36,25 @@ const LogInBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 440px;
+  height: 231px;
   width: 393px;
 `;
 
 const LogInP2 = styled(styles.P2)`
   margin: 29px 0 26px 0;
+  font-weight: bold;
 `;
 
 const LogIn = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  & > p {
+    margin: 0 0 10px 40px;
+    align-self: flex-start;
+  }
 `;
