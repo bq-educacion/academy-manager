@@ -10,4 +10,5 @@ echo "deno fmt packages/api_m:"
 deno fmt packages/api_m
 echo "yarn lint:"
 yarn lint
+yarn tsc
 git add .

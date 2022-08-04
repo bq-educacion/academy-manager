@@ -9,7 +9,7 @@ export type CenterModel = Omit<Center, "id" | "groups"> & {
 };
 
 export const centerCollection = (
-  db: Database
+  db: Database,
 ): Collection<CenterModel> & FindById<CenterModel> => {
   const collection = db.collection<CenterModel>("centers");
   (collection as Collection<CenterModel> & FindById<CenterModel>).findById =

@@ -17,4 +17,3 @@ plugins:
 ignorePatterns:
   - "packages/api_bo/src/types.ts"
   - "packages/api_m/src/types.ts"
-
