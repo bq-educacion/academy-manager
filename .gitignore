@@ -10,3 +10,4 @@ google-application-credentials.json
 .DS_Store
 .next
 packages/front_bo/tsconfig.tsbuildinfo
+packages/front_m/tsconfig.tsbuildinfo
