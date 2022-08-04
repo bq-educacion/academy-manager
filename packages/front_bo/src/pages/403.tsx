@@ -15,7 +15,7 @@ const NotFoundPage: NextPage = () => {
         changeLabel={setLabel}
         changeSection={setSection}
       />
-      <ErrorContent error={404} />
+      <ErrorContent error={403} />
     </div>
   );
 };

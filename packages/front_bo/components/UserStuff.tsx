@@ -1,17 +1,13 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import SecondActionButton from "@academy-manager/ui/src/components/SecondActionButton";
-import UserButton from "@academy-manager/ui/src/components/UserButton";
-import OptionsButton from "@academy-manager/ui/src/components/OptionsButton";
-import { colors, Popover } from "@academy-manager/ui";
-import { P4 } from "@academy-manager/ui/src/theme/styles";
+import  { SecondActionButton, UserButton, OptionsButton, styles, Popover, colors }  from "@academy-manager/ui";
 
 export const UserStuff: FC<{ token: string }> = ({ token }) => {
   return (
     <UserStuffLayout>
       <SecondActionButton />
       <UserButton />
-      <Popover title={<OptionsButton />} content={<PopoverContent><P4>Cerrar sesión</P4></PopoverContent>}></Popover>
+      <Popover title={<OptionsButton />} content={<PopoverContent><styles.P4>Cerrar sesión</styles.P4></PopoverContent>}></Popover>
     </UserStuffLayout>
   );
 };

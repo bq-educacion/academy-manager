@@ -30,12 +30,6 @@
     "api-types": "yarn run api_bo_types && yarn run api_m_types",
     "lint": "eslint \"packages/*/src/**/*.{js,jsx,ts,tsx}\" --fix --quiet"
   },
-  "lint-staged": {
-    "*.{js,ts,tsx,jsx,scss}": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bq-education/academy-manager.git"

@@ -1,22 +1,21 @@
-import { Lens } from "@academy-manager/ui/src/assets/icons";
-import { P1, P2, RainbowDivider } from "@academy-manager/ui/src/theme/styles";
+import { colors, Icon, styles } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { UserStuff } from "./UserStuff";
-import {colors} from "@academy-manager/ui";
+
 
 
 export const ContentStart : FC<{section: string, label: string}> = ({section, label}) => {
     return (
         <ContentLayout>
             <ContentHeader>
-                <P1>{section}</P1>
+                <styles.P1>{section}</styles.P1>
                 <UserStuff token="token"/>
             </ContentHeader>
-            <RainbowDivider/>
+            <styles.RainbowDivider/>
             <ContentSubHeader>
-                <P2>{label}</P2>
-                <InputMail placeholder="    Buscar por email"></InputMail><LensSearch/>
+                <styles.P2>{label}</styles.P2>
+                <InputMail placeholder="    Buscar por email"></InputMail><LensSearch name="lens"/>
             </ContentSubHeader>
             <ContentBody>
                 
@@ -82,7 +81,7 @@ const InputMail = styled.input`
     }
 `
 
-const LensSearch = styled(Lens)`
+const LensSearch = styled(Icon)`
     color: ${colors.colors.grayBlue2};
     position: absolute;
     right: 61px;

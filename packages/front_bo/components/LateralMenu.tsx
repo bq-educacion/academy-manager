@@ -1,9 +1,6 @@
 import styled from "@emotion/styled";
 import { FC, useState } from "react";
-import LogoBQ from "../public/images/bq-logo.svg";
-import { A, P4 } from "@academy-manager/ui/src/theme/styles";
-import { Triangle } from "@academy-manager/ui/src/assets/icons";
-import {colors} from "@academy-manager/ui";
+import {BQLogo, colors, Icon, styles} from "@academy-manager/ui";
 
 type LateralMenuProps = {
   changeSection: (section: string) => void;
@@ -21,7 +18,7 @@ export const LateralMenu: FC<LateralMenuProps> = ({ sections, changeLabel, chang
   return (
     <LateralContainer>
       <LateralMenuItem top={35} left={43} bottom={26}>
-        <LogoBQ />
+        <BQLogo />
       </LateralMenuItem>
 
       {sections?.map((elem) => {
@@ -40,7 +37,7 @@ export const LateralMenu: FC<LateralMenuProps> = ({ sections, changeLabel, chang
               }}
             >
               <P4Lateral>{elem.title}</P4Lateral>
-              <TriangleLateral clicked={clicked} />
+              <TriangleLateral name="triangle" clicked={clicked} />
             </LateralMenuItem>
             {clicked &&
               (
@@ -88,14 +85,14 @@ const LateralMenuItem = styled.div<{ left: number; top: number; bottom: number; 
     }
 `;
 
-const P4Lateral = styled(P4)`
+const P4Lateral = styled(styles.P4)`
     color: ${colors.colors.white};
     &:hover {
       cursor: pointer;
     }
 `;
 
-const TriangleLateral = styled(Triangle)<{ clicked: boolean }>`
+const TriangleLateral = styled(Icon)<{ clicked: boolean }>`
 
 
   color: ${colors.colors.white};
@@ -120,7 +117,7 @@ const LinksLateral = styled.div<{ left: number; top: number; bottom: number; cli
     }
 `;
 
-const ALateral = styled(A)`
+const ALateral = styled(styles.A)`
     color: ${colors.colors.white};
     font-size: 14px;
     font-weight: normal;
