@@ -1,6 +1,7 @@
 import { Group } from "../types.ts";
 import { ObjectId } from "objectId";
-import { Database } from "mongo";
+import { Collection, Database } from "mongo";
+import { FindById } from "./types.ts";
 
 export type GroupModel = Omit<
   Group,
@@ -12,5 +13,13 @@ export type GroupModel = Omit<
   instructors: ObjectId[];
 };
 
-export const groupCollection = (db: Database) =>
-  db.collection<GroupModel>("groups");
+export const groupCollection = (
+  db: Database
+): Collection<GroupModel> & FindById<GroupModel> => {
+  const collection = db.collection<GroupModel>("groups");
+  (collection as Collection<GroupModel> & FindById<GroupModel>).findById =
+    function (id: string) {
+      return collection.findOne({ _id: new ObjectId(id) });
+    };
+  return collection as Collection<GroupModel> & FindById<GroupModel>;
+};
