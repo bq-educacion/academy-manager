@@ -1,10 +1,10 @@
 import {
-  ContactCenter,
-  MutationAddContactCenterArgs,
+  CenterContact,
+  MutationAddCenterContactArgs,
   MutationCreateCenterArgs,
   MutationCreateGroupArgs,
   MutationEditCenterArgs,
-  MutationEditContactsCenterArgs,
+  MutationeditCenterContactsArgs,
 } from "../types.ts";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
@@ -34,11 +34,11 @@ export const Mutation = {
     };
   },
 
-  addContactCenter: async (
+  addCenterContact: async (
     _parent: unknown,
-    args: MutationAddContactCenterArgs,
+    args: MutationAddCenterContactArgs,
     ctx: Context,
-  ): Promise<ContactCenter> => {
+  ): Promise<CenterContact> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.idCenter),
     });
@@ -52,7 +52,7 @@ export const Mutation = {
     });
     if (contact) throw new Error("404, Contact already exists");
 
-    const newContact: ContactCenter = { ...args };
+    const newContact: CenterContact = { ...args };
 
     await centerCollection(ctx.db).updateOne(
       {
@@ -84,11 +84,11 @@ export const Mutation = {
     return { _id: center._id, ...center, ...args };
   },
 
-  editContactsCenter: async (
+  editCenterContacts: async (
     _parent: unknown,
-    args: MutationEditContactsCenterArgs,
+    args: MutationeditCenterContactsArgs,
     ctx: Context,
-  ): Promise<ContactCenter> => {
+  ): Promise<CenterContact> => {
     const contactsCenter = await centerCollection(ctx.db)
       .find(
         {
@@ -103,7 +103,7 @@ export const Mutation = {
       throw new Error("404, Center or contact not found");
     }
 
-    let contactUpdate: ContactCenter = {};
+    let contactUpdate: CenterContact = {};
     const updateContacts = contactsCenter[0].contacts?.map((contact) => {
       if (contact.email === args.originEmail) {
         contactUpdate = {
@@ -115,7 +115,7 @@ export const Mutation = {
         return contactUpdate;
       }
       return contact;
-    }) as ContactCenter[];
+    }) as CenterContact[];
 
     await centerCollection(ctx.db).updateOne(
       {

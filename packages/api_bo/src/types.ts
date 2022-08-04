@@ -29,31 +29,55 @@ export type Scalars = {
 
 export type Center = {
   __typename?: "Center";
+  activityTypes: CenterActivityTypes;
   address: Scalars["String"];
-  contacts?: Maybe<Array<ContactCenter>>;
+  contacts: Array<CenterContact>;
   course: Scalars["String"];
   createdAt: Scalars["String"];
-  email?: Maybe<Scalars["String"]>;
-  groups?: Maybe<Array<Group>>;
+  email: Scalars["String"];
+  groups: Array<Group>;
   id: Scalars["ID"];
-  languages?: Maybe<Array<Scalars["String"]>>;
-  modality: ModalityCenter;
+  languages: Array<Scalars["String"]>;
+  modality: CenterModality;
   name: Scalars["String"];
-  nature: NatureCenter;
+  nature: CenterNature;
   notes?: Maybe<Scalars["String"]>;
   phone: Scalars["String"];
   population: Scalars["String"];
-  type: TypeCenter;
-  typeActivities: TypeActivitiesCenter;
+  type: CenterType;
 };
 
-export type ContactCenter = {
-  __typename?: "ContactCenter";
+export enum CenterActivityTypes {
+  Extracurricular = "EXTRACURRICULAR",
+  Others = "OTHERS",
+  Workshops = "WORKSHOPS",
+}
+
+export type CenterContact = {
+  __typename?: "CenterContact";
   email: Scalars["String"];
   name: Scalars["String"];
   phone: Scalars["String"];
   surname: Scalars["String"];
 };
+
+export enum CenterModality {
+  Online = "ONLINE",
+  Presential = "PRESENTIAL",
+  SemiPresential = "SEMI_PRESENTIAL",
+}
+
+export enum CenterNature {
+  Concerted = "CONCERTED",
+  Private = "PRIVATE",
+  Public = "PUBLIC",
+}
+
+export enum CenterType {
+  Academy = "ACADEMY",
+  Campus = "CAMPUS",
+  NoAcademy = "NO_ACADEMY",
+}
 
 export type ContactStudent = {
   __typename?: "ContactStudent";
@@ -82,13 +106,18 @@ export type Group = {
   createdAt: Scalars["String"];
   id: Scalars["ID"];
   id_group: Scalars["Number"];
-  instructors?: Maybe<Array<Instructor>>;
+  instructors: Array<Instructor>;
   name: Scalars["String"];
   notes?: Maybe<Scalars["String"]>;
-  students?: Maybe<Array<Student>>;
-  timetable: Array<Timetable>;
-  type: TypeGroup;
+  students: Array<Student>;
+  timetable: Array<Scalars["String"]>;
+  type: GroupType;
 };
+
+export enum GroupType {
+  External = "EXTERNAL",
+  Internal = "INTERNAL",
+}
 
 export type Instructor = {
   __typename?: "Instructor";
@@ -115,22 +144,16 @@ export type Instructor = {
   vehicle?: Maybe<Scalars["Boolean"]>;
 };
 
-export enum ModalityCenter {
-  Online = "ONLINE",
-  Presential = "PRESENTIAL",
-  SemiPresential = "SEMI_PRESENTIAL",
-}
-
 export type Mutation = {
   __typename?: "Mutation";
-  addContactCenter: ContactCenter;
+  addCenterContact: CenterContact;
   createCenter: Center;
   createGroup: Group;
   editCenter: Center;
-  editContactsCenter: ContactCenter;
+  editCenterContacts: CenterContact;
 };
 
-export type MutationAddContactCenterArgs = {
+export type MutationAddCenterContactArgs = {
   email: Scalars["String"];
   idCenter: Scalars["String"];
   name: Scalars["String"];
@@ -139,47 +162,47 @@ export type MutationAddContactCenterArgs = {
 };
 
 export type MutationCreateCenterArgs = {
+  activityTypes: CenterActivityTypes;
   address: Scalars["String"];
   course: Scalars["String"];
-  email?: InputMaybe<Scalars["String"]>;
+  email: Scalars["String"];
   languages: Array<Scalars["String"]>;
-  modality: ModalityCenter;
+  modality: CenterModality;
   name: Scalars["String"];
-  nature: NatureCenter;
+  nature: CenterNature;
   notes?: InputMaybe<Scalars["String"]>;
   phone: Scalars["String"];
   population: Scalars["String"];
-  type: TypeCenter;
-  typeActivities: TypeActivitiesCenter;
+  type: CenterType;
 };
 
 export type MutationCreateGroupArgs = {
   course: Scalars["String"];
   idCenter: Scalars["String"];
-  instructors?: InputMaybe<Array<Scalars["String"]>>;
+  instructors: Array<Scalars["String"]>;
   name: Scalars["String"];
   notes?: InputMaybe<Scalars["String"]>;
   timetable: Array<TimetableInput>;
-  type: TypeGroup;
+  type: GroupType;
 };
 
 export type MutationEditCenterArgs = {
+  activityTypes?: InputMaybe<CenterActivityTypes>;
   address?: InputMaybe<Scalars["String"]>;
   course?: InputMaybe<Scalars["String"]>;
   email?: InputMaybe<Scalars["String"]>;
   id: Scalars["String"];
   languages?: InputMaybe<Array<Scalars["String"]>>;
-  modality?: InputMaybe<ModalityCenter>;
+  modality?: InputMaybe<CenterModality>;
   name?: InputMaybe<Scalars["String"]>;
-  nature?: InputMaybe<NatureCenter>;
+  nature?: InputMaybe<CenterNature>;
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
   population?: InputMaybe<Scalars["String"]>;
-  type?: InputMaybe<TypeCenter>;
-  typeActivities?: InputMaybe<TypeActivitiesCenter>;
+  type?: InputMaybe<CenterType>;
 };
 
-export type MutationEditContactsCenterArgs = {
+export type MutationEditCenterContactsArgs = {
   email?: InputMaybe<Scalars["String"]>;
   idCenter: Scalars["String"];
   name?: InputMaybe<Scalars["String"]>;
@@ -187,12 +210,6 @@ export type MutationEditContactsCenterArgs = {
   phone?: InputMaybe<Scalars["String"]>;
   surname?: InputMaybe<Scalars["String"]>;
 };
-
-export enum NatureCenter {
-  Concerted = "CONCERTED",
-  Private = "PRIVATE",
-  Public = "PUBLIC",
-}
 
 export type Query = {
   __typename?: "Query";
@@ -243,33 +260,16 @@ export type Student = {
 
 export type Timetable = {
   __typename?: "Timetable";
-  day?: Maybe<Days>;
-  end?: Maybe<Scalars["String"]>;
-  start?: Maybe<Scalars["String"]>;
+  day: Days;
+  end: Scalars["String"];
+  start: Scalars["String"];
 };
 
 export type TimetableInput = {
-  day?: InputMaybe<Days>;
-  end?: InputMaybe<Scalars["String"]>;
-  start?: InputMaybe<Scalars["String"]>;
+  day: Days;
+  end: Scalars["String"];
+  start: Scalars["String"];
 };
-
-export enum TypeActivitiesCenter {
-  Extracurricular = "EXTRACURRICULAR",
-  Others = "OTHERS",
-  Workshops = "WORKSHOPS",
-}
-
-export enum TypeCenter {
-  Academy = "ACADEMY",
-  Campus = "CAMPUS",
-  NoAcademy = "NO_ACADEMY",
-}
-
-export enum TypeGroup {
-  External = "EXTERNAL",
-  Internal = "INTERNAL",
-}
 
 export enum TypeVehicleInstructor {
   Own = "OWN",
@@ -388,15 +388,18 @@ export type DirectiveResolverFn<
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Center: ResolverTypeWrapper<Center>;
-  ContactCenter: ResolverTypeWrapper<ContactCenter>;
+  CenterActivityTypes: CenterActivityTypes;
+  CenterContact: ResolverTypeWrapper<CenterContact>;
+  CenterModality: CenterModality;
+  CenterNature: CenterNature;
+  CenterType: CenterType;
   ContactStudent: ResolverTypeWrapper<ContactStudent>;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
+  GroupType: GroupType;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Instructor: ResolverTypeWrapper<Instructor>;
-  ModalityCenter: ModalityCenter;
   Mutation: ResolverTypeWrapper<{}>;
-  NatureCenter: NatureCenter;
   Number: ResolverTypeWrapper<Scalars["Number"]>;
   Query: ResolverTypeWrapper<{}>;
   StateInstructor: StateInstructor;
@@ -405,9 +408,6 @@ export type ResolversTypes = ResolversObject<{
   Student: ResolverTypeWrapper<Student>;
   Timetable: ResolverTypeWrapper<Timetable>;
   TimetableInput: TimetableInput;
-  TypeActivitiesCenter: TypeActivitiesCenter;
-  TypeCenter: TypeCenter;
-  TypeGroup: TypeGroup;
   TypeVehicleInstructor: TypeVehicleInstructor;
 }>;
 
@@ -415,7 +415,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"];
   Center: Center;
-  ContactCenter: ContactCenter;
+  CenterContact: CenterContact;
   ContactStudent: ContactStudent;
   Group: Group;
   ID: Scalars["ID"];
@@ -434,49 +434,45 @@ export type CenterResolvers<
   ParentType extends ResolversParentTypes["Center"] =
     ResolversParentTypes["Center"],
 > = ResolversObject<{
+  activityTypes?: Resolver<
+    ResolversTypes["CenterActivityTypes"],
+    ParentType,
+    ContextType
+  >;
   address?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   contacts?: Resolver<
-    Maybe<Array<ResolversTypes["ContactCenter"]>>,
+    Array<ResolversTypes["CenterContact"]>,
     ParentType,
     ContextType
   >;
   course?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  email?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  groups?: Resolver<
-    Maybe<Array<ResolversTypes["Group"]>>,
-    ParentType,
-    ContextType
-  >;
+  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   languages?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
+    Array<ResolversTypes["String"]>,
     ParentType,
     ContextType
   >;
   modality?: Resolver<
-    ResolversTypes["ModalityCenter"],
+    ResolversTypes["CenterModality"],
     ParentType,
     ContextType
   >;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  nature?: Resolver<ResolversTypes["NatureCenter"], ParentType, ContextType>;
+  nature?: Resolver<ResolversTypes["CenterNature"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   phone?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   population?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes["TypeCenter"], ParentType, ContextType>;
-  typeActivities?: Resolver<
-    ResolversTypes["TypeActivitiesCenter"],
-    ParentType,
-    ContextType
-  >;
+  type?: Resolver<ResolversTypes["CenterType"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ContactCenterResolvers<
+export type CenterContactResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes["ContactCenter"] =
-    ResolversParentTypes["ContactCenter"],
+  ParentType extends ResolversParentTypes["CenterContact"] =
+    ResolversParentTypes["CenterContact"],
 > = ResolversObject<{
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -514,23 +510,23 @@ export type GroupResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   id_group?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
   instructors?: Resolver<
-    Maybe<Array<ResolversTypes["Instructor"]>>,
+    Array<ResolversTypes["Instructor"]>,
     ParentType,
     ContextType
   >;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   students?: Resolver<
-    Maybe<Array<ResolversTypes["Student"]>>,
+    Array<ResolversTypes["Student"]>,
     ParentType,
     ContextType
   >;
   timetable?: Resolver<
-    Array<ResolversTypes["Timetable"]>,
+    Array<ResolversTypes["String"]>,
     ParentType,
     ContextType
   >;
-  type?: Resolver<ResolversTypes["TypeGroup"], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes["GroupType"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -624,12 +620,12 @@ export type MutationResolvers<
   ParentType extends ResolversParentTypes["Mutation"] =
     ResolversParentTypes["Mutation"],
 > = ResolversObject<{
-  addContactCenter?: Resolver<
-    ResolversTypes["ContactCenter"],
+  addCenterContact?: Resolver<
+    ResolversTypes["CenterContact"],
     ParentType,
     ContextType,
     RequireFields<
-      MutationAddContactCenterArgs,
+      MutationAddCenterContactArgs,
       "email" | "idCenter" | "name" | "phone" | "surname"
     >
   >;
@@ -639,8 +635,10 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateCenterArgs,
+      | "activityTypes"
       | "address"
       | "course"
+      | "email"
       | "languages"
       | "modality"
       | "name"
@@ -648,7 +646,6 @@ export type MutationResolvers<
       | "phone"
       | "population"
       | "type"
-      | "typeActivities"
     >
   >;
   createGroup?: Resolver<
@@ -657,7 +654,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateGroupArgs,
-      "course" | "idCenter" | "name" | "timetable" | "type"
+      "course" | "idCenter" | "instructors" | "name" | "timetable" | "type"
     >
   >;
   editCenter?: Resolver<
@@ -666,11 +663,11 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationEditCenterArgs, "id">
   >;
-  editContactsCenter?: Resolver<
-    ResolversTypes["ContactCenter"],
+  editCenterContacts?: Resolver<
+    ResolversTypes["CenterContact"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditContactsCenterArgs, "idCenter" | "originEmail">
+    RequireFields<MutationEditCenterContactsArgs, "idCenter" | "originEmail">
   >;
 }>;
 
@@ -778,15 +775,15 @@ export type TimetableResolvers<
   ParentType extends ResolversParentTypes["Timetable"] =
     ResolversParentTypes["Timetable"],
 > = ResolversObject<{
-  day?: Resolver<Maybe<ResolversTypes["Days"]>, ParentType, ContextType>;
-  end?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  start?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  day?: Resolver<ResolversTypes["Days"], ParentType, ContextType>;
+  end?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  start?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Center?: CenterResolvers<ContextType>;
-  ContactCenter?: ContactCenterResolvers<ContextType>;
+  CenterContact?: CenterContactResolvers<ContextType>;
   ContactStudent?: ContactStudentResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
   Instructor?: InstructorResolvers<ContextType>;
