@@ -1,7 +1,7 @@
 import { Image404 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { NextPage } from "next";
-import {colors} from "@academy-manager/ui";
+import { colors } from "@academy-manager/ui";
 
 const NotFoundPage: NextPage = () => {
   return (
@@ -33,4 +33,4 @@ const ErrorContainer = styled.div`
     height: auto;
     box-shadow: 0 0 10px ${colors.colors.shadow5};
   }
-`
+`;

@@ -10,7 +10,7 @@ export const P1 = styled.p`
   font-style: normal;
   letter-spacing: normal;
   color: ${colors.colors.black};
-`
+`;
 
 export const P2 = styled.p`
   ${fonts.family.roboto};
@@ -20,7 +20,7 @@ export const P2 = styled.p`
   font-style: normal;
   letter-spacing: normal;
   color: ${colors.colors.black};
-`
+`;
 
 export const P3 = styled.p`
   ${fonts.family.roboto};
@@ -30,11 +30,11 @@ export const P3 = styled.p`
   font-style: normal;
   letter-spacing: normal;
   color: ${colors.colors.black};
-`
+`;
 
 export const P4 = styled.p`
   ${fonts.family.roboto};
-  ${fonts.size.normal}; 
+  ${fonts.size.normal};
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
@@ -58,10 +58,10 @@ export const A = styled.a`
   &:active {
     color: ${colors.colors.blue60};
   }
-`
+`;
 
 export const RainbowDivider = styled.div`
-    background-image: ${colors.gradient.rainbow};
-    width: 100%;
-    height: 1px;
-`
+  background-image: ${colors.gradient.rainbow};
+  width: 100%;
+  height: 1px;
+`;

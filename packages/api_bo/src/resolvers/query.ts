@@ -1,3 +1,4 @@
+import { ObjectId } from "objectId";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
@@ -9,7 +10,7 @@ export const Query = {
   getCenters: async (
     _parent: unknown,
     _args: unknown,
-    ctx: Context,
+    ctx: Context
   ): Promise<CenterModel[]> => {
     return await centerCollection(ctx.db).find().toArray();
   },
@@ -17,9 +18,11 @@ export const Query = {
   getCenter: async (
     _parent: unknown,
     args: QueryGetCenterArgs,
-    ctx: Context,
+    ctx: Context
   ): Promise<CenterModel> => {
-    const center = await centerCollection(ctx.db).findById(args.id);
+    const center = await centerCollection(ctx.db).findOne({
+      _id: new ObjectId(args.id),
+    });
     if (!center) {
       throw new Error("404, Center not found");
     }
@@ -29,7 +32,7 @@ export const Query = {
   getGroups: async (
     _parent: unknown,
     _args: unknown,
-    ctx: Context,
+    ctx: Context
   ): Promise<GroupModel[]> => {
     return await groupCollection(ctx.db).find().toArray();
   },
@@ -37,7 +40,7 @@ export const Query = {
   getGroup: async (
     _parent: unknown,
     args: QueryGetGroupArgs,
-    ctx: Context,
+    ctx: Context
   ): Promise<GroupModel> => {
     const group = await groupCollection(ctx.db).findById(args.id);
     if (!group) {
@@ -52,7 +55,8 @@ export const Center = {
     return String(parent._id!);
   },
   groups: async (parent: CenterModel, _: unknown, ctx: Context) => {
-    return await groupCollection(ctx.db).find({ _id: { $in: parent.groups } })
+    return await groupCollection(ctx.db)
+      .find({ _id: { $in: parent.groups } })
       .toArray();
   },
 };
@@ -65,13 +69,17 @@ export const Group = {
     return await centerCollection(ctx.db).findOne({ _id: parent.center });
   },
   students: async (parent: GroupModel, _: unknown, ctx: Context) => {
-    return await studentCollection(ctx.db).find({
-      _id: { $in: parent.students },
-    }).toArray();
+    return await studentCollection(ctx.db)
+      .find({
+        _id: { $in: parent.students },
+      })
+      .toArray();
   },
   instructors: async (parent: GroupModel, _: unknown, ctx: Context) => {
-    return await instructorCollection(ctx.db).find({
-      _id: { $in: parent.instructors },
-    }).toArray();
+    return await instructorCollection(ctx.db)
+      .find({
+        _id: { $in: parent.instructors },
+      })
+      .toArray();
   },
 };
