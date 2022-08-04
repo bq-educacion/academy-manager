@@ -3,7 +3,7 @@ import { FC } from "react";
 import { colors } from "../theme";
 import { ImageLogoGoogle } from "../assets/images";
 
-export const GoogleButton: FC = () => {
+const GoogleButton: FC = () => {
     return(
         <GButton>
             <ImageLogoGoogle/>
@@ -25,3 +25,5 @@ const GButton = styled.button`
         border: solid 1px ${colors.colors.grayBlue};
     }
 `
+
+export default GoogleButton;

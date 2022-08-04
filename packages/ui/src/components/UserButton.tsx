@@ -3,7 +3,7 @@ import { FC } from "react";
 import { colors, fonts } from "../theme";
 
 
-export const UserButton:FC<{disable?:boolean}>=({disable})=>{
+const UserButton:FC<{disable?:boolean}>=({disable})=>{
     const disabled = disable ? true : false;
     return(
         <Circle border={false} disable={disabled}><PUser>JL</PUser></Circle>

@@ -3,7 +3,7 @@ import { FC } from "react";
 import { colors } from "../theme";
 import { P4 } from "../theme/styles";
 
-export const LoadingOvercast: FC = () => {
+const LoadingOvercast: FC = () => {
   return (
     <Blur>
       <LoadingAnimation>
@@ -72,3 +72,5 @@ const LoadingAnimation = styled.div`
 	}
     
 `;
+
+export default LoadingOvercast;

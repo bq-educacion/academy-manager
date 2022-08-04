@@ -1,10 +1,6 @@
 import styled from "@emotion/styled";
 import React, { memo, FC } from "react";
-import { ClosePannel } from "../assets/icons";
-import { Bell } from "../assets/icons";
-import { MenuKebab } from "../assets/icons";
-import { Lens } from "../assets/icons";
-import { Triangle } from "../assets/icons";
+import { Bell, ClosePannel, Lens, MenuKebab, Triangle } from "../assets/icons";
 import { colors } from "../theme";
 
 export interface IIconProps {

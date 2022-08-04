@@ -5,7 +5,7 @@ import Icon from "./Icon";
 
 
 
-export const OptionsButton:FC<{disable?:boolean}>=({disable})=>{
+const OptionsButton:FC<{disable?:boolean}>=({disable})=>{
     const disabled = disable ? true : false;
     return(
         <Kebabdiv disable={disabled}><Icon name="menu-kebab"/></Kebabdiv>

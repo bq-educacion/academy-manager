@@ -5,7 +5,7 @@ import { P3 } from "../theme/styles";
 import Icon from "./Icon";
 
 
-export const SecondActionButton:FC<{disable?:boolean}> =({disable})=>{
+const SecondActionButton:FC<{disable?:boolean}> =({disable})=>{
     const disabled = disable ? true : false;
     return(
         <Circle border={true} disable={disabled}><Icon name="bell"/></Circle>
