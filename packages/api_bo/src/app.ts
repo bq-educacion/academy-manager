@@ -2,9 +2,13 @@ import { Server } from "std/http/server.ts";
 import { makeExecutableSchema } from "graphql-tools";
 import { GraphQLHTTP } from "gql";
 import { Database, MongoClient } from "mongo";
-import { Query } from "./resolvers/query.ts";
+import { Center, Group, Query } from "./resolvers/query.ts";
 import { Mutation } from "./resolvers/mutation.ts";
-import { typeDefs } from "./schema.ts";
+import { typeDefs as center } from "./schemas/center.ts";
+import { typeDefs as student } from "./schemas/student.ts";
+import { typeDefs as instructor } from "./schemas/instructor.ts";
+import { typeDefs as group } from "./schemas/group.ts";
+import { typeDefs as scalars } from "./schemas/scalars.ts";
 
 export type Context = {
   db: Database;
@@ -25,6 +29,8 @@ if (!DB_NAME) {
 
 const resolvers = {
   Query,
+  Center,
+  Group,
   Mutation,
 };
 
@@ -38,12 +44,15 @@ try {
 
     return pathname === "/graphql"
       ? await GraphQLHTTP<Request, Context>({
-        schema: makeExecutableSchema({ resolvers, typeDefs }),
-        graphiql: true,
-        context: () => {
-          return { db: client.database(DB_NAME), request: req };
-        },
-      })(req)
+          schema: makeExecutableSchema({
+            resolvers,
+            typeDefs: [center, student, instructor, group, scalars],
+          }),
+          graphiql: true,
+          context: () => {
+            return { db: client.database(DB_NAME), request: req };
+          },
+        })(req)
       : new Response("Not Found", { status: 404 });
   };
 

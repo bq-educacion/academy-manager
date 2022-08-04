@@ -8,3 +8,6 @@ echo "deno fmt packages/api_bo:"
 deno fmt packages/api_bo
 echo "deno fmt packages/api_m:"
 deno fmt packages/api_m
+echo "yarn lint:"
+yarn lint
+git add .

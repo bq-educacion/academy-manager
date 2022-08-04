@@ -5,26 +5,26 @@ import colors from "./colors";
 export const P1 = styled.p`
   ${fonts.size.huge};
   font-weight: bold;
-`
+`;
 
 export const P2 = styled.p`
   ${fonts.size.large};
   font-weight: bold;
-`
+`;
 
 export const P3 = styled.p`
   ${fonts.size.medium};
   font-weight: 500;
-`
+`;
 
 export const P4 = styled.p`
-  ${fonts.size.normal}; 
+  ${fonts.size.normal};
   font-weight: bold;
 `;
 
 export const PG = styled.p`
   ${fonts.size.giant};
-`
+`;
 
 export const A = styled.a`
   ${fonts.size.normal};
@@ -38,13 +38,13 @@ export const A = styled.a`
   &:active {
     color: ${colors.colors.blue60};
   }
-`
+`;
 
 export const RainbowDivider = styled.div`
-    background-image: ${colors.gradient.rainbow};
-    width: 100%;
-    height: 1px;
-`
+  background-image: ${colors.gradient.rainbow};
+  width: 100%;
+  height: 1px;
+`;
 
 export default {
   P1,
@@ -53,5 +53,5 @@ export default {
   P4,
   PG,
   A,
-  RainbowDivider
-}
+  RainbowDivider,
+};

@@ -5,9 +5,7 @@ import { LateralMenu } from "../../components/LateralMenu";
 import { sections } from "../config";
 import { useCookies } from "react-cookie";
 
-
 const HomePage: NextPage = () => {
-
   //Example set cookie
   // import { useCookies } from "react-cookie";
   // const [cookie, setCookie, removeCookie] = useCookies(['token']);
@@ -21,8 +19,12 @@ const HomePage: NextPage = () => {
 
   return (
     <div>
-      <LateralMenu sections={sections} changeLabel={setLabel} changeSection={setSection}/>
-      <ContentStart section={section} label={label}/>
+      <LateralMenu
+        sections={sections}
+        changeLabel={setLabel}
+        changeSection={setSection}
+      />
+      <ContentStart section={section} label={label} />
     </div>
   );
 };

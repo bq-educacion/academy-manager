@@ -26,7 +26,7 @@ const size = {
   giant: css`
     font-size: 50px;
     line-height: 35px;
-  `
+  `,
 };
 
 export default {
