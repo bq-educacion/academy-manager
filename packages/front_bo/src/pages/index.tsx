@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { ContentStart } from "../../components/ContentStart";
-import { LateralMenu } from "../../components/LateralMenu";
+import { ContentStart } from "../components/ContentStart";
+import { LateralMenu } from "../components/LateralMenu";
 import { sections } from "../config";
 import { useCookies } from "react-cookie";
 
