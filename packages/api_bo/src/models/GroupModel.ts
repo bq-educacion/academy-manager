@@ -12,13 +12,13 @@ export type GroupModel =
     instructors: ObjectId[];
   };
 
-  export const groupCollection = (
-    db: Database,
-  ): Collection<GroupModel> & FindById<GroupModel> => {
-    const collection = db.collection<GroupModel>("groups");
-    (collection as Collection<GroupModel> & FindById<GroupModel>).findById =
-      function (id: string) {
-        return collection.findOne({ _id: new ObjectId(id) });
-      };
-    return collection as Collection<GroupModel> & FindById<GroupModel>;
-  };
+export const groupCollection = (
+  db: Database,
+): Collection<GroupModel> & FindById<GroupModel> => {
+  const collection = db.collection<GroupModel>("groups");
+  (collection as Collection<GroupModel> & FindById<GroupModel>).findById =
+    function (id: string) {
+      return collection.findOne({ _id: new ObjectId(id) });
+    };
+  return collection as Collection<GroupModel> & FindById<GroupModel>;
+};

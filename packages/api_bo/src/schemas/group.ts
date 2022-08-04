@@ -30,15 +30,15 @@ export const typeDefs = gql`
     }
 
     type Group{
-        id:ID
-        id_group: Number
-        name: String
-        type: TypeGroup
-        createdAt: String
-        course: String
-        timetable: [Timetable!]
+        id:ID!
+        id_group: Number!
+        name: String!
+        type: TypeGroup!
+        createdAt: String!
+        course: String!
+        timetable: [Timetable!]!
         notes: String
-        center: Center
+        center: Center!
         instructors: [Instructor!]
         students: [Student!]
     }

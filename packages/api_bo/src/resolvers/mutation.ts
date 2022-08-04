@@ -121,7 +121,6 @@ export const Mutation = {
     args: MutationCreateGroupArgs,
     ctx: Context,
   ): Promise<GroupModel> => {
-
     const group = await groupCollection(ctx.db).findOne({
       center: new ObjectId(args.idCenter),
       name: { $regex: args.name, $options: "i" },
