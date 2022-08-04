@@ -33,7 +33,8 @@
     "lint": "yarn run lint:front_bo && yarn run lint:front_m",
     "tsc:front_bo": "cd packages/front_bo && tsc --p ./tsconfig.json",
     "tsc:front_m": "cd packages/front_m && tsc --p ./tsconfig.json",
-    "tsc": "yarn run tsc:front_bo && yarn run tsc:front_m"
+    "tsc:ui": "cd packages/ui && tsc --p ./tsconfig.json",
+    "tsc": "yarn run tsc:front_bo && yarn run tsc:front_m && yarn run tsc:ui"
   },
   "repository": {
     "type": "git",
