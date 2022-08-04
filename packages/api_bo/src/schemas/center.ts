@@ -1,59 +1,58 @@
 import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
-  enum TypeCenter {
+  enum CenterType {
     ACADEMY
     NO_ACADEMY
     CAMPUS
   }
 
-  enum TypeActivitiesCenter {
+  enum CenterActivityTypes {
     EXTRACURRICULAR
     WORKSHOPS
     OTHERS
   }
 
-  enum ModalityCenter {
+  enum CenterModality {
     PRESENTIAL
     SEMI_PRESENTIAL
     ONLINE
   }
 
-  enum NatureCenter {
+  enum CenterNature {
     PRIVATE
     PUBLIC
     CONCERTED
   }
 
-  type ContactCenter {
-    name: String
-    surname: String
-    email: String
-    phone: String
+  type CenterContact {
+    name: String!
+    surname: String!
+    email: String!
+    phone: String!
   }
 
   type Center {
-    id: ID
-    name: String
-    address: String
-    population: String
-    phone: String
-    email: String
-    type: TypeCenter
-    typeActivities: TypeActivitiesCenter
-    modality: ModalityCenter
-    nature: NatureCenter
-    course: String
-    languages: [String!]
+    id: ID!
+    name: String!
+    address: String!
+    population: String!
+    phone: String!
+    email: String!
+    type: CenterType!
+    activityTypes: CenterActivityTypes!
+    modality: CenterModality!
+    nature: CenterNature!
+    course: String!
+    languages: [String!]!
     notes: String
-    createdAt: String
-    contacts: [ContactCenter!]
-    groups: [Group!]
+    createdAt: String!
+    contacts: [CenterContact!]!
+    groups: [Group!]!
   }
 
   type Query {
-    getCenters: [Center!]
-
+    getCenters: [Center!]!
     getCenter(id: String!): Center!
   }
 
@@ -63,23 +62,23 @@ export const typeDefs = gql`
       address: String!
       population: String!
       phone: String!
-      email: String
-      type: TypeCenter!
-      typeActivities: TypeActivitiesCenter!
-      modality: ModalityCenter!
-      nature: NatureCenter!
+      email: String!
+      type: CenterType!
+      activityTypes: CenterActivityTypes!
+      modality: CenterModality!
+      nature: CenterNature!
       course: String!
       languages: [String!]!
       notes: String
     ): Center!
 
-    addContactCenter(
+    addCenterContact(
       idCenter: String!
       name: String!
       surname: String!
       email: String!
       phone: String!
-    ): ContactCenter!
+    ): CenterContact!
 
     editCenter(
       id: String!
@@ -88,22 +87,22 @@ export const typeDefs = gql`
       population: String
       phone: String
       email: String
-      type: TypeCenter
-      typeActivities: TypeActivitiesCenter
-      modality: ModalityCenter
-      nature: NatureCenter
+      type: CenterType
+      activityTypes: CenterActivityTypes
+      modality: CenterModality
+      nature: CenterNature
       course: String
       languages: [String!]
       notes: String
     ): Center!
 
-    editContactsCenter(
+    editCenterContacts(
       idCenter: String!
       originEmail: String!
       name: String
       surname: String
       phone: String
       email: String
-    ): ContactCenter!
+    ): CenterContact!
   }
 `;
