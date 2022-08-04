@@ -4,7 +4,7 @@ import {
   MutationCreateCenterArgs,
   MutationCreateGroupArgs,
   MutationEditCenterArgs,
-  MutationeditCenterContactsArgs,
+  MutationEditCenterContactsArgs,
 } from "../types.ts";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
@@ -68,25 +68,22 @@ export const Mutation = {
     args: MutationEditCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
-    const center = await centerCollection(ctx.db).findOne({
-      _id: new ObjectId(args.id),
+    const newCenter = await centerCollection(ctx.db).findAndModify({
+      query: { _id: new ObjectId(args.id) },
+      update: { $set: { ...args } },
+      new: true,
     });
-    if (!center) {
+
+    if (!newCenter) {
       throw new Error("404, Center not found");
     }
 
-    await centerCollection(ctx.db).updateOne(
-      { _id: new ObjectId(args.id) },
-      {
-        $set: { ...args },
-      },
-    );
-    return { _id: center._id, ...center, ...args };
+    return newCenter;
   },
 
   editCenterContacts: async (
     _parent: unknown,
-    args: MutationeditCenterContactsArgs,
+    args: MutationEditCenterContactsArgs,
     ctx: Context,
   ): Promise<CenterContact> => {
     const contactsCenter = await centerCollection(ctx.db)
