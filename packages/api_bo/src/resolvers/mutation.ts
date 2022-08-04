@@ -71,7 +71,6 @@ export const Mutation = {
     if (!center) {
       throw new Error("404, Center not found");
     }
-
     await centerCollection(ctx.db).updateOne({ _id: new ObjectId(args.id) }, {
       $set: { ...args },
     });
@@ -95,7 +94,12 @@ export const Mutation = {
       throw new Error("404, Center or contact not found");
     }
 
-    let contactUpdate: ContactCenter = {};
+    let contactUpdate: ContactCenter = {
+      email: "",
+      name: "",
+      phone: "",
+      surname: ""
+    };
     const updateContacts = contactsCenter[0].contacts?.map((contact) => {
       if (contact.email === args.originEmail) {
         contactUpdate = {

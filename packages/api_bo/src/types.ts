@@ -17,22 +17,22 @@ export type Scalars = {
 
 export type Center = {
   __typename?: 'Center';
-  address: Scalars['String'];
+  address?: Maybe<Scalars['String']>;
   contacts?: Maybe<Array<ContactCenter>>;
-  course: Scalars['String'];
-  createdAt: Scalars['String'];
+  course?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   groups?: Maybe<Array<Group>>;
   id: Scalars['ID'];
   languages?: Maybe<Array<Scalars['String']>>;
-  modality: ModalityCenter;
-  name: Scalars['String'];
-  nature: NatureCenter;
+  modality?: Maybe<ModalityCenter>;
+  name?: Maybe<Scalars['String']>;
+  nature?: Maybe<NatureCenter>;
   notes?: Maybe<Scalars['String']>;
-  phone: Scalars['String'];
-  population: Scalars['String'];
-  type: TypeCenter;
-  typeActivities: TypeActivitiesCenter;
+  phone?: Maybe<Scalars['String']>;
+  population?: Maybe<Scalars['String']>;
+  type?: Maybe<TypeCenter>;
+  typeActivities?: Maybe<TypeActivitiesCenter>;
 };
 
 export type ContactCenter = {
@@ -385,22 +385,22 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type CenterResolvers<ContextType = any, ParentType extends ResolversParentTypes['Center'] = ResolversParentTypes['Center']> = ResolversObject<{
-  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contacts?: Resolver<Maybe<Array<ResolversTypes['ContactCenter']>>, ParentType, ContextType>;
-  course?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  course?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   groups?: Resolver<Maybe<Array<ResolversTypes['Group']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   languages?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  modality?: Resolver<ResolversTypes['ModalityCenter'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  nature?: Resolver<ResolversTypes['NatureCenter'], ParentType, ContextType>;
+  modality?: Resolver<Maybe<ResolversTypes['ModalityCenter']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  nature?: Resolver<Maybe<ResolversTypes['NatureCenter']>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  population?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['TypeCenter'], ParentType, ContextType>;
-  typeActivities?: Resolver<ResolversTypes['TypeActivitiesCenter'], ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  population?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['TypeCenter']>, ParentType, ContextType>;
+  typeActivities?: Resolver<Maybe<ResolversTypes['TypeActivitiesCenter']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
