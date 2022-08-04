@@ -16,7 +16,7 @@ export const Mutation = {
   createCenter: async (
     _parent: unknown,
     args: MutationCreateCenterArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel> => {
     const createdAt = new Date().toLocaleDateString("en-GB");
     const idCenter = await centerCollection(ctx.db).insertOne({
@@ -37,7 +37,7 @@ export const Mutation = {
   addContactCenter: async (
     _parent: unknown,
     args: MutationAddContactCenterArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<ContactCenter> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.idCenter),
@@ -58,7 +58,7 @@ export const Mutation = {
       {
         _id: new ObjectId(args.idCenter),
       },
-      { $push: { contacts: { $each: [newContact] } } }
+      { $push: { contacts: { $each: [newContact] } } },
     );
     return newContact;
   },
@@ -66,7 +66,7 @@ export const Mutation = {
   editCenter: async (
     _parent: unknown,
     args: MutationEditCenterArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel> => {
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.id),
@@ -79,7 +79,7 @@ export const Mutation = {
       { _id: new ObjectId(args.id) },
       {
         $set: { ...args },
-      }
+      },
     );
     return { _id: center._id, ...center, ...args };
   },
@@ -87,7 +87,7 @@ export const Mutation = {
   editContactsCenter: async (
     _parent: unknown,
     args: MutationEditContactsCenterArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<ContactCenter> => {
     const contactsCenter = await centerCollection(ctx.db)
       .find(
@@ -95,7 +95,7 @@ export const Mutation = {
           _id: new ObjectId(args.idCenter),
           contacts: { $elemMatch: { email: args.originEmail } },
         },
-        { projection: { _id: 0, contacts: 1 } }
+        { projection: { _id: 0, contacts: 1 } },
       )
       .toArray();
 
@@ -121,7 +121,7 @@ export const Mutation = {
       {
         _id: new ObjectId(args.idCenter),
       },
-      { $set: { contacts: updateContacts } }
+      { $set: { contacts: updateContacts } },
     );
 
     return contactUpdate;
@@ -130,7 +130,7 @@ export const Mutation = {
   createGroup: async (
     _parent: unknown,
     args: MutationCreateGroupArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<GroupModel> => {
     const group = await groupCollection(ctx.db).findOne({
       center: new ObjectId(args.idCenter),
@@ -154,7 +154,7 @@ export const Mutation = {
     const center = new ObjectId(args.idCenter);
 
     const instructors = args.instructors?.map(
-      (instructor) => new ObjectId(instructor)
+      (instructor) => new ObjectId(instructor),
     );
     if (args.instructors) {
       const exists = await instructorCollection(ctx.db)
@@ -180,7 +180,7 @@ export const Mutation = {
       {
         _id: new ObjectId(args.idCenter),
       },
-      { $push: { groups: { $each: [idGroup] } } }
+      { $push: { groups: { $each: [idGroup] } } },
     );
 
     return {

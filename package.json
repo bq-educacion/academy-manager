@@ -28,7 +28,12 @@
     "api_bo_types": "graphql-code-generator --config ./packages/api_bo/codegen_api_bo.yml",
     "api_m_types": "graphql-code-generator --config ./packages/api_m/codegen_api_m.yml",
     "api-types": "yarn run api_bo_types && yarn run api_m_types",
-    "lint": "eslint \"packages/*/src/**/*.{js,jsx,ts,tsx}\" --fix --quiet"
+    "lint:front_bo": "eslint \"packages/front_bo/src/**/*.{js,jsx,ts,tsx}\" --fix --quiet",
+    "lint:front_m": "eslint \"packages/front_m/src/**/*.{js,jsx,ts,tsx}\" --fix --quiet",
+    "lint": "yarn run lint:front_bo && yarn run lint:front_m",
+    "tsc:front_bo": "cd packages/front_bo && tsc --p ./tsconfig.json",
+    "tsc:front_m": "cd packages/front_m && tsc --p ./tsconfig.json",
+    "tsc": "yarn run tsc:front_bo && yarn run tsc:front_m"
   },
   "repository": {
     "type": "git",
