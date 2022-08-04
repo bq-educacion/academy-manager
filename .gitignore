@@ -9,3 +9,4 @@ yarn-error.log
 google-application-credentials.json
 .DS_Store
 .next
+tsconfig.tsbuildinfo
