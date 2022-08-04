@@ -1,17 +1,14 @@
-import { P2, RainbowDivider } from "@academy-manager/ui/src/theme/styles";
 import styled from "@emotion/styled";
 import { NextPage } from "next";
-import LogoBQ from "../../public/images/bq-logo-gray.svg";
-import { GoogleButton } from "@academy-manager/ui/src/components/GoogleButton";
-import { colors } from "@academy-manager/ui";
+import { BQLogoGray, colors, GoogleButton, styles } from "@academy-manager/ui";
 
 const LogInPage: NextPage = () => {
   return (
     <Layout>
-      <LogoBQ />
+      <BQLogoGray />
       <LogInBox>
         <LogInP2>Inicia sesión</LogInP2>
-        <RainbowDivider />
+        <styles.RainbowDivider />
         <LogIn>
           <GoogleButton />
         </LogIn>
@@ -42,7 +39,7 @@ const LogInBox = styled.div`
   width: 393px;
 `;
 
-const LogInP2 = styled(P2)`
+const LogInP2 = styled(styles.P2)`
   margin: 29px 0 26px 0;
 `;
 

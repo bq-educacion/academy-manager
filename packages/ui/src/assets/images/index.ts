@@ -1,4 +1,5 @@
-import Image404 from "./404.gif";
 import ImageLogoGoogle from "./logo-google.svg";
+import BQLogoGray from "./bq-logo-gray.svg";
+import BQLogo from "./bq-logo.svg";
 
-export { Image404, ImageLogoGoogle };
+export { ImageLogoGoogle, BQLogoGray, BQLogo };

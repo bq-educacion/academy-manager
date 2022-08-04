@@ -1,13 +1,13 @@
 import { FC } from "react";
-import { MenuKebab } from "@academy-manager/ui/src/assets/icons";
 import styled from "@emotion/styled";
 import { colors } from "../theme";
+import Icon from "./Icon";
 
 const OptionsButton: FC<{ disable?: boolean }> = ({ disable }) => {
   const disabled = disable ? true : false;
   return (
     <Kebabdiv disable={disabled}>
-      <MenuKebab />
+      <Icon name="menu-kebab" />
     </Kebabdiv>
   );
 };

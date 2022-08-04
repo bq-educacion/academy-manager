@@ -2,12 +2,13 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { colors } from "../theme";
 import { P3 } from "../theme/styles";
+import Icon from "./Icon";
 
 const SecondActionButton: FC<{ disable?: boolean }> = ({ disable }) => {
   const disabled = disable ? true : false;
   return (
     <Circle border={true} disable={disabled}>
-      <P3User>?</P3User>
+      <Icon name="bell" />
     </Circle>
   );
 };
@@ -24,10 +25,14 @@ const Circle = styled.div<{ border: boolean; disable: boolean }>`
     props.border ? `${colors.colors.white}` : ""};
   border: ${(props) =>
     props.border ? `1px solid ${colors.colors.grayBlue2}` : "none"};
+
+  & > svg {
+    color: ${colors.colors.grayBlue2};
+  }
   &:hover {
     border: solid 1px ${colors.colors.gray2};
     cursor: pointer;
-    & > p {
+    & > svg {
       color: ${colors.colors.gray2};
     }
   }
@@ -36,19 +41,15 @@ const Circle = styled.div<{ border: boolean; disable: boolean }>`
       ? `
         border: none;
         background-color: ${colors.colors.gray3};
-        & > p {color: ${colors.colors.gray20}}
+        & > svg {color: ${colors.colors.gray20}}
         &:hover {
             border: none;
             background-color: ${colors.colors.gray3};
-            & > p {color: ${colors.colors.gray20}}
+            & > svg {color: ${colors.colors.gray20}}
         }
     }
     `
       : ""}
-`;
-
-const P3User = styled(P3)`
-  color: ${colors.colors.grayBlue2};
 `;
 
 export default SecondActionButton;

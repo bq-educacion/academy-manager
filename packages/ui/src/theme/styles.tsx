@@ -3,52 +3,32 @@ import fonts from "./fonts";
 import colors from "./colors";
 
 export const P1 = styled.p`
-  ${fonts.family.roboto};
   ${fonts.size.huge};
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  color: ${colors.colors.black};
 `;
 
 export const P2 = styled.p`
-  ${fonts.family.roboto};
   ${fonts.size.large};
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  color: ${colors.colors.black};
 `;
 
 export const P3 = styled.p`
-  ${fonts.family.roboto};
   ${fonts.size.medium};
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  color: ${colors.colors.black};
 `;
 
 export const P4 = styled.p`
-  ${fonts.family.roboto};
   ${fonts.size.normal};
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  color: ${colors.colors.black};
+`;
+
+export const PG = styled.p`
+  ${fonts.size.giant};
 `;
 
 export const A = styled.a`
-  ${fonts.family.roboto};
   ${fonts.size.normal};
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
   color: ${colors.colors.gray2};
   text-decoration: none;
   &:hover {
@@ -65,3 +45,13 @@ export const RainbowDivider = styled.div`
   width: 100%;
   height: 1px;
 `;
+
+export default {
+  P1,
+  P2,
+  P3,
+  P4,
+  PG,
+  A,
+  RainbowDivider,
+};

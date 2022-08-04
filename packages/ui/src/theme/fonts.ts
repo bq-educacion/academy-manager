@@ -23,6 +23,10 @@ const size = {
     font-size: 25px;
     line-height: 30px;
   `,
+  giant: css`
+    font-size: 50px;
+    line-height: 35px;
+  `,
 };
 
 export default {

@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { P4 } from "@academy-manager/ui/src/theme/styles";
-import { colors } from "@academy-manager/ui";
+import { colors } from "../theme";
+import { P4 } from "../theme/styles";
 
-export const LoadingOvercast: FC = () => {
+const LoadingOvercast: FC = () => {
   return (
     <Blur>
       <LoadingAnimation>
@@ -11,7 +11,7 @@ export const LoadingOvercast: FC = () => {
         <span className="dot"></span>
         <span className="dot"></span>
       </LoadingAnimation>
-      <LoadP4>Cargando</LoadP4>
+      <P4>Cargando</P4>
     </Blur>
   );
 };
@@ -74,6 +74,4 @@ const LoadingAnimation = styled.div`
   }
 `;
 
-const LoadP4 = styled(P4)`
-  font-weight: normal;
-`;
+export default LoadingOvercast;

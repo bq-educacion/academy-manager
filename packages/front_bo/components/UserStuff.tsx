@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import  SecondActionButton  from "@academy-manager/ui/src/components/SecondActionButton";
-import  UserButton  from "@academy-manager/ui/src/components/UserButton";
-import  OptionsButton  from "@academy-manager/ui/src/components/OptionsButton";
+import  { SecondActionButton, UserButton, OptionsButton }  from "@academy-manager/ui";
 
 export const UserStuff: FC<{ token: string }> = ({ token }) => {
   return (
