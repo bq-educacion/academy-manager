@@ -2,6 +2,7 @@ node_modules
 dist
 coverage
 packages/**/*.tgz
+packages/**/tsconfig.tsbuildinfo
 .vscode/
 .env
 /data
@@ -9,5 +10,3 @@ yarn-error.log
 google-application-credentials.json
 .DS_Store
 .next
-packages/front_bo/tsconfig.tsbuildinfo
-packages/front_m/tsconfig.tsbuildinfo

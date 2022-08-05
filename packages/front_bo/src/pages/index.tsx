@@ -1,8 +1,7 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import withApollo from "../apollo/withApollo";
-import { ContentStart } from "../../components/ContentStart";
-import { LateralMenu } from "../../components/LateralMenu";
+import { ContentStart, LateralMenu } from "../components";
 import { sections } from "../config";
 import { useCookies } from "react-cookie";
 

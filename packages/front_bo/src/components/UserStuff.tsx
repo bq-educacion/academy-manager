@@ -1,23 +1,39 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import  { SecondActionButton, UserButton, OptionsButton, styles, Popover, colors }  from "@academy-manager/ui";
+import {
+  SecondActionButton,
+  UserButton,
+  OptionsButton,
+  styles,
+  Popover,
+  colors,
+} from "@academy-manager/ui";
 
 export const UserStuff: FC<{ token: string }> = ({ token }) => {
   return (
     <UserStuffLayout>
       <SecondActionButton />
       <UserButton />
-      <Popover title={<OptionsButton />} content={<PopoverContent><styles.P4>Cerrar sesión</styles.P4></PopoverContent>}></Popover>
+      <Popover
+        title={<OptionsButton />}
+        content={
+          <PopoverContent>
+            <styles.P4>Cerrar sesión</styles.P4>
+          </PopoverContent>
+        }
+      ></Popover>
     </UserStuffLayout>
   );
 };
 
+export default UserStuff;
+
 const UserStuffLayout = styled.div`
-    display: flex;
-    flex-direction: row;
-    &:last-child {
-        margin-right: 40px;
-    }
+  display: flex;
+  flex-direction: row;
+  &:last-child {
+    margin-right: 40px;
+  }
 `;
 
 const PopoverContent = styled.div`

@@ -1,5 +1,7 @@
+import { TranslateProvider } from "@academy-manager/ui";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import messages from "../messages";
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <>
@@ -7,7 +9,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
       <link rel="icon" href="/icon.ico" />
       <title>Next</title>
     </Head>
-    <Component {...pageProps} />
+    <TranslateProvider
+      defaultMessages={messages["es"]}
+      messages={messages["es"]}
+    >
+      <Component {...pageProps} />
+    </TranslateProvider>
   </>
 );
 
