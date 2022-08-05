@@ -56,7 +56,7 @@ export const Center = {
   },
   groups: async (parent: CenterModel, _: unknown, ctx: Context) => {
     return await groupCollection(ctx.db)
-      .find({ _id: { $in: parent.groups } })
+      .find({ center: parent._id })
       .toArray();
   },
 };

@@ -21,14 +21,13 @@ export const Mutation = {
     const createdAt = new Date().toLocaleDateString("en-GB");
     const idCenter = await centerCollection(ctx.db).insertOne({
       ...args,
+      notes: args.notes || "",
       contacts: [],
-      groups: [],
       createdAt,
     });
     return {
       _id: idCenter,
       contacts: [],
-      groups: [],
       createdAt: createdAt,
       ...args,
     };
@@ -100,7 +99,13 @@ export const Mutation = {
       throw new Error("404, Center or contact not found");
     }
 
-    let contactUpdate: CenterContact = {};
+    let contactUpdate: CenterContact = {
+      email: "",
+      name: "",
+      phone: "",
+      surname: "",
+    };
+
     const updateContacts = contactsCenter[0].contacts?.map((contact) => {
       if (contact.email === args.originEmail) {
         contactUpdate = {
@@ -166,23 +171,16 @@ export const Mutation = {
 
     const idGroup = await groupCollection(ctx.db).insertOne({
       ...args,
-      id_group: id_group,
+      id_group,
       center,
-      createdAt,
       instructors: instructors || [],
+      createdAt,
       students: [],
     });
 
-    await centerCollection(ctx.db).updateOne(
-      {
-        _id: new ObjectId(args.idCenter),
-      },
-      { $push: { groups: { $each: [idGroup] } } },
-    );
-
     return {
-      ...args,
       _id: idGroup,
+      ...args,
       id_group: id_group,
       center: center,
       students: [],
