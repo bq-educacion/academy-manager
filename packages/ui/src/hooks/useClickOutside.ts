@@ -2,8 +2,7 @@ import { RefObject, useEffect } from "react";
 
 const useClickOutside = (
   ref: RefObject<HTMLElement>,
-  callback: () => void,
-  effects: any[] = []
+  callback: () => void
 ): void => {
   useEffect(() => {
     const onBodyClick = (e: MouseEvent) => {
@@ -16,7 +15,7 @@ const useClickOutside = (
     return () => {
       document.removeEventListener("click", onBodyClick);
     };
-  }, effects);
+  }, []);
 };
 
 export default useClickOutside;

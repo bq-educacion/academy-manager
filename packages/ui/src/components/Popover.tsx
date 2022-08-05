@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useRef, useState } from "react";
 import { FC, ReactNode } from "react";
-import useClickOutside from "../hooks/useClickOutside";
+import { useClickOutside } from "../hooks";
 
 export type PopoverProps = {
   title: ReactNode;
