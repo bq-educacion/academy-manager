@@ -10,19 +10,13 @@ export type Exact<T extends { [key: string]: unknown }> = {
 };
 export type MakeOptional<T, K extends keyof T> =
   & Omit<T, K>
-  & {
-    [SubKey in K]?: Maybe<T[SubKey]>;
-  };
+  & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> =
   & Omit<T, K>
-  & {
-    [SubKey in K]: Maybe<T[SubKey]>;
-  };
+  & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> =
   & Omit<T, K>
-  & {
-    [P in K]-?: NonNullable<T[P]>;
-  };
+  & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -40,7 +34,7 @@ export type Center = {
   contacts: Array<CenterContact>;
   course: Scalars["String"];
   createdAt: Scalars["String"];
-  email: Scalars["String"];
+  email?: Maybe<Scalars["String"]>;
   groups: Array<Group>;
   id: Scalars["ID"];
   languages: Array<Scalars["String"]>;
@@ -116,7 +110,7 @@ export type Group = {
   name: Scalars["String"];
   notes?: Maybe<Scalars["String"]>;
   students: Array<Student>;
-  timetable: Array<Scalars["String"]>;
+  timetable: Array<Timetable>;
   type: GroupType;
 };
 
@@ -185,7 +179,7 @@ export type MutationCreateCenterArgs = {
 export type MutationCreateGroupArgs = {
   course: Scalars["String"];
   idCenter: Scalars["String"];
-  instructors: Array<Scalars["String"]>;
+  instructors?: InputMaybe<Array<Scalars["String"]>>;
   name: Scalars["String"];
   notes?: InputMaybe<Scalars["String"]>;
   timetable: Array<TimetableInput>;
@@ -453,7 +447,7 @@ export type CenterResolvers<
   >;
   course?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   languages?: Resolver<
@@ -528,7 +522,7 @@ export type GroupResolvers<
     ContextType
   >;
   timetable?: Resolver<
-    Array<ResolversTypes["String"]>,
+    Array<ResolversTypes["Timetable"]>,
     ParentType,
     ContextType
   >;
@@ -660,7 +654,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateGroupArgs,
-      "course" | "idCenter" | "instructors" | "name" | "timetable" | "type"
+      "course" | "idCenter" | "name" | "timetable" | "type"
     >
   >;
   editCenter?: Resolver<

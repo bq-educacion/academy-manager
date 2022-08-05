@@ -1,0 +1,39 @@
+{
+  "components": {
+    "content-start": {
+      "search-placeholder": "Buscar por email"
+    },
+    "error-content": {
+      "button": "Volver a inicio",
+      "403": {
+        "text": "Lo sentimos, no tienes permisos para poder continuar por este camino.",
+        "title": "Acceso privado"
+      },
+      "404": {
+        "text": "¡Vaya! La página web a la que intentas acceder no existe.",
+        "title": "Página equivocada"
+      },
+      "500": {
+        "text": "¡Uy! Parece que ha ocurrido un error, vuelve a cargar la página.",
+        "title": "Error desconocido"
+      }
+    }
+  },
+  "general": {
+    "sections": {
+      "title": "Extraescolares",
+      "links": {
+        "dashboard": "Dashboard",
+        "centers": "Centros",
+        "groups": "Grupos",
+        "students": "Alumnos",
+        "monitors": "Monitores" 
+      }
+    }
+  },
+  "pages": {
+    "login": {
+      "title": "Inicia sesión"
+    }
+  }
+}

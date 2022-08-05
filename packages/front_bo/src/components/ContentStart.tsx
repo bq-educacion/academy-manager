@@ -1,4 +1,4 @@
-import { colors, Icon, styles } from "@academy-manager/ui";
+import { colors, Icon, styles, useTranslate } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { UserStuff } from "./UserStuff";
@@ -7,16 +7,20 @@ export const ContentStart: FC<{ section: string; label: string }> = ({
   section,
   label,
 }) => {
+  const t = useTranslate();
+
   return (
     <ContentLayout>
       <ContentHeader>
-        <styles.P1>{section}</styles.P1>
+        <styles.P1>{t(section)}</styles.P1>
         <UserStuff token="token" />
       </ContentHeader>
       <styles.RainbowDivider />
       <ContentSubHeader>
-        <styles.P2>{label}</styles.P2>
-        <InputMail placeholder="    Buscar por email"></InputMail>
+        <styles.P2>{t(label)}</styles.P2>
+        <InputMail
+          placeholder={t("components.content-start.search-placeholder")}
+        />
         <LensSearch name="lens" />
       </ContentSubHeader>
       <ContentBody></ContentBody>

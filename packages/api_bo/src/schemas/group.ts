@@ -33,7 +33,7 @@ export const typeDefs = gql`
     type: GroupType!
     createdAt: String!
     course: String!
-    timetable: [String!]!
+    timetable: [Timetable!]!
     notes: String
     center: Center!
     instructors: [Instructor!]!
@@ -52,7 +52,7 @@ export const typeDefs = gql`
       type: GroupType!
       course: String!
       timetable: [TimetableInput!]!
-      instructors: [String!]!
+      instructors: [String!]
       notes: String
     ): Group!
   }

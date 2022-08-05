@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import { ContentStart, LateralMenu } from "../components";
 import { sections } from "../config";
 import { useCookies } from "react-cookie";
-import { ContentStart, LateralMenu } from "../components";
 
 const HomePage: NextPage = () => {
   //Example set cookie

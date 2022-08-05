@@ -1,3 +1,4 @@
 import useClickOutside from "./useClickOutside";
+import { TranslateProvider, useTranslate } from "./useTranslate";
 
-export { useClickOutside };
+export { TranslateProvider, useClickOutside, useTranslate };

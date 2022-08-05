@@ -2,6 +2,7 @@ node_modules
 dist
 coverage
 packages/**/*.tgz
+packages/**/tsconfig.tsbuildinfo
 .vscode/
 .env
 /data

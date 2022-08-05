@@ -1,30 +1,21 @@
-import { styles, MButton, colors } from "@academy-manager/ui";
+import { styles, MButton, colors, useTranslate } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { useRouter } from "next/router";
 
 export const ErrorContent: FC<{ error: number }> = ({ error }) => {
   const router = useRouter();
+  const t = useTranslate();
+
   return (
     <ErrorContainer>
       <div>
         <styles.PG>{error}</styles.PG>
-        <styles.P2>
-          {error === 404 && "Página equivocada"}
-          {error === 403 && "Acceso privado"}
-          {error === 500 && "Error desconocido"}
-        </styles.P2>
-        <styles.P4>
-          {error === 404 &&
-            "¡Vaya! La página web a la que intentas acceder no existe."}
-          {error === 403 &&
-            "Lo sentimos, no tienes permisos para poder continuar por este camino."}
-          {error === 500 &&
-            "¡Uy! Parece que ha ocurrido un error, vuelve a cargar la página."}
-        </styles.P4>
+        <styles.P2>{t(`components.error-content.${error}.title`)}</styles.P2>
+        <styles.P4>{t(`components.error-content.${error}.text`)}</styles.P4>
         <MButton
           width="133px"
-          text="Volver a inicio"
+          text={t("components.error-content.button")}
           Click={() => {
             router.push("/");
           }}
