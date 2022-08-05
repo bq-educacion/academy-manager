@@ -12,7 +12,7 @@ export const centerCollection = (
 ): Collection<CenterModel> & FindById<CenterModel> => {
   const collection = db.collection<CenterModel>("centers");
   (collection as Collection<CenterModel> & FindById<CenterModel>).findById =
-    function (id: string) {
+    function (id: string): Promise<CenterModel | undefined> {
       return collection.findOne({ _id: new ObjectId(id) });
     };
   return collection as Collection<CenterModel> & FindById<CenterModel>;

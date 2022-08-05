@@ -20,7 +20,7 @@ export const groupCollection = (
 ): Collection<GroupModel> & FindById<GroupModel> => {
   const collection = db.collection<GroupModel>("groups");
   (collection as Collection<GroupModel> & FindById<GroupModel>).findById =
-    function (id: string) {
+    function (id: string): Promise<GroupModel | undefined> {
       return collection.findOne({ _id: new ObjectId(id) });
     };
   return collection as Collection<GroupModel> & FindById<GroupModel>;
