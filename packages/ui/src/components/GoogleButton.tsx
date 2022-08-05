@@ -15,7 +15,7 @@ const GButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 191px;
+  width: 313px;
   height: 40px;
   border: solid 1px ${colors.colors.blackBackground};
   border-radius: 4px;
