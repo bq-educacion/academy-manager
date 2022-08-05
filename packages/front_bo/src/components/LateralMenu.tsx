@@ -14,7 +14,7 @@ type LateralMenuProps = {
   }[];
 };
 
-export const LateralMenu: FC<LateralMenuProps> = ({
+const LateralMenu: FC<LateralMenuProps> = ({
   sections,
   changeLabel,
   changeSection,
@@ -68,6 +68,8 @@ export const LateralMenu: FC<LateralMenuProps> = ({
     </LateralContainer>
   );
 };
+
+export default LateralMenu;
 
 const LateralContainer = styled.div`
   position: absolute;

@@ -1,9 +1,9 @@
 import { colors, Icon, styles } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { UserStuff } from "./UserStuff";
+import UserStuff from "./UserStuff";
 
-export const ContentStart: FC<{ section: string; label: string }> = ({
+const ContentStart: FC<{ section: string; label: string }> = ({
   section,
   label,
 }) => {
@@ -23,6 +23,8 @@ export const ContentStart: FC<{ section: string; label: string }> = ({
     </ContentLayout>
   );
 };
+
+export default ContentStart;
 
 const ContentLayout = styled.div`
   background-color: ${colors.colors.grayBlueTransparent};

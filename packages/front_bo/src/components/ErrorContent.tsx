@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { useRouter } from "next/router";
 
-export const ErrorContent: FC<{ error: number }> = ({ error }) => {
+const ErrorContent: FC<{ error: number }> = ({ error }) => {
   const router = useRouter();
   return (
     <ErrorContainer>
@@ -33,6 +33,8 @@ export const ErrorContent: FC<{ error: number }> = ({ error }) => {
     </ErrorContainer>
   );
 };
+
+export default ErrorContent;
 
 const ErrorContainer = styled.div`
   display: flex;

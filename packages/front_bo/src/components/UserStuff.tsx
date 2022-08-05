@@ -6,7 +6,7 @@ import {
   OptionsButton,
 } from "@academy-manager/ui";
 
-export const UserStuff: FC<{ token: string }> = ({ token }) => {
+const UserStuff: FC<{ token: string }> = ({ token }) => {
   return (
     <UserStuffLayout>
       <SecondActionButton />
@@ -15,6 +15,8 @@ export const UserStuff: FC<{ token: string }> = ({ token }) => {
     </UserStuffLayout>
   );
 };
+
+export default UserStuff;
 
 const UserStuffLayout = styled.div`
   display: flex;

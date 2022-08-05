@@ -1,8 +1,7 @@
 import { NextPage } from "next";
-import { LateralMenu } from "../components/LateralMenu";
 import { useState } from "react";
+import { ErrorContent, LateralMenu } from "../components";
 import { sections } from "../config";
-import { ErrorContent } from "../components/ErrorContent";
 
 const NotFoundPage: NextPage = () => {
   const [section, setSection] = useState<string>(sections[0].title);
