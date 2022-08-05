@@ -36,7 +36,7 @@ services:
   front_bo:
     image: node:16
     environment:
-      REACT_APP_API_URL: http://localhost:6005
+      NEXT_PUBLIC_API_URL: http://localhost:6005
       PORT: 3000
     volumes:
       - type: bind
@@ -52,7 +52,7 @@ services:
   front_m:
     image: node:16
     environment:
-      REACT_APP_API_URL: http://localhost:6010
+      NEXT_PUBLIC_API_URL: http://localhost:6010
       PORT: 3000
     volumes:
       - type: bind

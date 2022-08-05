@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import { BQLogoGray, colors, GoogleButton, styles } from "@academy-manager/ui";
+import withApollo from "../apollo/withApollo";
 
 const LogInPage: NextPage = () => {
   return (
@@ -18,7 +19,7 @@ const LogInPage: NextPage = () => {
   );
 };
 
-export default LogInPage;
+export default withApollo(LogInPage, { requiresAccess: false });
 
 const Layout = styled.div`
   display: flex;
