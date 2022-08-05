@@ -1,12 +1,21 @@
 #!/usr/bin/env sh
+set -e
 . "$(dirname -- "$0")/_/husky.sh"
 
+cwd=$(pwd)
+echo $cwd
+
 echo "deno lint:"
-deno lint packages/api_bo
-deno lint packages/api_m
+cd $cwd/packages/api_bo/ && deno lint . 
+cd $cwd/packages/api_bo/ && deno lint . 
+echo "deno check types:"
+cd $cwd/packages/api_bo/ && deno bundle src/app.ts -- .bundle 
+rm -fr .bundle
+cd $cwd/packages/api_m/ && deno bundle src/app.ts -- .bundle
+rm -fr .bundle
 echo "deno fmt packages/api_bo:"
-deno fmt packages/api_bo
+cd $cwd/packages/api_bo/ && deno fmt .
 echo "deno fmt packages/api_m:"
-deno fmt packages/api_m
+cd $cwd/packages/api_m/ && deno fmt .
 echo "yarn pre-commit:"
-yarn pre-commit
+cd $cwd/ && yarn pre-commit
