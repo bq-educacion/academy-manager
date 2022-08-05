@@ -12,8 +12,8 @@ type TApolloClient = ApolloClient<NormalizedCacheObject>;
 
 type InitialProps = {
   apolloClient: TApolloClient;
-  apolloState: any;
-} & Record<string, any>;
+  apolloState: any; // eslint-disable-line
+} & Record<string, any>; // eslint-disable-line
 
 let globalApolloClient: TApolloClient;
 
@@ -22,7 +22,7 @@ let globalApolloClient: TApolloClient;
  * Creates or reuses apollo client in the browser.
  * @param  {Object} initialState
  */
-function initApolloClient(initialState?: any, req?: NextApiRequest) {
+function initApolloClient(initialState?: any, req?: NextApiRequest) { // eslint-disable-line
   const isServer = !!req;
   const getToken = () => null; // TODO: Add getToken when session exists
 
@@ -52,7 +52,7 @@ export default function withApollo(
   const WithApollo = ({
     apolloClient,
     apolloState,
-    userData,
+    // userData,
     ...pageProps
   }: InitialProps) => {
     const client = apolloClient || initApolloClient(apolloState);
@@ -70,6 +70,7 @@ export default function withApollo(
       PageComponent.displayName || PageComponent.name || "Component";
 
     if (displayName === "App") {
+      // eslint-disable-next-line no-console
       console.warn("This withApollo HOC only works with PageComponents.");
     }
 
@@ -77,7 +78,7 @@ export default function withApollo(
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: any) => {
+    WithApollo.getInitialProps = async (ctx: any) => { // eslint-disable-line
       const { AppTree } = ctx;
 
       // Initialize ApolloClient, add it to the ctx object so
@@ -117,6 +118,7 @@ export default function withApollo(
             // Prevent Apollo Client GraphQL errors from crashing SSR.
             // Handle them in components via the data.error prop:
             // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
+            // eslint-disable-next-line no-console
             console.error("Error while running `getDataFromTree`", error);
           }
         }
@@ -125,30 +127,31 @@ export default function withApollo(
       // Extract query data from the Apollo store
       const apolloState = apolloClient.cache.extract();
 
-      // TODO: Uncomment when session exists
-      // try {
-      //   const { data } = await apolloClient.query({
-      //     query: ME_QUERY,
-      //     errorPolicy: "all"
-      //   })
+      try {
+        // TODO: Uncomment when session exists
+        // const { data } = await apolloClient.query({
+        //   query: ME_QUERY,
+        //   errorPolicy: "all"
+        // })
+        const data = { me: undefined };
 
-      //   if (requiresAccess && (!data || !data.me)) {
-      //     redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
-      //   } else if (ctx.pathname === "/login" && data?.me) {
-      //     redirect(ctx, "/");
-      //   }
+        if (requiresAccess && (!data || !data.me)) {
+          redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
+        } else if (ctx.pathname === "/login" && data?.me) {
+          redirect(ctx, "/");
+        }
 
-      //   return {
-      //     ...pageProps,
-      //     apolloState,
-      //     userData: data.me
-      //   };
-      // } catch (e) {
-      return {
-        ...pageProps,
-        apolloState,
-      };
-      // }
+        return {
+          ...pageProps,
+          apolloState,
+          userData: data.me,
+        };
+      } catch (e) {
+        return {
+          ...pageProps,
+          apolloState,
+        };
+      }
     };
   }
 

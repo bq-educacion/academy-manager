@@ -9,7 +9,7 @@ import {
   colors,
 } from "@academy-manager/ui";
 
-export const UserStuff: FC<{ token: string }> = ({ token }) => {
+export const UserStuff: FC<{ token: string }> = () => {
   return (
     <UserStuffLayout>
       <SecondActionButton />

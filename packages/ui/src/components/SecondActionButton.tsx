@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { colors } from "../theme";
-import { P3 } from "../theme/styles";
 import Icon from "./Icon";
 
 const SecondActionButton: FC<{ disable?: boolean }> = ({ disable }) => {

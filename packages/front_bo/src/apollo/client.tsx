@@ -15,6 +15,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import fetch from "isomorphic-fetch";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { NextApiRequest } from "next";
+import { Subscription } from "zen-observable-ts";
 
 const isBrowser = typeof window !== "undefined";
 const uri = process.env.NEXT_PUBLIC_API_URL;
@@ -47,7 +48,7 @@ export function createApolloClient(
 ) {
   const createWsLink = () => {
     const subscriptionClient = new SubscriptionClient(
-      uri!.replace("http", "ws"),
+      (uri || "").replace("http", "ws"),
       {
         lazy: true,
         reconnect: true,
@@ -78,19 +79,21 @@ export function createApolloClient(
       onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors) {
           graphQLErrors.map(({ message, locations, path }) => {
+            // eslint-disable-next-line no-console
             console.error(
               `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
             );
           });
         }
         if (networkError) {
+          // eslint-disable-next-line no-console
           console.error(`[Network error]: ${JSON.stringify(networkError)}`);
         }
       }),
       new ApolloLink(
         (operation: Operation, forward: NextLink) =>
           new Observable((observer) => {
-            let handle: any;
+            let handle: Subscription;
             Promise.resolve(operation)
               .then((oper) => request(oper, getToken))
               .then(() => {

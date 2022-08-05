@@ -1,7 +1,7 @@
 import Router from "next/router";
 
 export const redirect = (
-  context: any,
+  context: any, // eslint-disable-line
   url: Record<string, unknown> | string,
   as?: Record<string, unknown> | string,
   options?: Record<string, unknown>

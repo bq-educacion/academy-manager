@@ -13,6 +13,7 @@ export interface IIconProps {
  * Icon component that renders an svg from a catalog of icons
  */
 const IconSVG: FC<IIconProps> = ({ className, name }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rest = { className } as any;
 
   switch (name) {
@@ -27,7 +28,7 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
     case "triangle":
       return <Triangle {...rest} />;
     default:
-      // tslint:disable-next-line:no-console
+      // eslint-disable-next-line no-console
       console.warn("Icon not found");
       return null;
   }
