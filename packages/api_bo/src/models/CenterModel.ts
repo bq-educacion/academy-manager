@@ -5,7 +5,6 @@ import { FindById } from "./types.ts";
 
 export type CenterModel = Omit<Center, "id" | "groups"> & {
   _id?: ObjectId;
-  groups: ObjectId[];
 };
 
 export const centerCollection = (

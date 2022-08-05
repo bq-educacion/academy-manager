@@ -38,7 +38,7 @@ export const typeDefs = gql`
     address: String!
     population: String!
     phone: String!
-    email: String!
+    email: String
     type: CenterType!
     activityTypes: CenterActivityTypes!
     modality: CenterModality!
