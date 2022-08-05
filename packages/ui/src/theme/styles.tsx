@@ -4,12 +4,10 @@ import colors from "./colors";
 
 export const P1 = styled.p`
   ${fonts.size.huge};
-  font-weight: bold;
 `;
 
 export const P2 = styled.p`
   ${fonts.size.large};
-  font-weight: bold;
 `;
 
 export const P3 = styled.p`
@@ -19,7 +17,6 @@ export const P3 = styled.p`
 
 export const P4 = styled.p`
   ${fonts.size.normal};
-  font-weight: bold;
 `;
 
 export const PG = styled.p`
