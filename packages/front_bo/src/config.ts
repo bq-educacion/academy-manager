@@ -1,12 +1,12 @@
 export const sections = [
   {
-    title: "Extraescolares",
+    title: "general.sections.title",
     links: [
-      { label: "Dashboard", href: "/" },
-      { label: "Centros", href: "/1" },
-      { label: "Grupos", href: "/1" },
-      { label: "Alumnos", href: "/1" },
-      { label: "Monitores", href: "/1" },
+      { label: "general.sections.links.dashboard", href: "/" },
+      { label: "general.sections.links.centers", href: "/1" },
+      { label: "general.sections.links.groups", href: "/1" },
+      { label: "general.sections.links.students", href: "/1" },
+      { label: "general.sections.links.monitors", href: "/1" },
     ],
   },
 ];

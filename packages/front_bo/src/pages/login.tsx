@@ -1,13 +1,21 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
-import { BQLogoGray, colors, GoogleButton, styles } from "@academy-manager/ui";
+import {
+  BQLogoGray,
+  colors,
+  GoogleButton,
+  styles,
+  useTranslate,
+} from "@academy-manager/ui";
 
 const LogInPage: NextPage = () => {
+  const t = useTranslate();
+
   return (
     <Layout>
       <BQLogoGray />
       <LogInBox>
-        <LogInP2>Inicia sesión</LogInP2>
+        <LogInP2>{t("pages.login.title")}</LogInP2>
         <styles.RainbowDivider />
         <LogIn>
           <styles.P4>Accede con tu cuenta BQ</styles.P4>

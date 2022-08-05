@@ -1,6 +1,12 @@
 import styled from "@emotion/styled";
 import { FC, Fragment, useState } from "react";
-import { BQLogo, colors, Icon, styles } from "@academy-manager/ui";
+import {
+  BQLogo,
+  colors,
+  Icon,
+  styles,
+  useTranslate,
+} from "@academy-manager/ui";
 
 type LateralMenuProps = {
   changeSection: (section: string) => void;
@@ -19,6 +25,8 @@ const LateralMenu: FC<LateralMenuProps> = ({
   changeLabel,
   changeSection,
 }) => {
+  const t = useTranslate();
+
   return (
     <LateralContainer>
       <LateralMenuItem top={35} left={43} bottom={26}>
@@ -42,7 +50,7 @@ const LateralMenu: FC<LateralMenuProps> = ({
                 }
               }}
             >
-              <P4Lateral>{elem.title}</P4Lateral>
+              <P4Lateral>{t(elem.title)}</P4Lateral>
               <TriangleLateral name="triangle" clicked={clicked} />
             </LateralMenuItem>
             {clicked && (
@@ -57,7 +65,7 @@ const LateralMenu: FC<LateralMenuProps> = ({
                           changeSection(elem.title);
                         }}
                       >
-                        {link.label}
+                        {t(link.label)}
                       </ALateral>
                     );
                   })}
