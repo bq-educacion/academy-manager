@@ -5,6 +5,7 @@ import MButton from "./MainButton";
 import OptionsButton from "./OptionsButton";
 import SecondActionButton from "./SecondActionButton";
 import UserButton from "./UserButton";
+import Popover from "./Popover";
 
 export {
   GoogleButton,
@@ -14,4 +15,5 @@ export {
   OptionsButton,
   SecondActionButton,
   UserButton,
+  Popover,
 };
