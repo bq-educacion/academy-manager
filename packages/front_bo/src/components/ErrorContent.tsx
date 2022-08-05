@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { useRouter } from "next/router";
 
-const ErrorContent: FC<{ error: number }> = ({ error }) => {
+export const ErrorContent: FC<{ error: number }> = ({ error }) => {
   const router = useRouter();
   return (
     <ErrorContainer>

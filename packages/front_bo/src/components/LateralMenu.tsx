@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { BQLogo, colors, Icon, styles } from "@academy-manager/ui";
 
 type LateralMenuProps = {
@@ -28,7 +28,7 @@ const LateralMenu: FC<LateralMenuProps> = ({
       {sections?.map((elem) => {
         const [clicked, setClicked] = useState<boolean>(false);
         return (
-          <>
+          <Fragment key={elem.title}>
             <LateralMenuItem
               top={15}
               left={45}
@@ -51,6 +51,7 @@ const LateralMenu: FC<LateralMenuProps> = ({
                   elem.links.map((link) => {
                     return (
                       <ALateral
+                        key={link.label}
                         onClick={() => {
                           changeLabel(link.label);
                           changeSection(elem.title);
@@ -62,7 +63,7 @@ const LateralMenu: FC<LateralMenuProps> = ({
                   })}
               </LinksLateral>
             )}
-          </>
+          </Fragment>
         );
       })}
     </LateralContainer>
