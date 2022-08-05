@@ -7,6 +7,7 @@ import {
   styles,
   useTranslate,
 } from "@academy-manager/ui";
+import withApollo from "../apollo/withApollo";
 
 const LogInPage: NextPage = () => {
   const t = useTranslate();
@@ -26,7 +27,7 @@ const LogInPage: NextPage = () => {
   );
 };
 
-export default LogInPage;
+export default withApollo(LogInPage, { requiresAccess: false });
 
 const Layout = styled.div`
   display: flex;

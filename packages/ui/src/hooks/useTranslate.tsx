@@ -7,7 +7,7 @@ export type TranslateFn = (
 
 export const TranslateContext = createContext<TranslateFn>((id: string) => id);
 
-const findByString = (object: any, selector: string) => {
+const findByString = (object: any, selector: string) => { // eslint-disable-line
   if (!selector) {
     return;
   }
@@ -29,8 +29,8 @@ const findByString = (object: any, selector: string) => {
 export const translateFn = (
   id: string,
   variables?: (number | string)[],
-  messages?: any,
-  defaultMessages?: any
+  messages?: any, // eslint-disable-line
+  defaultMessages?: any // eslint-disable-line
 ) => {
   let translation: string = findByString(messages, id);
   if (!translation && defaultMessages) {
@@ -38,7 +38,7 @@ export const translateFn = (
   }
   if (translation) {
     if (variables) {
-      variables.forEach(variable => {
+      variables.forEach((variable) => {
         translation = translation.replace("%v%", `${variable}`);
       });
     }
@@ -48,8 +48,8 @@ export const translateFn = (
 };
 
 export interface ITranslateProviderProps {
-  defaultMessages?: any;
-  messages: any;
+  defaultMessages?: any; // eslint-disable-line
+  messages: any; // eslint-disable-line
   fallback?: React.ReactNode;
   children: React.ReactNode;
 }
@@ -58,10 +58,11 @@ export const TranslateProvider: FC<ITranslateProviderProps> = ({
   defaultMessages,
   messages,
   fallback,
-  children
+  children,
 }) => {
   useEffect(() => {
     !defaultMessages &&
+      // eslint-disable-next-line no-console
       console.warn(
         "Set default messages is recommend when more than one language is supported"
       );

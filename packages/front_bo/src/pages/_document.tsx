@@ -1,5 +1,4 @@
 import { baseStyles } from "@academy-manager/ui";
-import { ApolloProvider } from "@apollo/client";
 import { Global } from "@emotion/react";
 import Document, {
   DocumentContext,
@@ -8,7 +7,6 @@ import Document, {
   Main,
   NextScript,
 } from "next/document";
-import { client } from "../apollo/client";
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -26,12 +24,10 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <ApolloProvider client={client}>
-          <body>
-            <Main />
-            <NextScript />
-          </body>
-        </ApolloProvider>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
       </Html>
     );
   }

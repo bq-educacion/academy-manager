@@ -17,8 +17,5 @@ echo "deno fmt packages/api_bo:"
 cd $cwd/packages/api_bo/ && deno fmt .
 echo "deno fmt packages/api_m:"
 cd $cwd/packages/api_m/ && deno fmt .
-echo "yarn lint:"
-cd $cwd/
-yarn lint
-yarn tsc
-git add .
+echo "yarn pre-commit:"
+cd $cwd/ && yarn pre-commit

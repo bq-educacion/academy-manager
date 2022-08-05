@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import withApollo from "../apollo/withApollo";
 import { ContentStart, LateralMenu } from "../components";
 import { sections } from "../config";
-import { useCookies } from "react-cookie";
 
 const HomePage: NextPage = () => {
   //Example set cookie
@@ -28,4 +28,4 @@ const HomePage: NextPage = () => {
   );
 };
 
-export default HomePage;
+export default withApollo(HomePage);
