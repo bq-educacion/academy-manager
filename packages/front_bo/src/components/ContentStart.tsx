@@ -12,12 +12,12 @@ export const ContentStart: FC<{ section: string; label: string }> = ({
   return (
     <ContentLayout>
       <ContentHeader>
-        <styles.P1>{section}</styles.P1>
+        <styles.P1>{t(section)}</styles.P1>
         <UserStuff token="token" />
       </ContentHeader>
       <styles.RainbowDivider />
       <ContentSubHeader>
-        <styles.P2>{label}</styles.P2>
+        <styles.P2>{t(label)}</styles.P2>
         <InputMail
           placeholder={t("components.content-start.search-placeholder")}
         />
