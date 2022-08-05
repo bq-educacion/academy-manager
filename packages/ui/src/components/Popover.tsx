@@ -3,12 +3,12 @@ import { useRef, useState } from "react";
 import { FC, ReactNode } from "react";
 import useClickOutside from "../hooks/useClickOutside";
 
-export type Popoverprops = {
+export type PopoverProps = {
   title: ReactNode;
   content: ReactNode;
 };
 
-const Popover: FC<Popoverprops> = ({ title, content }) => {
+const Popover: FC<PopoverProps> = ({ title, content }) => {
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
