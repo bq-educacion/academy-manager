@@ -11,3 +11,4 @@ google-application-credentials.json
 .next
 packages/front_bo/tsconfig.tsbuildinfo
 packages/front_m/tsconfig.tsbuildinfo
+.vscode
