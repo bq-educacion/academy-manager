@@ -8,6 +8,7 @@ import {
   InstructorModel,
 } from "../models/InstructorModel.ts";
 import {
+  PaginatedCenters,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
@@ -19,8 +20,12 @@ export const Query = {
     _parent: unknown,
     args: QueryGetCentersArgs,
     ctx: Context,
-  ): Promise<CenterModel[]> => {
-    const filter: Filter<CenterModel> = { "$or": [] };
+  ): Promise<PaginatedCenters> => {
+    const page = args.page || 1;
+    const pageSize = args.pageSize ||
+      (await centerCollection(ctx.db).countDocuments());
+
+    const filter: Filter<PaginatedCenters> = { $or: [] };
     if (args.searchText) {
       filter["$or"] = [
         { name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
@@ -80,9 +85,47 @@ export const Query = {
       sortFilter.name = 1;
     }
 
-    return await centerCollection(ctx.db).aggregate([{ $match: filter }, {
-      $sort: sortFilter,
-    }]).toArray();
+    const agr = await centerCollection(ctx.db)
+      .aggregate<PaginatedCenters>([
+        { $match: filter },
+        {
+          $facet: {
+            stage1: [{ $group: { _id: null, count: { $sum: 1 } } }],
+            stage2: [
+              { $sort: sortFilter },
+              { $skip: pageSize * (page - 1) },
+              { $limit: pageSize === 0 ? 1 : pageSize },
+              // { $addFields: { id: "$_id" } },
+              // { $unset: "_id" }
+            ],
+          },
+        },
+        { $unwind: "$stage1" },
+        {
+          $project: {
+            totalNumber: "$stage1.count",
+            page: { $floor: page },
+            pageSize: { $floor: pageSize },
+            totalPages: {
+              $ceil: { $divide: ["$stage1.count", pageSize] },
+            },
+            data: "$stage2",
+          },
+        },
+      ])
+      .toArray();
+
+    if (agr.length === 0) {
+      return {
+        totalNumber: 0,
+        page: 1,
+        pageSize: 0,
+        totalPages: 1,
+        data: [],
+      };
+    }
+
+    return agr[0];
   },
 
   getCenter: async (
@@ -129,9 +172,13 @@ export const Center = {
     _: unknown,
     ctx: Context,
   ): Promise<GroupModel[]> => {
+<<<<<<< HEAD
     return await groupCollection(ctx.db)
       .find({ center: parent._id })
       .toArray();
+=======
+    return await groupCollection(ctx.db).find({ center: parent._id }).toArray();
+>>>>>>> 37757e6652371b6f8da513d0940a89ead1fe5e64
   },
 };
 

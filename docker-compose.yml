@@ -8,6 +8,7 @@ services:
         source: .
         target: /usr/src
     ports:
+      - 9222:9229
       - 6005:3000
     command: bash -c "cd /usr/src/packages/api_bo && deno task start"
     depends_on:

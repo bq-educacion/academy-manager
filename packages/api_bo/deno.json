@@ -21,7 +21,7 @@
   },
   "tasks": {
     "start": "deno run -A --watch src/app.ts",
-    "inspect": "deno run -A --inspect-brk src/app.ts"
+    "inspect": "deno run -A --inspect src/app.ts"
   },
   "importMap": "../../import_map.json"
 }
