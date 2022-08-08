@@ -7,7 +7,8 @@ import { FirstActionButton } from "@academy-manager/ui";
 const CentersPage: NextPage = () => {
   return (
     <Layout section={sections[0].title} label={sections[0].links[1].label}>
-      <FirstActionButton />
+      <FirstActionButton/>
+      <h1>Test</h1>
     </Layout>
   );
 };

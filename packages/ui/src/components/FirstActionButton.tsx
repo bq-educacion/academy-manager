@@ -20,23 +20,26 @@ const Circle = styled.div<{ border: boolean; disable: boolean }>`
   height: 40px;
   border-radius: 50%;
   margin: 5px;
-  background-color: ${colors.gradient.orange100};
+  background-image: ${colors.gradient.orange100};
 
   & > svg {
     color: ${colors.colors.white};
   }
   &:hover {
     cursor: pointer;
-    background-color: ${colors.gradient.orange80};
+    background-image: ${colors.gradient.orange80};
   }
   ${(props) =>
     props.disable
       ? `
         border: none;
+        background-image: none;
         background-color: ${colors.colors.gray3};
         &:hover {
             border: none;
+            background-image: none;
             background-color: ${colors.colors.gray3};
+            cursor: default;
         }
     }
     `
