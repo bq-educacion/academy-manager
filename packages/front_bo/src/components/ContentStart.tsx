@@ -13,19 +13,21 @@ export const ContentStart: FC<{
   return (
     <ContentLayout>
       <ContentHeader>
-        <styles.P1>{t(section)}</styles.P1>
+        <BoldP1>{t(section)}</BoldP1>
         <UserStuff token="token" />
       </ContentHeader>
       <styles.RainbowDivider />
-      <ContentSubHeader>
-        {childrenHeader}
-      </ContentSubHeader>
+      <ContentSubHeader>{childrenHeader}</ContentSubHeader>
       <ContentBody>{children}</ContentBody>
     </ContentLayout>
   );
 };
 
 export default ContentStart;
+
+const BoldP1 = styled(styles.P1)`
+  font-weight: bold;
+`
 
 const ContentLayout = styled.div`
   background-color: ${colors.colors.grayBlueTransparent};

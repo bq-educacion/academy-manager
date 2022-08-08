@@ -5,7 +5,7 @@ import { sections } from "../config";
 const ForbiddenPage: NextPage = () => {
   return (
     <Layout
-    childrenHeader={undefined} 
+      childrenHeader={undefined}
       section={sections[0].title}
       error={403}
       children={undefined}

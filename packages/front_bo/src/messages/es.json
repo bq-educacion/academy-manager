@@ -34,6 +34,9 @@
   "pages": {
     "login": {
       "title": "Inicia sesión"
+    },
+    "centers": {
+      "advance-search": "Búsqueda avanzada"
     }
   }
 }

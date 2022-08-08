@@ -5,7 +5,7 @@ import withApollo from "../../apollo/withApollo";
 
 const GroupsPage: NextPage = () => {
   return (
-    <Layout childrenHeader={undefined}  section={sections[0].title} >
+    <Layout childrenHeader={undefined} section={sections[0].title}>
       <h1>Test</h1>
     </Layout>
   );

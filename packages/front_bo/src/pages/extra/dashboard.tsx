@@ -5,10 +5,8 @@ import withApollo from "../../apollo/withApollo";
 
 const DashboardPage: NextPage = () => {
   return (
-    <Layout childrenHeader={undefined} 
-        section={sections[0].title} 
-                    >
-              <h1>Test</h1>
+    <Layout childrenHeader={undefined} section={sections[0].title}>
+      <h1>Test</h1>
     </Layout>
   );
 };

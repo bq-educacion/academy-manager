@@ -12,7 +12,11 @@ const Layout: FC<{
     <div>
       <LateralMenu sections={sections} />
       {!error && (
-        <ContentStart childrenHeader={childrenHeader} section={section} children={children} />
+        <ContentStart
+          childrenHeader={childrenHeader}
+          section={section}
+          children={children}
+        />
       )}
       {error && <ErrorContent error={error} />}
     </div>

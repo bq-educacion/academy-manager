@@ -18,14 +18,22 @@ const CentersPage: NextPage = () => {
     <Layout
       childrenHeader={
         <>
-          <LeftHeader>
-            <FirstActionButton margin="0 20px 0 40px"/>
-            <BoldP1>{t("general.sections.links.centers")}</BoldP1>
-          </LeftHeader>
-          <Input
-            placeholder={t("components.content-start.search-placeholder")}
-          />
-          <LensSearch name="lens" />
+          <DivHeader>
+            <FirstActionButton margin="0 20px 0 40px" />
+            <BoldP2>{t("general.sections.links.centers")}</BoldP2>
+          </DivHeader>
+
+          <DivHeader>
+          <RelativeDiv>
+            <Input
+              placeholder={t("components.content-start.search-placeholder")}
+            />
+            <LensSearch name="lens" />
+          </RelativeDiv>
+          <AdvanceSearch>
+            <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
+          </AdvanceSearch>
+          </DivHeader>
         </>
       }
       section={sections[0].title}
@@ -38,22 +46,34 @@ const CentersPage: NextPage = () => {
 // export default withApollo(CentersPage);
 export default CentersPage;
 
-const BoldP1 = styled(styles.P1)`
+const BoldP2 = styled(styles.P2)`
+  font-weight: bold;
+`;
+
+const BoldP4 = styled(styles.P4)`
   font-weight: bold;
 `
 
-const LeftHeader = styled.div`
+const DivHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
+const RelativeDiv = styled.div`
+  position: relative;
+  width: 270px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`
+
 const Input = styled.input`
-  width: 22.7%;
   height: 40px;
+  width: 100%;
   border-radius: 5px;
   border: solid 1px ${colors.colors.gray};
-  margin-right: 40px;
   &::placeholder {
     font-family: Roboto;
     font-size: 14px;
@@ -67,9 +87,19 @@ const Input = styled.input`
   }
 `;
 
+const AdvanceSearch = styled.button`
+  font-weight: bold;
+  height: 40px;
+  width: 166px;
+  border-radius: 4px;
+  background-color: ${colors.colors.gray60};
+  border: none;
+  margin: 0 40px 0 10px;
+`;
+
 const LensSearch = styled(Icon)`
   color: ${colors.colors.grayBlue2};
   position: absolute;
-  right: 61px;
+  right: 20px;
   z-index: 1;
 `;

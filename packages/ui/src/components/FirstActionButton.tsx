@@ -3,7 +3,10 @@ import { FC } from "react";
 import { colors } from "../theme";
 import Icon from "./Icon";
 
-const FirstActionButton: FC<{ disable?: boolean, margin?: string }> = ({ disable, margin }) => {
+const FirstActionButton: FC<{ disable?: boolean; margin?: string }> = ({
+  disable,
+  margin,
+}) => {
   const disabled = disable ? true : false;
   return (
     <Circle border={false} disable={disabled} margin={margin}>
@@ -12,14 +15,18 @@ const FirstActionButton: FC<{ disable?: boolean, margin?: string }> = ({ disable
   );
 };
 
-const Circle = styled.div<{ border: boolean; disable: boolean; margin?: string }>`
+const Circle = styled.div<{
+  border: boolean;
+  disable: boolean;
+  margin?: string;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  ${props => props.margin ? `margin: ${props.margin}` : `margin: 5px`};
+  ${(props) => (props.margin ? `margin: ${props.margin}` : `margin: 5px`)};
   background-image: ${colors.gradient.orange100};
 
   & > svg {
