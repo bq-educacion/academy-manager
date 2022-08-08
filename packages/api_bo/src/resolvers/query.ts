@@ -172,13 +172,7 @@ export const Center = {
     _: unknown,
     ctx: Context,
   ): Promise<GroupModel[]> => {
-<<<<<<< HEAD
-    return await groupCollection(ctx.db)
-      .find({ center: parent._id })
-      .toArray();
-=======
     return await groupCollection(ctx.db).find({ center: parent._id }).toArray();
->>>>>>> 37757e6652371b6f8da513d0940a89ead1fe5e64
   },
 };
 
