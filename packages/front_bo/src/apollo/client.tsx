@@ -18,7 +18,9 @@ import { NextApiRequest } from "next";
 import { Subscription } from "zen-observable-ts";
 
 const isBrowser = typeof window !== "undefined";
-const uri = isBrowser ? process.env.NEXT_PUBLIC_API_URL : process.env.NEXT_PUBLIC_API_URL_SERVER;
+const uri = isBrowser
+  ? process.env.NEXT_PUBLIC_API_URL
+  : process.env.NEXT_PUBLIC_API_URL_SERVER;
 const httpLink = createUploadLink({ fetch, uri });
 
 const request = async (
