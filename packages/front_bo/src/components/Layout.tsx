@@ -4,15 +4,15 @@ import { sections } from "../config";
 
 const Layout: FC<{
   children: ReactNode;
+  childrenHeader: ReactNode;
   section: string;
-  label: string;
   error?: number;
-}> = ({ children, section, label, error }) => {
+}> = ({ children, section, error, childrenHeader }) => {
   return (
     <div>
       <LateralMenu sections={sections} />
       {!error && (
-        <ContentStart section={section} label={label} children={children} />
+        <ContentStart childrenHeader={childrenHeader} section={section} children={children} />
       )}
       {error && <ErrorContent error={error} />}
     </div>

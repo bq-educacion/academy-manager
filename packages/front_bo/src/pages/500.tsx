@@ -5,8 +5,8 @@ import { sections } from "../config";
 const NotFoundPage: NextPage = () => {
   return (
     <Layout
+    childrenHeader={undefined} 
       section={sections[0].title}
-      label={sections[0].links[0].label}
       error={500}
       children={undefined}
     />

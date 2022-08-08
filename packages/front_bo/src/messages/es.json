@@ -1,7 +1,7 @@
 {
   "components": {
     "content-start": {
-      "search-placeholder": "Buscar por email"
+      "search-placeholder": "Buscar"
     },
     "error-content": {
       "button": "Volver a inicio",

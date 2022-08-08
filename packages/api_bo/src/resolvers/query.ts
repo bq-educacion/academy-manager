@@ -3,7 +3,10 @@ import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
-import { instructorCollection, InstructorModel } from "../models/InstructorModel.ts";
+import {
+  instructorCollection,
+  InstructorModel,
+} from "../models/InstructorModel.ts";
 import {
   QueryGetCenterArgs,
   QueryGetCentersArgs,
@@ -121,7 +124,11 @@ export const Center = {
   id: (parent: CenterModel): string => {
     return String(parent._id!);
   },
-  groups: async (parent: CenterModel, _: unknown, ctx: Context):Promise<GroupModel[]> => {
+  groups: async (
+    parent: CenterModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<GroupModel[]> => {
     return await groupCollection(ctx.db)
       .find({ center: parent._id })
       .toArray();
@@ -132,17 +139,29 @@ export const Group = {
   id: (parent: GroupModel): string => {
     return String(parent._id!);
   },
-  center: async (parent: GroupModel, _: unknown, ctx: Context):Promise<CenterModel|undefined> => {
+  center: async (
+    parent: GroupModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<CenterModel | undefined> => {
     return await centerCollection(ctx.db).findOne({ _id: parent.center });
   },
-  students: async (parent: GroupModel, _: unknown, ctx: Context):Promise<StudentModel[]> => {
+  students: async (
+    parent: GroupModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<StudentModel[]> => {
     return await studentCollection(ctx.db)
       .find({
         _id: { $in: parent.students },
       })
       .toArray();
   },
-  instructors: async (parent: GroupModel, _: unknown, ctx: Context):Promise<InstructorModel[]> => {
+  instructors: async (
+    parent: GroupModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<InstructorModel[]> => {
     return await instructorCollection(ctx.db)
       .find({
         _id: { $in: parent.instructors },
