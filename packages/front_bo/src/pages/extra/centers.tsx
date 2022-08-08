@@ -16,7 +16,7 @@ import { GET_CENTER } from "../../apollo/queries";
 const CentersPage: NextPage = () => {
   const t = useTranslate();
 
-  const { data, loading, error } = useQuery(GET_CENTER);
+  const { data, loading, error, refetch } = useQuery(GET_CENTER);
 
   return (
     <Layout
@@ -45,6 +45,7 @@ const CentersPage: NextPage = () => {
       {loading && <h1>Loading...</h1>}
       {error && <h1>Error: {error.message}</h1>}
       {data && <h1>{data.getCenter.name}</h1>}
+      <button onClick={()=>{refetch()}}>Refetch</button>
     </Layout>
   );
 };
