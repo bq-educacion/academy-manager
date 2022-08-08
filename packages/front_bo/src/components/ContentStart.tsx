@@ -1,12 +1,13 @@
 import { colors, Icon, styles, useTranslate } from "@academy-manager/ui";
 import styled from "@emotion/styled";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { UserStuff } from "./UserStuff";
 
-export const ContentStart: FC<{ section: string; label: string }> = ({
-  section,
-  label,
-}) => {
+export const ContentStart: FC<{
+  section: string;
+  label: string;
+  children: ReactNode;
+}> = ({ section, label, children }) => {
   const t = useTranslate();
 
   return (
@@ -23,7 +24,7 @@ export const ContentStart: FC<{ section: string; label: string }> = ({
         />
         <LensSearch name="lens" />
       </ContentSubHeader>
-      <ContentBody></ContentBody>
+      <ContentBody>{children}</ContentBody>
     </ContentLayout>
   );
 };

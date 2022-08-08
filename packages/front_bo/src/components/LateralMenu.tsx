@@ -7,10 +7,9 @@ import {
   styles,
   useTranslate,
 } from "@academy-manager/ui";
+import { useRouter } from "next/router";
 
 type LateralMenuProps = {
-  changeSection: (section: string) => void;
-  changeLabel: (label: string) => void;
   sections: {
     title: string;
     links: {
@@ -20,12 +19,9 @@ type LateralMenuProps = {
   }[];
 };
 
-const LateralMenu: FC<LateralMenuProps> = ({
-  sections,
-  changeLabel,
-  changeSection,
-}) => {
+const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {
   const t = useTranslate();
+  const router = useRouter();
 
   return (
     <LateralContainer>
@@ -44,10 +40,6 @@ const LateralMenu: FC<LateralMenuProps> = ({
               clicked={clicked}
               onClick={() => {
                 setClicked(!clicked);
-                changeSection(elem.title);
-                {
-                  elem.links[0] && changeLabel(elem.links[0].label);
-                }
               }}
             >
               <P4Lateral>{t(elem.title)}</P4Lateral>
@@ -61,8 +53,7 @@ const LateralMenu: FC<LateralMenuProps> = ({
                       <ALateral
                         key={link.label}
                         onClick={() => {
-                          changeLabel(link.label);
-                          changeSection(elem.title);
+                          router.push(link.href);
                         }}
                       >
                         {t(link.label)}

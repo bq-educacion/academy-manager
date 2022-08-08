@@ -23,6 +23,7 @@ const GButton = styled.button`
 
   &:hover {
     border: solid 1px ${colors.colors.grayBlue};
+    cursor: pointer;
   }
 `;
 
