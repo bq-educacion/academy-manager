@@ -27,7 +27,7 @@ export default ContentStart;
 
 const BoldP1 = styled(styles.P1)`
   font-weight: bold;
-`
+`;
 
 const ContentLayout = styled.div`
   background-color: ${colors.colors.grayBlueTransparent};

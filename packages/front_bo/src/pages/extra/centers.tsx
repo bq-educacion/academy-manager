@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { Layout } from "../../components";
 import { sections } from "../../config";
-// import withApollo from "../../apollo/withApollo";
+import withApollo from "../../apollo/withApollo";
 import {
   colors,
   FirstActionButton,
@@ -10,9 +10,13 @@ import {
   useTranslate,
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
+import { useQuery } from "@apollo/client";
+import { GET_CENTER } from "../../apollo/queries";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
+
+  const { data, loading, error } = useQuery(GET_CENTER);
 
   return (
     <Layout
@@ -24,27 +28,29 @@ const CentersPage: NextPage = () => {
           </DivHeader>
 
           <DivHeader>
-          <RelativeDiv>
-            <Input
-              placeholder={t("components.content-start.search-placeholder")}
-            />
-            <LensSearch name="lens" />
-          </RelativeDiv>
-          <AdvanceSearch>
-            <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
-          </AdvanceSearch>
+            <RelativeDiv>
+              <Input
+                placeholder={t("components.content-start.search-placeholder")}
+              />
+              <LensSearch name="lens" />
+            </RelativeDiv>
+            <AdvanceSearch>
+              <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
+            </AdvanceSearch>
           </DivHeader>
         </>
       }
       section={sections[0].title}
     >
-      <h1>Test</h1>
+      {loading && <h1>Loading...</h1>}
+      {error && <h1>Error: {error.message}</h1>}
+      {data && <h1>{data.getCenter.name}</h1>}
     </Layout>
   );
 };
 
 // export default withApollo(CentersPage);
-export default CentersPage;
+export default withApollo(CentersPage, { requiresAccess: false });
 
 const BoldP2 = styled(styles.P2)`
   font-weight: bold;
@@ -52,7 +58,7 @@ const BoldP2 = styled(styles.P2)`
 
 const BoldP4 = styled(styles.P4)`
   font-weight: bold;
-`
+`;
 
 const DivHeader = styled.div`
   display: flex;
@@ -67,7 +73,7 @@ const RelativeDiv = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
 const Input = styled.input`
   height: 40px;
