@@ -223,6 +223,12 @@ export type QueryGetCenterArgs = {
   id: Scalars["String"];
 };
 
+export type QueryGetCentersArgs = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<Scalars["String"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
+};
+
 export type QueryGetGroupArgs = {
   id: Scalars["String"];
 };
@@ -690,7 +696,8 @@ export type QueryResolvers<
   getCenters?: Resolver<
     Array<ResolversTypes["Center"]>,
     ParentType,
-    ContextType
+    ContextType,
+    Partial<QueryGetCentersArgs>
   >;
   getGroup?: Resolver<
     ResolversTypes["Group"],
