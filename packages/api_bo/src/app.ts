@@ -12,7 +12,27 @@ import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
 
-type Request = OpineRequest & { json: () => Promise<unknown> };
+type Params = {
+  variables?: Record<string, unknown>;
+  operationName?: string;
+};
+
+type QueryParams = Params & {
+  query: string;
+  mutation?: never;
+};
+
+type MutationParams = Params & {
+  mutation: string;
+  query?: never;
+};
+
+type GraphQLParams = QueryParams | MutationParams;
+
+type Request = OpineRequest & {
+  json: () => Promise<GraphQLParams>;
+};
+
 export type Context = {
   db: Database;
   request: Request;
