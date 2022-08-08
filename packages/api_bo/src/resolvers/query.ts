@@ -3,8 +3,12 @@ import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
-import { instructorCollection, InstructorModel } from "../models/InstructorModel.ts";
 import {
+  instructorCollection,
+  InstructorModel,
+} from "../models/InstructorModel.ts";
+import {
+  PaginatedCenters,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
@@ -16,8 +20,12 @@ export const Query = {
     _parent: unknown,
     args: QueryGetCentersArgs,
     ctx: Context,
-  ): Promise<CenterModel[]> => {
-    const filter: Filter<CenterModel> = { "$or": [] };
+  ): Promise<PaginatedCenters> => {
+    const page = args.page || 1;
+    const pageSize = args.pageSize ||
+      (await centerCollection(ctx.db).countDocuments());
+
+    const filter: Filter<PaginatedCenters> = { $or: [] };
     if (args.searchText) {
       filter["$or"] = [
         { name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
@@ -77,9 +85,47 @@ export const Query = {
       sortFilter.name = 1;
     }
 
-    return await centerCollection(ctx.db).aggregate([{ $match: filter }, {
-      $sort: sortFilter,
-    }]).toArray();
+    const agr = await centerCollection(ctx.db)
+      .aggregate<PaginatedCenters>([
+        { $match: filter },
+        {
+          $facet: {
+            stage1: [{ $group: { _id: null, count: { $sum: 1 } } }],
+            stage2: [
+              { $sort: sortFilter },
+              { $skip: pageSize * (page - 1) },
+              { $limit: pageSize === 0 ? 1 : pageSize },
+              // { $addFields: { id: "$_id" } },
+              // { $unset: "_id" }
+            ],
+          },
+        },
+        { $unwind: "$stage1" },
+        {
+          $project: {
+            totalNumber: "$stage1.count",
+            page: { $floor: page },
+            pageSize: { $floor: pageSize },
+            totalPages: {
+              $ceil: { $divide: ["$stage1.count", pageSize] },
+            },
+            data: "$stage2",
+          },
+        },
+      ])
+      .toArray();
+
+    if (agr.length === 0) {
+      return {
+        totalNumber: 0,
+        page: 1,
+        pageSize: 0,
+        totalPages: 1,
+        data: [],
+      };
+    }
+
+    return agr[0];
   },
 
   getCenter: async (
@@ -121,10 +167,12 @@ export const Center = {
   id: (parent: CenterModel): string => {
     return String(parent._id!);
   },
-  groups: async (parent: CenterModel, _: unknown, ctx: Context):Promise<GroupModel[]> => {
-    return await groupCollection(ctx.db)
-      .find({ center: parent._id })
-      .toArray();
+  groups: async (
+    parent: CenterModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<GroupModel[]> => {
+    return await groupCollection(ctx.db).find({ center: parent._id }).toArray();
   },
 };
 
@@ -132,17 +180,29 @@ export const Group = {
   id: (parent: GroupModel): string => {
     return String(parent._id!);
   },
-  center: async (parent: GroupModel, _: unknown, ctx: Context):Promise<CenterModel|undefined> => {
+  center: async (
+    parent: GroupModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<CenterModel | undefined> => {
     return await centerCollection(ctx.db).findOne({ _id: parent.center });
   },
-  students: async (parent: GroupModel, _: unknown, ctx: Context):Promise<StudentModel[]> => {
+  students: async (
+    parent: GroupModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<StudentModel[]> => {
     return await studentCollection(ctx.db)
       .find({
         _id: { $in: parent.students },
       })
       .toArray();
   },
-  instructors: async (parent: GroupModel, _: unknown, ctx: Context):Promise<InstructorModel[]> => {
+  instructors: async (
+    parent: GroupModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<InstructorModel[]> => {
     return await instructorCollection(ctx.db)
       .find({
         _id: { $in: parent.instructors },

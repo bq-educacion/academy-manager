@@ -33,7 +33,7 @@
     "lint:front_m": "eslint \"packages/front_m/src/**/*.{js,jsx,ts,tsx}\" --fix",
     "lint:ui": "eslint \"packages/ui/src/**/*.{js,jsx,ts,tsx}\" --fix",
     "lint": "yarn run lint:front_bo && yarn run lint:front_m && yarn run lint:ui",
-    "pre-commit": "lint-staged && yarn tsc",
+    "pre-commit": "yarn lint && yarn tsc",
     "tsc:front_bo": "cd packages/front_bo && tsc --p ./tsconfig.json",
     "tsc:front_m": "cd packages/front_m && tsc --p ./tsconfig.json",
     "tsc:ui": "cd packages/ui && tsc --p ./tsconfig.json",
