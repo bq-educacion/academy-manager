@@ -1,4 +1,3 @@
-import { Server } from "std/http/server.ts";
 import { makeExecutableSchema } from "graphql-tools";
 import { GraphQLHTTP } from "gql";
 import { Database, MongoClient } from "mongo";
@@ -9,7 +8,11 @@ import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
 import { typeDefs as group } from "./schemas/group.ts";
 import { typeDefs as scalars } from "./schemas/scalars.ts";
+import { opine, OpineRequest } from "opine";
+import { readAll } from "std/streams/conversion.ts";
+import { opineCors } from "cors";
 
+type Request = OpineRequest & { json: () => Promise<unknown> };
 export type Context = {
   db: Database;
   request: Request;
@@ -39,32 +42,44 @@ try {
   await client.connect(MONGO_URL);
   console.info("Mongo DB connected: ", MONGO_URL);
 
-  const handler = async (req: Request) => {
-    const { pathname } = new URL(req.url);
+  const dec = new TextDecoder();
+  const schema = makeExecutableSchema({
+    resolvers,
+    typeDefs: [center, student, instructor, group, scalars],
+  });
 
-    return pathname === "/graphql"
-      ? await GraphQLHTTP<Request, Context>({
-          schema: makeExecutableSchema({
-            resolvers,
-            typeDefs: [center, student, instructor, group, scalars],
-          }),
-          graphiql: true,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-          context: () => {
-            return { db: client.database(DB_NAME), request: req };
-          },
-        })(req)
-      : new Response("Not Found", { status: 404 });
-  };
+  const app = opine();
 
-  const server = new Server({ handler });
-  const listener = Deno.listen({ port: parseInt(PORT) });
+  app
+    .use(opineCors())
+    .use("/graphql", async (req, res) => {
+      const request = req as Request;
 
-  console.info("Listening on", listener.addr);
+      request.json = async () => {
+        const rawBody = await readAll(req.raw);
+        return JSON.parse(dec.decode(rawBody));
+      };
 
-  await server.serve(listener);
+      if (request.method == "OPTIONS") {
+        return res.end();
+      }
+
+      const resp = await GraphQLHTTP<Request, Context>({
+        schema,
+        graphiql: true,
+        context: () => {
+          return { db: client.database(DB_NAME), request };
+        },
+      })(request);
+
+      for (const [k, v] of resp.headers.entries()) res.headers?.append(k, v);
+
+      res.status = resp.status;
+      res.send(await resp.text());
+    })
+    .listen({ port: parseInt(PORT) }, () =>
+      console.log(`API BO started on http://localhost:3000`)
+    );
 } catch (e) {
   console.error(e);
 }

@@ -10,7 +10,7 @@ services:
     ports:
       - 9229:9229
       - 6005:3000
-    command: bash -c "cd /usr/src/packages/api_bo && deno task inspect"
+    command: bash -c "cd /usr/src/packages/api_bo && deno task start"
     depends_on:
       - mongo_db
     environment:
