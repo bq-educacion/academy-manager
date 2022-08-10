@@ -11,4 +11,4 @@ const MonitorsPage: NextPage = () => {
   );
 };
 
-export default withApollo(MonitorsPage);
+export default withApollo(MonitorsPage, { requiresAccess: false });

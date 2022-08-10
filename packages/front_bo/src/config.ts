@@ -1,12 +1,12 @@
 type ILink = {
   label: string;
   href: string;
-}
+};
 
 export type ISection = {
   title: string;
   links: ILink[];
-}
+};
 
 export const sections: ISection[] = [
   {
