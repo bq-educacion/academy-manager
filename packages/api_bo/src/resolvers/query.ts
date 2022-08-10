@@ -22,43 +22,42 @@ export const Query = {
   getCenters: async (
     _parent: unknown,
     args: QueryGetCentersArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<PaginatedCenters> => {
-
     const filter: Filter<PaginatedCenters> = { $or: [{}] };
     if (args.searchText) {
       const groupIds = await groupCollection(ctx.db).distinct("center", {
-        name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
       });
 
       filter["$or"] = [
-        { name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { address: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { address: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
-          population: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+          population: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
-        { phone: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { email: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { type: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { email: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           activityTypes: {
-            $regex: `.*${args.searchText || ""}.*`,
+            $regex: `.*${args.searchText}.*`,
             $options: "i",
           },
         },
-        { modality: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { nature: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { course: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { notes: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { modality: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { nature: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
-          createdAt: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+          createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
         {
-          languages: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+          languages: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
         {
           "contacts.name": {
-            $regex: `.*${args.searchText || ""}.*`,
+            $regex: `.*${args.searchText}.*`,
             $options: "i",
           },
         },
@@ -76,7 +75,7 @@ export const Query = {
 
     if (args.orderFilter && args.order) {
       if (args.order !== 1 && args.order !== -1) {
-        throw new Error("404, wrong order (1 or -1)");
+        throw new Error("400, wrong order (1 or -1)");
       }
       switch (args.orderFilter) {
         case "name":
@@ -99,9 +98,9 @@ export const Query = {
           break;
       }
     } else if (args.orderFilter && !args.order) {
-      throw new Error("404, order is required");
+      throw new Error("400, order is required");
     } else if (!args.orderFilter && args.order) {
-      throw new Error("404, orderFilter is required");
+      throw new Error("400, orderFilter is required");
     } else {
       sortFilter.name = 1;
     }
@@ -110,17 +109,16 @@ export const Query = {
       centerCollection(ctx.db),
       filter,
       sortFilter,
-      args.page as number,
-      args.pageSize as number
+      args.page!,
+      args.pageSize!,
     ) as Promise<PaginatedCenters>;
   },
 
   getCenter: async (
     _parent: unknown,
     args: QueryGetCenterArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel> => {
-
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.id),
     });
@@ -133,49 +131,48 @@ export const Query = {
   getGroups: async (
     _parent: unknown,
     args: QueryGetGroupsArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<PaginatedGroups> => {
-
     const filter: Filter<PaginatedGroups> = { $or: [{}] };
     if (args.searchText) {
       const centerIds = await centerCollection(ctx.db).distinct("_id", {
-        name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
       });
       const instructorsIds = await instructorCollection(ctx.db).distinct(
         "_id",
-        { name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } }
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
       );
       const studentsIds = await studentCollection(ctx.db).distinct("_id", {
-        name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
       });
 
       filter["$or"] = [
-        { id_group: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { type: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { course: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { id_group: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
-          createdAt: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+          createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
         {
           "timetable.day": {
-            $regex: `.*${args.searchText || ""}.*`,
+            $regex: `.*${args.searchText}.*`,
             $options: "i",
           },
         },
         {
           "timetable.start": {
-            $regex: `.*${args.searchText || ""}.*`,
+            $regex: `.*${args.searchText}.*`,
             $options: "i",
           },
         },
         {
           "timetable.end": {
-            $regex: `.*${args.searchText || ""}.*`,
+            $regex: `.*${args.searchText}.*`,
             $options: "i",
           },
         },
-        { notes: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { center: { $in: centerIds } },
         { instructors: { $in: instructorsIds } },
         { students: { $in: studentsIds } },
@@ -186,7 +183,7 @@ export const Query = {
 
     if (args.orderFilter && args.order) {
       if (args.order !== 1 && args.order !== -1) {
-        throw new Error("404, wrong order (1 or -1)");
+        throw new Error("400, wrong order (1 or -1)");
       }
       switch (args.orderFilter) {
         case "id_group":
@@ -203,9 +200,9 @@ export const Query = {
           break;
       }
     } else if (args.orderFilter && !args.order) {
-      throw new Error("404, order is required");
+      throw new Error("400, order is required");
     } else if (!args.orderFilter && args.order) {
-      throw new Error("404, orderFilter is required");
+      throw new Error("400, orderFilter is required");
     } else {
       sortFilter = { id_group: 1 };
     }
@@ -214,20 +211,19 @@ export const Query = {
       groupCollection(ctx.db),
       filter,
       sortFilter,
-      args.page as number,
-      args.pageSize as number
+      args.page!,
+      args.pageSize!,
     ) as Promise<PaginatedGroups>;
   },
 
   getGroup: async (
     _parent: unknown,
     args: QueryGetGroupArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<GroupModel> => {
-
     const group = await groupCollection(ctx.db).findById(args.id);
     if (!group) {
-      throw new Error("404, Group not found");
+      throw new Error("400, Group not found");
     }
     return group;
   },
@@ -240,7 +236,7 @@ export const Center = {
   groups: async (
     parent: CenterModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<GroupModel[]> => {
     return await groupCollection(ctx.db).find({ center: parent._id }).toArray();
   },
@@ -253,14 +249,14 @@ export const Group = {
   center: async (
     parent: GroupModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel | undefined> => {
     return await centerCollection(ctx.db).findOne({ _id: parent.center });
   },
   students: async (
     parent: GroupModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<StudentModel[]> => {
     return await studentCollection(ctx.db)
       .find({
@@ -271,7 +267,7 @@ export const Group = {
   instructors: async (
     parent: GroupModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<InstructorModel[]> => {
     return await instructorCollection(ctx.db)
       .find({

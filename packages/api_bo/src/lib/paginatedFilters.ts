@@ -4,15 +4,15 @@ import { GroupModel } from "../models/GroupModel.ts";
 import { PaginatedCenters, PaginatedGroups } from "../types.ts";
 
 export const paginatedFilters = async (
-  DBModel: Collection<CenterModel|GroupModel>,
-  filter: Filter<PaginatedCenters|PaginatedGroups>,
+  DBModel: Collection<CenterModel | GroupModel>,
+  filter: Filter<PaginatedCenters | PaginatedGroups>,
   sortFilter: unknown,
   pageArgs: number,
-  pageSizeArgs: number
+  pageSizeArgs: number,
 ) => {
   try {
     const page = pageArgs || 1;
-    const pageSize = pageSizeArgs ||(await DBModel.countDocuments());
+    const pageSize = pageSizeArgs || (await DBModel.countDocuments());
 
     const agr = await DBModel.aggregate(
       [
@@ -40,9 +40,9 @@ export const paginatedFilters = async (
           },
         },
       ],
-      { collation: { locale: "es", numericOrdering: true } }
+      { collation: { locale: "es", numericOrdering: true } },
     ).toArray();
-    
+
     if (agr.length === 0) {
       return {
         totalNumber: 0,
