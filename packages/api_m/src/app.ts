@@ -88,8 +88,9 @@ try {
       res.status = resp.status;
       res.send(await resp.text());
     })
-    .listen({ port: parseInt(PORT) }, () =>
-      console.log(`API M started on http://localhost:3000`)
+    .listen(
+      { port: parseInt(PORT) },
+      () => console.log(`API M started on http://localhost:3000`),
     );
 } catch (e) {
   console.error(e);
