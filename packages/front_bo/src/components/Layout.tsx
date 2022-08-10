@@ -10,7 +10,7 @@ const Layout: FC<{
 }> = ({ children, section, label, error }) => {
   return (
     <div>
-      <LateralMenu sections={sections} section={section} label={label}/>
+      <LateralMenu sections={sections} section={section} label={label} />
       {!error && (
         <ContentStart section={section} label={label}>
           {children}

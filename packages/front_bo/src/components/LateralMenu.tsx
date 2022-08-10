@@ -90,9 +90,9 @@ const LateralMenuItem = styled.div<{
   width: 100%;
   transition: border-bottom 0.3s ease-in-out;
   ${(props) =>
-  props.clicked
-    ? `border-bottom: 1px solid ${colors.colors.gray80Transparent}`
-    : `border-bottom: 1px solid ${colors.colors.gray80}`};
+    props.clicked
+      ? `border-bottom: 1px solid ${colors.colors.gray80Transparent}`
+      : `border-bottom: 1px solid ${colors.colors.gray80}`};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -141,7 +141,7 @@ const LinksLateral = styled.div<{
 
 const ALateral = styled(styles.A)<{ selected: boolean }>`
   color: ${(props) =>
-  props.selected ? colors.colors.blue80 : colors.colors.white};
+    props.selected ? colors.colors.blue80 : colors.colors.white};
   font-size: 14px;
   font-weight: normal;
   line-height: 1.43;
