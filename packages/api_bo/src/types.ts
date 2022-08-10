@@ -219,9 +219,26 @@ export enum OrderFilter {
   Type = "type",
 }
 
+export enum OrderFilterGroup {
+  Center = "center",
+  End = "end",
+  IdGroup = "id_group",
+  Instructors = "instructors",
+  Start = "start",
+}
+
 export type PaginatedCenters = {
   __typename?: "PaginatedCenters";
   data?: Maybe<Array<Maybe<Center>>>;
+  page: Scalars["Int"];
+  pageSize: Scalars["Int"];
+  totalNumber: Scalars["Int"];
+  totalPages: Scalars["Int"];
+};
+
+export type PaginatedGroups = {
+  __typename?: "PaginatedGroups";
+  data?: Maybe<Array<Maybe<Group>>>;
   page: Scalars["Int"];
   pageSize: Scalars["Int"];
   totalNumber: Scalars["Int"];
@@ -233,7 +250,7 @@ export type Query = {
   getCenter: Center;
   getCenters: PaginatedCenters;
   getGroup: Group;
-  getGroups: Array<Group>;
+  getGroups: PaginatedGroups;
 };
 
 export type QueryGetCenterArgs = {
@@ -250,6 +267,14 @@ export type QueryGetCentersArgs = {
 
 export type QueryGetGroupArgs = {
   id: Scalars["String"];
+};
+
+export type QueryGetGroupsArgs = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterGroup>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
 };
 
 export enum StateInstructor {
@@ -428,7 +453,9 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   Number: ResolverTypeWrapper<Scalars["Number"]>;
   OrderFilter: OrderFilter;
+  OrderFilterGroup: OrderFilterGroup;
   PaginatedCenters: ResolverTypeWrapper<PaginatedCenters>;
+  PaginatedGroups: ResolverTypeWrapper<PaginatedGroups>;
   Query: ResolverTypeWrapper<{}>;
   StateInstructor: StateInstructor;
   StateStudent: StateStudent;
@@ -452,6 +479,7 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   Number: Scalars["Number"];
   PaginatedCenters: PaginatedCenters;
+  PaginatedGroups: PaginatedGroups;
   Query: {};
   String: Scalars["String"];
   Student: Student;
@@ -723,6 +751,23 @@ export type PaginatedCentersResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type PaginatedGroupsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["PaginatedGroups"] =
+    ResolversParentTypes["PaginatedGroups"],
+> = ResolversObject<{
+  data?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["Group"]>>>,
+    ParentType,
+    ContextType
+  >;
+  page?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageSize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalNumber?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalPages?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] =
@@ -746,7 +791,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetGroupArgs, "id">
   >;
-  getGroups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
+  getGroups?: Resolver<
+    ResolversTypes["PaginatedGroups"],
+    ParentType,
+    ContextType,
+    Partial<QueryGetGroupsArgs>
+  >;
 }>;
 
 export type StudentResolvers<
@@ -838,6 +888,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Number?: GraphQLScalarType;
   PaginatedCenters?: PaginatedCentersResolvers<ContextType>;
+  PaginatedGroups?: PaginatedGroupsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
   Timetable?: TimetableResolvers<ContextType>;

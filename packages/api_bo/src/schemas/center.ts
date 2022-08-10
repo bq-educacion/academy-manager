@@ -25,6 +25,14 @@ export const typeDefs = gql`
     CONCERTED
   }
 
+  enum OrderFilter {
+    name
+    modality
+    population
+    type
+    languages
+  }
+
   type CenterContact {
     name: String!
     surname: String!
@@ -57,14 +65,6 @@ export const typeDefs = gql`
     createdAt: String!
     contacts: [CenterContact!]!
     groups: [Group!]!
-  }
-
-  enum OrderFilter {
-    name
-    modality
-    population
-    type
-    languages
   }
 
   type Query {

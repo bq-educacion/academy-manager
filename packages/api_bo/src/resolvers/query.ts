@@ -9,11 +9,14 @@ import {
 } from "../models/InstructorModel.ts";
 import {
   PaginatedCenters,
+  PaginatedGroups,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
+  QueryGetGroupsArgs,
 } from "../types.ts";
 import { Filter } from "mongo";
+import { paginatedFilters } from "../lib/paginatedFilters.ts";
 
 export const Query = {
   getCenters: async (
@@ -21,34 +24,44 @@ export const Query = {
     args: QueryGetCentersArgs,
     ctx: Context,
   ): Promise<PaginatedCenters> => {
-    const page = args.page || 1;
-    const pageSize = args.pageSize ||
-      (await centerCollection(ctx.db).countDocuments());
-
-    const filter: Filter<PaginatedCenters> = { $or: [] };
+    const filter: Filter<PaginatedCenters> = { $or: [{}] };
     if (args.searchText) {
+      const groupIds = await groupCollection(ctx.db).distinct("center", {
+        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
+      });
+
       filter["$or"] = [
-        { name: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { address: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { address: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
-          population: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+          population: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
-        { phone: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { email: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { type: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { email: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           activityTypes: {
-            $regex: `.*${args.searchText || ""}.*`,
+            $regex: `.*${args.searchText}.*`,
             $options: "i",
           },
         },
-        { modality: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { nature: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { course: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
-        { notes: { $regex: `.*${args.searchText || ""}.*`, $options: "i" } },
+        { modality: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { nature: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
-          createdAt: { $regex: `.*${args.searchText || ""}.*`, $options: "i" },
+          createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
+        {
+          languages: { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        {
+          "contacts.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        { _id: { $in: groupIds } },
       ];
     }
 
@@ -60,7 +73,10 @@ export const Query = {
       type?: number;
     } = {};
 
-    if (args.order && args.orderFilter) {
+    if (args.orderFilter && args.order) {
+      if (args.order !== 1 && args.order !== -1) {
+        throw new Error("400, wrong order (1 or -1)");
+      }
       switch (args.orderFilter) {
         case "name":
           sortFilter.name = args.order;
@@ -81,51 +97,21 @@ export const Query = {
           sortFilter.name = 1;
           break;
       }
+    } else if (args.orderFilter && !args.order) {
+      throw new Error("400, order is required");
+    } else if (!args.orderFilter && args.order) {
+      throw new Error("400, orderFilter is required");
     } else {
       sortFilter.name = 1;
     }
 
-    const agr = await centerCollection(ctx.db)
-      .aggregate<PaginatedCenters>([
-        { $match: filter },
-        {
-          $facet: {
-            stage1: [{ $group: { _id: null, count: { $sum: 1 } } }],
-            stage2: [
-              { $sort: sortFilter },
-              { $skip: pageSize * (page - 1) },
-              { $limit: pageSize === 0 ? 1 : pageSize },
-              // { $addFields: { id: "$_id" } },
-              // { $unset: "_id" }
-            ],
-          },
-        },
-        { $unwind: "$stage1" },
-        {
-          $project: {
-            totalNumber: "$stage1.count",
-            page: { $floor: page },
-            pageSize: { $floor: pageSize },
-            totalPages: {
-              $ceil: { $divide: ["$stage1.count", pageSize] },
-            },
-            data: "$stage2",
-          },
-        },
-      ])
-      .toArray();
-
-    if (agr.length === 0) {
-      return {
-        totalNumber: 0,
-        page: 1,
-        pageSize: 0,
-        totalPages: 1,
-        data: [],
-      };
-    }
-
-    return agr[0];
+    return paginatedFilters(
+      centerCollection(ctx.db),
+      filter,
+      sortFilter,
+      args.page,
+      args.pageSize,
+    ) as Promise<PaginatedCenters>;
   },
 
   getCenter: async (
@@ -144,10 +130,90 @@ export const Query = {
 
   getGroups: async (
     _parent: unknown,
-    _args: unknown,
+    args: QueryGetGroupsArgs,
     ctx: Context,
-  ): Promise<GroupModel[]> => {
-    return await groupCollection(ctx.db).find().toArray();
+  ): Promise<PaginatedGroups> => {
+    const filter: Filter<PaginatedGroups> = { $or: [{}] };
+    if (args.searchText) {
+      const centerIds = await centerCollection(ctx.db).distinct("_id", {
+        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
+      });
+      const instructorsIds = await instructorCollection(ctx.db).distinct(
+        "_id",
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+      );
+      const studentsIds = await studentCollection(ctx.db).distinct("_id", {
+        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
+      });
+
+      filter["$or"] = [
+        { id_group: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        {
+          "timetable.day": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "timetable.start": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "timetable.end": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { center: { $in: centerIds } },
+        { instructors: { $in: instructorsIds } },
+        { students: { $in: studentsIds } },
+      ];
+    }
+
+    let sortFilter = {};
+
+    if (args.orderFilter && args.order) {
+      if (args.order !== 1 && args.order !== -1) {
+        throw new Error("400, wrong order (1 or -1)");
+      }
+      switch (args.orderFilter) {
+        case "id_group":
+          sortFilter = { id_group: args.order };
+          break;
+        case "start":
+          sortFilter = { "timetable.start": args.order };
+          break;
+        case "end":
+          sortFilter = { "timetable.end": args.order };
+          break;
+        default: // default id_groupAsc
+          sortFilter = { id_group: 1 };
+          break;
+      }
+    } else if (args.orderFilter && !args.order) {
+      throw new Error("400, order is required");
+    } else if (!args.orderFilter && args.order) {
+      throw new Error("400, orderFilter is required");
+    } else {
+      sortFilter = { id_group: 1 };
+    }
+
+    return paginatedFilters(
+      groupCollection(ctx.db),
+      filter,
+      sortFilter,
+      args.page,
+      args.pageSize,
+    ) as Promise<PaginatedGroups>;
   },
 
   getGroup: async (
@@ -157,7 +223,7 @@ export const Query = {
   ): Promise<GroupModel> => {
     const group = await groupCollection(ctx.db).findById(args.id);
     if (!group) {
-      throw new Error("404, Group not found");
+      throw new Error("400, Group not found");
     }
     return group;
   },
