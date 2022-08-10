@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN yarn global add pm2 && yarn install
+RUN yarn install
 ENV NODE_ENV=production
 
 WORKDIR /usr/src/app/packages/front_bo
