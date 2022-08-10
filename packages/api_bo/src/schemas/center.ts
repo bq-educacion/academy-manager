@@ -32,6 +32,14 @@ export const typeDefs = gql`
     phone: String!
   }
 
+  type PaginatedCenters {
+    page: Int!
+    totalPages: Int!
+    totalNumber: Int!
+    pageSize: Int!
+    data: [Center]
+  }
+
   type Center {
     id: ID!
     name: String!
@@ -51,8 +59,22 @@ export const typeDefs = gql`
     groups: [Group!]!
   }
 
+  enum OrderFilter {
+    name
+    modality
+    population
+    type
+    languages
+  }
+
   type Query {
-    getCenters: [Center!]!
+    getCenters(
+      searchText: String
+      orderFilter: OrderFilter
+      order: Number
+      page: Int
+      pageSize: Int
+    ): PaginatedCenters!
     getCenter(id: String!): Center!
   }
 

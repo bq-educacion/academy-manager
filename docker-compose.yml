@@ -2,12 +2,13 @@ version: "3.2"
 
 services:
   api_bo:
-    image: denoland/deno:debian-1.23.4
+    image: denoland/deno:debian-1.24.1
     volumes:
       - type: bind
         source: .
         target: /usr/src
     ports:
+      - 9229:9229
       - 6005:3000
     command: bash -c "cd /usr/src/packages/api_bo && deno task start"
     depends_on:
@@ -18,7 +19,7 @@ services:
       - PORT=3000
 
   api_m:
-    image: denoland/deno:debian-1.23.4
+    image: denoland/deno:debian-1.24.1
     volumes:
       - type: bind
         source: .
