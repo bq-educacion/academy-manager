@@ -15,11 +15,29 @@ export const typeDefs = gql`
     SATURDAY
     SUNDAY
   }
+
+  enum OrderFilterGroup {
+    id_group
+    center
+    instructors
+    start
+    end
+  }
+
   type Timetable {
     day: Days!
     start: String!
     end: String!
   }
+
+  type PaginatedGroups {
+    page: Int!
+    totalPages: Int!
+    totalNumber: Int!
+    pageSize: Int!
+    data: [Group]
+  }
+
   input TimetableInput {
     day: Days!
     start: String!
@@ -41,7 +59,13 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    getGroups: [Group!]!
+    getGroups( 
+      searchText: String
+      orderFilter: OrderFilterGroup
+      order: Number
+      page: Int
+      pageSize: Int
+    ): PaginatedGroups!
 
     getGroup(id: String!): Group!
   }
