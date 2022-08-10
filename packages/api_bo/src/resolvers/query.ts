@@ -189,6 +189,12 @@ export const Query = {
         case "id_group":
           sortFilter = { id_group: args.order };
           break;
+        case "center":
+          sortFilter = { "centersName.name": args.order };
+          break;
+        case "instructors":
+          sortFilter = { "instructorsName.name": args.order };
+          break;
         case "start":
           sortFilter = { "timetable.start": args.order };
           break;

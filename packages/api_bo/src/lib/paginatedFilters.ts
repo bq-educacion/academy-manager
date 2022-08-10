@@ -21,6 +21,8 @@ export const paginatedFilters = async (
           $facet: {
             stage1: [{ $group: { _id: null, count: { $sum: 1 } } }],
             stage2: [
+              { $lookup: {from: "centers", localField: "center", foreignField: "_id", as: "centersName"}},
+              { $lookup: {from: "instructors", localField: "instructors", foreignField: "_id", as: "instructorsName"}},
               { $sort: sortFilter },
               { $skip: pageSize * (page - 1) },
               { $limit: pageSize === 0 ? 1 : pageSize },
