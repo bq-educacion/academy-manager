@@ -8,7 +8,6 @@ const InternalServerErrorPage: NextPage = () => {
       section={sections[0].title}
       label={sections[0].links[0].label}
       error={404}
-      children={undefined}
     />
   );
 };

@@ -8,15 +8,10 @@ import {
   useTranslate,
 } from "@academy-manager/ui";
 import { useRouter } from "next/router";
+import { ISection } from "../config";
 
 type LateralMenuProps = {
-  sections: {
-    title: string;
-    links: {
-      label: string;
-      href: string;
-    }[];
-  }[];
+  sections: ISection[];
 };
 
 const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {

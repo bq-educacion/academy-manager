@@ -3,7 +3,7 @@ import { ContentStart, ErrorContent, LateralMenu } from ".";
 import { sections } from "../config";
 
 const Layout: FC<{
-  children: ReactNode;
+  children?: ReactNode;
   section: string;
   label: string;
   error?: number;
@@ -12,7 +12,7 @@ const Layout: FC<{
     <div>
       <LateralMenu sections={sections} />
       {!error && (
-        <ContentStart section={section} label={label} children={children} />
+        <ContentStart section={section} label={label}>{children}</ContentStart>
       )}
       {error && <ErrorContent error={error} />}
     </div>

@@ -11,4 +11,4 @@ const CentersPage: NextPage = () => {
   );
 };
 
-export default withApollo(CentersPage);
+export default withApollo(CentersPage, { requiresAccess: false });
