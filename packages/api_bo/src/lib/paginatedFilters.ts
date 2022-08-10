@@ -1,14 +1,14 @@
 import { Collection, Filter } from "mongo";
 import { CenterModel } from "../models/CenterModel.ts";
 import { GroupModel } from "../models/GroupModel.ts";
-import { PaginatedCenters, PaginatedGroups } from "../types.ts";
+import { InputMaybe, PaginatedCenters, PaginatedGroups } from "../types.ts";
 
 export const paginatedFilters = async (
   DBModel: Collection<CenterModel | GroupModel>,
   filter: Filter<PaginatedCenters | PaginatedGroups>,
   sortFilter: unknown,
-  pageArgs: number,
-  pageSizeArgs: number,
+  pageArgs: InputMaybe<number> | undefined,
+  pageSizeArgs: InputMaybe<number> | undefined,
 ) => {
   try {
     const page = pageArgs || 1;

@@ -109,8 +109,8 @@ export const Query = {
       centerCollection(ctx.db),
       filter,
       sortFilter,
-      args.page!,
-      args.pageSize!,
+      args.page,
+      args.pageSize,
     ) as Promise<PaginatedCenters>;
   },
 
@@ -211,8 +211,8 @@ export const Query = {
       groupCollection(ctx.db),
       filter,
       sortFilter,
-      args.page!,
-      args.pageSize!,
+      args.page,
+      args.pageSize,
     ) as Promise<PaginatedGroups>;
   },
 
