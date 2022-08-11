@@ -7,8 +7,8 @@ export const paginatedFilters = async (
   DBModel: Collection<CenterModel | GroupModel>,
   filter: Filter<PaginatedCenters | PaginatedGroups>,
   sortFilter: unknown,
-  pageArgs: InputMaybe<number> | undefined,
-  pageSizeArgs: InputMaybe<number> | undefined,
+  pageArgs?: InputMaybe<number>,
+  pageSizeArgs?: InputMaybe<number>,
 ) => {
   try {
     const page = pageArgs || 1;
@@ -16,13 +16,43 @@ export const paginatedFilters = async (
 
     const agr = await DBModel.aggregate(
       [
-        { $match: filter },
+        {
+          $lookup: {
+            from: "groups",
+            localField: "_id",
+            foreignField: "center",
+            as: "groupsName",
+          },
+        },
+        {
+          $lookup: {
+            from: "centers",
+            localField: "center",
+            foreignField: "_id",
+            as: "centersName",
+          },
+        },
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructors",
+            foreignField: "_id",
+            as: "instructorsName",
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "students",
+            foreignField: "_id",
+            as: "studentsName",
+          },
+        },    
+        { $match: filter },       
         {
           $facet: {
             stage1: [{ $group: { _id: null, count: { $sum: 1 } } }],
             stage2: [
-              { $lookup: {from: "centers", localField: "center", foreignField: "_id", as: "centersName"}},
-              { $lookup: {from: "instructors", localField: "instructors", foreignField: "_id", as: "instructorsName"}},
               { $sort: sortFilter },
               { $skip: pageSize * (page - 1) },
               { $limit: pageSize === 0 ? 1 : pageSize },

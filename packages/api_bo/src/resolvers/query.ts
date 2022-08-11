@@ -19,16 +19,13 @@ import { Filter } from "mongo";
 import { paginatedFilters } from "../lib/paginatedFilters.ts";
 
 export const Query = {
-  getCenters: async (
+  getCenters: (
     _parent: unknown,
     args: QueryGetCentersArgs,
     ctx: Context,
   ): Promise<PaginatedCenters> => {
     const filter: Filter<PaginatedCenters> = { $or: [{}] };
     if (args.searchText) {
-      const groupIds = await groupCollection(ctx.db).distinct("center", {
-        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
-      });
 
       filter["$or"] = [
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
@@ -61,7 +58,7 @@ export const Query = {
             $options: "i",
           },
         },
-        { _id: { $in: groupIds } },
+        { "groupsName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
       ];
     }
 
@@ -128,24 +125,13 @@ export const Query = {
     return center;
   },
 
-  getGroups: async (
+  getGroups: (
     _parent: unknown,
     args: QueryGetGroupsArgs,
     ctx: Context,
   ): Promise<PaginatedGroups> => {
     const filter: Filter<PaginatedGroups> = { $or: [{}] };
     if (args.searchText) {
-      const centerIds = await centerCollection(ctx.db).distinct("_id", {
-        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
-      });
-      const instructorsIds = await instructorCollection(ctx.db).distinct(
-        "_id",
-        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-      );
-      const studentsIds = await studentCollection(ctx.db).distinct("_id", {
-        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
-      });
-
       filter["$or"] = [
         { id_group: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
@@ -173,9 +159,9 @@ export const Query = {
           },
         },
         { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        { center: { $in: centerIds } },
-        { instructors: { $in: instructorsIds } },
-        { students: { $in: studentsIds } },
+        { "centersName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
+        { "instructorsName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
+        { "studentsName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
       ];
     }
 
@@ -218,7 +204,7 @@ export const Query = {
       filter,
       sortFilter,
       args.page,
-      args.pageSize,
+      args.pageSize
     ) as Promise<PaginatedGroups>;
   },
 
