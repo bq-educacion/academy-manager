@@ -20,10 +20,10 @@ const GButton = styled.button`
   border: solid 1px ${colors.colors.blackBackground};
   border-radius: 4px;
   background-color: ${colors.colors.white};
+  cursor: pointer;
 
   &:hover {
     border: solid 1px ${colors.colors.grayBlue};
-    cursor: pointer;
   }
 `;
 

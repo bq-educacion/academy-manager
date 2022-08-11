@@ -41,6 +41,7 @@ const CentersPage: NextPage = () => {
         </>
       }
       section={sections[0].title}
+      label={sections[0].links[1].label}
     >
       {loading && <h1>Loading...</h1>}
       {error && <h1>Error: {error.message}</h1>}

@@ -5,7 +5,10 @@ import withApollo from "../../apollo/withApollo";
 
 const MonitorsPage: NextPage = () => {
   return (
-    <Layout childrenHeader={undefined} section={sections[0].title}>
+    <Layout
+      section={sections[0].title}
+      label={sections[0].links[4].label}
+    >
       <h1>Test</h1>
     </Layout>
   );

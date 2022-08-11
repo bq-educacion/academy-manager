@@ -1,4 +1,14 @@
-export const sections = [
+type ILink = {
+  label: string;
+  href: string;
+};
+
+export type ISection = {
+  title: string;
+  links: ILink[];
+};
+
+export const sections: ISection[] = [
   {
     title: "general.sections.title",
     links: [
