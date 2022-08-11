@@ -121,6 +121,7 @@ export const Query = {
     args: QueryGetCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
+    try{
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.id),
     });
@@ -128,6 +129,9 @@ export const Query = {
       throw new Error("404, Center not found");
     }
     return center;
+  } catch (error) {
+    throw new Error("500",error);
+  }
   },
 
   getGroups: (
@@ -234,11 +238,15 @@ export const Query = {
     args: QueryGetGroupArgs,
     ctx: Context,
   ): Promise<GroupModel> => {
+    try{
     const group = await groupCollection(ctx.db).findById(args.id);
     if (!group) {
       throw new Error("400, Group not found");
     }
     return group;
+  } catch (error) {
+    throw new Error("500",error);
+  }
   },
 };
 

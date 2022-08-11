@@ -18,6 +18,7 @@ export const Mutation = {
     args: MutationCreateCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
+    try{
     const createdAt = new Date().toLocaleDateString("en-GB");
     const idCenter = await centerCollection(ctx.db).insertOne({
       ...args,
@@ -31,6 +32,9 @@ export const Mutation = {
       createdAt: createdAt,
       ...args,
     };
+  } catch (error) {
+    throw new Error("500 ",error);
+  }
   },
 
   addCenterContact: async (
@@ -38,6 +42,7 @@ export const Mutation = {
     args: MutationAddCenterContactArgs,
     ctx: Context,
   ): Promise<CenterContact> => {
+    try{
     const center = await centerCollection(ctx.db).findOne({
       _id: new ObjectId(args.idCenter),
     });
@@ -60,6 +65,9 @@ export const Mutation = {
       { $push: { contacts: { $each: [newContact] } } },
     );
     return newContact;
+    } catch (error) {
+      throw new Error("500 ",error);
+    }
   },
 
   editCenter: async (
@@ -67,17 +75,17 @@ export const Mutation = {
     args: MutationEditCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
-    const newCenter = await centerCollection(ctx.db).findAndModify({
-      query: { _id: new ObjectId(args.id) },
-      update: { $set: { ...args } },
-      new: true,
+    const center = await centerCollection(ctx.db).findOne({
+      _id: new ObjectId(args.id),
     });
-
-    if (!newCenter) {
+    if (!center) {
       throw new Error("404, Center not found");
     }
-
-    return newCenter;
+    const newCenter = { ...center, ...args };
+    await centerCollection(ctx.db).updateOne({ _id: new ObjectId(args.id) }, {
+      $set:{newCenter}
+    });
+    return newCenter as CenterModel;
   },
 
   editCenterContacts: async (
@@ -85,6 +93,7 @@ export const Mutation = {
     args: MutationEditCenterContactsArgs,
     ctx: Context,
   ): Promise<CenterContact> => {
+    try{
     const contactsCenter = await centerCollection(ctx.db)
       .find(
         {
@@ -127,6 +136,9 @@ export const Mutation = {
     );
 
     return contactUpdate;
+    } catch (error) {
+      throw new Error("500 ",error);
+    }
   },
 
   createGroup: async (
@@ -134,6 +146,7 @@ export const Mutation = {
     args: MutationCreateGroupArgs,
     ctx: Context,
   ): Promise<GroupModel> => {
+    try{
     const group = await groupCollection(ctx.db).findOne({
       center: new ObjectId(args.idCenter),
       name: { $regex: args.name, $options: "i" },
@@ -187,5 +200,8 @@ export const Mutation = {
       instructors: instructors || [],
       createdAt: createdAt,
     };
+  }catch(error){
+    throw new Error("500 "+ error);
+  }
   },
 };
