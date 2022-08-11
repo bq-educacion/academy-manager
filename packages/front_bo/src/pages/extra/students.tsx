@@ -11,4 +11,4 @@ const StudentsPage: NextPage = () => {
   );
 };
 
-export default withApollo(StudentsPage);
+export default withApollo(StudentsPage, { requiresAccess: false });

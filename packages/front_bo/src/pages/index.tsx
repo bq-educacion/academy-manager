@@ -20,4 +20,4 @@ const HomePage: NextPage = () => {
   return <></>;
 };
 
-export default withApollo(HomePage);
+export default withApollo(HomePage, { requiresAccess: false });

@@ -102,6 +102,7 @@ const AdvanceSearch = styled.button`
   background-color: ${colors.colors.gray60};
   border: none;
   margin: 0 40px 0 10px;
+  cursor: pointer;
 `;
 
 const LensSearch = styled(Icon)`

@@ -11,4 +11,4 @@ const DashboardPage: NextPage = () => {
   );
 };
 
-export default withApollo(DashboardPage);
+export default withApollo(DashboardPage, { requiresAccess: false });

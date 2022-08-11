@@ -25,8 +25,15 @@ const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {
 
   return (
     <LateralContainer>
-      <LateralMenuItem top={35} left={43} bottom={26}>
-        <BQLogo />
+      <LateralMenuItem
+        top={35}
+        left={43}
+        bottom={26}
+        onClick={() => {
+          router.push(sections[0].links[0].href);
+        }}
+      >
+        <Logo />
       </LateralMenuItem>
 
       {sections?.map((elem) => {
@@ -71,6 +78,10 @@ const LateralMenu: FC<LateralMenuProps> = ({ sections }) => {
 
 export default LateralMenu;
 
+const Logo = styled(BQLogo)`
+  cursor: pointer;
+`;
+
 const LateralContainer = styled.div`
   position: absolute;
   display: flex;
@@ -91,9 +102,9 @@ const LateralMenuItem = styled.div<{
   width: 100%;
   transition: border-bottom 0.3s ease-in-out;
   ${(props) =>
-    props.clicked
-      ? `border-bottom: 1px solid ${colors.colors.gray80Transparent}`
-      : `border-bottom: 1px solid ${colors.colors.gray80}`};
+  props.clicked
+    ? `border-bottom: 1px solid ${colors.colors.gray80Transparent}`
+    : `border-bottom: 1px solid ${colors.colors.gray80}`};
   display: flex;
   flex-direction: row;
   justify-content: space-between;

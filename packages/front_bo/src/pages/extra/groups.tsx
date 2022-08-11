@@ -11,4 +11,4 @@ const GroupsPage: NextPage = () => {
   );
 };
 
-export default withApollo(GroupsPage);
+export default withApollo(GroupsPage, { requiresAccess: false });
