@@ -6,6 +6,7 @@ import { InputMaybe, PaginatedCenters, PaginatedGroups } from "../types.ts";
 export const paginatedFilters = async (
   DBModel: Collection<CenterModel | GroupModel>,
   filter: Filter<PaginatedCenters | PaginatedGroups>,
+  check:string,
   sortFilter: unknown,
   pageArgs?: InputMaybe<number>,
   pageSizeArgs?: InputMaybe<number>,
@@ -13,42 +14,19 @@ export const paginatedFilters = async (
   try {
     const page = pageArgs || 1;
     const pageSize = pageSizeArgs || (await DBModel.countDocuments());
+    const lookup = [];
+    if(check === "centers"){
+      lookup.push({$lookup: {from: "groups",localField: "_id", foreignField: "center", as: "groupsName"}})
+    }else if (check === "groups"){
+      lookup.push({$lookup: {from: "centers",localField: "center", foreignField: "_id", as: "centersName"}},
+        {$lookup: {from: "students",localField: "students", foreignField: "_id", as: "studentsName"}},
+        {$lookup: {from: "instructors",localField: "instructors", foreignField: "_id", as: "instructorsName"}})
+    }
 
     const agr = await DBModel.aggregate(
       [
-        {
-          $lookup: {
-            from: "groups",
-            localField: "_id",
-            foreignField: "center",
-            as: "groupsName",
-          },
-        },
-        {
-          $lookup: {
-            from: "centers",
-            localField: "center",
-            foreignField: "_id",
-            as: "centersName",
-          },
-        },
-        {
-          $lookup: {
-            from: "instructors",
-            localField: "instructors",
-            foreignField: "_id",
-            as: "instructorsName",
-          },
-        },
-        {
-          $lookup: {
-            from: "students",
-            localField: "students",
-            foreignField: "_id",
-            as: "studentsName",
-          },
-        },    
-        { $match: filter },       
+        ...lookup,
+        { $match: filter },
         {
           $facet: {
             stage1: [{ $group: { _id: null, count: { $sum: 1 } } }],

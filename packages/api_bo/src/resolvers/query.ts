@@ -26,7 +26,6 @@ export const Query = {
   ): Promise<PaginatedCenters> => {
     const filter: Filter<PaginatedCenters> = { $or: [{}] };
     if (args.searchText) {
-
       filter["$or"] = [
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { address: { $regex: `.*${args.searchText}.*`, $options: "i" } },
@@ -58,7 +57,12 @@ export const Query = {
             $options: "i",
           },
         },
-        { "groupsName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
+        {
+          "groupsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
       ];
     }
 
@@ -105,6 +109,7 @@ export const Query = {
     return paginatedFilters(
       centerCollection(ctx.db),
       filter,
+      "centers",
       sortFilter,
       args.page,
       args.pageSize,
@@ -159,9 +164,24 @@ export const Query = {
           },
         },
         { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        { "centersName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
-        { "instructorsName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
-        { "studentsName.name": { $regex: `.*${args.searchText}.*`, $options: "i"} },
+        {
+          "centersName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "instructorsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "studentsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
       ];
     }
 
@@ -202,9 +222,10 @@ export const Query = {
     return paginatedFilters(
       groupCollection(ctx.db),
       filter,
+      "groups",
       sortFilter,
       args.page,
-      args.pageSize
+      args.pageSize,
     ) as Promise<PaginatedGroups>;
   },
 
