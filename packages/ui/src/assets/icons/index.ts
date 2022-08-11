@@ -7,4 +7,13 @@ import Add from "./add.svg";
 import OrderDown from "./order-down.svg";
 import OrderUp from "./order-up.svg";
 
-export { ClosePannel, Triangle, MenuKebab, Lens, Bell, Add, OrderUp, OrderDown };
+export {
+  ClosePannel,
+  Triangle,
+  MenuKebab,
+  Lens,
+  Bell,
+  Add,
+  OrderUp,
+  OrderDown,
+};
