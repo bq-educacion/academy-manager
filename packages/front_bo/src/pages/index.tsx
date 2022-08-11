@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect } from "react";
 import withApollo from "../apollo/withApollo";
-import { ContentStart, LateralMenu } from "../components";
 import { sections } from "../config";
 
 const HomePage: NextPage = () => {
@@ -12,20 +11,13 @@ const HomePage: NextPage = () => {
   // removeCookie('token', { path: '/' });
   // {cookie.token && console.log(cookie.token)}
   // {!cookie.token && console.log("Pues no hay token")}
+  const isBrowser = typeof window !== "undefined";
 
-  const [section, setSection] = useState<string>(sections[0].title);
-  const [label, setLabel] = useState<string>(sections[0].links[0].label);
+  useEffect(() => {
+    window.location.href = sections[0].links[0].href;
+  }, [isBrowser]);
 
-  return (
-    <div>
-      <LateralMenu
-        sections={sections}
-        changeLabel={setLabel}
-        changeSection={setSection}
-      />
-      <ContentStart section={section} label={label} />
-    </div>
-  );
+  return <></>;
 };
 
 export default withApollo(HomePage);
