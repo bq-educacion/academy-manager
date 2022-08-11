@@ -5,9 +5,9 @@
     "graphql-tools": "https://deno.land/x/graphql_tools@0.0.2/mod.ts",
     "graphql-tag": "https://deno.land/x/graphql_tag@0.0.1/mod.ts",
     "gql": "https://deno.land/x/gql@1.1.2/mod.ts",
-    "mongo": "https://deno.land/x/mongo@v0.30.1/mod.ts",
+    "mongo": "https://deno.land/x/mongo@v0.31.0/mod.ts",
     "graphql": "https://deno.land/x/graphql_deno@v15.0.0/mod.ts",
-    "objectId": "https://deno.land/x/web_bson@v0.2.3/mod.ts",
+    "objectId": "https://deno.land/x/web_bson@v0.2.4/mod.ts",
     "opine": "https://deno.land/x/opine@2.2.0/mod.ts",
     "cors": "https://deno.land/x/cors@v1.2.2/mod.ts"
   }

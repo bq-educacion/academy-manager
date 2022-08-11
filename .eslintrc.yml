@@ -15,8 +15,10 @@ parserOptions:
 plugins:
   - "@typescript-eslint"
 ignorePatterns:
-  - "packages/api_bo/src/types.ts"
-  - "packages/api_m/src/types.ts"
+  - "packages/api_bo/**/*"
+  - "packages/api_m/**/*"
+  - "packages/front_bo/src/generated/*"
+  - "packages/front_m/src/generated/*"
 rules:
   "no-console": error
   # "@typescript-eslint/explicit-function-return-type": warn
