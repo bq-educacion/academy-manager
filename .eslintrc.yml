@@ -17,6 +17,7 @@ plugins:
 ignorePatterns:
   - "packages/api_bo/src/types.ts"
   - "packages/api_m/src/types.ts"
+  - "packages/front_bo/src/generated/*"
 rules:
   "no-console": error
   # "@typescript-eslint/explicit-function-return-type": warn
