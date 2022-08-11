@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Layout } from "../../components";
+import { Column, Layout } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
@@ -10,13 +10,27 @@ import {
   useTranslate,
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
-import { useQuery } from "@apollo/client";
-import { GET_CENTER } from "../../apollo/queries";
+import { useState } from "react";
+import { OrderFilter, useGetCentersFQuery } from "../../generated/graphql";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
+  const [inputText, setInputText] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>("");
+  const [order, setOrder] = useState<number>(1);
 
-  const { data, loading, error, refetch } = useQuery(GET_CENTER);
+  const { data, error } = useGetCentersFQuery({
+    variables: {
+      searchText: searchText,
+      orderFilter: OrderFilter.Name,
+      order: order,
+      page: 1,
+      pageSize: 20,
+    },
+    fetchPolicy: "network-only",
+  });
+
+  //TODO: Advance Search
 
   return (
     <Layout
@@ -28,9 +42,21 @@ const CentersPage: NextPage = () => {
           </DivHeader>
 
           <DivHeader>
-            <RelativeDiv>
+            <RelativeDiv
+              onClick={() => {
+                setSearchText(inputText);
+              }}
+            >
               <Input
                 placeholder={t("components.content-start.search-placeholder")}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                }}
+                onKeyDownCapture={(e) => {
+                  {
+                    e.key === "Enter" && setSearchText(inputText);
+                  }
+                }}
               />
               <LensSearch name="lens" />
             </RelativeDiv>
@@ -43,16 +69,19 @@ const CentersPage: NextPage = () => {
       section={sections[0].title}
       label={sections[0].links[1].label}
     >
-      {loading && <h1>Loading...</h1>}
       {error && <h1>Error: {error.message}</h1>}
-      {data && <h1>{data.getCenter.name}</h1>}
-      <button
-        onClick={() => {
-          refetch();
-        }}
-      >
-        Refetch
-      </button>
+      {data && (
+        <>
+          <Column
+            order={order}
+            width={445}
+            title="Nombre"
+            content={data.getCenters.data?.map((elem) => elem?.name)}
+            ChangeOrder={setOrder}
+            ChangeOrderFilter={setSearchText}
+          />
+        </>
+      )}
     </Layout>
   );
 };
@@ -81,6 +110,7 @@ const RelativeDiv = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin-right: 40px;
 `;
 
 const Input = styled.input`
@@ -102,13 +132,14 @@ const Input = styled.input`
 `;
 
 const AdvanceSearch = styled.button`
+  display: none;
   font-weight: bold;
   height: 40px;
   width: 166px;
   border-radius: 4px;
   background-color: ${colors.colors.gray60};
   border: none;
-  margin: 0 40px 0 10px;
+  margin: 0 0px 0 10px;
   cursor: pointer;
 `;
 
@@ -117,4 +148,8 @@ const LensSearch = styled(Icon)`
   position: absolute;
   right: 20px;
   z-index: 1;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
 `;

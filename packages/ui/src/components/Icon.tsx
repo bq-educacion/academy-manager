@@ -6,6 +6,8 @@ import {
   ClosePannel,
   Lens,
   MenuKebab,
+  OrderDown,
+  OrderUp,
   Triangle,
 } from "../assets/icons";
 import { colors } from "../theme";
@@ -36,6 +38,10 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <Triangle {...rest} />;
     case "add":
       return <Add {...rest} />;
+    case "order-up":
+      return <OrderUp {...rest} />;
+    case "order-down":
+      return <OrderDown {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

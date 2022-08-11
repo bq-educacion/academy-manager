@@ -73,4 +73,7 @@ const ContentBody = styled.div`
   width: calc(100% - 41px - 39px);
   height: calc(100% - 24px - 30px);
   margin: 24px 41px 30px 39px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 `;
