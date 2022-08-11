@@ -45,7 +45,13 @@ const CentersPage: NextPage = () => {
       {loading && <h1>Loading...</h1>}
       {error && <h1>Error: {error.message}</h1>}
       {data && <h1>{data.getCenter.name}</h1>}
-      <button onClick={()=>{refetch()}}>Refetch</button>
+      <button
+        onClick={() => {
+          refetch();
+        }}
+      >
+        Refetch
+      </button>
     </Layout>
   );
 };
