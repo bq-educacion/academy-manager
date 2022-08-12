@@ -67,6 +67,17 @@ const CentersPage: NextPage = () => {
           </DivHeader>
         </>
       }
+      childrenSubHeader={
+        <SubHeaderDiv>
+          {data && (
+            <SubHeaderP4>
+              {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
+              {t("pages.paginate.middle")} {data.getCenters.totalNumber}{" "}
+            </SubHeaderP4>
+          )}
+          <GreyDivider />
+        </SubHeaderDiv>
+      }
       section={sections[0].title}
       label={sections[0].links[1].label}
     >
@@ -136,12 +147,28 @@ const CentersPage: NextPage = () => {
 // export default withApollo(CentersPage);
 export default withApollo(CentersPage, { requiresAccess: false });
 
+const SubHeaderDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const GreyDivider = styled.div`
+  width: calc(100% - 210px);
+  margin: 30px 0 0 20px;
+  background-color: ${colors.colors.gray40};
+  height: 1px;
+`;
+
 const BoldP2 = styled(styles.P2)`
   font-weight: bold;
 `;
 
 const BoldP4 = styled(styles.P4)`
   font-weight: bold;
+`;
+
+const SubHeaderP4 = styled(styles.P4)`
+  margin: 31px 0 0 40px;
 `;
 
 const DivHeader = styled.div`

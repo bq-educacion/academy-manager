@@ -7,7 +7,8 @@ export const ContentStart: FC<{
   section: string;
   children: ReactNode;
   childrenHeader: ReactNode;
-}> = ({ section, children, childrenHeader }) => {
+  childrenSubHeader?: ReactNode;
+}> = ({ section, children, childrenHeader, childrenSubHeader }) => {
   const t = useTranslate();
 
   return (
@@ -18,6 +19,7 @@ export const ContentStart: FC<{
       </ContentHeader>
       <styles.RainbowDivider />
       <ContentSubHeader>{childrenHeader}</ContentSubHeader>
+      {childrenSubHeader && <>{childrenSubHeader}</>}
       <ContentBody>{children}</ContentBody>
     </ContentLayout>
   );
