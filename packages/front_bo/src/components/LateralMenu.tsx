@@ -7,25 +7,18 @@ import {
   styles,
   useTranslate,
 } from "@academy-manager/ui";
+import { useRouter } from "next/router";
+import { ISection } from "../config";
 
 type LateralMenuProps = {
-  changeSection: (section: string) => void;
-  changeLabel: (label: string) => void;
-  sections: {
-    title: string;
-    links: {
-      label: string;
-      href: string;
-    }[];
-  }[];
+  sections: ISection[];
+  section?: string;
+  label?: string;
 };
 
-const LateralMenu: FC<LateralMenuProps> = ({
-  sections,
-  changeLabel,
-  changeSection,
-}) => {
+const LateralMenu: FC<LateralMenuProps> = ({ sections, section, label }) => {
   const t = useTranslate();
+  const router = useRouter();
 
   return (
     <LateralContainer>
@@ -34,7 +27,8 @@ const LateralMenu: FC<LateralMenuProps> = ({
       </LateralMenuItem>
 
       {sections?.map((elem) => {
-        const [clicked, setClicked] = useState<boolean>(false);
+        const open: boolean = elem.title == section ? true : false;
+        const [clicked, setClicked] = useState<boolean>(open);
         return (
           <Fragment key={elem.title}>
             <LateralMenuItem
@@ -44,10 +38,6 @@ const LateralMenu: FC<LateralMenuProps> = ({
               clicked={clicked}
               onClick={() => {
                 setClicked(!clicked);
-                changeSection(elem.title);
-                {
-                  elem.links[0] && changeLabel(elem.links[0].label);
-                }
               }}
             >
               <P4Lateral>{t(elem.title)}</P4Lateral>
@@ -59,10 +49,10 @@ const LateralMenu: FC<LateralMenuProps> = ({
                   elem.links.map((link) => {
                     return (
                       <ALateral
+                        selected={link.label == label ? true : false}
                         key={link.label}
                         onClick={() => {
-                          changeLabel(link.label);
-                          changeSection(elem.title);
+                          router.push(link.href);
                         }}
                       >
                         {t(link.label)}
@@ -149,8 +139,9 @@ const LinksLateral = styled.div<{
   }
 `;
 
-const ALateral = styled(styles.A)`
-  color: ${colors.colors.white};
+const ALateral = styled(styles.A)<{ selected: boolean }>`
+  color: ${(props) =>
+    props.selected ? colors.colors.blue80 : colors.colors.white};
   font-size: 14px;
   font-weight: normal;
   line-height: 1.43;
