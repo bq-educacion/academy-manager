@@ -37,12 +37,12 @@ const CentersPage: NextPage = () => {
     <Layout
       childrenHeader={
         <>
-          <DivHeader>
-            <FirstActionButton margin="0 20px 0 40px" />
+          <DivHeader1>
+            <FirstActionButton />
             <BoldP2>{t("general.sections.links.centers")}</BoldP2>
-          </DivHeader>
+          </DivHeader1>
 
-          <DivHeader>
+          <DivHeader2>
             <RelativeDiv
               onClick={() => {
                 setSearchText(inputText);
@@ -64,7 +64,7 @@ const CentersPage: NextPage = () => {
             <AdvanceSearch>
               <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
             </AdvanceSearch>
-          </DivHeader>
+          </DivHeader2>
         </>
       }
       childrenSubHeader={
@@ -260,7 +260,16 @@ const SubHeaderP4 = styled(styles.P4)`
   margin: 31px 0 0 40px;
 `;
 
-const DivHeader = styled.div`
+const DivHeader1 = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  & > div {
+    margin: 0 20px 0 40px;
+  }
+`;
+
+const DivHeader2 = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
