@@ -27,7 +27,7 @@ const Column: FC<{
       <ColumnHeader
         center={center}
         onClick={() => {
-          order == 1 ? changeOrder(-1) : changeOrder(1);
+          order === 1 ? changeOrder(-1) : changeOrder(1);
           {
             filter !== actualFilter && changeOrderFilter(filter);
           }
@@ -36,8 +36,8 @@ const Column: FC<{
         <BoldP4>{title}</BoldP4>
         <Icon
           name={
-            actualFilter == filter
-              ? order == 1
+            actualFilter === filter
+              ? order === 1
                 ? "order-up"
                 : "order-down"
               : "order-non"
