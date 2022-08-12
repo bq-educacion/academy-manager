@@ -281,6 +281,7 @@ const Input = styled.input`
   width: 100%;
   border-radius: 5px;
   border: solid 1px ${colors.colors.gray};
+  padding-left: 20px;
   &::placeholder {
     font-family: Roboto;
     font-size: 14px;
@@ -290,7 +291,6 @@ const Input = styled.input`
     line-height: 1.07;
     letter-spacing: normal;
     color: ${colors.colors.gray2};
-    padding-left: 20px;
   }
 `;
 
