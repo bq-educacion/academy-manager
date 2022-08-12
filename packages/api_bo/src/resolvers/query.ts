@@ -85,7 +85,7 @@ export const Query = {
         case "languages":
           sortFilter.languages = args.order;
           break;
-        case "population": //
+        case "population":
           sortFilter.population = args.order;
           break;
         case "modality":
