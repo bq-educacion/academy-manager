@@ -32,8 +32,8 @@ const Circle = styled.div<{
     background-image: ${colors.gradient.orange80};
   }
   ${(props) =>
-    props.disable
-      ? `
+    props.disable &&
+    `
         border: none;
         background-image: none;
         background-color: ${colors.colors.gray3};
@@ -44,8 +44,7 @@ const Circle = styled.div<{
             cursor: default;
         }
     }
-    `
-      : ""}
+    `}
 `;
 
 export default FirstActionButton;
