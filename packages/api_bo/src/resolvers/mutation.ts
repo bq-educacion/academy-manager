@@ -75,17 +75,18 @@ export const Mutation = {
     args: MutationEditCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
-    const center = await centerCollection(ctx.db).findOne({
-      _id: new ObjectId(args.id),
-    });
-    if (!center) {
+    // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
+    const newCenter = await centerCollection(ctx.db).findAndModify(
+      { _id: new ObjectId(args.id) },
+      {
+        update: { $set: { ...(args as Partial<CenterModel>) } },
+        new: true,
+      },
+    );
+    if (!newCenter) {
       throw new Error("404, Center not found");
     }
-    const newCenter = { ...center, ...args };
-    await centerCollection(ctx.db).updateOne({ _id: new ObjectId(args.id) }, {
-      $set: { newCenter },
-    });
-    return newCenter as CenterModel;
+    return newCenter;
   },
 
   editCenterContacts: async (

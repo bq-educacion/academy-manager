@@ -6,7 +6,7 @@ import { InputMaybe, PaginatedCenters, PaginatedGroups } from "../types.ts";
 export const paginatedFilters = async (
   DBModel: Collection<CenterModel | GroupModel>,
   filter: Filter<PaginatedCenters | PaginatedGroups>,
-  check: "centers"|"groups",
+  check: "centers" | "groups",
   sortFilter: unknown,
   pageArgs?: InputMaybe<number>,
   pageSizeArgs?: InputMaybe<number>,
