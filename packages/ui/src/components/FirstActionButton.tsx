@@ -34,6 +34,7 @@ const Circle = styled.div<{
   ${(props) =>
     props.disable &&
     `
+        pointer-events: none;
         border: none;
         background-image: none;
         background-color: ${colors.colors.gray3};
@@ -41,7 +42,6 @@ const Circle = styled.div<{
             border: none;
             background-image: none;
             background-color: ${colors.colors.gray3};
-            cursor: default;
         }
     }
     `}
