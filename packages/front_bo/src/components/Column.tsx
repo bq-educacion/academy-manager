@@ -10,26 +10,26 @@ const Column: FC<{
   title: string;
   content: (string | undefined)[] | undefined;
   center: boolean;
-  ChangeOrder: (order: number) => void;
-  ChangeOrderFilter: (filter: SetStateAction<OrderFilter>) => void;
+  changeOrder: (order: number) => void;
+  changeOrderFilter: (filter: SetStateAction<OrderFilter>) => void;
 }> = ({
   order,
   title,
   content,
-  ChangeOrder,
+  changeOrder,
   center,
   filter,
   actualFilter,
-  ChangeOrderFilter,
+  changeOrderFilter,
 }) => {
   return (
     <ColumnContainer>
       <ColumnHeader
         center={center}
         onClick={() => {
-          order == 1 ? ChangeOrder(-1) : ChangeOrder(1);
+          order == 1 ? changeOrder(-1) : changeOrder(1);
           {
-            filter !== actualFilter && ChangeOrderFilter(filter);
+            filter !== actualFilter && changeOrderFilter(filter);
           }
         }}
       >

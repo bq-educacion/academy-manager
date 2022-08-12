@@ -129,8 +129,8 @@ const CentersPage: NextPage = () => {
             order={order}
             title={t("components.column.name")}
             content={data.getCenters.data?.map((elem) => elem?.name)}
-            ChangeOrder={setOrder}
-            ChangeOrderFilter={setFilter}
+            changeOrder={setOrder}
+            changeOrderFilter={setFilter}
           />
           <Column
             filter={OrderFilter.Languages}
@@ -143,8 +143,8 @@ const CentersPage: NextPage = () => {
                 .replace(/\[|\]/g, "")
                 .replace(/"/g, " ")
             )}
-            ChangeOrder={setOrder}
-            ChangeOrderFilter={setFilter}
+            changeOrder={setOrder}
+            changeOrderFilter={setFilter}
           />
           <Column
             filter={OrderFilter.Population}
@@ -153,8 +153,8 @@ const CentersPage: NextPage = () => {
             order={order}
             title={t("components.column.population")}
             content={data.getCenters.data?.map((elem) => elem?.population)}
-            ChangeOrder={setOrder}
-            ChangeOrderFilter={setFilter}
+            changeOrder={setOrder}
+            changeOrderFilter={setFilter}
           />
           <Column
             filter={OrderFilter.Modality}
@@ -163,8 +163,8 @@ const CentersPage: NextPage = () => {
             order={order}
             title={t("components.column.modality")}
             content={data.getCenters.data?.map((elem) => elem?.modality)}
-            ChangeOrder={setOrder}
-            ChangeOrderFilter={setFilter}
+            changeOrder={setOrder}
+            changeOrderFilter={setFilter}
           />
           <Column
             filter={OrderFilter.Type}
@@ -173,8 +173,8 @@ const CentersPage: NextPage = () => {
             order={order}
             title={t("components.column.type")}
             content={data.getCenters.data?.map((elem) => elem?.type)}
-            ChangeOrder={setOrder}
-            ChangeOrderFilter={setFilter}
+            changeOrder={setOrder}
+            changeOrderFilter={setFilter}
           />
         </>
       )}
