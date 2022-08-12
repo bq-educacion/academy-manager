@@ -6,6 +6,7 @@ import Bell from "./bell.svg";
 import Add from "./add.svg";
 import OrderDown from "./order-down.svg";
 import OrderUp from "./order-up.svg";
+import OrderNon from "./order-non.svg";
 
 export {
   ClosePannel,
@@ -16,4 +17,5 @@ export {
   Add,
   OrderUp,
   OrderDown,
+  OrderNon
 };

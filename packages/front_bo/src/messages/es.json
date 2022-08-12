@@ -17,6 +17,13 @@
         "text": "¡Uy! Parece que ha ocurrido un error, vuelve a cargar la página.",
         "title": "Error desconocido"
       }
+    },
+    "column": {
+      "name": "Nombre",
+      "languages": "Idiomas",
+      "population": "Población",
+      "modality": "Modalidad",
+      "type": "Tipo"
     }
   },
   "general": {

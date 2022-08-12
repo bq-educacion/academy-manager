@@ -9,6 +9,7 @@ import {
   OrderDown,
   OrderUp,
   Triangle,
+  OrderNon
 } from "../assets/icons";
 import { colors } from "../theme";
 
@@ -42,6 +43,8 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <OrderUp {...rest} />;
     case "order-down":
       return <OrderDown {...rest} />;
+    case "order-non":
+      return <OrderNon {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

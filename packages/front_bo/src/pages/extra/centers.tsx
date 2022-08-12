@@ -18,11 +18,12 @@ const CentersPage: NextPage = () => {
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [order, setOrder] = useState<number>(1);
+  const [filter, setFilter] = useState<OrderFilter>(OrderFilter.Name);
 
   const { data, error } = useGetCentersFQuery({
     variables: {
       searchText: searchText,
-      orderFilter: OrderFilter.Name,
+      orderFilter: filter,
       order: order,
       page: 1,
       pageSize: 20,
@@ -73,12 +74,58 @@ const CentersPage: NextPage = () => {
       {data && (
         <>
           <Column
+            filter={OrderFilter.Name}
+            actualFilter={filter}
+            center={false}
             order={order}
-            width={445}
-            title="Nombre"
+            title={t("components.column.name")}
             content={data.getCenters.data?.map((elem) => elem?.name)}
             ChangeOrder={setOrder}
-            ChangeOrderFilter={setSearchText}
+            ChangeOrderFilter={setFilter}
+          />
+          <Column
+            filter={OrderFilter.Languages}
+            actualFilter={filter}
+            center
+            order={order}
+            title={t("components.column.languages")}
+            content={data.getCenters.data?.map((elem) =>
+              JSON.stringify(elem?.languages)
+                .replace(/\[|\]/g, "")
+                .replace(/"/g, " ")
+            )}
+            ChangeOrder={setOrder}
+            ChangeOrderFilter={setFilter}
+          />
+          <Column
+            filter={OrderFilter.Population}
+            actualFilter={filter}
+            center
+            order={order}
+            title={t("components.column.population")}
+            content={data.getCenters.data?.map((elem) => elem?.population)}
+            ChangeOrder={setOrder}
+            ChangeOrderFilter={setFilter}
+          />
+          <Column
+            filter={OrderFilter.Modality}
+            actualFilter={filter}
+            center
+            order={order}
+            title={t("components.column.modality")}
+            content={data.getCenters.data?.map((elem) => elem?.modality)}
+            ChangeOrder={setOrder}
+            ChangeOrderFilter={setFilter}
+          />
+          <Column
+            filter={OrderFilter.Type}
+            actualFilter={filter}
+            center
+            order={order}
+            title={t("components.column.type")}
+            content={data.getCenters.data?.map((elem) => elem?.type)}
+            ChangeOrder={setOrder}
+            ChangeOrderFilter={setFilter}
           />
         </>
       )}

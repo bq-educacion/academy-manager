@@ -19,7 +19,7 @@ import { Filter } from "mongo";
 import { paginatedFilters } from "../lib/paginatedFilters.ts";
 
 export const Query = {
-  getCenters:(
+  getCenters: (
     _parent: unknown,
     args: QueryGetCentersArgs,
     ctx: Context,

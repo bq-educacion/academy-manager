@@ -76,4 +76,5 @@ const ContentBody = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  overflow: scroll;
 `;
