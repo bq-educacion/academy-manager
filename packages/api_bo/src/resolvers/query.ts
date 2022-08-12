@@ -19,17 +19,13 @@ import { Filter } from "mongo";
 import { paginatedFilters } from "../lib/paginatedFilters.ts";
 
 export const Query = {
-  getCenters: async (
+  getCenters:(
     _parent: unknown,
     args: QueryGetCentersArgs,
     ctx: Context,
   ): Promise<PaginatedCenters> => {
     const filter: Filter<PaginatedCenters> = { $or: [{}] };
     if (args.searchText) {
-      const groupIds = await groupCollection(ctx.db).distinct("center", {
-        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
-      });
-
       filter["$or"] = [
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { address: { $regex: `.*${args.searchText}.*`, $options: "i" } },
@@ -61,7 +57,12 @@ export const Query = {
             $options: "i",
           },
         },
-        { _id: { $in: groupIds } },
+        {
+          "groupsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
       ];
     }
 
@@ -108,6 +109,7 @@ export const Query = {
     return paginatedFilters(
       centerCollection(ctx.db),
       filter,
+      "centers",
       sortFilter,
       args.page,
       args.pageSize,
@@ -119,33 +121,26 @@ export const Query = {
     args: QueryGetCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
-    const center = await centerCollection(ctx.db).findOne({
-      _id: new ObjectId(args.id),
-    });
-    if (!center) {
-      throw new Error("404, Center not found");
+    try {
+      const center = await centerCollection(ctx.db).findOne({
+        _id: new ObjectId(args.id),
+      });
+      if (!center) {
+        throw new Error("404, Center not found");
+      }
+      return center;
+    } catch (error) {
+      throw new Error("500", error);
     }
-    return center;
   },
 
-  getGroups: async (
+  getGroups: (
     _parent: unknown,
     args: QueryGetGroupsArgs,
     ctx: Context,
   ): Promise<PaginatedGroups> => {
     const filter: Filter<PaginatedGroups> = { $or: [{}] };
     if (args.searchText) {
-      const centerIds = await centerCollection(ctx.db).distinct("_id", {
-        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
-      });
-      const instructorsIds = await instructorCollection(ctx.db).distinct(
-        "_id",
-        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-      );
-      const studentsIds = await studentCollection(ctx.db).distinct("_id", {
-        name: { $regex: `.*${args.searchText}.*`, $options: "i" },
-      });
-
       filter["$or"] = [
         { id_group: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
@@ -173,9 +168,24 @@ export const Query = {
           },
         },
         { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        { center: { $in: centerIds } },
-        { instructors: { $in: instructorsIds } },
-        { students: { $in: studentsIds } },
+        {
+          "centersName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "instructorsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "studentsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
       ];
     }
 
@@ -188,6 +198,12 @@ export const Query = {
       switch (args.orderFilter) {
         case "id_group":
           sortFilter = { id_group: args.order };
+          break;
+        case "center":
+          sortFilter = { "centersName.name": args.order };
+          break;
+        case "instructors":
+          sortFilter = { "instructorsName.name": args.order };
           break;
         case "start":
           sortFilter = { "timetable.start": args.order };
@@ -210,6 +226,7 @@ export const Query = {
     return paginatedFilters(
       groupCollection(ctx.db),
       filter,
+      "groups",
       sortFilter,
       args.page,
       args.pageSize,
@@ -221,11 +238,15 @@ export const Query = {
     args: QueryGetGroupArgs,
     ctx: Context,
   ): Promise<GroupModel> => {
-    const group = await groupCollection(ctx.db).findById(args.id);
-    if (!group) {
-      throw new Error("400, Group not found");
+    try {
+      const group = await groupCollection(ctx.db).findById(args.id);
+      if (!group) {
+        throw new Error("400, Group not found");
+      }
+      return group;
+    } catch (error) {
+      throw new Error("500", error);
     }
-    return group;
   },
 };
 

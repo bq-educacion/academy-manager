@@ -13,14 +13,15 @@
     "@graphql-codegen/cli": "^2.8.1",
     "@graphql-codegen/typescript": "^2.7.1",
     "@graphql-codegen/typescript-operations": "^2.5.1",
-    "@graphql-codegen/typescript-resolvers": "^2.7.1",
     "@graphql-codegen/typescript-react-apollo": "^3.3.3",
+    "@graphql-codegen/typescript-resolvers": "^2.7.1",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "graphql": "^16.5.0",
     "graphql-codegen": "^0.4.0",
     "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "prettier": "^2.7.1"
   },
   "scripts": {
@@ -31,15 +32,26 @@
     "api-types": "yarn run api_bo_types && yarn run api_m_types",
     "front_bo_types": "cd ./packages/front_bo/ && graphql-code-generator --config ./codegen.yml",
     "front-types": "yarn run front_bo_types",
+    "gen-types": "yarn run api-types && yarn run front-types",
     "lint:front_bo": "eslint \"packages/front_bo/src/**/*.{js,jsx,ts,tsx}\" --fix",
     "lint:front_m": "eslint \"packages/front_m/src/**/*.{js,jsx,ts,tsx}\" --fix",
     "lint:ui": "eslint \"packages/ui/src/**/*.{js,jsx,ts,tsx}\" --fix",
     "lint": "yarn run lint:front_bo && yarn run lint:front_m && yarn run lint:ui",
-    "pre-commit": "yarn lint && yarn tsc",
+    "pre-commit": "lint-staged && yarn tsc",
     "tsc:front_bo": "cd packages/front_bo && tsc --p ./tsconfig.json",
     "tsc:front_m": "cd packages/front_m && tsc --p ./tsconfig.json",
     "tsc:ui": "cd packages/ui && tsc --p ./tsconfig.json",
     "tsc": "yarn run tsc:front_bo && yarn run tsc:front_m && yarn run tsc:ui"
+  },
+  "lint-staged": {
+    "packages/front_bo/src/**/*.{js, json, scss, ts,tsx}": [
+      "yarn lint --fix --quiet",
+      "git add"
+    ],
+    "packages/front_m/src/**/*.{js, json, scss, ts,tsx}": [
+      "yarn lint --fix --quiet",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
