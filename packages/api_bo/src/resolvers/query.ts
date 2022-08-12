@@ -22,7 +22,7 @@ export const Query = {
   getCenters: (
     _parent: unknown,
     args: QueryGetCentersArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<PaginatedCenters> => {
     const filter: Filter<PaginatedCenters> = { $or: [{}] };
     if (args.searchText) {
@@ -85,7 +85,7 @@ export const Query = {
         case "languages":
           sortFilter.languages = args.order;
           break;
-        case "population":
+        case "population": //
           sortFilter.population = args.order;
           break;
         case "modality":
@@ -112,14 +112,14 @@ export const Query = {
       "centers",
       sortFilter,
       args.page,
-      args.pageSize
+      args.pageSize,
     ) as Promise<PaginatedCenters>;
   },
 
   getCenter: async (
     _parent: unknown,
     args: QueryGetCenterArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel> => {
     try {
       const center = await centerCollection(ctx.db).findOne({
@@ -137,7 +137,7 @@ export const Query = {
   getGroups: (
     _parent: unknown,
     args: QueryGetGroupsArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<PaginatedGroups> => {
     const filter: Filter<PaginatedGroups> = { $or: [{}] };
     if (args.searchText) {
@@ -229,14 +229,14 @@ export const Query = {
       "groups",
       sortFilter,
       args.page,
-      args.pageSize
+      args.pageSize,
     ) as Promise<PaginatedGroups>;
   },
 
   getGroup: async (
     _parent: unknown,
     args: QueryGetGroupArgs,
-    ctx: Context
+    ctx: Context,
   ): Promise<GroupModel> => {
     try {
       const group = await groupCollection(ctx.db).findById(args.id);
@@ -257,7 +257,7 @@ export const Center = {
   groups: async (
     parent: CenterModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<GroupModel[]> => {
     return await groupCollection(ctx.db).find({ center: parent._id }).toArray();
   },
@@ -270,14 +270,14 @@ export const Group = {
   center: async (
     parent: GroupModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<CenterModel | undefined> => {
     return await centerCollection(ctx.db).findOne({ _id: parent.center });
   },
   students: async (
     parent: GroupModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<StudentModel[]> => {
     return await studentCollection(ctx.db)
       .find({
@@ -288,7 +288,7 @@ export const Group = {
   instructors: async (
     parent: GroupModel,
     _: unknown,
-    ctx: Context
+    ctx: Context,
   ): Promise<InstructorModel[]> => {
     return await instructorCollection(ctx.db)
       .find({
