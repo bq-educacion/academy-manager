@@ -9,7 +9,7 @@ import {
   OrderDown,
   OrderUp,
   Triangle,
-  OrderNon
+  OrderNon,
 } from "../assets/icons";
 import { colors } from "../theme";
 

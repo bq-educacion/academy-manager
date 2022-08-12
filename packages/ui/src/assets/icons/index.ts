@@ -17,5 +17,5 @@ export {
   Add,
   OrderUp,
   OrderDown,
-  OrderNon
+  OrderNon,
 };
