@@ -46,13 +46,11 @@ const Column: FC<{
       </ColumnHeader>
       {content && (
         <ColumnContentGeneral>
-          {content.map((item, index) => {
-            return (
-              <ColumnContent center={center} key={index}>
-                <p>{item}</p>
-              </ColumnContent>
-            );
-          })}
+          {content.map((item, index) => (
+            <ColumnContent center={center} key={index}>
+              <p>{item}</p>
+            </ColumnContent>
+          ))}
         </ColumnContentGeneral>
       )}
     </ColumnContainer>
