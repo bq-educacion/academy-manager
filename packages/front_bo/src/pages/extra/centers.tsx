@@ -69,6 +69,11 @@ const CentersPage: NextPage = () => {
       }
       childrenSubHeader={
         <SubHeaderDiv>
+          {error && (
+            <SubHeaderP4>
+              {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
+            </SubHeaderP4>
+          )}
           {data && (
             <SubHeaderP4>
               {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
@@ -81,7 +86,40 @@ const CentersPage: NextPage = () => {
       section={sections[0].title}
       label={sections[0].links[1].label}
     >
-      {error && <h1>Error: {error.message}</h1>}
+      {error && (
+        <ErrorDiv>
+          <ErrorColumnHeaders>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.column.name")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.column.languages")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.column.population")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.column.modality")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.column.type")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+          </ErrorColumnHeaders>
+          <ErrorContainer>
+            <styles.P4>{t("pages.centers.data-error")}</styles.P4>
+            <styles.P4>
+              <a>{t("pages.centers.data-error-options.0")}</a>{" "}
+              {t("pages.centers.data-error-options.1")}{" "}
+              <a>{t("pages.centers.data-error-options.2")}</a>
+            </styles.P4>
+          </ErrorContainer>
+        </ErrorDiv>
+      )}
       {data && (
         <>
           <Column
@@ -147,6 +185,46 @@ const CentersPage: NextPage = () => {
 // export default withApollo(CentersPage);
 export default withApollo(CentersPage, { requiresAccess: false });
 
+const ErrorDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+`;
+
+const ErrorColumnHeaders = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 41px;
+  border-bottom: 1px solid ${colors.colors.grayBlue2};
+  justify-content: space-between;
+`;
+
+const ErrorColumnHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-left: 1px solid ${colors.colors.grayBlue};
+  padding: 0 20px;
+  & > svg {
+    margin-left: 5px;
+  }
+`;
+
+const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  & > p {
+    margin-bottom: 9px;
+  }
+`;
+
 const SubHeaderDiv = styled.div`
   display: flex;
   flex-direction: row;
@@ -154,7 +232,7 @@ const SubHeaderDiv = styled.div`
 
 const GreyDivider = styled.div`
   width: calc(100% - 210px);
-  margin: 30px 0 0 20px;
+  margin: 40px 0 0 20px;
   background-color: ${colors.colors.gray40};
   height: 1px;
 `;

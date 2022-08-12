@@ -47,7 +47,13 @@
       "title": "Inicia sesión"
     },
     "centers": {
-      "advance-search": "Búsqueda avanzada"
+      "advance-search": "Búsqueda avanzada",
+      "data-error": "No hay datos",
+      "data-error-options": {
+        "0": "Crear un nuevo centro",
+        "1": "o",
+        "2": "varios centros"
+      }
     }
   }
 }
