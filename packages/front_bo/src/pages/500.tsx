@@ -3,13 +3,7 @@ import Layout from "../components/Layout";
 import { sections } from "../config";
 
 const NotFoundPage: NextPage = () => {
-  return (
-    <Layout
-      section={sections[0].title}
-      label={sections[0].links[0].label}
-      error={500}
-    />
-  );
+  return <Layout section={sections[0].title} error={500} label={""} />;
 };
 
 export default NotFoundPage;

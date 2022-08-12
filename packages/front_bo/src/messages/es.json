@@ -1,7 +1,7 @@
 {
   "components": {
     "content-start": {
-      "search-placeholder": "Buscar por email"
+      "search-placeholder": "Buscar"
     },
     "error-content": {
       "button": "Volver a inicio",
@@ -17,6 +17,13 @@
         "text": "¡Uy! Parece que ha ocurrido un error, vuelve a cargar la página.",
         "title": "Error desconocido"
       }
+    },
+    "column": {
+      "name": "Nombre",
+      "languages": "Idiomas",
+      "population": "Población",
+      "modality": "Modalidad",
+      "type": "Tipo"
     }
   },
   "general": {
@@ -32,8 +39,21 @@
     }
   },
   "pages": {
+    "paginate": {
+      "first": "Mostrando",
+      "middle": "de"
+    },
     "login": {
       "title": "Inicia sesión"
+    },
+    "centers": {
+      "advance-search": "Búsqueda avanzada",
+      "data-error": "No hay datos",
+      "data-error-options": {
+        "0": "Crear un nuevo centro",
+        "1": "o",
+        "2": "varios centros"
+      }
     }
   }
 }

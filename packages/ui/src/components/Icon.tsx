@@ -1,6 +1,16 @@
 import styled from "@emotion/styled";
 import React, { memo, FC } from "react";
-import { Bell, ClosePannel, Lens, MenuKebab, Triangle } from "../assets/icons";
+import {
+  Add,
+  Bell,
+  ClosePannel,
+  Lens,
+  MenuKebab,
+  OrderDown,
+  OrderUp,
+  Triangle,
+  OrderNon,
+} from "../assets/icons";
 import { colors } from "../theme";
 
 export interface IIconProps {
@@ -27,6 +37,14 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <Lens {...rest} />;
     case "triangle":
       return <Triangle {...rest} />;
+    case "add":
+      return <Add {...rest} />;
+    case "order-up":
+      return <OrderUp {...rest} />;
+    case "order-down":
+      return <OrderDown {...rest} />;
+    case "order-non":
+      return <OrderNon {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

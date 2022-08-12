@@ -1,0 +1,16 @@
+query GetCentersF($searchText: String, $orderFilter: OrderFilter, $order: Number, $page: Int, $pageSize: Int) {
+  getCenters(searchText: $searchText, orderFilter: $orderFilter, order: $order, page: $page, pageSize: $pageSize) {
+    page
+    pageSize
+    totalPages
+    totalNumber
+    data {
+      id
+      name
+      languages
+      population
+      modality
+      type
+    }
+  }
+}
