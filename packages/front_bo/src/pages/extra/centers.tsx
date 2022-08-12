@@ -128,7 +128,9 @@ const CentersPage: NextPage = () => {
             center={false}
             order={order}
             title={t("components.column.name")}
-            content={data.getCenters.data?.map((elem) => elem?.name)}
+            content={data.getCenters.data?.map((elem) => {
+              return { index: elem?.id, name: elem?.name };
+            })}
             changeOrder={setOrder}
             changeOrderFilter={setFilter}
           />
@@ -138,11 +140,14 @@ const CentersPage: NextPage = () => {
             center
             order={order}
             title={t("components.column.languages")}
-            content={data.getCenters.data?.map((elem) =>
-              JSON.stringify(elem?.languages)
-                .replace(/\[|\]/g, "")
-                .replace(/"/g, " ")
-            )}
+            content={data.getCenters.data?.map((elem) => {
+              return {
+                index: elem?.id,
+                name: JSON.stringify(elem?.languages)
+                  .replace(/\[|\]/g, "")
+                  .replace(/"/g, " "),
+              };
+            })}
             changeOrder={setOrder}
             changeOrderFilter={setFilter}
           />
@@ -152,7 +157,9 @@ const CentersPage: NextPage = () => {
             center
             order={order}
             title={t("components.column.population")}
-            content={data.getCenters.data?.map((elem) => elem?.population)}
+            content={data.getCenters.data?.map((elem) => {
+              return { index: elem?.id, name: elem?.population };
+            })}
             changeOrder={setOrder}
             changeOrderFilter={setFilter}
           />
@@ -162,7 +169,9 @@ const CentersPage: NextPage = () => {
             center
             order={order}
             title={t("components.column.modality")}
-            content={data.getCenters.data?.map((elem) => elem?.modality)}
+            content={data.getCenters.data?.map((elem) => {
+              return { index: elem?.id, name: elem?.modality };
+            })}
             changeOrder={setOrder}
             changeOrderFilter={setFilter}
           />
@@ -172,7 +181,9 @@ const CentersPage: NextPage = () => {
             center
             order={order}
             title={t("components.column.type")}
-            content={data.getCenters.data?.map((elem) => elem?.type)}
+            content={data.getCenters.data?.map((elem) => {
+              return { index: elem?.id, name: elem?.type };
+            })}
             changeOrder={setOrder}
             changeOrderFilter={setFilter}
           />

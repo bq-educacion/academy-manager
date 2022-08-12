@@ -8,7 +8,7 @@ const Column: FC<{
   actualFilter: OrderFilter;
   order: number;
   title: string;
-  content: (string | undefined)[] | undefined;
+  content?: { name?: string; index?: string }[];
   center: boolean;
   changeOrder: (order: number) => void;
   changeOrderFilter: (filter: SetStateAction<OrderFilter>) => void;
@@ -46,9 +46,9 @@ const Column: FC<{
       </ColumnHeader>
       {content && (
         <ColumnContentGeneral>
-          {content.map((item, index) => (
-            <ColumnContent center={center} key={index}>
-              <p>{item}</p>
+          {content.map((item) => (
+            <ColumnContent center={center} key={item.index}>
+              <p>{item.name}</p>
             </ColumnContent>
           ))}
         </ColumnContentGeneral>
