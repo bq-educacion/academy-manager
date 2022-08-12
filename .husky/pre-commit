@@ -5,17 +5,11 @@ set -e
 cwd=$(pwd)
 echo $cwd
 
-echo "deno lint:"
-cd $cwd/packages/api_bo/ && deno lint . 
-cd $cwd/packages/api_bo/ && deno lint . 
+echo "yarn pre-commit:"
+cd $cwd/ && yarn pre-commit
+ 
 echo "deno check types:"
 cd $cwd/packages/api_bo/ && deno bundle src/app.ts -- .bundle 
 rm -fr .bundle
 cd $cwd/packages/api_m/ && deno bundle src/app.ts -- .bundle
 rm -fr .bundle
-echo "deno fmt packages/api_bo:"
-cd $cwd/packages/api_bo/ && deno fmt .
-echo "deno fmt packages/api_m:"
-cd $cwd/packages/api_m/ && deno fmt .
-echo "yarn pre-commit:"
-cd $cwd/ && yarn pre-commit

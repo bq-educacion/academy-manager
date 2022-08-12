@@ -35,8 +35,10 @@
     "gen-types": "yarn run api-types && yarn run front-types",
     "lint:front_bo": "eslint \"packages/front_bo/src/**/*.{js,jsx,ts,tsx}\" --fix",
     "lint:front_m": "eslint \"packages/front_m/src/**/*.{js,jsx,ts,tsx}\" --fix",
+    "lint:api_m": "cd ./packages/api_m && deno lint && deno fmt",
+    "lint:api_bo": "cd ./packages/api_bo && deno lint && deno fmt",
     "lint:ui": "eslint \"packages/ui/src/**/*.{js,jsx,ts,tsx}\" --fix",
-    "lint": "yarn run lint:front_bo && yarn run lint:front_m && yarn run lint:ui",
+    "lint": "yarn run lint:front_bo && yarn run lint:front_m && yarn run lint:ui && yarn run lint:api_m && yarn run lint:api_bo",
     "pre-commit": "lint-staged && yarn tsc",
     "tsc:front_bo": "cd packages/front_bo && tsc --p ./tsconfig.json",
     "tsc:front_m": "cd packages/front_m && tsc --p ./tsconfig.json",
@@ -44,13 +46,20 @@
     "tsc": "yarn run tsc:front_bo && yarn run tsc:front_m && yarn run tsc:ui"
   },
   "lint-staged": {
-    "packages/front_bo/src/**/*.{js, json, scss, ts,tsx}": [
-      "yarn lint --fix --quiet",
-      "git add"
+    "packages/ui/src/**/*.{js,json,scss,ts,tsx}": [
+      "yarn lint:ui --fix --quiet"
     ],
-    "packages/front_m/src/**/*.{js, json, scss, ts,tsx}": [
-      "yarn lint --fix --quiet",
-      "git add"
+    "packages/front_bo/src/**/*.{js,json,scss,ts,tsx}": [
+      "yarn lint:front_bo --fix --quiet"
+    ],
+    "packages/front_m/src/**/*.{js,json,scss,ts,tsx}": [
+      "yarn lint:front_m --fix --quiet"
+    ],
+    "packages/api_m/src/**/*.{json,ts}": [
+      "yarn lint:api_m"
+    ],
+    "packages/api_bo/src/**/*.{json,ts}": [
+      "yarn lint:api_bo"
     ]
   },
   "repository": {
