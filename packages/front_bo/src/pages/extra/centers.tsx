@@ -1,17 +1,19 @@
 import { NextPage } from "next";
-import { Column, Layout } from "../../components";
+import { Layout } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
   colors,
   FirstActionButton,
   Icon,
+  LoadingOvercast,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { OrderFilter, useGetCentersFQuery } from "../../generated/graphql";
+import Table from "../../components/Table";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -20,7 +22,7 @@ const CentersPage: NextPage = () => {
   const [order, setOrder] = useState<number>(1);
   const [filter, setFilter] = useState<OrderFilter>(OrderFilter.Name);
 
-  const { data, error } = useGetCentersFQuery({
+  const { data, loading, error } = useGetCentersFQuery({
     variables: {
       searchText: searchText,
       orderFilter: filter,
@@ -34,162 +36,144 @@ const CentersPage: NextPage = () => {
   //TODO: Advance Search
 
   return (
-    <Layout
-      childrenHeader={
-        <>
-          <DivHeader1>
-            <FirstActionButton />
-            <BoldP2>{t("general.sections.links.centers")}</BoldP2>
-          </DivHeader1>
+    <>
+      {loading && <LoadingOvercast />}
+      <Layout
+        childrenHeader={
+          <>
+            <DivHeader1>
+              <FirstActionButton />
+              <BoldP2>{t("general.sections.links.centers")}</BoldP2>
+            </DivHeader1>
 
-          <DivHeader2>
-            <RelativeDiv
-              onClick={() => {
-                setSearchText(inputText);
-              }}
-            >
-              <Input
-                placeholder={t("components.content-start.search-placeholder")}
-                onChange={(e) => {
-                  setInputText(e.target.value);
+            <DivHeader2>
+              <RelativeDiv
+                onClick={() => {
+                  setSearchText(inputText);
                 }}
-                onKeyDownCapture={(e) => {
-                  {
-                    e.key === "Enter" && setSearchText(inputText);
-                  }
-                }}
-              />
-              <LensSearch name="lens" />
-            </RelativeDiv>
-            <AdvanceSearch>
-              <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
-            </AdvanceSearch>
-          </DivHeader2>
-        </>
-      }
-      childrenSubHeader={
-        <SubHeaderDiv>
-          {error && (
-            <SubHeaderP4>
-              {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
-            </SubHeaderP4>
-          )}
-          {data && (
-            <SubHeaderP4>
-              {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
-              {t("pages.paginate.middle")} {data.getCenters.totalNumber}{" "}
-            </SubHeaderP4>
-          )}
-          <GreyDivider />
-        </SubHeaderDiv>
-      }
-      section={sections[0].title}
-      label={sections[0].links[1].label}
-    >
-      {error && (
-        <ErrorDiv>
-          <ErrorColumnHeaders>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.column.name")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.column.languages")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.column.population")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.column.modality")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.column.type")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-          </ErrorColumnHeaders>
-          <ErrorContainer>
-            <styles.P4>{t("pages.centers.data-error")}</styles.P4>
-            <styles.P4>
-              <a>{t("pages.centers.data-error-options.0")}</a>{" "}
-              {t("pages.centers.data-error-options.1")}{" "}
-              <a>{t("pages.centers.data-error-options.2")}</a>
-            </styles.P4>
-          </ErrorContainer>
-        </ErrorDiv>
-      )}
-      {data && (
-        <>
-          <Column
-            filter={OrderFilter.Name}
-            actualFilter={filter}
-            center={false}
+              >
+                <Input
+                  placeholder={t("components.content-start.search-placeholder")}
+                  onChange={(e) => {
+                    setInputText(e.target.value);
+                  }}
+                  onKeyDownCapture={(e) => {
+                    {
+                      e.key === "Enter" && setSearchText(inputText);
+                    }
+                  }}
+                />
+                <LensSearch name="lens" />
+              </RelativeDiv>
+              <AdvanceSearch>
+                <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
+              </AdvanceSearch>
+            </DivHeader2>
+          </>
+        }
+        childrenSubHeader={
+          <SubHeaderDiv>
+            {error && (
+              <SubHeaderP4>
+                {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
+              </SubHeaderP4>
+            )}
+            {data && (
+              <SubHeaderP4>
+                {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
+                {t("pages.paginate.middle")} {data.getCenters.totalNumber}{" "}
+              </SubHeaderP4>
+            )}
+            <GreyDivider />
+          </SubHeaderDiv>
+        }
+        section={sections[0].title}
+        label={sections[0].links[1].label}
+      >
+        {data && !data.getCenters.data?.length && !loading && (
+          <ErrorDiv>
+            <ErrorColumnHeaders>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.column.name")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.column.languages")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.column.population")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.column.modality")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.column.type")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+            </ErrorColumnHeaders>
+            <ErrorContainer>
+              <styles.P4>{t("pages.centers.data-error")}</styles.P4>
+              <styles.P4>
+                <a>{t("pages.centers.data-error-options.0")}</a>{" "}
+                {t("pages.centers.data-error-options.1")}{" "}
+                <a>{t("pages.centers.data-error-options.2")}</a>
+              </styles.P4>
+            </ErrorContainer>
+          </ErrorDiv>
+        )}
+        {data && data.getCenters.data?.length && (
+          <Table
+            setOrder={setOrder}
             order={order}
-            title={t("components.column.name")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.name };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
+            actualOrderFilter={filter}
+            setOrderFilter={setFilter}
+            columns={[
+              {
+                title: t("components.column.name"),
+                orderFilter: OrderFilter.Name,
+                data: data.getCenters.data?.map((elem) => {
+                  return { index: elem?.id, text: elem?.name };
+                }),
+              },
+              {
+                title: t("components.column.languages"),
+                orderFilter: OrderFilter.Languages,
+                data: data.getCenters.data?.map((elem) => {
+                  return {
+                    index: elem?.id,
+                    text: JSON.stringify(elem?.languages),
+                  };
+                }),
+              },
+              {
+                title: t("components.column.population"),
+                orderFilter: OrderFilter.Population,
+                data: data.getCenters.data?.map((elem) => {
+                  return { index: elem?.id, text: elem?.population };
+                }),
+              },
+              {
+                title: t("components.column.modality"),
+                orderFilter: OrderFilter.Modality,
+                data: data.getCenters.data?.map((elem) => {
+                  return { index: elem?.id, text: elem?.modality };
+                }),
+              },
+              {
+                title: t("components.column.type"),
+                orderFilter: OrderFilter.Type,
+                data: data.getCenters.data?.map((elem) => {
+                  return { index: elem?.id, text: elem?.type };
+                }),
+              },
+            ]}
           />
-          <Column
-            filter={OrderFilter.Languages}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.languages")}
-            content={data.getCenters.data?.map((elem) => {
-              return {
-                index: elem?.id,
-                name: JSON.stringify(elem?.languages)
-                  .replace(/\[|\]/g, "")
-                  .replace(/"/g, " "),
-              };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-          <Column
-            filter={OrderFilter.Population}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.population")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.population };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-          <Column
-            filter={OrderFilter.Modality}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.modality")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.modality };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-          <Column
-            filter={OrderFilter.Type}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.type")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.type };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-        </>
-      )}
-    </Layout>
+        )}
+      </Layout>
+    </>
   );
 };
 
