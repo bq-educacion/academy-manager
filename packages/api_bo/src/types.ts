@@ -151,6 +151,7 @@ export type Mutation = {
   createGroup: Group;
   editCenter: Center;
   editCenterContacts: CenterContact;
+  editGroup: Group;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -209,6 +210,16 @@ export type MutationEditCenterContactsArgs = {
   originEmail: Scalars["String"];
   phone?: InputMaybe<Scalars["String"]>;
   surname?: InputMaybe<Scalars["String"]>;
+};
+
+export type MutationEditGroupArgs = {
+  center?: InputMaybe<Scalars["String"]>;
+  id: Scalars["String"];
+  instructors?: InputMaybe<Array<Scalars["String"]>>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  timetable?: InputMaybe<Array<TimetableInput>>;
+  type?: InputMaybe<GroupType>;
 };
 
 export enum OrderFilter {
@@ -726,6 +737,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationEditCenterContactsArgs, "idCenter" | "originEmail">
+  >;
+  editGroup?: Resolver<
+    ResolversTypes["Group"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditGroupArgs, "id">
   >;
 }>;
 

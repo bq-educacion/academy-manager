@@ -130,7 +130,7 @@ export const Query = {
       }
       return center;
     } catch (error) {
-      throw new Error("500", error);
+      throw new Error("500, " + error);
     }
   },
 
@@ -245,7 +245,7 @@ export const Query = {
       }
       return group;
     } catch (error) {
-      throw new Error("500", error);
+      throw new Error("500, " + error);
     }
   },
 };
