@@ -223,7 +223,7 @@ export enum OrderFilterGroup {
 
 export type PaginatedCenters = {
   __typename?: 'PaginatedCenters';
-  data?: Maybe<Array<Maybe<Center>>>;
+  data: Array<Center>;
   page: Scalars['Int'];
   pageSize: Scalars['Int'];
   totalNumber: Scalars['Int'];
@@ -232,7 +232,7 @@ export type PaginatedCenters = {
 
 export type PaginatedGroups = {
   __typename?: 'PaginatedGroups';
-  data?: Maybe<Array<Maybe<Group>>>;
+  data: Array<Group>;
   page: Scalars['Int'];
   pageSize: Scalars['Int'];
   totalNumber: Scalars['Int'];
@@ -333,7 +333,7 @@ export type GetCentersQueryVariables = Exact<{
 }>;
 
 
-export type GetCentersQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, totalPages: number, totalNumber: number, pageSize: number, data?: Array<{ __typename?: 'Center', id: string, name: string, address: string, population: string, phone: string, email?: string | null, type: CenterType, activityTypes: CenterActivityTypes, modality: CenterModality, nature: CenterNature, course: string, languages: Array<string>, notes?: string | null, createdAt: string, contacts: Array<{ __typename?: 'CenterContact', phone: string, email: string, surname: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, type: GroupType, createdAt: string, course: string, timetable: Array<{ __typename?: 'Timetable', day: Days }> }> } | null> | null } };
+export type GetCentersQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Center', id: string, name: string, address: string, population: string, phone: string, email?: string | null, type: CenterType, activityTypes: CenterActivityTypes, modality: CenterModality, nature: CenterNature, course: string, languages: Array<string>, notes?: string | null, createdAt: string, contacts: Array<{ __typename?: 'CenterContact', phone: string, email: string, surname: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, type: GroupType, createdAt: string, course: string, timetable: Array<{ __typename?: 'Timetable', day: Days }> }> }> } };
 
 export type GetCentersFQueryVariables = Exact<{
   searchText?: InputMaybe<Scalars['String']>;
@@ -344,7 +344,7 @@ export type GetCentersFQueryVariables = Exact<{
 }>;
 
 
-export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data?: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<string>, population: string, modality: CenterModality, type: CenterType } | null> | null } };
+export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<string>, population: string, modality: CenterModality, type: CenterType }> } };
 
 
 export const GetCentersDocument = gql`

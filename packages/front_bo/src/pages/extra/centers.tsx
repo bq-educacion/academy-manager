@@ -11,29 +11,50 @@ import {
   useTranslate,
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
-import { useState } from "react";
-import { OrderFilter, useGetCentersFQuery } from "../../generated/graphql";
+import { useEffect, useState } from "react";
+import {
+  Center,
+  OrderFilter,
+  useGetCentersFQuery,
+} from "../../generated/graphql";
 import Table from "../../components/Table";
+import { useRouter } from "next/router";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
-  const [order, setOrder] = useState<number>(1);
-  const [filter, setFilter] = useState<OrderFilter>(OrderFilter.Name);
+  const [order, setOrder] = useState<{ key: OrderFilter; direction: number }>({
+    key: OrderFilter.Name,
+    direction: 1,
+  });
+
+  const [tableData, setTableData] = useState<
+    Array<Partial<Center> & { id: string }>
+  >([]);
 
   const { data, loading, error } = useGetCentersFQuery({
     variables: {
       searchText: searchText,
-      orderFilter: filter,
-      order: order,
+      orderFilter: order.key,
+      order: order.direction,
       page: 1,
       pageSize: 20,
     },
-    fetchPolicy: "network-only",
   });
 
+  useEffect(() => {
+    {
+      data && data.getCenters.data && setTableData(data.getCenters.data);
+    }
+  }, [data]);
+
   //TODO: Advance Search
+
+  const route = useRouter();
+  {
+    error && route.push("/500");
+  }
 
   return (
     <>
@@ -73,18 +94,24 @@ const CentersPage: NextPage = () => {
         }
         childrenSubHeader={
           <SubHeaderDiv>
-            {error && (
-              <SubHeaderP4>
-                {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
-              </SubHeaderP4>
+            {data && !data.getCenters.data?.length && (
+              <>
+                <SubHeaderP4>
+                  {t("pages.paginate.first")} {0} {t("pages.paginate.middle")}{" "}
+                  {0}{" "}
+                </SubHeaderP4>
+                <GreyDivider />
+              </>
             )}
-            {data && (
-              <SubHeaderP4>
-                {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
-                {t("pages.paginate.middle")} {data.getCenters.totalNumber}{" "}
-              </SubHeaderP4>
+            {data && data.getCenters.data?.length && (
+              <>
+                <SubHeaderP4>
+                  {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
+                  {t("pages.paginate.middle")} {data.getCenters.totalNumber}{" "}
+                </SubHeaderP4>
+                <GreyDivider />
+              </>
             )}
-            <GreyDivider />
           </SubHeaderDiv>
         }
         section={sections[0].title}
@@ -124,50 +151,18 @@ const CentersPage: NextPage = () => {
             </ErrorContainer>
           </ErrorDiv>
         )}
-        {data && data.getCenters.data?.length && (
-          <Table
-            setOrder={setOrder}
+        {data && data.getCenters.data && data.getCenters.data?.length && (
+          <Table<Partial<Center> & { id: string }>
+            data={tableData}
             order={order}
-            actualOrderFilter={filter}
-            setOrderFilter={setFilter}
+            onSetOrder={setOrder}
             columns={[
               {
-                title: t("components.column.name"),
-                orderFilter: OrderFilter.Name,
-                data: data.getCenters.data?.map((elem) => {
-                  return { index: elem?.id, text: elem?.name };
-                }),
-              },
-              {
-                title: t("components.column.languages"),
-                orderFilter: OrderFilter.Languages,
-                data: data.getCenters.data?.map((elem) => {
-                  return {
-                    index: elem?.id,
-                    text: JSON.stringify(elem?.languages),
-                  };
-                }),
-              },
-              {
-                title: t("components.column.population"),
-                orderFilter: OrderFilter.Population,
-                data: data.getCenters.data?.map((elem) => {
-                  return { index: elem?.id, text: elem?.population };
-                }),
-              },
-              {
-                title: t("components.column.modality"),
-                orderFilter: OrderFilter.Modality,
-                data: data.getCenters.data?.map((elem) => {
-                  return { index: elem?.id, text: elem?.modality };
-                }),
-              },
-              {
-                title: t("components.column.type"),
-                orderFilter: OrderFilter.Type,
-                data: data.getCenters.data?.map((elem) => {
-                  return { index: elem?.id, text: elem?.type };
-                }),
+                label: t("components.column.name"),
+                key: OrderFilter.Name,
+                content: (item) => {
+                  return <div>{item.name}</div>;
+                },
               },
             ]}
           />

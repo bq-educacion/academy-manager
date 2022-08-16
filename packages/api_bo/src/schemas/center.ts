@@ -45,7 +45,7 @@ export const typeDefs = gql`
     totalPages: Int!
     totalNumber: Int!
     pageSize: Int!
-    data: [Center]
+    data: [Center!]!
   }
 
   type Center {
