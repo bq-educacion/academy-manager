@@ -1,12 +1,11 @@
 import { NextPage } from "next";
-import { Layout } from "../../components";
+import { Layout, Table } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
   colors,
   FirstActionButton,
   Icon,
-  LoadingOvercast,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -17,7 +16,6 @@ import {
   OrderFilter,
   useGetCentersFQuery,
 } from "../../generated/graphql";
-import Table from "../../components/Table";
 import { useRouter } from "next/router";
 
 const CentersPage: NextPage = () => {
@@ -58,7 +56,6 @@ const CentersPage: NextPage = () => {
 
   return (
     <>
-      {loading && <LoadingOvercast />}
       <Layout
         childrenHeader={
           <>
@@ -160,9 +157,27 @@ const CentersPage: NextPage = () => {
               {
                 label: t("components.column.name"),
                 key: OrderFilter.Name,
-                content: (item) => {
-                  return <div>{item.name}</div>;
-                },
+                content: (item) => <div>{item.name}</div>,
+              },
+              {
+                label: t("components.column.languages"),
+                key: OrderFilter.Languages,
+                content: (item) => <div>{item.languages}</div>,
+              },
+              {
+                label: t("components.column.population"),
+                key: OrderFilter.Population,
+                content: (item) => <div>{item.population}</div>,
+              },
+              {
+                label: t("components.column.modality"),
+                key: OrderFilter.Modality,
+                content: (item) => <div>{item.modality}</div>,
+              },
+              {
+                label: t("components.column.type"),
+                key: OrderFilter.Type,
+                content: (item) => <div>{item.type}</div>,
               },
             ]}
           />
