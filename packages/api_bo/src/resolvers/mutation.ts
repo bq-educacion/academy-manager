@@ -5,6 +5,7 @@ import {
   MutationCreateGroupArgs,
   MutationEditCenterArgs,
   MutationEditCenterContactsArgs,
+  MutationEditGroupArgs,
 } from "../types.ts";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
@@ -29,11 +30,12 @@ export const Mutation = {
       return {
         _id: idCenter,
         contacts: [],
+        notes: args.notes || "",
         createdAt: createdAt,
         ...args,
       };
     } catch (error) {
-      throw new Error("500 ", error);
+      throw new Error("500, " + error);
     }
   },
 
@@ -43,30 +45,27 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterContact> => {
     try {
-      const center = await centerCollection(ctx.db).findOne({
-        _id: new ObjectId(args.idCenter),
-      });
-      if (!center) {
-        throw new Error("404, Center not found");
-      }
-
       const contact = await centerCollection(ctx.db).findOne({
-        _id: center._id,
+        _id: new ObjectId(args.idCenter),
         contacts: { $elemMatch: { email: args.email } },
       });
       if (contact) throw new Error("404, Contact already exists");
 
-      const newContact: CenterContact = { ...args };
-
-      await centerCollection(ctx.db).updateOne(
+      const newCenterContact = await centerCollection(ctx.db).findAndModify(
+        { _id: new ObjectId(args.idCenter) },
         {
-          _id: new ObjectId(args.idCenter),
+          update: { $push: { contacts: { $each: [{ ...args }] } } },
+          new: true,
         },
-        { $push: { contacts: { $each: [newContact] } } },
       );
-      return newContact;
+      if (!newCenterContact) {
+        throw new Error("404, Center not found");
+      }
+      return newCenterContact.contacts.filter((contact) =>
+        contact.email === args.email
+      )[0];
     } catch (error) {
-      throw new Error("500 ", error);
+      throw new Error("500, " + error);
     }
   },
 
@@ -75,18 +74,22 @@ export const Mutation = {
     args: MutationEditCenterArgs,
     ctx: Context,
   ): Promise<CenterModel> => {
-    // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
-    const newCenter = await centerCollection(ctx.db).findAndModify(
-      { _id: new ObjectId(args.id) },
-      {
-        update: { $set: { ...(args as Partial<CenterModel>) } },
-        new: true,
-      },
-    );
-    if (!newCenter) {
-      throw new Error("404, Center not found");
+    try {
+      // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
+      const newCenter = await centerCollection(ctx.db).findAndModify(
+        { _id: new ObjectId(args.id) },
+        {
+          update: { $set: { ...(args as Partial<CenterModel>) } },
+          new: true,
+        },
+      );
+      if (!newCenter) {
+        throw new Error("404, Center not found");
+      }
+      return newCenter;
+    } catch (error) {
+      throw new Error("500, " + error);
     }
-    return newCenter;
   },
 
   editCenterContacts: async (
@@ -138,7 +141,7 @@ export const Mutation = {
 
       return contactUpdate;
     } catch (error) {
-      throw new Error("500 ", error);
+      throw new Error("500, " + error);
     }
   },
 
@@ -187,6 +190,7 @@ export const Mutation = {
         ...args,
         id_group,
         center,
+        notes: args.notes || "",
         instructors: instructors || [],
         createdAt,
         students: [],
@@ -199,10 +203,60 @@ export const Mutation = {
         center: center,
         students: [],
         instructors: instructors || [],
+        notes: args.notes || "",
         createdAt: createdAt,
       };
     } catch (error) {
-      throw new Error("500 " + error);
+      throw new Error("500, " + error);
+    }
+  },
+
+  editGroup: async (
+    _parent: unknown,
+    args: MutationEditGroupArgs,
+    ctx: Context,
+  ): Promise<GroupModel> => {
+    try {
+      let updateGroup = { ...args } as Partial<GroupModel>;
+
+      const instructors = args.instructors?.map(
+        (instructor) => new ObjectId(instructor),
+      );
+      if (args.instructors) {
+        const exists = await instructorCollection(ctx.db)
+          .find({
+            _id: { $in: instructors },
+          })
+          .toArray();
+
+        if (exists?.length !== instructors?.length) {
+          throw new Error("404, Instructors not found");
+        }
+        updateGroup = { ...updateGroup, instructors };
+      }
+
+      if (args.center) {
+        const center = new ObjectId(args.center);
+        const exists = await centerCollection(ctx.db).findOne({ _id: center });
+        if (!exists) {
+          throw new Error("404, Center not found");
+        }
+        updateGroup = { ...updateGroup, center };
+      }
+
+      const newGroup = await groupCollection(ctx.db).findAndModify(
+        { _id: new ObjectId(args.id) },
+        {
+          update: { $set: updateGroup },
+          new: true,
+        },
+      );
+      if (!newGroup) {
+        throw new Error("404, Group not found");
+      }
+      return newGroup;
+    } catch (error) {
+      throw new Error("500, " + error);
     }
   },
 };
