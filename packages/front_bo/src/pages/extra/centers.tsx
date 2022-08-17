@@ -31,7 +31,13 @@ const CentersPage: NextPage = () => {
     Array<Partial<Center> & { id: string }>
   >([]);
 
-  const { data, loading, error } = useGetCentersFQuery({
+  const [pageData, setPageData] = useState<{
+    page: number;
+    pageSize: number;
+    total: number;
+  }>({ page: 1, pageSize: 0, total: 0 });
+
+  const { data, error } = useGetCentersFQuery({
     variables: {
       searchText: searchText,
       orderFilter: order.key,
@@ -41,10 +47,15 @@ const CentersPage: NextPage = () => {
     },
   });
 
-  useEffect(
-    () => data && data.getCenters.data && setTableData(data.getCenters.data),
-    [data]
-  );
+  useEffect(() => {
+    data &&
+      setPageData({
+        page: data.getCenters.page,
+        pageSize: data.getCenters.pageSize,
+        total: data.getCenters.totalNumber,
+      });
+    data?.getCenters.data && setTableData(data.getCenters.data);
+  }, [data]);
 
   //TODO: Advance Search
 
@@ -89,7 +100,7 @@ const CentersPage: NextPage = () => {
       }
       childrenSubHeader={
         <SubHeaderDiv>
-          {data && !data.getCenters.data?.length && (
+          {tableData.length === 0 && (
             <>
               <SubHeaderP4>
                 {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
@@ -97,11 +108,11 @@ const CentersPage: NextPage = () => {
               <GreyDivider />
             </>
           )}
-          {data && data.getCenters.data?.length && (
+          {tableData.length && (
             <>
               <SubHeaderP4>
-                {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
-                {t("pages.paginate.middle")} {data.getCenters.totalNumber}{" "}
+                {t("pages.paginate.first")} {tableData.length}{" "}
+                {t("pages.paginate.middle")} {pageData.total}{" "}
               </SubHeaderP4>
               <GreyDivider />
             </>
@@ -111,27 +122,27 @@ const CentersPage: NextPage = () => {
       section={sections[0].title}
       label={sections[0].links[1].label}
     >
-      {data && !data.getCenters.data?.length && !loading && (
+      {tableData.length === 0 && (
         <ErrorDiv>
           <ErrorColumnHeaders>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.name")}</BoldP4>
+              <BoldP4>{t("components.table.name")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.languages")}</BoldP4>
+              <BoldP4>{t("components.table.languages")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.population")}</BoldP4>
+              <BoldP4>{t("components.table.population")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.modality")}</BoldP4>
+              <BoldP4>{t("components.table.modality")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.type")}</BoldP4>
+              <BoldP4>{t("components.table.type")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
           </ErrorColumnHeaders>
@@ -145,34 +156,34 @@ const CentersPage: NextPage = () => {
           </ErrorContainer>
         </ErrorDiv>
       )}
-      {data && data.getCenters.data && data.getCenters.data?.length && (
+      {tableData.length && (
         <Table<Partial<Center> & { id: string }>
           data={tableData}
           order={order}
           onSetOrder={setOrder}
           columns={[
             {
-              label: t("components.column.name"),
+              label: t("components.table.name"),
               key: OrderFilter.Name,
               content: (item) => <div>{item.name}</div>,
             },
             {
-              label: t("components.column.languages"),
+              label: t("components.table.languages"),
               key: OrderFilter.Languages,
-              content: (item) => <div>{item.languages}</div>,
+              content: (item) => <div>{item.languages?.join(", ")}</div>,
             },
             {
-              label: t("components.column.population"),
+              label: t("components.table.population"),
               key: OrderFilter.Population,
               content: (item) => <div>{item.population}</div>,
             },
             {
-              label: t("components.column.modality"),
+              label: t("components.table.modality"),
               key: OrderFilter.Modality,
               content: (item) => <div>{item.modality}</div>,
             },
             {
-              label: t("components.column.type"),
+              label: t("components.table.type"),
               key: OrderFilter.Type,
               content: (item) => <div>{item.type}</div>,
             },

@@ -1,4 +1,4 @@
-import { colors } from "@academy-manager/ui";
+import { colors, Icon, styles } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import React, { Dispatch, SetStateAction } from "react";
 import { OrderFilter } from "../generated/graphql";
@@ -33,7 +33,16 @@ const Table = <T extends Data>({
             onSetOrder({ key: column.key, direction: -order.direction });
           }}
         >
-          {column.label}
+          <BoldP4>{column.label}</BoldP4>
+          <Icon
+            name={
+              order.key === column.key
+                ? order.direction === 1
+                  ? "order-up"
+                  : "order-down"
+                : "order-non"
+            }
+          />
         </HeaderCell>
       ))}
       {data.map((item) => (
@@ -61,8 +70,9 @@ const HeaderCell = styled.div`
     margin-left: 5px;
   }
   border-bottom: 1px solid ${colors.colors.grayBlue2};
-  padding: 12px 1px 9px 0;
-  justify-content: center;
+  border-left: solid 1px ${colors.colors.grayBlue};
+  padding: 12px 1px 9px 2em;
+  justify-content: flex-start;
   & > * {
     cursor: pointer;
   }
@@ -73,10 +83,15 @@ const Cell = styled.div`
   height: 39px;
   align-items: center;
   border-bottom: solid 1px ${colors.colors.grayBlue};
+  border-left: solid 1px ${colors.colors.grayBlue};
   min-width: max-content;
   justify-content: flex-start;
-  padding: 0 20px;
+  padding: 0 2em;
   overflow: visible;
+`;
+
+const BoldP4 = styled(styles.P4)`
+  font-weight: bold;
 `;
 
 export default Table;

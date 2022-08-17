@@ -18,7 +18,7 @@
         "title": "Error desconocido"
       }
     },
-    "column": {
+    "table": {
       "name": "Nombre",
       "languages": "Idiomas",
       "population": "Población",
