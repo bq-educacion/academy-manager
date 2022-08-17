@@ -248,6 +248,7 @@ export enum OrderFilterGroup {
   Center = "center",
   Course = "course",
   End = "end",
+  IdDay = "id_day",
   IdGroup = "id_group",
   Instructors = "instructors",
   Start = "start",
@@ -353,6 +354,7 @@ export type Timetable = {
   __typename?: "Timetable";
   day: Days;
   end: Scalars["String"];
+  id_day: Scalars["Number"];
   start: Scalars["String"];
 };
 
@@ -923,6 +925,7 @@ export type TimetableResolvers<
 > = ResolversObject<{
   day?: Resolver<ResolversTypes["Days"], ParentType, ContextType>;
   end?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id_day?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
   start?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
