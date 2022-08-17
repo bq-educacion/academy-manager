@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Column, Layout } from "../../components";
+import { Layout, Table } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
@@ -10,28 +10,59 @@ import {
   useTranslate,
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
-import { useState } from "react";
-import { OrderFilter, useGetCentersFQuery } from "../../generated/graphql";
+import { useEffect, useState } from "react";
+import {
+  Center,
+  OrderFilter,
+  useGetCentersFQuery,
+} from "../../generated/graphql";
+import { useRouter } from "next/router";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
-  const [order, setOrder] = useState<number>(1);
-  const [filter, setFilter] = useState<OrderFilter>(OrderFilter.Name);
+  const [order, setOrder] = useState<{ key: OrderFilter; direction: number }>({
+    key: OrderFilter.Name,
+    direction: 1,
+  });
+
+  const [tableData, setTableData] = useState<
+    Array<Partial<Center> & { id: string }>
+  >([]);
+
+  const [pageData, setPageData] = useState<{
+    page: number;
+    pageSize: number;
+    total: number;
+  }>({ page: 1, pageSize: 0, total: 0 });
 
   const { data, error } = useGetCentersFQuery({
     variables: {
       searchText: searchText,
-      orderFilter: filter,
-      order: order,
+      orderFilter: order.key,
+      order: order.direction,
       page: 1,
       pageSize: 20,
     },
-    fetchPolicy: "network-only",
   });
 
+  useEffect(() => {
+    data &&
+      setPageData({
+        page: data.getCenters.page,
+        pageSize: data.getCenters.pageSize,
+        total: data.getCenters.totalNumber,
+      });
+    data?.getCenters.data && setTableData(data.getCenters.data);
+  }, [data]);
+
   //TODO: Advance Search
+
+  const route = useRouter();
+  if (error) {
+    route.push("/500");
+  }
 
   return (
     <Layout
@@ -69,44 +100,49 @@ const CentersPage: NextPage = () => {
       }
       childrenSubHeader={
         <SubHeaderDiv>
-          {error && (
-            <SubHeaderP4>
-              {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
-            </SubHeaderP4>
+          {tableData.length === 0 && (
+            <>
+              <SubHeaderP4>
+                {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
+              </SubHeaderP4>
+              <GreyDivider />
+            </>
           )}
-          {data && (
-            <SubHeaderP4>
-              {t("pages.paginate.first")} {data.getCenters.data?.length}{" "}
-              {t("pages.paginate.middle")} {data.getCenters.totalNumber}{" "}
-            </SubHeaderP4>
+          {tableData.length && (
+            <>
+              <SubHeaderP4>
+                {t("pages.paginate.first")} {tableData.length}{" "}
+                {t("pages.paginate.middle")} {pageData.total}{" "}
+              </SubHeaderP4>
+              <GreyDivider />
+            </>
           )}
-          <GreyDivider />
         </SubHeaderDiv>
       }
       section={sections[0].title}
       label={sections[0].links[1].label}
     >
-      {error && (
+      {tableData.length === 0 && (
         <ErrorDiv>
           <ErrorColumnHeaders>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.name")}</BoldP4>
+              <BoldP4>{t("components.table.name")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.languages")}</BoldP4>
+              <BoldP4>{t("components.table.languages")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.population")}</BoldP4>
+              <BoldP4>{t("components.table.population")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.modality")}</BoldP4>
+              <BoldP4>{t("components.table.modality")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
             <ErrorColumnHeader>
-              <BoldP4>{t("components.column.type")}</BoldP4>
+              <BoldP4>{t("components.table.type")}</BoldP4>
               <Icon name={"order-non"} />
             </ErrorColumnHeader>
           </ErrorColumnHeaders>
@@ -120,74 +156,39 @@ const CentersPage: NextPage = () => {
           </ErrorContainer>
         </ErrorDiv>
       )}
-      {data && (
-        <>
-          <Column
-            filter={OrderFilter.Name}
-            actualFilter={filter}
-            center={false}
-            order={order}
-            title={t("components.column.name")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.name };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-          <Column
-            filter={OrderFilter.Languages}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.languages")}
-            content={data.getCenters.data?.map((elem) => {
-              return {
-                index: elem?.id,
-                name: JSON.stringify(elem?.languages)
-                  .replace(/\[|\]/g, "")
-                  .replace(/"/g, " "),
-              };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-          <Column
-            filter={OrderFilter.Population}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.population")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.population };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-          <Column
-            filter={OrderFilter.Modality}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.modality")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.modality };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-          <Column
-            filter={OrderFilter.Type}
-            actualFilter={filter}
-            center
-            order={order}
-            title={t("components.column.type")}
-            content={data.getCenters.data?.map((elem) => {
-              return { index: elem?.id, name: elem?.type };
-            })}
-            changeOrder={setOrder}
-            changeOrderFilter={setFilter}
-          />
-        </>
+      {tableData.length && (
+        <Table<Partial<Center> & { id: string }>
+          data={tableData}
+          order={order}
+          onSetOrder={setOrder}
+          columns={[
+            {
+              label: t("components.table.name"),
+              key: OrderFilter.Name,
+              content: (item) => <div>{item.name}</div>,
+            },
+            {
+              label: t("components.table.languages"),
+              key: OrderFilter.Languages,
+              content: (item) => <div>{item.languages?.join(", ")}</div>,
+            },
+            {
+              label: t("components.table.population"),
+              key: OrderFilter.Population,
+              content: (item) => <div>{item.population}</div>,
+            },
+            {
+              label: t("components.table.modality"),
+              key: OrderFilter.Modality,
+              content: (item) => <div>{item.modality}</div>,
+            },
+            {
+              label: t("components.table.type"),
+              key: OrderFilter.Type,
+              content: (item) => <div>{item.type}</div>,
+            },
+          ]}
+        />
       )}
     </Layout>
   );

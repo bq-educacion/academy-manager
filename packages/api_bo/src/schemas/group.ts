@@ -35,7 +35,7 @@ export const typeDefs = gql`
     totalPages: Int!
     totalNumber: Int!
     pageSize: Int!
-    data: [Group]
+    data: [Group!]!
   }
 
   input TimetableInput {

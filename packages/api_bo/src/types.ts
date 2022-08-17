@@ -240,7 +240,7 @@ export enum OrderFilterGroup {
 
 export type PaginatedCenters = {
   __typename?: "PaginatedCenters";
-  data?: Maybe<Array<Maybe<Center>>>;
+  data: Array<Center>;
   page: Scalars["Int"];
   pageSize: Scalars["Int"];
   totalNumber: Scalars["Int"];
@@ -249,7 +249,7 @@ export type PaginatedCenters = {
 
 export type PaginatedGroups = {
   __typename?: "PaginatedGroups";
-  data?: Maybe<Array<Maybe<Group>>>;
+  data: Array<Group>;
   page: Scalars["Int"];
   pageSize: Scalars["Int"];
   totalNumber: Scalars["Int"];
@@ -756,11 +756,7 @@ export type PaginatedCentersResolvers<
   ParentType extends ResolversParentTypes["PaginatedCenters"] =
     ResolversParentTypes["PaginatedCenters"],
 > = ResolversObject<{
-  data?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes["Center"]>>>,
-    ParentType,
-    ContextType
-  >;
+  data?: Resolver<Array<ResolversTypes["Center"]>, ParentType, ContextType>;
   page?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageSize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   totalNumber?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -773,11 +769,7 @@ export type PaginatedGroupsResolvers<
   ParentType extends ResolversParentTypes["PaginatedGroups"] =
     ResolversParentTypes["PaginatedGroups"],
 > = ResolversObject<{
-  data?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes["Group"]>>>,
-    ParentType,
-    ContextType
-  >;
+  data?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
   page?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageSize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   totalNumber?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
