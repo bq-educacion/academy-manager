@@ -1,4 +1,3 @@
-import { ObjectId } from "objectId";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
@@ -14,6 +13,7 @@ import {
   QueryGetCentersArgs,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
+  QueryGetStudentArgs,
 } from "../types.ts";
 import { Filter } from "mongo";
 import { paginatedFilters } from "../lib/paginatedFilters.ts";
@@ -122,9 +122,7 @@ export const Query = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
-      const center = await centerCollection(ctx.db).findOne({
-        _id: new ObjectId(args.id),
-      });
+      const center = await centerCollection(ctx.db).findById(args.id);
       if (!center) {
         throw new Error("404, Center not found");
       }
@@ -199,6 +197,9 @@ export const Query = {
         case "id_group":
           sortFilter = { id_group: args.order };
           break;
+        case "course":
+          sortFilter = { course: args.order };
+          break;
         case "center":
           sortFilter = { "centersName.name": args.order };
           break;
@@ -244,6 +245,30 @@ export const Query = {
         throw new Error("400, Group not found");
       }
       return group;
+    } catch (error) {
+      throw new Error("500, " + error);
+    }
+  },
+
+  getStudents: async (
+    _parent: unknown,
+    _args: unknown,
+    ctx: Context,
+  ): Promise<StudentModel[]> => {
+    return await studentCollection(ctx.db).find({}).toArray();
+  },
+
+  getStudent: async (
+    _parent: unknown,
+    args: QueryGetStudentArgs,
+    ctx: Context,
+  ): Promise<StudentModel> => {
+    try {
+      const student = await studentCollection(ctx.db).findById(args.id);
+      if (!student) {
+        throw new Error("404, Student not found");
+      }
+      return student;
     } catch (error) {
       throw new Error("500, " + error);
     }
@@ -295,5 +320,28 @@ export const Group = {
         _id: { $in: parent.instructors },
       })
       .toArray();
+  },
+};
+
+export const Student = {
+  id: (parent: StudentModel): string => {
+    return String(parent._id!);
+  },
+  center: async (
+    parent: StudentModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<CenterModel | undefined> => {
+    const group = await groupCollection(ctx.db).findOne({
+      students: parent._id,
+    });
+    return await centerCollection(ctx.db).findOne({ _id: group?.center });
+  },
+  group: async (
+    parent: StudentModel,
+    _: unknown,
+    ctx: Context,
+  ): Promise<GroupModel | undefined> => {
+    return await groupCollection(ctx.db).findOne({ students: parent._id });
   },
 };

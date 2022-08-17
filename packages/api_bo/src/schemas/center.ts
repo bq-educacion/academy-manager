@@ -35,7 +35,6 @@ export const typeDefs = gql`
 
   type CenterContact {
     name: String!
-    surname: String!
     email: String!
     phone: String!
   }
@@ -97,7 +96,6 @@ export const typeDefs = gql`
     addCenterContact(
       idCenter: String!
       name: String!
-      surname: String!
       email: String!
       phone: String!
     ): CenterContact!
@@ -122,7 +120,6 @@ export const typeDefs = gql`
       idCenter: String!
       originEmail: String!
       name: String
-      surname: String
       phone: String
       email: String
     ): CenterContact!

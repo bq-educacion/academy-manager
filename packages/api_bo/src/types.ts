@@ -58,7 +58,6 @@ export type CenterContact = {
   email: Scalars["String"];
   name: Scalars["String"];
   phone: Scalars["String"];
-  surname: Scalars["String"];
 };
 
 export enum CenterModality {
@@ -78,16 +77,6 @@ export enum CenterType {
   Campus = "CAMPUS",
   NoAcademy = "NO_ACADEMY",
 }
-
-export type ContactStudent = {
-  __typename?: "ContactStudent";
-  email?: Maybe<Scalars["String"]>;
-  name?: Maybe<Scalars["String"]>;
-  notes?: Maybe<Scalars["String"]>;
-  phone?: Maybe<Scalars["String"]>;
-  send_info?: Maybe<Scalars["Boolean"]>;
-  surname?: Maybe<Scalars["String"]>;
-};
 
 export enum Days {
   Friday = "FRIDAY",
@@ -147,8 +136,10 @@ export type Instructor = {
 export type Mutation = {
   __typename?: "Mutation";
   addCenterContact: CenterContact;
+  addStudentContact: StudentContact;
   createCenter: Center;
   createGroup: Group;
+  createStudent: Student;
   editCenter: Center;
   editCenterContacts: CenterContact;
   editGroup: Group;
@@ -159,7 +150,15 @@ export type MutationAddCenterContactArgs = {
   idCenter: Scalars["String"];
   name: Scalars["String"];
   phone: Scalars["String"];
-  surname: Scalars["String"];
+};
+
+export type MutationAddStudentContactArgs = {
+  email: Scalars["String"];
+  idStudent: Scalars["String"];
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  phone: Scalars["String"];
+  send_info: Scalars["Boolean"];
 };
 
 export type MutationCreateCenterArgs = {
@@ -187,6 +186,22 @@ export type MutationCreateGroupArgs = {
   type: GroupType;
 };
 
+export type MutationCreateStudentArgs = {
+  alergies: Scalars["Boolean"];
+  birthDate: Scalars["String"];
+  collectionPermit: Scalars["String"];
+  course: Scalars["String"];
+  descriptionAllergy?: InputMaybe<Scalars["String"]>;
+  goesAlone: Scalars["Boolean"];
+  idCenter: Scalars["String"];
+  idGroup: Scalars["String"];
+  imageAuthorisation: Scalars["Boolean"];
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  oldStudent: Scalars["Boolean"];
+  signedMandate: Scalars["Boolean"];
+};
+
 export type MutationEditCenterArgs = {
   activityTypes?: InputMaybe<CenterActivityTypes>;
   address?: InputMaybe<Scalars["String"]>;
@@ -209,7 +224,6 @@ export type MutationEditCenterContactsArgs = {
   name?: InputMaybe<Scalars["String"]>;
   originEmail: Scalars["String"];
   phone?: InputMaybe<Scalars["String"]>;
-  surname?: InputMaybe<Scalars["String"]>;
 };
 
 export type MutationEditGroupArgs = {
@@ -232,6 +246,7 @@ export enum OrderFilter {
 
 export enum OrderFilterGroup {
   Center = "center",
+  Course = "course",
   End = "end",
   IdGroup = "id_group",
   Instructors = "instructors",
@@ -262,6 +277,8 @@ export type Query = {
   getCenters: PaginatedCenters;
   getGroup: Group;
   getGroups: PaginatedGroups;
+  getStudent: Student;
+  getStudents?: Maybe<Array<Student>>;
 };
 
 export type QueryGetCenterArgs = {
@@ -288,36 +305,49 @@ export type QueryGetGroupsArgs = {
   searchText?: InputMaybe<Scalars["String"]>;
 };
 
+export type QueryGetStudentArgs = {
+  id: Scalars["String"];
+};
+
 export enum StateInstructor {
   Active = "ACTIVE",
   Inactive = "INACTIVE",
 }
 
-export enum StateStudent {
+export type Student = {
+  __typename?: "Student";
+  alergies: Scalars["Boolean"];
+  birthDate: Scalars["String"];
+  center: Center;
+  collectionPermit: Scalars["String"];
+  contacts: Array<StudentContact>;
+  course: Scalars["String"];
+  descriptionAllergy?: Maybe<Scalars["String"]>;
+  goesAlone: Scalars["Boolean"];
+  group: Group;
+  id: Scalars["ID"];
+  imageAuthorisation: Scalars["Boolean"];
+  name: Scalars["String"];
+  notes?: Maybe<Scalars["String"]>;
+  oldStudent: Scalars["Boolean"];
+  registrationDate: Scalars["String"];
+  signedMandate: Scalars["Boolean"];
+  state: StudentState;
+};
+
+export type StudentContact = {
+  __typename?: "StudentContact";
+  email: Scalars["String"];
+  name: Scalars["String"];
+  notes?: Maybe<Scalars["String"]>;
+  phone: Scalars["String"];
+  send_info: Scalars["Boolean"];
+};
+
+export enum StudentState {
   Active = "ACTIVE",
   Withdrawn = "WITHDRAWN",
 }
-
-export type Student = {
-  __typename?: "Student";
-  alergies?: Maybe<Scalars["Boolean"]>;
-  birthDate?: Maybe<Scalars["String"]>;
-  center?: Maybe<Center>;
-  collectionAuthorisation?: Maybe<Scalars["String"]>;
-  contact?: Maybe<ContactStudent>;
-  course?: Maybe<Scalars["String"]>;
-  descriptionAllergy?: Maybe<Scalars["String"]>;
-  goesAlone?: Maybe<Scalars["Boolean"]>;
-  id?: Maybe<Scalars["ID"]>;
-  imageAuthorisation?: Maybe<Scalars["Boolean"]>;
-  name?: Maybe<Scalars["String"]>;
-  notes?: Maybe<Scalars["String"]>;
-  oldStudent?: Maybe<Scalars["Boolean"]>;
-  registration?: Maybe<Scalars["String"]>;
-  signedMandate?: Maybe<Scalars["Boolean"]>;
-  state?: Maybe<StateStudent>;
-  surname?: Maybe<Scalars["String"]>;
-};
 
 export type Timetable = {
   __typename?: "Timetable";
@@ -454,7 +484,6 @@ export type ResolversTypes = ResolversObject<{
   CenterModality: CenterModality;
   CenterNature: CenterNature;
   CenterType: CenterType;
-  ContactStudent: ResolverTypeWrapper<ContactStudent>;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
   GroupType: GroupType;
@@ -469,9 +498,10 @@ export type ResolversTypes = ResolversObject<{
   PaginatedGroups: ResolverTypeWrapper<PaginatedGroups>;
   Query: ResolverTypeWrapper<{}>;
   StateInstructor: StateInstructor;
-  StateStudent: StateStudent;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Student: ResolverTypeWrapper<Student>;
+  StudentContact: ResolverTypeWrapper<StudentContact>;
+  StudentState: StudentState;
   Timetable: ResolverTypeWrapper<Timetable>;
   TimetableInput: TimetableInput;
   TypeVehicleInstructor: TypeVehicleInstructor;
@@ -482,7 +512,6 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"];
   Center: Center;
   CenterContact: CenterContact;
-  ContactStudent: ContactStudent;
   Group: Group;
   ID: Scalars["ID"];
   Instructor: Instructor;
@@ -494,6 +523,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars["String"];
   Student: Student;
+  StudentContact: StudentContact;
   Timetable: Timetable;
   TimetableInput: TimetableInput;
 }>;
@@ -546,25 +576,6 @@ export type CenterContactResolvers<
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   phone?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  surname?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ContactStudentResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["ContactStudent"] =
-    ResolversParentTypes["ContactStudent"],
-> = ResolversObject<{
-  email?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  send_info?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
-    ParentType,
-    ContextType
-  >;
-  surname?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -695,7 +706,16 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationAddCenterContactArgs,
-      "email" | "idCenter" | "name" | "phone" | "surname"
+      "email" | "idCenter" | "name" | "phone"
+    >
+  >;
+  addStudentContact?: Resolver<
+    ResolversTypes["StudentContact"],
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationAddStudentContactArgs,
+      "email" | "idStudent" | "name" | "phone" | "send_info"
     >
   >;
   createCenter?: Resolver<
@@ -724,6 +744,25 @@ export type MutationResolvers<
     RequireFields<
       MutationCreateGroupArgs,
       "course" | "idCenter" | "name" | "timetable" | "type"
+    >
+  >;
+  createStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationCreateStudentArgs,
+      | "alergies"
+      | "birthDate"
+      | "collectionPermit"
+      | "course"
+      | "goesAlone"
+      | "idCenter"
+      | "idGroup"
+      | "imageAuthorisation"
+      | "name"
+      | "oldStudent"
+      | "signedMandate"
     >
   >;
   editCenter?: Resolver<
@@ -806,6 +845,17 @@ export type QueryResolvers<
     ContextType,
     Partial<QueryGetGroupsArgs>
   >;
+  getStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetStudentArgs, "id">
+  >;
+  getStudents?: Resolver<
+    Maybe<Array<ResolversTypes["Student"]>>,
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type StudentResolvers<
@@ -813,67 +863,56 @@ export type StudentResolvers<
   ParentType extends ResolversParentTypes["Student"] =
     ResolversParentTypes["Student"],
 > = ResolversObject<{
-  alergies?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+  alergies?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  birthDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
+  collectionPermit?: Resolver<
+    ResolversTypes["String"],
     ParentType,
     ContextType
   >;
-  birthDate?: Resolver<
-    Maybe<ResolversTypes["String"]>,
+  contacts?: Resolver<
+    Array<ResolversTypes["StudentContact"]>,
     ParentType,
     ContextType
   >;
-  center?: Resolver<Maybe<ResolversTypes["Center"]>, ParentType, ContextType>;
-  collectionAuthorisation?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
-  contact?: Resolver<
-    Maybe<ResolversTypes["ContactStudent"]>,
-    ParentType,
-    ContextType
-  >;
-  course?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  course?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   descriptionAllergy?: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
     ContextType
   >;
-  goesAlone?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
-    ParentType,
-    ContextType
-  >;
-  id?: Resolver<Maybe<ResolversTypes["ID"]>, ParentType, ContextType>;
+  goesAlone?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   imageAuthorisation?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+    ResolversTypes["Boolean"],
     ParentType,
     ContextType
   >;
-  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  oldStudent?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+  oldStudent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  registrationDate?: Resolver<
+    ResolversTypes["String"],
     ParentType,
     ContextType
   >;
-  registration?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
-  signedMandate?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
-    ParentType,
-    ContextType
-  >;
-  state?: Resolver<
-    Maybe<ResolversTypes["StateStudent"]>,
-    ParentType,
-    ContextType
-  >;
-  surname?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  signedMandate?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes["StudentState"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type StudentContactResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["StudentContact"] =
+    ResolversParentTypes["StudentContact"],
+> = ResolversObject<{
+  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  phone?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  send_info?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -891,7 +930,6 @@ export type TimetableResolvers<
 export type Resolvers<ContextType = any> = ResolversObject<{
   Center?: CenterResolvers<ContextType>;
   CenterContact?: CenterContactResolvers<ContextType>;
-  ContactStudent?: ContactStudentResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
   Instructor?: InstructorResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
@@ -900,5 +938,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   PaginatedGroups?: PaginatedGroupsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
+  StudentContact?: StudentContactResolvers<ContextType>;
   Timetable?: TimetableResolvers<ContextType>;
 }>;
