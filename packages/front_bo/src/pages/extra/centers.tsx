@@ -122,7 +122,40 @@ const CentersPage: NextPage = () => {
       section={sections[0].title}
       label={sections[0].links[1].label}
     >
-      {tableData.length === 0 && (
+      {tableData.length === 0 && searchText !== "" && (
+        <ErrorDiv>
+          <ErrorColumnHeaders>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.table.name")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.table.languages")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.table.population")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.table.modality")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+            <ErrorColumnHeader>
+              <BoldP4>{t("components.table.type")}</BoldP4>
+              <Icon name={"order-non"} />
+            </ErrorColumnHeader>
+          </ErrorColumnHeaders>
+          <ErrorContainer>
+            <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
+            <styles.P4>
+              {t("pages.centers.search-error.1")}{" "}
+              <a>{t("pages.centers.search-error.2")}</a>
+            </styles.P4>
+          </ErrorContainer>
+        </ErrorDiv>
+      )}
+      {tableData.length === 0 && searchText === "" && (
         <ErrorDiv>
           <ErrorColumnHeaders>
             <ErrorColumnHeader>
