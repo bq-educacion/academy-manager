@@ -17,6 +17,7 @@ import { ObjectId } from "objectId";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
+import { setIdTimetable } from "../lib/setIdTimetable.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -189,9 +190,12 @@ export const Mutation = {
         }
       }
 
+      const timetable = setIdTimetable(args.timetable);
+
       const idGroup = await groupCollection(ctx.db).insertOne({
         ...args,
         id_group,
+        timetable,
         center,
         notes: args.notes || "",
         instructors: instructors || [],
@@ -202,6 +206,7 @@ export const Mutation = {
       return {
         _id: idGroup,
         ...args,
+        timetable,
         id_group,
         center,
         students: [],
@@ -245,6 +250,11 @@ export const Mutation = {
           throw new Error("404, Center not found");
         }
         updateGroup = { ...updateGroup, center: new ObjectId(args.center) };
+      }
+
+      if (args.timetable) {
+        const timetable = setIdTimetable(args.timetable);
+        updateGroup = { ...updateGroup, timetable };
       }
 
       const newGroup = await groupCollection(ctx.db).findAndModify(

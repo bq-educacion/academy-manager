@@ -21,11 +21,13 @@ export const typeDefs = gql`
     course
     center
     instructors
+    id_day
     start
     end
   }
 
   type Timetable {
+    id_day: Number!
     day: Days!
     start: String!
     end: String!

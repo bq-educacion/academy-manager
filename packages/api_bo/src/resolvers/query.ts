@@ -206,6 +206,9 @@ export const Query = {
         case "instructors":
           sortFilter = { "instructorsName.name": args.order };
           break;
+        case "id_day":
+          sortFilter = { "timetable.id_day": args.order };
+          break;
         case "start":
           sortFilter = { "timetable.start": args.order };
           break;
