@@ -41,11 +41,10 @@ const CentersPage: NextPage = () => {
     },
   });
 
-  useEffect(() => {
-    {
-      data && data.getCenters.data && setTableData(data.getCenters.data);
-    }
-  }, [data]);
+  useEffect(
+    () => data && data.getCenters.data && setTableData(data.getCenters.data),
+    [data]
+  );
 
   //TODO: Advance Search
 
