@@ -25,7 +25,7 @@
       "modality": "Modalidad",
       "type": "Tipo"
     },
-    "desplegable": {
+    "Dropdown": {
       "title": "Seleccionar"
     }
   },

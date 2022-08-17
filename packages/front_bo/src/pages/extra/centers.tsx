@@ -4,7 +4,7 @@ import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
   colors,
-  Desplegable,
+  DropDown,
   FirstActionButton,
   Icon,
   styles,
@@ -74,7 +74,7 @@ const CentersPage: NextPage = () => {
           setModal={setModalOpen}
           title={t("pages.centers.modal-create.step1.title")}
         >
-          <Desplegable
+          <DropDown
             titles={["1", "2", "3", "4", "5"]}
             setSelected={(txt: string[]) => {
               txt;

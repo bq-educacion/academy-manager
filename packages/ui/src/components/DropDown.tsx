@@ -6,7 +6,7 @@ import CheckBox from "./CheckBox";
 import Icon from "./Icon";
 import Popover from "./Popover";
 
-const Desplegable: FC<{
+const DropDown: FC<{
   width: number;
   titles: string[];
   setSelected: (selected: string[]) => void;
@@ -27,7 +27,7 @@ const Desplegable: FC<{
         >
           <styles.P4>
             {selected.length === 0
-              ? t("components.desplegable.title")
+              ? t("components.Dropdown.title")
               : selected.join(", ")}
           </styles.P4>
           <Icon name="triangle" />
@@ -67,7 +67,7 @@ const Desplegable: FC<{
   );
 };
 
-export default Desplegable;
+export default DropDown;
 
 const OptionBox = styled.div<{ clicked: boolean }>`
   display: flex;

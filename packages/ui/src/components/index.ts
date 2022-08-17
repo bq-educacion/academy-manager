@@ -8,7 +8,7 @@ import UserButton from "./UserButton";
 import Popover from "./Popover";
 import FirstActionButton from "./FirstActionButton";
 import CloseButton from "./CloseButton";
-import Desplegable from "./Desplegable";
+import DropDown from "./DropDown";
 import CheckBox from "./CheckBox";
 
 export {
@@ -22,6 +22,6 @@ export {
   Popover,
   FirstActionButton,
   CloseButton,
-  Desplegable,
+  DropDown,
   CheckBox,
 };
