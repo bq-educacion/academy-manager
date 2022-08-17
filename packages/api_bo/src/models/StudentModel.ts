@@ -5,7 +5,6 @@ import { FindById } from "./types.ts";
 
 export type StudentModel = Omit<Student, "id" | "center" | "group"> & {
   _id?: ObjectId;
-  center: ObjectId;
 };
 
 export const studentCollection = (

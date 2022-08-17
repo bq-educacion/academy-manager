@@ -332,7 +332,10 @@ export const Student = {
     _: unknown,
     ctx: Context,
   ): Promise<CenterModel | undefined> => {
-    return await centerCollection(ctx.db).findOne({ _id: parent.center });
+    const group = await groupCollection(ctx.db).findOne({
+      students: parent._id,
+    });
+    return await centerCollection(ctx.db).findOne({ _id: group?.center });
   },
   group: async (
     parent: StudentModel,
