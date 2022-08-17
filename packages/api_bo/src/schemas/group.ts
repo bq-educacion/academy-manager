@@ -79,5 +79,7 @@ export const typeDefs = gql`
       instructors: [String!]
       notes: String
     ): Group!
+
+    editGroup(id:String!, name: String, type: GroupType,  timetable: [TimetableInput!], notes: String, center: String, instructors: [String!]): Group!
   }
 `;
