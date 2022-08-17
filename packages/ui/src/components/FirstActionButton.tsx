@@ -3,10 +3,13 @@ import { FC } from "react";
 import { colors } from "../theme";
 import Icon from "./Icon";
 
-const FirstActionButton: FC<{ disable?: boolean }> = ({ disable }) => {
+const FirstActionButton: FC<{ onClick?: () => void; disable?: boolean }> = ({
+  disable,
+  onClick,
+}) => {
   const disabled = disable ? true : false;
   return (
-    <Circle border={false} disable={disabled}>
+    <Circle onClick={onClick} border={false} disable={disabled}>
       <Icon name="add" />
     </Circle>
   );

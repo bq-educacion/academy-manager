@@ -10,6 +10,8 @@ import {
   OrderUp,
   Triangle,
   OrderNon,
+  CloseCross,
+  Tick,
 } from "../assets/icons";
 import { colors } from "../theme";
 
@@ -45,6 +47,10 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <OrderDown {...rest} />;
     case "order-non":
       return <OrderNon {...rest} />;
+    case "close-cross":
+      return <CloseCross {...rest} />;
+    case "tick":
+      return <Tick {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

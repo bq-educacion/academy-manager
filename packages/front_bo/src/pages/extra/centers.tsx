@@ -1,9 +1,10 @@
 import { NextPage } from "next";
-import { Layout, Table } from "../../components";
+import { Layout, Modal, Table } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
   colors,
+  Desplegable,
   FirstActionButton,
   Icon,
   styles,
@@ -57,6 +58,8 @@ const CentersPage: NextPage = () => {
     data?.getCenters.data && setTableData(data.getCenters.data);
   }, [data]);
 
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
   //TODO: Advance Search
 
   const route = useRouter();
@@ -65,165 +68,186 @@ const CentersPage: NextPage = () => {
   }
 
   return (
-    <Layout
-      childrenHeader={
-        <>
-          <DivHeader1>
-            <FirstActionButton />
-            <BoldP2>{t("general.sections.links.centers")}</BoldP2>
-          </DivHeader1>
-
-          <DivHeader2>
-            <RelativeDiv
-              onClick={() => {
-                setSearchText(inputText);
-              }}
-            >
-              <Input
-                placeholder={t("components.content-start.search-placeholder")}
-                onChange={(e) => {
-                  setInputText(e.target.value);
-                }}
-                onKeyDownCapture={(e) => {
-                  {
-                    e.key === "Enter" && setSearchText(inputText);
-                  }
+    <>
+      {modalOpen && (
+        <Modal
+          setModal={setModalOpen}
+          title={t("pages.centers.modal-create.step1.title")}
+        >
+          <Desplegable
+            titles={["1", "2", "3", "4", "5"]}
+            setSelected={(txt: string[]) => {
+              txt;
+            }}
+            width={390}
+          />
+        </Modal>
+      )}
+      <Layout
+        childrenHeader={
+          <>
+            <DivHeader1>
+              <FirstActionButton
+                onClick={() => {
+                  setModalOpen(true);
                 }}
               />
-              <LensSearch name="lens" />
-            </RelativeDiv>
-            <AdvanceSearch>
-              <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
-            </AdvanceSearch>
-          </DivHeader2>
-        </>
-      }
-      childrenSubHeader={
-        <SubHeaderDiv>
-          {tableData.length === 0 && (
-            <>
-              <SubHeaderP4>
-                {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
-              </SubHeaderP4>
-              <GreyDivider />
-            </>
-          )}
-          {tableData.length && (
-            <>
-              <SubHeaderP4>
-                {t("pages.paginate.first")} {tableData.length}{" "}
-                {t("pages.paginate.middle")} {pageData.total}{" "}
-              </SubHeaderP4>
-              <GreyDivider />
-            </>
-          )}
-        </SubHeaderDiv>
-      }
-      section={sections[0].title}
-      label={sections[0].links[1].label}
-    >
-      {tableData.length === 0 && searchText !== "" && (
-        <ErrorDiv>
-          <ErrorColumnHeaders>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.name")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.languages")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.population")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.modality")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.type")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-          </ErrorColumnHeaders>
-          <ErrorContainer>
-            <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
-            <styles.P4>
-              {t("pages.centers.search-error.1")}{" "}
-              <a>{t("pages.centers.search-error.2")}</a>
-            </styles.P4>
-          </ErrorContainer>
-        </ErrorDiv>
-      )}
-      {tableData.length === 0 && searchText === "" && (
-        <ErrorDiv>
-          <ErrorColumnHeaders>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.name")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.languages")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.population")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.modality")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.type")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-          </ErrorColumnHeaders>
-          <ErrorContainer>
-            <styles.P4>{t("pages.centers.data-error")}</styles.P4>
-            <styles.P4>
-              <a>{t("pages.centers.data-error-options.0")}</a>{" "}
-              {t("pages.centers.data-error-options.1")}{" "}
-              <a>{t("pages.centers.data-error-options.2")}</a>
-            </styles.P4>
-          </ErrorContainer>
-        </ErrorDiv>
-      )}
-      {tableData.length && (
-        <Table<Partial<Center> & { id: string }>
-          data={tableData}
-          order={order}
-          onSetOrder={setOrder}
-          columns={[
-            {
-              label: t("components.table.name"),
-              key: OrderFilter.Name,
-              content: (item) => <div>{item.name}</div>,
-            },
-            {
-              label: t("components.table.languages"),
-              key: OrderFilter.Languages,
-              content: (item) => <div>{item.languages?.join(", ")}</div>,
-            },
-            {
-              label: t("components.table.population"),
-              key: OrderFilter.Population,
-              content: (item) => <div>{item.population}</div>,
-            },
-            {
-              label: t("components.table.modality"),
-              key: OrderFilter.Modality,
-              content: (item) => <div>{item.modality}</div>,
-            },
-            {
-              label: t("components.table.type"),
-              key: OrderFilter.Type,
-              content: (item) => <div>{item.type}</div>,
-            },
-          ]}
-        />
-      )}
-    </Layout>
+              <BoldP2>{t("general.sections.links.centers")}</BoldP2>
+            </DivHeader1>
+
+            <DivHeader2>
+              <RelativeDiv
+                onClick={() => {
+                  setSearchText(inputText);
+                }}
+              >
+                <Input
+                  placeholder={t("components.content-start.search-placeholder")}
+                  onChange={(e) => {
+                    setInputText(e.target.value);
+                  }}
+                  onKeyDownCapture={(e) => {
+                    {
+                      e.key === "Enter" && setSearchText(inputText);
+                    }
+                  }}
+                />
+                <LensSearch name="lens" />
+              </RelativeDiv>
+              <AdvanceSearch>
+                <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
+              </AdvanceSearch>
+            </DivHeader2>
+          </>
+        }
+        childrenSubHeader={
+          <SubHeaderDiv>
+            {tableData.length === 0 && (
+              <>
+                <SubHeaderP4>
+                  {t("pages.paginate.first")} {0} {t("pages.paginate.middle")}{" "}
+                  {0}{" "}
+                </SubHeaderP4>
+                <GreyDivider />
+              </>
+            )}
+            {tableData.length && (
+              <>
+                <SubHeaderP4>
+                  {t("pages.paginate.first")} {tableData.length}{" "}
+                  {t("pages.paginate.middle")} {pageData.total}{" "}
+                </SubHeaderP4>
+                <GreyDivider />
+              </>
+            )}
+          </SubHeaderDiv>
+        }
+        section={sections[0].title}
+        label={sections[0].links[1].label}
+      >
+        {tableData.length === 0 && searchText !== "" && (
+          <ErrorDiv>
+            <ErrorColumnHeaders>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.name")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.languages")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.population")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.modality")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.type")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+            </ErrorColumnHeaders>
+            <ErrorContainer>
+              <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
+              <styles.P4>
+                {t("pages.centers.search-error.1")}{" "}
+                <a>{t("pages.centers.search-error.2")}</a>
+              </styles.P4>
+            </ErrorContainer>
+          </ErrorDiv>
+        )}
+        {tableData.length === 0 && searchText === "" && (
+          <ErrorDiv>
+            <ErrorColumnHeaders>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.name")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.languages")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.population")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.modality")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+              <ErrorColumnHeader>
+                <BoldP4>{t("components.table.type")}</BoldP4>
+                <Icon name={"order-non"} />
+              </ErrorColumnHeader>
+            </ErrorColumnHeaders>
+            <ErrorContainer>
+              <styles.P4>{t("pages.centers.data-error")}</styles.P4>
+              <styles.P4>
+                <a>{t("pages.centers.data-error-options.0")}</a>{" "}
+                {t("pages.centers.data-error-options.1")}{" "}
+                <a>{t("pages.centers.data-error-options.2")}</a>
+              </styles.P4>
+            </ErrorContainer>
+          </ErrorDiv>
+        )}
+        {tableData.length && (
+          <Table<Partial<Center> & { id: string }>
+            data={tableData}
+            order={order}
+            onSetOrder={setOrder}
+            columns={[
+              {
+                label: t("components.table.name"),
+                key: OrderFilter.Name,
+                content: (item) => <div>{item.name}</div>,
+              },
+              {
+                label: t("components.table.languages"),
+                key: OrderFilter.Languages,
+                content: (item) => <div>{item.languages?.join(", ")}</div>,
+              },
+              {
+                label: t("components.table.population"),
+                key: OrderFilter.Population,
+                content: (item) => <div>{item.population}</div>,
+              },
+              {
+                label: t("components.table.modality"),
+                key: OrderFilter.Modality,
+                content: (item) => <div>{item.modality}</div>,
+              },
+              {
+                label: t("components.table.type"),
+                key: OrderFilter.Type,
+                content: (item) => <div>{item.type}</div>,
+              },
+            ]}
+          />
+        )}
+      </Layout>
+    </>
   );
 };
 

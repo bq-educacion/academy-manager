@@ -4,5 +4,14 @@ import LateralMenu from "./LateralMenu";
 import UserStuff from "./UserStuff";
 import Layout from "./Layout";
 import Table from "./Table";
+import Modal from "./Modal";
 
-export { ContentStart, ErrorContent, LateralMenu, UserStuff, Layout, Table };
+export {
+  ContentStart,
+  ErrorContent,
+  LateralMenu,
+  UserStuff,
+  Layout,
+  Table,
+  Modal,
+};

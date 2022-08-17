@@ -7,6 +7,8 @@ import Add from "./add.svg";
 import OrderDown from "./order-down.svg";
 import OrderUp from "./order-up.svg";
 import OrderNon from "./order-non.svg";
+import CloseCross from "./close-cross.svg";
+import Tick from "./tick.svg";
 
 export {
   ClosePannel,
@@ -18,4 +20,6 @@ export {
   OrderUp,
   OrderDown,
   OrderNon,
+  CloseCross,
+  Tick,
 };

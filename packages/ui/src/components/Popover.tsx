@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { useRef, useState } from "react";
+import React from "react";
+import { useState } from "react";
 import { FC, ReactNode } from "react";
-import { useClickOutside } from "../hooks";
 
 export type PopoverProps = {
   title: ReactNode;
@@ -10,18 +10,16 @@ export type PopoverProps = {
 
 const Popover: FC<PopoverProps> = ({ title, content }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const popoverRef = useRef<HTMLDivElement>(null);
-
-  useClickOutside(popoverRef, () => setIsOpen(false));
 
   return (
-    <PopoverWrapper
-      ref={popoverRef}
-      onClick={() => {
-        setIsOpen(!isOpen);
-      }}
-    >
-      {title}
+    <PopoverWrapper>
+      <PopoverTitle
+        onClick={() => {
+          setIsOpen(!isOpen);
+        }}
+      >
+        {title}
+      </PopoverTitle>
       <PopoverContent open={isOpen}>{content}</PopoverContent>
     </PopoverWrapper>
   );
@@ -33,6 +31,10 @@ const PopoverWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const PopoverTitle = styled.div`
+  margin: 0;
 `;
 
 const PopoverContent = styled.div<{ open: boolean }>`

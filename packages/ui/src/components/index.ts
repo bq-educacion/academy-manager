@@ -7,6 +7,9 @@ import SecondActionButton from "./SecondActionButton";
 import UserButton from "./UserButton";
 import Popover from "./Popover";
 import FirstActionButton from "./FirstActionButton";
+import CloseButton from "./CloseButton";
+import Desplegable from "./Desplegable";
+import CheckBox from "./CheckBox";
 
 export {
   GoogleButton,
@@ -18,4 +21,7 @@ export {
   UserButton,
   Popover,
   FirstActionButton,
+  CloseButton,
+  Desplegable,
+  CheckBox,
 };
