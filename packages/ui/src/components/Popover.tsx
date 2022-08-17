@@ -36,7 +36,7 @@ const PopoverWrapper = styled.div`
 `;
 
 const PopoverContent = styled.div<{ open: boolean }>`
-  display: ${(props) => (props.open ? "block" : "none")};
+  display: ${(props) => (props.open ? "flex" : "none")};
   position: absolute;
   z-index: 20;
   margin-top: 55px;

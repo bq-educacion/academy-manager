@@ -44,7 +44,8 @@ const PopoverContent = styled.div`
   width: 125px;
   height: 51px;
   border-radius: 3px;
-  margin-right: 100px;
+  position: fixed;
+  right: 50px;
   border: solid 1px ${colors.colors.gray4};
   background-color: ${colors.colors.white};
   color: ${colors.colors.black};
