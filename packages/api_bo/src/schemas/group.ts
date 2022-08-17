@@ -18,6 +18,7 @@ export const typeDefs = gql`
 
   enum OrderFilterGroup {
     id_group
+    course
     center
     instructors
     start
@@ -35,7 +36,7 @@ export const typeDefs = gql`
     totalPages: Int!
     totalNumber: Int!
     pageSize: Int!
-    data: [Group]
+    data: [Group!]!
   }
 
   input TimetableInput {
@@ -80,6 +81,14 @@ export const typeDefs = gql`
       notes: String
     ): Group!
 
-    editGroup(id:String!, name: String, type: GroupType,  timetable: [TimetableInput!], notes: String, center: String, instructors: [String!]): Group!
+    editGroup(
+      id:String!,
+      name: String,
+      type: GroupType, 
+      timetable: [TimetableInput!], 
+      notes: String, 
+      center: String, 
+      instructors: [String!]
+    ): Group!
   }
 `;

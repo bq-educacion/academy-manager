@@ -1,11 +1,20 @@
 import { Student } from "../types.ts";
 import { ObjectId } from "objectId";
-import { Database } from "mongo";
+import { Collection, Database } from "mongo";
+import { FindById } from "./types.ts";
 
-export type StudentModel = Omit<Student, "id" | "center"> & {
+export type StudentModel = Omit<Student, "id" | "center" | "group"> & {
   _id?: ObjectId;
   center: ObjectId;
 };
 
-export const studentCollection = (db: Database) =>
-  db.collection<StudentModel>("students");
+export const studentCollection = (
+  db: Database,
+): Collection<StudentModel> & FindById<StudentModel> => {
+  const collection = db.collection<StudentModel>("students");
+  (collection as Collection<StudentModel> & FindById<StudentModel>).findById =
+    function (id: string): Promise<StudentModel | undefined> {
+      return collection.findOne({ _id: new ObjectId(id) });
+    };
+  return collection as Collection<StudentModel> & FindById<StudentModel>;
+};
