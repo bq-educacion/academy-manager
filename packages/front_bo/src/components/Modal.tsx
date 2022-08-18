@@ -17,7 +17,7 @@ const Modal: FC<{
       />
       <ModalWrapper>
         <Header>
-          <BoldP2>{title}</BoldP2>
+          <styles.BoldP2>{title}</styles.BoldP2>
           <CloseButton onClick={() => setModal(false)} />
         </Header>
         <RainbowDivider />
@@ -28,10 +28,6 @@ const Modal: FC<{
 };
 
 export default Modal;
-
-const BoldP2 = styled(styles.P2)`
-  font-weight: bold;
-`;
 
 const Background = styled.div`
   position: fixed;

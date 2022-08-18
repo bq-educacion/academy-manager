@@ -92,7 +92,9 @@ const CentersPage: NextPage = () => {
                   setModalOpen(true);
                 }}
               />
-              <BoldP2>{t("general.sections.links.centers")}</BoldP2>
+              <styles.BoldP2>
+                {t("general.sections.links.centers")}
+              </styles.BoldP2>
             </DivHeader1>
 
             <DivHeader2>
@@ -115,7 +117,9 @@ const CentersPage: NextPage = () => {
                 <LensSearch name="lens" />
               </RelativeDiv>
               <AdvanceSearch>
-                <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
+                <styles.BoldP4>
+                  {t("pages.centers.advance-search")}
+                </styles.BoldP4>
               </AdvanceSearch>
             </DivHeader2>
           </>
@@ -225,14 +229,6 @@ const GreyDivider = styled.div`
   margin: 40px 0 0 20px;
   background-color: ${colors.colors.gray40};
   height: 1px;
-`;
-
-const BoldP2 = styled(styles.P2)`
-  font-weight: bold;
-`;
-
-const BoldP4 = styled(styles.P4)`
-  font-weight: bold;
 `;
 
 const SubHeaderP4 = styled(styles.P4)`

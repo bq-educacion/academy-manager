@@ -6,8 +6,16 @@ export const P1 = styled.p`
   ${fonts.size.huge};
 `;
 
+export const BoldP1 = styled(P1)`
+  font-weight: bold;
+`;
+
 export const P2 = styled.p`
   ${fonts.size.large};
+`;
+
+export const BoldP2 = styled(P2)`
+  font-weight: bold;
 `;
 
 export const P3 = styled.p`
@@ -17,6 +25,10 @@ export const P3 = styled.p`
 
 export const P4 = styled.p`
   ${fonts.size.normal};
+`;
+
+export const BoldP4 = styled(P4)`
+  font-weight: bold;
 `;
 
 export const PG = styled.p`
@@ -51,4 +63,7 @@ export default {
   PG,
   A,
   RainbowDivider,
+  BoldP1,
+  BoldP2,
+  BoldP4,
 };
