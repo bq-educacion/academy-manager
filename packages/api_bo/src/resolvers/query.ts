@@ -9,11 +9,13 @@ import {
 import {
   PaginatedCenters,
   PaginatedGroups,
+  PaginatedStudents,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
   QueryGetStudentArgs,
+  QueryGetStudentsArgs,
 } from "../types.ts";
 import { Filter } from "mongo";
 import { paginatedFilters } from "../lib/paginatedFilters.ts";
@@ -253,12 +255,101 @@ export const Query = {
     }
   },
 
-  getStudents: async (
+  getStudents: (
     _parent: unknown,
-    _args: unknown,
+    args: QueryGetStudentsArgs,
     ctx: Context,
-  ): Promise<StudentModel[]> => {
-    return await studentCollection(ctx.db).find({}).toArray();
+  ): Promise<PaginatedStudents> => {
+    const filter: Filter<PaginatedStudents> = { $or: [{}] };
+    if (args.searchText) {
+      filter["$or"] = [
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { birthDate: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { state: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          registrationDate: { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        { alergies: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          descriptionAllergy: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        { oldStudent: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { signedMandate: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          imageAuthorisation: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          collectionPermit: { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        { goesAlone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          "contacts.name": { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        {
+          "centersName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "groupsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+      ];
+    }
+
+    let sortFilter = {};
+
+    if (args.orderFilter && args.order) {
+      if (args.order !== 1 && args.order !== -1) {
+        throw new Error("400, wrong order (1 or -1)");
+      }
+      switch (args.orderFilter) {
+        case "name":
+          sortFilter = { name: args.order };
+          break;
+        case "course":
+          sortFilter = { course: args.order };
+          break;
+        case "center":
+          sortFilter = { "centersName.name": args.order };
+          break;
+        case "group":
+          sortFilter = { "groupsName.name": args.order };
+          break;
+        case "state":
+          sortFilter = { state: args.order };
+          break;
+        default: // default nameAsc
+          sortFilter = { name: 1 };
+          break;
+      }
+    } else if (args.orderFilter && !args.order) {
+      throw new Error("400, order is required");
+    } else if (!args.orderFilter && args.order) {
+      throw new Error("400, orderFilter is required");
+    } else {
+      sortFilter = { id_group: 1 };
+    }
+
+    return paginatedFilters(
+      studentCollection(ctx.db),
+      filter,
+      "students",
+      sortFilter,
+      args.page,
+      args.pageSize,
+    ) as Promise<PaginatedStudents>;
   },
 
   getStudent: async (
