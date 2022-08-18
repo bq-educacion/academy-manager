@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useTranslate } from "../hooks";
 import { colors, styles } from "../theme";
 import CheckBox from "./CheckBox";
@@ -36,27 +36,29 @@ const DropDown: FC<{
       content={
         <OptionsBox width={width}>
           {titles.map((title) => {
-            const [clickedOption, setClickedOption] = useState<boolean>(false);
-            useEffect(() => {
-              if (clickedOption) {
-                {
-                  selected.find((elem) => elem == title)
-                    ? null
-                    : setSelected([...selected, title]);
-                }
-              } else {
-                setSelected(selected.filter((elem) => elem != title));
-              }
-            }, [clickedOption]);
+            const clicked = selected.includes(title);
             return (
               <OptionBox
                 key={title}
-                clicked={clickedOption}
-                onClick={() => {
-                  setClickedOption(!clickedOption);
-                }}
+                clicked={clicked}
+                onClick={() =>
+                  setSelected(
+                    clicked
+                      ? selected.filter((elem) => elem != title)
+                      : [...selected, title]
+                  )
+                }
               >
-                <CheckBox option={clickedOption} setOption={setClickedOption} />
+                <CheckBox
+                  option={clicked}
+                  setOption={() =>
+                    setSelected(
+                      clicked
+                        ? selected.filter((elem) => elem != title)
+                        : [...selected, title]
+                    )
+                  }
+                />
                 <styles.P4>{title}</styles.P4>
               </OptionBox>
             );
