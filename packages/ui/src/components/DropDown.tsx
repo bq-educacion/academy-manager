@@ -9,10 +9,10 @@ import Popover from "./Popover";
 const DropDown: FC<{
   width: number;
   titles: string[];
+  selected: string[];
   setSelected: (selected: string[]) => void;
-}> = ({ width, titles, setSelected }) => {
+}> = ({ width, titles, setSelected, selected }) => {
   const t = useTranslate();
-  const [selected, setSelectedState] = useState<string[]>([]);
   const [clicked, setClicked] = useState<boolean>(false);
   return (
     <Popover
@@ -42,10 +42,10 @@ const DropDown: FC<{
                 {
                   selected.find((elem) => elem == title)
                     ? null
-                    : setSelectedState([...selected, title]);
+                    : setSelected([...selected, title]);
                 }
               } else {
-                setSelectedState(selected.filter((elem) => elem != title));
+                setSelected(selected.filter((elem) => elem != title));
               }
             }, [clickedOption]);
             return (

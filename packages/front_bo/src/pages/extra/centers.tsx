@@ -67,6 +67,8 @@ const CentersPage: NextPage = () => {
     route.push("/500");
   }
 
+  const [dropDownSelection, setDropDownSelection] = useState<string[]>([]);
+
   return (
     <>
       {modalOpen && (
@@ -76,9 +78,8 @@ const CentersPage: NextPage = () => {
         >
           <DropDown
             titles={["1", "2", "3", "4", "5"]}
-            setSelected={(txt: string[]) => {
-              txt;
-            }}
+            selected={dropDownSelection}
+            setSelected={setDropDownSelection}
             width={390}
           />
         </Modal>
