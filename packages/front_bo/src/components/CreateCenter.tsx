@@ -10,7 +10,13 @@ import {
 import styled from "@emotion/styled";
 import { FC, useState } from "react";
 import { centerLanguages } from "../config";
-import { CenterModality, CenterNature, CenterType } from "../generated/graphql";
+import {
+  CenterContact,
+  CenterModality,
+  CenterNature,
+  CenterType,
+} from "../generated/graphql";
+import AddContacts from "./AddContacts";
 
 const CreateCenter: FC<{ close: (action: boolean) => void }> = ({ close }) => {
   const t = useTranslate();
@@ -33,6 +39,7 @@ const CreateCenter: FC<{ close: (action: boolean) => void }> = ({ close }) => {
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [numberOfContacts, setNumberOfContacts] = useState<number>(1);
+  const [contacts, setContacts] = useState<CenterContact[]>([]);
 
   return (
     <Form>
@@ -209,50 +216,11 @@ const CreateCenter: FC<{ close: (action: boolean) => void }> = ({ close }) => {
             <TitleStep3>
               {t(`components.create-center.${step}.title`)}
             </TitleStep3>
-            {Array(numberOfContacts)
-              .fill(0)
-              .map(() => (
-                <ContactDiv quantity={numberOfContacts}>
-                  <FillIn>
-                    <styles.BoldP4>
-                      {t(`components.create-center.3.subtitle.name`)}
-                    </styles.BoldP4>
-                    <InputSuper
-                      placeholder={t(
-                        "components.create-center.3.subtitle.name-placeholder"
-                      )}
-                      input={name}
-                      setInput={setName}
-                    />
-                  </FillIn>
-                  <FillInSectioned>
-                    <FillIn width="122px">
-                      <styles.BoldP4>
-                        {t(`components.create-center.3.subtitle.phone`)}
-                      </styles.BoldP4>
-                      <InputSuper
-                        placeholder={t(
-                          "components.create-center.3.subtitle.phone"
-                        )}
-                        input={address}
-                        setInput={setAddress}
-                      />
-                    </FillIn>
-                    <FillIn width="258px">
-                      <styles.BoldP4>
-                        {t(`components.create-center.2.subtitle.email`)}
-                      </styles.BoldP4>
-                      <InputSuper
-                        placeholder={t(
-                          "components.create-center.2.subtitle.email-placeholder"
-                        )}
-                        input={population}
-                        setInput={setPopulation}
-                      />
-                    </FillIn>
-                  </FillInSectioned>
-                </ContactDiv>
-              ))}
+            <AddContacts
+              numberOfContacts={numberOfContacts}
+              contacts={contacts}
+              setContacts={setContacts}
+            />
             <button
               onClick={() => {
                 setNumberOfContacts(numberOfContacts + 1);
@@ -294,7 +262,7 @@ const Form = styled.div`
   }
 `;
 
-const FillInSectioned = styled.div`
+export const FillInSectioned = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -302,7 +270,7 @@ const FillInSectioned = styled.div`
     margin-left: 10px;
   }
 `;
-const FillIn = styled.div<{ width?: string }>`
+export const FillIn = styled.div<{ width?: string }>`
   display: flex;
   ${({ width }) => (width ? `width: ${width}` : "width: 100%")};
   flex-direction: column;
@@ -344,9 +312,4 @@ const NavDivStep3 = styled.div`
   padding: 20px 45px 39px 45px;
   margin: -30px -45px;
   background-color: ${colors.colors.white};
-`;
-const ContactDiv = styled.div<{ quantity: number }>`
-  margin: 0;
-  ${({ quantity }) =>
-    quantity > 1 && `border-bottom: 1px solid ${colors.colors.grayBlue}`}; ;
 `;
