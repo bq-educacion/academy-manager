@@ -39,10 +39,7 @@ const Background = styled.div`
 `;
 
 const ModalContent = styled.div`
-  margin: 30px 0;
-  & > * {
-    margin: 0 45px;
-  }
+  padding: 30px 45px;
 `;
 
 const ModalWrapper = styled.div`
