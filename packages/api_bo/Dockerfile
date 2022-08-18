@@ -5,7 +5,7 @@ WORKDIR /usr/src/app/
 
 COPY . .
 WORKDIR /usr/src/app/packages/api_bo
-
+RUN deno cache src/app.ts
 RUN chmod a+x /usr/src/app/packages/api_bo/docker-entrypoint.sh
 
 EXPOSE 3000
