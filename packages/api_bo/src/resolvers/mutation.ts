@@ -288,7 +288,7 @@ export const Mutation = {
       }
 
       const [d, m, y] = args.birthDate.split("/");
-      if (d === undefined || m === undefined || y === undefined) {
+      if (!d || !m || !y) {
         throw new Error("400, Invalid birthDate");
       }
       const date = new Date(`${y}/${m}/${d}`).toString();
@@ -402,7 +402,7 @@ export const Mutation = {
 
       if (args.birthDate) {
         const [d, m, y] = args.birthDate.split("/");
-        if (d === undefined || m === undefined || y === undefined) {
+        if (!d || !m || !y) {
           throw new Error("400, Invalid birthDate");
         }
         const date = new Date(`${y}/${m}/${d}`).toString();
