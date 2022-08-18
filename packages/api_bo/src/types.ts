@@ -143,6 +143,8 @@ export type Mutation = {
   editCenter: Center;
   editCenterContacts: CenterContact;
   editGroup: Group;
+  editStudent: Student;
+  editStudentContacts: StudentContact;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -236,6 +238,32 @@ export type MutationEditGroupArgs = {
   type?: InputMaybe<GroupType>;
 };
 
+export type MutationEditStudentArgs = {
+  alergies?: InputMaybe<Scalars["Boolean"]>;
+  birthDate?: InputMaybe<Scalars["String"]>;
+  collectionPermit?: InputMaybe<Scalars["String"]>;
+  course?: InputMaybe<Scalars["String"]>;
+  descriptionAllergy?: InputMaybe<Scalars["String"]>;
+  group?: InputMaybe<Scalars["String"]>;
+  id: Scalars["String"];
+  imageAuthorisation?: InputMaybe<Scalars["Boolean"]>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  oldStudent?: InputMaybe<Scalars["Boolean"]>;
+  registrationDate?: InputMaybe<Scalars["String"]>;
+  signedMandate?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type MutationEditStudentContactsArgs = {
+  email?: InputMaybe<Scalars["String"]>;
+  idStudent: Scalars["String"];
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  originEmail: Scalars["String"];
+  phone?: InputMaybe<Scalars["String"]>;
+  send_info?: InputMaybe<Scalars["Boolean"]>;
+};
+
 export enum OrderFilter {
   Languages = "languages",
   Modality = "modality",
@@ -252,6 +280,14 @@ export enum OrderFilterGroup {
   IdGroup = "id_group",
   Instructors = "instructors",
   Start = "start",
+}
+
+export enum OrderFilterStudent {
+  Center = "center",
+  Course = "course",
+  Group = "group",
+  Name = "name",
+  State = "state",
 }
 
 export type PaginatedCenters = {
@@ -272,6 +308,15 @@ export type PaginatedGroups = {
   totalPages: Scalars["Int"];
 };
 
+export type PaginatedStudents = {
+  __typename?: "PaginatedStudents";
+  data: Array<Student>;
+  page: Scalars["Int"];
+  pageSize: Scalars["Int"];
+  totalNumber: Scalars["Int"];
+  totalPages: Scalars["Int"];
+};
+
 export type Query = {
   __typename?: "Query";
   getCenter: Center;
@@ -279,7 +324,7 @@ export type Query = {
   getGroup: Group;
   getGroups: PaginatedGroups;
   getStudent: Student;
-  getStudents?: Maybe<Array<Student>>;
+  getStudents: PaginatedStudents;
 };
 
 export type QueryGetCenterArgs = {
@@ -308,6 +353,14 @@ export type QueryGetGroupsArgs = {
 
 export type QueryGetStudentArgs = {
   id: Scalars["String"];
+};
+
+export type QueryGetStudentsArgs = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterStudent>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
 };
 
 export enum StateInstructor {
@@ -496,8 +549,10 @@ export type ResolversTypes = ResolversObject<{
   Number: ResolverTypeWrapper<Scalars["Number"]>;
   OrderFilter: OrderFilter;
   OrderFilterGroup: OrderFilterGroup;
+  OrderFilterStudent: OrderFilterStudent;
   PaginatedCenters: ResolverTypeWrapper<PaginatedCenters>;
   PaginatedGroups: ResolverTypeWrapper<PaginatedGroups>;
+  PaginatedStudents: ResolverTypeWrapper<PaginatedStudents>;
   Query: ResolverTypeWrapper<{}>;
   StateInstructor: StateInstructor;
   String: ResolverTypeWrapper<Scalars["String"]>;
@@ -522,6 +577,7 @@ export type ResolversParentTypes = ResolversObject<{
   Number: Scalars["Number"];
   PaginatedCenters: PaginatedCenters;
   PaginatedGroups: PaginatedGroups;
+  PaginatedStudents: PaginatedStudents;
   Query: {};
   String: Scalars["String"];
   Student: Student;
@@ -785,6 +841,18 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationEditGroupArgs, "id">
   >;
+  editStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditStudentArgs, "id">
+  >;
+  editStudentContacts?: Resolver<
+    ResolversTypes["StudentContact"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditStudentContactsArgs, "idStudent" | "originEmail">
+  >;
 }>;
 
 export interface NumberScalarConfig
@@ -811,6 +879,19 @@ export type PaginatedGroupsResolvers<
     ResolversParentTypes["PaginatedGroups"],
 > = ResolversObject<{
   data?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
+  page?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageSize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalNumber?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalPages?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PaginatedStudentsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["PaginatedStudents"] =
+    ResolversParentTypes["PaginatedStudents"],
+> = ResolversObject<{
+  data?: Resolver<Array<ResolversTypes["Student"]>, ParentType, ContextType>;
   page?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageSize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   totalNumber?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -854,9 +935,10 @@ export type QueryResolvers<
     RequireFields<QueryGetStudentArgs, "id">
   >;
   getStudents?: Resolver<
-    Maybe<Array<ResolversTypes["Student"]>>,
+    ResolversTypes["PaginatedStudents"],
     ParentType,
-    ContextType
+    ContextType,
+    Partial<QueryGetStudentsArgs>
   >;
 }>;
 
@@ -939,6 +1021,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Number?: GraphQLScalarType;
   PaginatedCenters?: PaginatedCentersResolvers<ContextType>;
   PaginatedGroups?: PaginatedGroupsResolvers<ContextType>;
+  PaginatedStudents?: PaginatedStudentsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
   StudentContact?: StudentContactResolvers<ContextType>;

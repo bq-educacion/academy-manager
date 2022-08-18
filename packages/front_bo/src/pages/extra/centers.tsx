@@ -38,7 +38,7 @@ const CentersPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error } = useGetCentersFQuery({
+  const { data, error, refetch } = useGetCentersFQuery({
     variables: {
       searchText: searchText,
       orderFilter: order.key,
@@ -47,6 +47,10 @@ const CentersPage: NextPage = () => {
       pageSize: 20,
     },
   });
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     data &&

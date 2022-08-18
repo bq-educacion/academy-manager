@@ -1,12 +1,18 @@
 import { Collection, Filter } from "mongo";
 import { CenterModel } from "../models/CenterModel.ts";
 import { GroupModel } from "../models/GroupModel.ts";
-import { InputMaybe, PaginatedCenters, PaginatedGroups } from "../types.ts";
+import { StudentModel } from "../models/StudentModel.ts";
+import {
+  InputMaybe,
+  PaginatedCenters,
+  PaginatedGroups,
+  PaginatedStudents,
+} from "../types.ts";
 
 export const paginatedFilters = async (
-  DBModel: Collection<CenterModel | GroupModel>,
-  filter: Filter<PaginatedCenters | PaginatedGroups>,
-  check: "centers" | "groups",
+  DBModel: Collection<CenterModel | GroupModel | StudentModel>,
+  filter: Filter<PaginatedCenters | PaginatedGroups | PaginatedStudents>,
+  check: "centers" | "groups" | "students",
   sortFilter: unknown,
   pageArgs?: InputMaybe<number>,
   pageSizeArgs?: InputMaybe<number>,
@@ -45,6 +51,22 @@ export const paginatedFilters = async (
           localField: "instructors",
           foreignField: "_id",
           as: "instructorsName",
+        },
+      });
+    } else if (check === "students") {
+      lookup.push({
+        $lookup: {
+          from: "groups",
+          localField: "_id",
+          foreignField: "students",
+          as: "groupsName",
+        },
+      }, {
+        $lookup: {
+          from: "centers",
+          localField: "groupsName.center",
+          foreignField: "_id",
+          as: "centersName",
         },
       });
     }
