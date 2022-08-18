@@ -7,7 +7,7 @@ import Icon from "./Icon";
 import Popover from "./Popover";
 
 const DropDown: FC<{
-  width: number;
+  width: string;
   titles: string[];
   selected: string[];
   setSelected: (selected: string[]) => void;
@@ -87,13 +87,13 @@ const OptionBox = styled.div<{ clicked: boolean }>`
   }
 `;
 
-const InputBox = styled.div<{ clicked: boolean; width: number }>`
+const InputBox = styled.div<{ clicked: boolean; width: string }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 0 20px;
   height: 40px;
-  width: ${(props) => props.width}px;
+  width: ${(props) => props.width};
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray2};
   color: ${colors.colors.grayBlue2};
@@ -112,12 +112,12 @@ const InputBox = styled.div<{ clicked: boolean; width: number }>`
   }
 `;
 
-const OptionsBox = styled.div<{ width: number }>`
+const OptionsBox = styled.div<{ width: string }>`
   position: relative;
   left: 20px;
   top: -22px;
   background-color: ${colors.colors.white};
-  width: ${(props) => props.width}px;
+  width: ${(props) => props.width};
   height: 150px;
   border: solid 1px ${colors.colors.gray4};
   box-shadow: 0 10px 20px 0 ${colors.colors.shadow2};

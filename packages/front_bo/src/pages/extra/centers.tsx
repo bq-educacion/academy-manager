@@ -80,7 +80,7 @@ const CentersPage: NextPage = () => {
             titles={["1", "2", "3", "4", "5"]}
             selected={dropDownSelection}
             setSelected={setDropDownSelection}
-            width={390}
+            width="390px"
           />
         </Modal>
       )}
