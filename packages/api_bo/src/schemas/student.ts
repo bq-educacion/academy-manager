@@ -102,5 +102,15 @@ export const typeDefs = gql`
       imageAuthorisation: Boolean,
       collectionPermit: String,
       notes: String): Student!
+
+    editStudentContacts(
+      idStudent: String!
+      originEmail: String!
+      name: String
+      email: String
+      phone: String
+      send_info: Boolean
+      notes: String
+    ): StudentContact!
   }
 `;

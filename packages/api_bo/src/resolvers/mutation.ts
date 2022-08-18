@@ -9,6 +9,7 @@ import {
   MutationEditCenterContactsArgs,
   MutationEditGroupArgs,
   MutationEditStudentArgs,
+  MutationEditStudentContactsArgs,
   StudentContact,
   StudentState,
 } from "../types.ts";
@@ -423,6 +424,57 @@ export const Mutation = {
         throw new Error("404, Student not found");
       }
       return newStudent;
+    } catch (error) {
+      throw new Error("500, " + error);
+    }
+  },
+
+  editStudentContacts: async (
+    _parent: unknown,
+    args: MutationEditStudentContactsArgs,
+    ctx: Context,
+  ): Promise<StudentContact> => {
+    try {
+      const contactsStudents = await studentCollection(ctx.db)
+        .find(
+          {
+            _id: new ObjectId(args.idStudent),
+            contacts: { $elemMatch: { email: args.originEmail } },
+          },
+          { projection: { _id: 0, contacts: 1 } },
+        )
+        .toArray();
+
+      if (contactsStudents.length === 0) {
+        throw new Error("404, Student or contact not found");
+      }
+
+      let contactUpdate = {};
+
+      const updateContacts = contactsStudents[0].contacts?.map((contact) => {
+        if (contact.email === args.originEmail) {
+          contactUpdate = {
+            name: args.name || contact.name,
+            email: args.email || contact.email,
+            phone: args.phone || contact.phone,
+            send_info: args.send_info === undefined
+              ? contact.send_info
+              : args.send_info,
+            notes: args.notes || contact.notes,
+          };
+          return contactUpdate;
+        }
+        return contact;
+      }) as StudentContact[];
+
+      await studentCollection(ctx.db).updateOne(
+        {
+          _id: new ObjectId(args.idStudent),
+        },
+        { $set: { contacts: updateContacts } },
+      );
+
+      return contactUpdate as StudentContact;
     } catch (error) {
       throw new Error("500, " + error);
     }

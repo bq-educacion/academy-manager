@@ -144,6 +144,7 @@ export type Mutation = {
   editCenterContacts: CenterContact;
   editGroup: Group;
   editStudent: Student;
+  editStudentContacts: StudentContact;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -251,6 +252,16 @@ export type MutationEditStudentArgs = {
   oldStudent?: InputMaybe<Scalars["Boolean"]>;
   registrationDate?: InputMaybe<Scalars["String"]>;
   signedMandate?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type MutationEditStudentContactsArgs = {
+  email?: InputMaybe<Scalars["String"]>;
+  idStudent: Scalars["String"];
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  originEmail: Scalars["String"];
+  phone?: InputMaybe<Scalars["String"]>;
+  send_info?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export enum OrderFilter {
@@ -835,6 +846,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationEditStudentArgs, "id">
+  >;
+  editStudentContacts?: Resolver<
+    ResolversTypes["StudentContact"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditStudentContactsArgs, "idStudent" | "originEmail">
   >;
 }>;
 
