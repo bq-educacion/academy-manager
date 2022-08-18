@@ -20,3 +20,5 @@ export const sections: ISection[] = [
     ],
   },
 ];
+
+export const centerLanguages: string[] = ["English", "Spanish"];

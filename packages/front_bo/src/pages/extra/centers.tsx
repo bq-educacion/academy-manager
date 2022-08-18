@@ -4,7 +4,6 @@ import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
   colors,
-  DropDown,
   FirstActionButton,
   Icon,
   styles,
@@ -18,6 +17,7 @@ import {
   useGetCentersFQuery,
 } from "../../generated/graphql";
 import { useRouter } from "next/router";
+import CreateCenter from "../../components/CreateCenter";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -67,21 +67,14 @@ const CentersPage: NextPage = () => {
     route.push("/500");
   }
 
-  const [dropDownSelection, setDropDownSelection] = useState<string[]>([]);
-
   return (
     <>
       {modalOpen && (
         <Modal
           setModal={setModalOpen}
-          title={t("pages.centers.modal-create.step1.title")}
+          title={t("pages.centers.modal-create.center.title")}
         >
-          <DropDown
-            titles={["1", "2", "3", "4", "5"]}
-            selected={dropDownSelection}
-            setSelected={setDropDownSelection}
-            width="390px"
-          />
+          <CreateCenter close={setModalOpen} />
         </Modal>
       )}
       <Layout

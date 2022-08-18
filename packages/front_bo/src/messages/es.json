@@ -27,6 +27,45 @@
     },
     "Dropdown": {
       "title": "Seleccionar"
+    },
+    "create-center": {
+      "1": {
+        "title": "Paso 1 de 3 - Datos generales",
+        "subtitle": {
+          "type": "Tipo",
+          "modality": "Modalidad",
+          "nature": "Naturaleza",
+          "languages": "Idiomas"
+        }
+      },
+      "2": {
+        "title": "Paso 2 de 3 - Información del centro",
+        "subtitle": {
+          "name": "Nombre del Centro",
+          "name-placeholder": "Nombre completo del centro",
+          "address": "Dirección del centro",
+          "address-placeholder": "Calle y el número",
+          "population": "Población",
+          "phone": "Teléfono (Opcional)",
+          "phone-placeholder": "Teléfono",
+          "email": "Email (Opcional)",
+          "email-placeholder": "Dirección de correo electrónico"
+        }
+      },
+      "3": {
+        "title": "Paso 3 de 3 - Contacto",
+        "subtitle": {
+          "name": "Persona de contacto",
+          "name-placeholder": "Nombre de la persona de contacto",
+          "phone": "Teléfono",
+          "email": "Email",
+          "email-placeholder": "Dirección de correo electrónico"
+        },
+        "create": "Crear"
+      },
+      "4": {
+        "title": "El centro ha sido creado satisfactoriamente."
+      }
     }
   },
   "general": {
@@ -39,6 +78,11 @@
         "students": "Alumnos",
         "monitors": "Monitores"
       }
+    },
+    "actions": {
+      "back": "Atrás",
+      "next": "Continuar",
+      "cancel": "Cancelar"
     }
   },
   "pages": {
@@ -63,7 +107,7 @@
         "2": "refinar búsqueda"
       },
       "modal-create": {
-        "step1": {
+        "center": {
           "title": "Crear centro"
         }
       }

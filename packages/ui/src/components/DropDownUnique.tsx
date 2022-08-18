@@ -2,15 +2,14 @@ import styled from "@emotion/styled";
 import { FC, useState } from "react";
 import { useTranslate } from "../hooks";
 import { colors, styles } from "../theme";
-import CheckBox from "./CheckBox";
 import Icon from "./Icon";
 import Popover from "./Popover";
 
-const DropDown: FC<{
+const DropDownUnique: FC<{
   width: string;
   titles: string[];
-  selected: string[];
-  setSelected: (selected: string[]) => void;
+  selected?: string;
+  setSelected: (selected: string) => void;
 }> = ({ width, titles, setSelected, selected }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
@@ -20,15 +19,12 @@ const DropDown: FC<{
         <InputBox
           onClick={() => {
             setClicked(!clicked);
-            setSelected(selected);
           }}
           clicked={clicked}
           width={width}
         >
           <styles.P4>
-            {selected.length === 0
-              ? t("components.Dropdown.title")
-              : selected.join(", ")}
+            {!selected ? t("components.Dropdown.title") : selected}
           </styles.P4>
           <Icon name="triangle" />
         </InputBox>
@@ -36,29 +32,14 @@ const DropDown: FC<{
       content={
         <OptionsBox width={width}>
           {titles.map((title) => {
-            const clicked = selected.includes(title);
+            const clicked = selected === title;
             return (
               <OptionBox
                 key={title}
                 clicked={clicked}
-                onClick={() =>
-                  setSelected(
-                    clicked
-                      ? selected.filter((elem) => elem != title)
-                      : [...selected, title]
-                  )
-                }
+                onClick={() => setSelected(title)}
               >
-                <CheckBox
-                  option={clicked}
-                  setOption={() =>
-                    setSelected(
-                      clicked
-                        ? selected.filter((elem) => elem != title)
-                        : [...selected, title]
-                    )
-                  }
-                />
+                {clicked && <Check name="tick" />}
                 <styles.P4>{title}</styles.P4>
               </OptionBox>
             );
@@ -69,7 +50,7 @@ const DropDown: FC<{
   );
 };
 
-export default DropDown;
+export default DropDownUnique;
 
 const OptionBox = styled.div<{ clicked: boolean }>`
   display: flex;
@@ -78,10 +59,9 @@ const OptionBox = styled.div<{ clicked: boolean }>`
   justify-content: flex-start;
   cursor: pointer;
   padding: 3px 0;
-  padding-left: 20px;
+  padding: 0 20px;
   height: 26px;
   & > p {
-    margin-left: 10px;
     ${(props) => props.clicked && `font-weight: bold;`}
   }
   &:hover {
@@ -100,7 +80,7 @@ const InputBox = styled.div<{ clicked: boolean; width: string }>`
   border: solid 1px ${colors.colors.gray2};
   color: ${colors.colors.grayBlue2};
   cursor: pointer;
-  overflow: scroll;
+  overflow-y: hidden;
   & > svg {
     transform-origin: center;
     transition: transform 0.2s ease-in-out;
@@ -128,4 +108,8 @@ const OptionsBox = styled.div<{ width: string }>`
   box-shadow: 0 10px 20px 0 ${colors.colors.shadow2};
   border-radius: 3px;
   overflow-y: scroll;
+`;
+
+const Check = styled(Icon)`
+  color: ${colors.colors.grayBlue2};
 `;

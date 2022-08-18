@@ -54,7 +54,7 @@ const ModalWrapper = styled.div`
   width: 480px;
   height: auto;
   min-height: 150px;
-  max-height: 575px;
+  max-height: 800px;
   background-color: ${colors.colors.white};
 `;
 
