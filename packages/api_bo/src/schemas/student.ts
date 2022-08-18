@@ -61,6 +61,7 @@ export const typeDefs = gql`
 
     getStudent(id: String!): Student!
   }
+  
   extend type Mutation {
     createStudent(
       idCenter: String!
@@ -86,6 +87,20 @@ export const typeDefs = gql`
       send_info: Boolean!
       notes: String
     ): StudentContact!
-
+    
+    editStudent(
+      id:String!,
+      group: String,
+      course: String,
+      registrationDate: String,
+      name: String,
+      birthDate: String,
+      alergies: Boolean,
+      descriptionAllergy: String,
+      oldStudent: Boolean,
+      signedMandate: Boolean,
+      imageAuthorisation: Boolean,
+      collectionPermit: String,
+      notes: String): Student!
   }
 `;
