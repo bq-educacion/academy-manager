@@ -63,6 +63,9 @@ const CentersPage: NextPage = () => {
   }, [data]);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalTitle, setModalTitle] = useState<string>(
+    t("pages.centers.modal-create.center.title")
+  );
 
   //TODO: Advance Search
 
@@ -76,9 +79,10 @@ const CentersPage: NextPage = () => {
       {modalOpen && (
         <Modal
           setModal={setModalOpen}
-          title={t("pages.centers.modal-create.center.title")}
+          title={modalTitle}
+          endTitle={t("pages.centers.modal-create.center.end-title")}
         >
-          <CreateCenter close={setModalOpen} />
+          <CreateCenter changeTitle={setModalTitle} close={setModalOpen} />
         </Modal>
       )}
       <Layout

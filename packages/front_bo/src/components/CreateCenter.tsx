@@ -2,6 +2,7 @@ import {
   colors,
   DropDown,
   DropDownUnique,
+  Icon,
   InputSuper,
   MButton,
   styles,
@@ -11,17 +12,23 @@ import styled from "@emotion/styled";
 import { FC, useState } from "react";
 import { centerLanguages } from "../config";
 import {
+  CenterActivityTypes,
   CenterContact,
   CenterModality,
   CenterNature,
   CenterType,
+  useCreateCenterMutation,
 } from "../generated/graphql";
-import AddContacts from "./AddContacts";
+import AddContact from "./AddContact";
 
-const CreateCenter: FC<{ close: (action: boolean) => void }> = ({ close }) => {
+const CreateCenter: FC<{
+  changeTitle: (title: string) => void;
+  close: (action: boolean) => void;
+}> = ({ close, changeTitle }) => {
   const t = useTranslate();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [finish, setFinish] = useState<boolean>(false);
 
   const [typeSelection, setTypeSelection] = useState<CenterType | undefined>(
     undefined
@@ -39,7 +46,23 @@ const CreateCenter: FC<{ close: (action: boolean) => void }> = ({ close }) => {
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [numberOfContacts, setNumberOfContacts] = useState<number>(1);
-  const [contacts, setContacts] = useState<CenterContact[]>([]);
+  const [contacts] = useState<CenterContact[]>([]);
+
+  const [createCenterMutation] = useCreateCenterMutation({
+    variables: {
+      name: name,
+      address: address,
+      population: population,
+      phone: phone,
+      email: email,
+      type: typeSelection as CenterType,
+      activityTypes: CenterActivityTypes.Workshops,
+      modality: modalitySelection as CenterModality,
+      nature: natureSelection as CenterNature,
+      course: "",
+      languages: languagesSelection,
+    },
+  });
 
   return (
     <Form>
@@ -216,16 +239,33 @@ const CreateCenter: FC<{ close: (action: boolean) => void }> = ({ close }) => {
             <TitleStep3>
               {t(`components.create-center.${step}.title`)}
             </TitleStep3>
-            <AddContacts
-              numberOfContacts={numberOfContacts}
-              contacts={contacts}
-              setContacts={setContacts}
-            />
-            <button
+            {Array(numberOfContacts)
+              .fill(0)
+              .map((elem, index) => {
+                return (
+                  <AddContact
+                    key={index}
+                    setNumberOfContacts={setNumberOfContacts}
+                    numberOfContacts={numberOfContacts}
+                    setContact={(contact) => {
+                      contacts.push(contact);
+                    }}
+                    finish={finish}
+                  />
+                );
+              })}
+            <AddContactButton
               onClick={() => {
+                setFinish(false);
                 setNumberOfContacts(numberOfContacts + 1);
               }}
-            ></button>
+            >
+              <Icon name="add" />
+              <Icon name="user" />
+              <styles.BoldP4>
+                {t("components.create-center.3.add-contact")}
+              </styles.BoldP4>
+            </AddContactButton>
           </ContactsDiv>
           <NavDivStep3>
             <MButton
@@ -235,12 +275,29 @@ const CreateCenter: FC<{ close: (action: boolean) => void }> = ({ close }) => {
               backColor={colors.colors.gray60}
             />
             <MButton
-              Click={() => setStep(4)}
+              Click={() => {
+                setFinish(true);
+                changeTitle("");
+                setTimeout(() => {
+                  setStep(4);
+                }, 100);
+              }}
               text={t("components.create-center.3.create")}
               color={colors.colors.white}
               backColor={colors.colors.green80}
             />
           </NavDivStep3>
+        </>
+      )}
+      {step === 4 && (
+        <>
+          <EndButton
+            Click={() => {
+              createCenterMutation();
+              close(false);
+            }}
+            text={t("general.actions.consent")}
+          />
         </>
       )}
     </Form>
@@ -312,4 +369,21 @@ const NavDivStep3 = styled.div`
   padding: 20px 45px 39px 45px;
   margin: -30px -45px;
   background-color: ${colors.colors.white};
+`;
+
+const AddContactButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: ${colors.colors.white};
+  color: ${colors.colors.blue80};
+  & > p {
+    margin-left: 5px;
+  }
+`;
+
+const EndButton = styled(MButton)`
+  align-self: flex-start;
 `;

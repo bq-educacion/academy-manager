@@ -34,7 +34,6 @@ query GetCenters(
       contacts {
         phone
         email
-        surname
         name
       }
       groups {

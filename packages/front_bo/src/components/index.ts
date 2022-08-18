@@ -5,6 +5,7 @@ import UserStuff from "./UserStuff";
 import Layout from "./Layout";
 import Table from "./Table";
 import Modal from "./Modal";
+import AddContact from "./AddContact";
 
 export {
   ContentStart,
@@ -14,4 +15,5 @@ export {
   Layout,
   Table,
   Modal,
+  AddContact,
 };
