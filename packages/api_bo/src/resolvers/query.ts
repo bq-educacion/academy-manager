@@ -9,11 +9,13 @@ import {
 import {
   PaginatedCenters,
   PaginatedGroups,
+  PaginatedStudents,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
   QueryGetStudentArgs,
+  QueryGetStudentsArgs,
 } from "../types.ts";
 import { Filter } from "mongo";
 import { paginatedFilters } from "../lib/paginatedFilters.ts";
@@ -66,44 +68,25 @@ export const Query = {
       ];
     }
 
-    const sortFilter: {
-      name?: number;
-      languages?: number;
-      population?: number;
-      modality?: number;
-      type?: number;
-    } = {};
-
+    let sortFilter = {};
+    const OrderFilter = {
+      name: "name",
+      languages: "languages",
+      population: "population",
+      modality: "modality",
+      type: "type",
+    };
     if (args.orderFilter && args.order) {
       if (args.order !== 1 && args.order !== -1) {
         throw new Error("400, wrong order (1 or -1)");
       }
-      switch (args.orderFilter) {
-        case "name":
-          sortFilter.name = args.order;
-          break;
-        case "languages":
-          sortFilter.languages = args.order;
-          break;
-        case "population":
-          sortFilter.population = args.order;
-          break;
-        case "modality":
-          sortFilter.modality = args.order;
-          break;
-        case "type":
-          sortFilter.type = args.order;
-          break;
-        default: // default nameAZ
-          sortFilter.name = 1;
-          break;
-      }
+      sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
     } else if (args.orderFilter && !args.order) {
       throw new Error("400, order is required");
     } else if (!args.orderFilter && args.order) {
       throw new Error("400, orderFilter is required");
     } else {
-      sortFilter.name = 1;
+      sortFilter = { name: 1 };
     }
 
     return paginatedFilters(
@@ -188,37 +171,21 @@ export const Query = {
     }
 
     let sortFilter = {};
+    const OrderFilter = {
+      id_group: "id_group",
+      course: "course",
+      instructors: "instructorsName.name",
+      center: "centersName.name",
+      id_day: "timetable.id_day",
+      start: "timetable.start",
+      end: "timetable.end",
+    };
 
     if (args.orderFilter && args.order) {
       if (args.order !== 1 && args.order !== -1) {
         throw new Error("400, wrong order (1 or -1)");
       }
-      switch (args.orderFilter) {
-        case "id_group":
-          sortFilter = { id_group: args.order };
-          break;
-        case "course":
-          sortFilter = { course: args.order };
-          break;
-        case "center":
-          sortFilter = { "centersName.name": args.order };
-          break;
-        case "instructors":
-          sortFilter = { "instructorsName.name": args.order };
-          break;
-        case "id_day":
-          sortFilter = { "timetable.id_day": args.order };
-          break;
-        case "start":
-          sortFilter = { "timetable.start": args.order };
-          break;
-        case "end":
-          sortFilter = { "timetable.end": args.order };
-          break;
-        default: // default id_groupAsc
-          sortFilter = { id_group: 1 };
-          break;
-      }
+      sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
     } else if (args.orderFilter && !args.order) {
       throw new Error("400, order is required");
     } else if (!args.orderFilter && args.order) {
@@ -253,12 +220,79 @@ export const Query = {
     }
   },
 
-  getStudents: async (
+  getStudents: (
     _parent: unknown,
-    _args: unknown,
+    args: QueryGetStudentsArgs,
     ctx: Context,
-  ): Promise<StudentModel[]> => {
-    return await studentCollection(ctx.db).find({}).toArray();
+  ): Promise<PaginatedStudents> => {
+    const filter: Filter<PaginatedStudents> = { $or: [{}] };
+    if (args.searchText) {
+      filter["$or"] = [
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { birthDate: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { state: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          registrationDate: { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        {
+          descriptionAllergy: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          collectionPermit: { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          "contacts.name": { $regex: `.*${args.searchText}.*`, $options: "i" },
+        },
+        {
+          "centersName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "groupsName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+      ];
+    }
+
+    let sortFilter = {};
+    const OrderFilter = {
+      name: "name",
+      course: "course",
+      state: "state",
+      center: "centersName.name",
+      group: "groupsName.name",
+    };
+
+    if (args.orderFilter && args.order) {
+      if (args.order !== 1 && args.order !== -1) {
+        throw new Error("400, wrong order (1 or -1)");
+      }
+      sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
+    } else if (args.orderFilter && !args.order) {
+      throw new Error("400, order is required");
+    } else if (!args.orderFilter && args.order) {
+      throw new Error("400, orderFilter is required");
+    } else {
+      sortFilter = { name: 1 };
+    }
+
+    return paginatedFilters(
+      studentCollection(ctx.db),
+      filter,
+      "students",
+      sortFilter,
+      args.page,
+      args.pageSize,
+    ) as Promise<PaginatedStudents>;
   },
 
   getStudent: async (

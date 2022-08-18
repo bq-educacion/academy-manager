@@ -6,6 +6,22 @@ export const typeDefs = gql`
     WITHDRAWN
   }
 
+  enum OrderFilterStudent {
+    name
+    center
+    group
+    course
+    state
+  }
+
+  type PaginatedStudents {
+    page: Int!
+    totalPages: Int!
+    totalNumber: Int!
+    pageSize: Int!
+    data: [Student!]!
+  }
+
   type StudentContact {
     name: String!
     email: String!
@@ -35,7 +51,13 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    getStudents: [Student!]
+    getStudents( 
+      searchText: String
+      orderFilter: OrderFilterStudent
+      order: Number
+      page: Int
+      pageSize: Int
+    ): PaginatedStudents!
 
     getStudent(id: String!): Student!
   }
