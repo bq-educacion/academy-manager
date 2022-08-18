@@ -24,6 +24,9 @@
       "population": "Población",
       "modality": "Modalidad",
       "type": "Tipo"
+    },
+    "Dropdown": {
+      "title": "Seleccionar"
     }
   },
   "general": {
@@ -53,6 +56,16 @@
         "0": "Crear un nuevo centro",
         "1": "o",
         "2": "varios centros"
+      },
+      "search-error": {
+        "0": "No se han encontrado resultados para tu busqueda",
+        "1": "Prueba con otro término o puedes ",
+        "2": "refinar búsqueda"
+      },
+      "modal-create": {
+        "step1": {
+          "title": "Crear centro"
+        }
       }
     }
   }

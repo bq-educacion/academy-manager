@@ -32,6 +32,7 @@ const colors = {
   gray2: "#bdbec2",
   gray3: "#d7d8da",
   gray4: "#c3c4c8",
+  gray5: "#bbb",
 
   orange100: "#db4501",
   orange80: "#fe5000",
@@ -64,6 +65,7 @@ const colors = {
   blue40: "#a1dbd7",
 
   blue1: "#3db8b0",
+  blue2: "#f5fbfb",
 
   brown100: "#8f7561",
   brown80: "#b29279",

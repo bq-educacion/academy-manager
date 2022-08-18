@@ -33,7 +33,7 @@ const Table = <T extends Data>({
             onSetOrder({ key: column.key, direction: -order.direction });
           }}
         >
-          <BoldP4>{column.label}</BoldP4>
+          <styles.BoldP4>{column.label}</styles.BoldP4>
           <Icon
             name={
               order.key === column.key
@@ -88,10 +88,6 @@ const Cell = styled.div`
   justify-content: flex-start;
   padding: 0 2em;
   overflow: visible;
-`;
-
-const BoldP4 = styled(styles.P4)`
-  font-weight: bold;
 `;
 
 export default Table;

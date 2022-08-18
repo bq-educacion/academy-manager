@@ -14,7 +14,7 @@ export const ContentStart: FC<{
   return (
     <ContentLayout>
       <ContentHeader>
-        <BoldP1>{t(section)}</BoldP1>
+        <styles.BoldP1>{t(section)}</styles.BoldP1>
         <UserStuff token="token" />
       </ContentHeader>
       <styles.RainbowDivider />
@@ -26,10 +26,6 @@ export const ContentStart: FC<{
 };
 
 export default ContentStart;
-
-const BoldP1 = styled(styles.P1)`
-  font-weight: bold;
-`;
 
 const ContentLayout = styled.div`
   background-color: ${colors.colors.grayBlueTransparent};

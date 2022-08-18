@@ -1,9 +1,10 @@
 import { NextPage } from "next";
-import { Layout, Table } from "../../components";
+import { Layout, Modal, Table } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
   colors,
+  DropDown,
   FirstActionButton,
   Icon,
   styles,
@@ -57,6 +58,8 @@ const CentersPage: NextPage = () => {
     data?.getCenters.data && setTableData(data.getCenters.data);
   }, [data]);
 
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
   //TODO: Advance Search
 
   const route = useRouter();
@@ -64,51 +67,66 @@ const CentersPage: NextPage = () => {
     route.push("/500");
   }
 
-  return (
-    <Layout
-      childrenHeader={
-        <>
-          <DivHeader1>
-            <FirstActionButton />
-            <BoldP2>{t("general.sections.links.centers")}</BoldP2>
-          </DivHeader1>
+  const [dropDownSelection, setDropDownSelection] = useState<string[]>([]);
 
-          <DivHeader2>
-            <RelativeDiv
-              onClick={() => {
-                setSearchText(inputText);
-              }}
-            >
-              <Input
-                placeholder={t("components.content-start.search-placeholder")}
-                onChange={(e) => {
-                  setInputText(e.target.value);
-                }}
-                onKeyDownCapture={(e) => {
-                  {
-                    e.key === "Enter" && setSearchText(inputText);
-                  }
+  return (
+    <>
+      {modalOpen && (
+        <Modal
+          setModal={setModalOpen}
+          title={t("pages.centers.modal-create.step1.title")}
+        >
+          <DropDown
+            titles={["1", "2", "3", "4", "5"]}
+            selected={dropDownSelection}
+            setSelected={setDropDownSelection}
+            width="390px"
+          />
+        </Modal>
+      )}
+      <Layout
+        childrenHeader={
+          <>
+            <DivHeader1>
+              <FirstActionButton
+                onClick={() => {
+                  setModalOpen(true);
                 }}
               />
-              <LensSearch name="lens" />
-            </RelativeDiv>
-            <AdvanceSearch>
-              <BoldP4>{t("pages.centers.advance-search")}</BoldP4>
-            </AdvanceSearch>
-          </DivHeader2>
-        </>
-      }
-      childrenSubHeader={
-        <SubHeaderDiv>
-          {tableData.length === 0 && (
-            <>
-              <SubHeaderP4>
-                {t("pages.paginate.first")} {0} {t("pages.paginate.middle")} {0}{" "}
-              </SubHeaderP4>
-              <GreyDivider />
-            </>
-          )}
-          {tableData.length && (
+              <styles.BoldP2>
+                {t("general.sections.links.centers")}
+              </styles.BoldP2>
+            </DivHeader1>
+
+            <DivHeader2>
+              <RelativeDiv
+                onClick={() => {
+                  setSearchText(inputText);
+                }}
+              >
+                <Input
+                  placeholder={t("components.content-start.search-placeholder")}
+                  onChange={(e) => {
+                    setInputText(e.target.value);
+                  }}
+                  onKeyDownCapture={(e) => {
+                    {
+                      e.key === "Enter" && setSearchText(inputText);
+                    }
+                  }}
+                />
+                <LensSearch name="lens" />
+              </RelativeDiv>
+              <AdvanceSearch>
+                <styles.BoldP4>
+                  {t("pages.centers.advance-search")}
+                </styles.BoldP4>
+              </AdvanceSearch>
+            </DivHeader2>
+          </>
+        }
+        childrenSubHeader={
+          <SubHeaderDiv>
             <>
               <SubHeaderP4>
                 {t("pages.paginate.first")} {tableData.length}{" "}
@@ -116,113 +134,78 @@ const CentersPage: NextPage = () => {
               </SubHeaderP4>
               <GreyDivider />
             </>
+          </SubHeaderDiv>
+        }
+        section={sections[0].title}
+        label={sections[0].links[1].label}
+      >
+        <ContentDiv>
+          <Table<Partial<Center> & { id: string }>
+            data={tableData}
+            order={order}
+            onSetOrder={setOrder}
+            columns={[
+              {
+                label: t("components.table.name"),
+                key: OrderFilter.Name,
+                content: (item) => <div>{item.name}</div>,
+              },
+              {
+                label: t("components.table.languages"),
+                key: OrderFilter.Languages,
+                content: (item) => <div>{item.languages?.join(", ")}</div>,
+              },
+              {
+                label: t("components.table.population"),
+                key: OrderFilter.Population,
+                content: (item) => <div>{item.population}</div>,
+              },
+              {
+                label: t("components.table.modality"),
+                key: OrderFilter.Modality,
+                content: (item) => <div>{item.modality}</div>,
+              },
+              {
+                label: t("components.table.type"),
+                key: OrderFilter.Type,
+                content: (item) => <div>{item.type}</div>,
+              },
+            ]}
+          />
+          {tableData.length === 0 && searchText !== "" && (
+            <ErrorContainer>
+              <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
+              <styles.P4>
+                {t("pages.centers.search-error.1")}{" "}
+                <a>{t("pages.centers.search-error.2")}</a>
+              </styles.P4>
+            </ErrorContainer>
           )}
-        </SubHeaderDiv>
-      }
-      section={sections[0].title}
-      label={sections[0].links[1].label}
-    >
-      {tableData.length === 0 && (
-        <ErrorDiv>
-          <ErrorColumnHeaders>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.name")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.languages")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.population")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.modality")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-            <ErrorColumnHeader>
-              <BoldP4>{t("components.table.type")}</BoldP4>
-              <Icon name={"order-non"} />
-            </ErrorColumnHeader>
-          </ErrorColumnHeaders>
-          <ErrorContainer>
-            <styles.P4>{t("pages.centers.data-error")}</styles.P4>
-            <styles.P4>
-              <a>{t("pages.centers.data-error-options.0")}</a>{" "}
-              {t("pages.centers.data-error-options.1")}{" "}
-              <a>{t("pages.centers.data-error-options.2")}</a>
-            </styles.P4>
-          </ErrorContainer>
-        </ErrorDiv>
-      )}
-      {tableData.length && (
-        <Table<Partial<Center> & { id: string }>
-          data={tableData}
-          order={order}
-          onSetOrder={setOrder}
-          columns={[
-            {
-              label: t("components.table.name"),
-              key: OrderFilter.Name,
-              content: (item) => <div>{item.name}</div>,
-            },
-            {
-              label: t("components.table.languages"),
-              key: OrderFilter.Languages,
-              content: (item) => <div>{item.languages?.join(", ")}</div>,
-            },
-            {
-              label: t("components.table.population"),
-              key: OrderFilter.Population,
-              content: (item) => <div>{item.population}</div>,
-            },
-            {
-              label: t("components.table.modality"),
-              key: OrderFilter.Modality,
-              content: (item) => <div>{item.modality}</div>,
-            },
-            {
-              label: t("components.table.type"),
-              key: OrderFilter.Type,
-              content: (item) => <div>{item.type}</div>,
-            },
-          ]}
-        />
-      )}
-    </Layout>
+          {tableData.length === 0 && searchText === "" && (
+            <ErrorContainer>
+              <styles.P4>{t("pages.centers.data-error")}</styles.P4>
+              <styles.P4>
+                <a>{t("pages.centers.data-error-options.0")}</a>{" "}
+                {t("pages.centers.data-error-options.1")}{" "}
+                <a>{t("pages.centers.data-error-options.2")}</a>
+              </styles.P4>
+            </ErrorContainer>
+          )}
+        </ContentDiv>
+      </Layout>
+    </>
   );
 };
 
 // export default withApollo(CentersPage);
 export default withApollo(CentersPage, { requiresAccess: false });
 
-const ErrorDiv = styled.div`
+const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   flex-direction: column;
-`;
-
-const ErrorColumnHeaders = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 41px;
-  border-bottom: 1px solid ${colors.colors.grayBlue2};
-  justify-content: space-between;
-`;
-
-const ErrorColumnHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-left: 1px solid ${colors.colors.grayBlue};
-  padding: 0 20px;
-  & > svg {
-    margin-left: 5px;
-  }
 `;
 
 const ErrorContainer = styled.div`
@@ -247,14 +230,6 @@ const GreyDivider = styled.div`
   margin: 40px 0 0 20px;
   background-color: ${colors.colors.gray40};
   height: 1px;
-`;
-
-const BoldP2 = styled(styles.P2)`
-  font-weight: bold;
-`;
-
-const BoldP4 = styled(styles.P4)`
-  font-weight: bold;
 `;
 
 const SubHeaderP4 = styled(styles.P4)`
