@@ -143,6 +143,7 @@ export type Mutation = {
   editCenter: Center;
   editCenterContacts: CenterContact;
   editGroup: Group;
+  editStudent: Student;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -234,6 +235,22 @@ export type MutationEditGroupArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   timetable?: InputMaybe<Array<TimetableInput>>;
   type?: InputMaybe<GroupType>;
+};
+
+export type MutationEditStudentArgs = {
+  alergies?: InputMaybe<Scalars["Boolean"]>;
+  birthDate?: InputMaybe<Scalars["String"]>;
+  collectionPermit?: InputMaybe<Scalars["String"]>;
+  course?: InputMaybe<Scalars["String"]>;
+  descriptionAllergy?: InputMaybe<Scalars["String"]>;
+  group?: InputMaybe<Scalars["String"]>;
+  id: Scalars["String"];
+  imageAuthorisation?: InputMaybe<Scalars["Boolean"]>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  oldStudent?: InputMaybe<Scalars["Boolean"]>;
+  registrationDate?: InputMaybe<Scalars["String"]>;
+  signedMandate?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export enum OrderFilter {
@@ -812,6 +829,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationEditGroupArgs, "id">
+  >;
+  editStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditStudentArgs, "id">
   >;
 }>;
 

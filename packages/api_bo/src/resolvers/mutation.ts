@@ -8,6 +8,7 @@ import {
   MutationEditCenterArgs,
   MutationEditCenterContactsArgs,
   MutationEditGroupArgs,
+  MutationEditStudentArgs,
   StudentContact,
   StudentState,
 } from "../types.ts";
@@ -287,6 +288,9 @@ export const Mutation = {
       }
 
       const [d, m, y] = args.birthDate.split("/");
+      if (d === undefined || m === undefined || y === undefined) {
+        throw new Error("400, Invalid birthDate");
+      }
       const date = new Date(`${y}/${m}/${d}`).toString();
       if (date === "Invalid Date") {
         throw new Error("400, Invalid birthDate");
@@ -364,6 +368,61 @@ export const Mutation = {
       return newStudentContact.contacts.filter((contact) =>
         contact.email === args.email
       )[0];
+    } catch (error) {
+      throw new Error("500, " + error);
+    }
+  },
+
+  editStudent: async (
+    _parent: unknown,
+    args: MutationEditStudentArgs,
+    ctx: Context,
+  ): Promise<StudentModel> => {
+    try {
+      let updateStudent = { ...args } as Partial<StudentModel>;
+
+      if (args.group) {
+        const existsGroup = await groupCollection(ctx.db).findOne({
+          _id: new ObjectId(args.group),
+        });
+        if (!existsGroup) {
+          throw new Error("404, Group not found");
+        }
+        //delete student from old group
+        await groupCollection(ctx.db).updateOne(
+          { students: new ObjectId(args.id) },
+          { $pull: { students: new ObjectId(args.id) } },
+        );
+        //add student to new group
+        await groupCollection(ctx.db).updateOne(
+          { _id: new ObjectId(args.group) },
+          { $push: { students: { $each: [new ObjectId(args.id)] } } },
+        );
+      }
+
+      if (args.birthDate) {
+        const [d, m, y] = args.birthDate.split("/");
+        if (d === undefined || m === undefined || y === undefined) {
+          throw new Error("400, Invalid birthDate");
+        }
+        const date = new Date(`${y}/${m}/${d}`).toString();
+        if (date === "Invalid Date") {
+          throw new Error("400, Invalid birthDate");
+        }
+        updateStudent = { ...updateStudent, birthDate: `${d}/${m}/${y}` };
+      }
+
+      const newStudent = await studentCollection(ctx.db).findAndModify(
+        { _id: new ObjectId(args.id) },
+        {
+          update: { $set: updateStudent },
+          new: true,
+        },
+      );
+      if (!newStudent) {
+        throw new Error("404, Student not found");
+      }
+      return newStudent;
     } catch (error) {
       throw new Error("500, " + error);
     }
