@@ -270,17 +270,8 @@ export const Query = {
         {
           registrationDate: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
-        { alergies: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           descriptionAllergy: {
-            $regex: `.*${args.searchText}.*`,
-            $options: "i",
-          },
-        },
-        { oldStudent: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        { signedMandate: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        {
-          imageAuthorisation: {
             $regex: `.*${args.searchText}.*`,
             $options: "i",
           },
@@ -288,7 +279,6 @@ export const Query = {
         {
           collectionPermit: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
-        { goesAlone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           "contacts.name": { $regex: `.*${args.searchText}.*`, $options: "i" },
