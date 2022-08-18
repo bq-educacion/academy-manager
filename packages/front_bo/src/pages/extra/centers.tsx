@@ -122,97 +122,19 @@ const CentersPage: NextPage = () => {
         }
         childrenSubHeader={
           <SubHeaderDiv>
-            {tableData.length === 0 && (
-              <>
-                <SubHeaderP4>
-                  {t("pages.paginate.first")} {0} {t("pages.paginate.middle")}{" "}
-                  {0}{" "}
-                </SubHeaderP4>
-                <GreyDivider />
-              </>
-            )}
-            {tableData.length && (
-              <>
-                <SubHeaderP4>
-                  {t("pages.paginate.first")} {tableData.length}{" "}
-                  {t("pages.paginate.middle")} {pageData.total}{" "}
-                </SubHeaderP4>
-                <GreyDivider />
-              </>
-            )}
+            <>
+              <SubHeaderP4>
+                {t("pages.paginate.first")} {tableData.length}{" "}
+                {t("pages.paginate.middle")} {pageData.total}{" "}
+              </SubHeaderP4>
+              <GreyDivider />
+            </>
           </SubHeaderDiv>
         }
         section={sections[0].title}
         label={sections[0].links[1].label}
       >
-        {tableData.length === 0 && searchText !== "" && (
-          <ErrorDiv>
-            <ErrorColumnHeaders>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.name")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.languages")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.population")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.modality")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.type")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-            </ErrorColumnHeaders>
-            <ErrorContainer>
-              <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
-              <styles.P4>
-                {t("pages.centers.search-error.1")}{" "}
-                <a>{t("pages.centers.search-error.2")}</a>
-              </styles.P4>
-            </ErrorContainer>
-          </ErrorDiv>
-        )}
-        {tableData.length === 0 && searchText === "" && (
-          <ErrorDiv>
-            <ErrorColumnHeaders>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.name")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.languages")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.population")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.modality")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-              <ErrorColumnHeader>
-                <BoldP4>{t("components.table.type")}</BoldP4>
-                <Icon name={"order-non"} />
-              </ErrorColumnHeader>
-            </ErrorColumnHeaders>
-            <ErrorContainer>
-              <styles.P4>{t("pages.centers.data-error")}</styles.P4>
-              <styles.P4>
-                <a>{t("pages.centers.data-error-options.0")}</a>{" "}
-                {t("pages.centers.data-error-options.1")}{" "}
-                <a>{t("pages.centers.data-error-options.2")}</a>
-              </styles.P4>
-            </ErrorContainer>
-          </ErrorDiv>
-        )}
-        {tableData.length && (
+        <ContentDiv>
           <Table<Partial<Center> & { id: string }>
             data={tableData}
             order={order}
@@ -245,7 +167,26 @@ const CentersPage: NextPage = () => {
               },
             ]}
           />
-        )}
+          {tableData.length === 0 && searchText !== "" && (
+            <ErrorContainer>
+              <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
+              <styles.P4>
+                {t("pages.centers.search-error.1")}{" "}
+                <a>{t("pages.centers.search-error.2")}</a>
+              </styles.P4>
+            </ErrorContainer>
+          )}
+          {tableData.length === 0 && searchText === "" && (
+            <ErrorContainer>
+              <styles.P4>{t("pages.centers.data-error")}</styles.P4>
+              <styles.P4>
+                <a>{t("pages.centers.data-error-options.0")}</a>{" "}
+                {t("pages.centers.data-error-options.1")}{" "}
+                <a>{t("pages.centers.data-error-options.2")}</a>
+              </styles.P4>
+            </ErrorContainer>
+          )}
+        </ContentDiv>
       </Layout>
     </>
   );
@@ -254,32 +195,12 @@ const CentersPage: NextPage = () => {
 // export default withApollo(CentersPage);
 export default withApollo(CentersPage, { requiresAccess: false });
 
-const ErrorDiv = styled.div`
+const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   flex-direction: column;
-`;
-
-const ErrorColumnHeaders = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 41px;
-  border-bottom: 1px solid ${colors.colors.grayBlue2};
-  justify-content: space-between;
-`;
-
-const ErrorColumnHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-left: 1px solid ${colors.colors.grayBlue};
-  padding: 0 20px;
-  & > svg {
-    margin-left: 5px;
-  }
 `;
 
 const ErrorContainer = styled.div`
