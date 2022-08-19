@@ -6,8 +6,9 @@ import { FC, ReactNode } from "react";
 const Modal: FC<{
   setModal: (open: boolean) => void;
   title: string;
+  endTitle?: string;
   children: ReactNode;
-}> = ({ title, children, setModal }) => {
+}> = ({ title, children, setModal, endTitle }) => {
   return (
     <>
       <Background
@@ -16,11 +17,24 @@ const Modal: FC<{
         }}
       />
       <ModalWrapper>
-        <Header>
-          <styles.BoldP2>{title}</styles.BoldP2>
-          <CloseButton onClick={() => setModal(false)} />
-        </Header>
-        <RainbowDivider />
+        {title !== "" && (
+          <>
+            <Header>
+              <styles.BoldP2>{title}</styles.BoldP2>
+              <CloseButton onClick={() => setModal(false)} />
+            </Header>
+            <RainbowDivider />
+          </>
+        )}
+        {title === "" && (
+          <>
+            <RainbowDivider />
+            <Header end>
+              <styles.BoldP2>{endTitle}</styles.BoldP2>
+              <CloseButton onClick={() => setModal(false)} />
+            </Header>
+          </>
+        )}
         <ModalContent>{children}</ModalContent>
       </ModalWrapper>
     </>
@@ -54,12 +68,13 @@ const ModalWrapper = styled.div`
   width: 480px;
   height: auto;
   min-height: 150px;
-  max-height: 575px;
+  max-height: 800px;
   background-color: ${colors.colors.white};
 `;
 
-const Header = styled.div`
+const Header = styled.div<{ end?: boolean }>`
   display: flex;
   justify-content: space-between;
   margin: 28px 45px;
+  ${(props) => props.end && `margin-bottom: -15px;`}
 `;

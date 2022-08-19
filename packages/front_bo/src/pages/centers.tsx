@@ -4,7 +4,6 @@ import { sections } from "../config";
 import withApollo from "../apollo/withApollo";
 import {
   colors,
-  DropDown,
   FirstActionButton,
   Icon,
   styles,
@@ -14,6 +13,7 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Center, OrderFilter, useGetCentersFQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
+import CreateCenter from "../components/CreateCenter";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -42,11 +42,8 @@ const CentersPage: NextPage = () => {
       page: 1,
       pageSize: 20,
     },
+    fetchPolicy: "network-only",
   });
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   useEffect(() => {
     data &&
@@ -59,6 +56,9 @@ const CentersPage: NextPage = () => {
   }, [data]);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalTitle, setModalTitle] = useState<string>(
+    t("pages.centers.modal-create.center.title")
+  );
 
   //TODO: Advance Search
 
@@ -67,24 +67,23 @@ const CentersPage: NextPage = () => {
     route.push("/500");
   }
 
-  const [dropDownSelection, setDropDownSelection] = useState<string[]>([]);
-
   return (
     <>
       {modalOpen && (
         <Modal
           setModal={setModalOpen}
-          title={t("pages.centers.modal-create.step1.title")}
+          title={modalTitle}
+          endTitle={t("pages.centers.modal-create.center.end-title")}
         >
-          <DropDown
-            titles={["1", "2", "3", "4", "5"]}
-            selected={dropDownSelection}
-            setSelected={setDropDownSelection}
-            width="390px"
+          <CreateCenter
+            refetch={refetch}
+            changeTitle={setModalTitle}
+            close={setModalOpen}
           />
         </Modal>
       )}
       <Layout
+        title={sections[0].bigTitle}
         childrenHeader={
           <>
             <DivHeader1>
@@ -153,7 +152,14 @@ const CentersPage: NextPage = () => {
               {
                 label: t("components.table.languages"),
                 key: OrderFilter.Languages,
-                content: (item) => <div>{item.languages?.join(", ")}</div>,
+                // reduce to a string of languages
+                content: (item) => (
+                  <div>
+                    {item.languages
+                      ?.map((elem) => t(`pages.centers.languages.${elem}`))
+                      .join(", ")}
+                  </div>
+                ),
               },
               {
                 label: t("components.table.population"),
@@ -161,14 +167,25 @@ const CentersPage: NextPage = () => {
                 content: (item) => <div>{item.population}</div>,
               },
               {
-                label: t("components.table.modality"),
-                key: OrderFilter.Modality,
-                content: (item) => <div>{item.modality}</div>,
+                label: t("components.table.nature"),
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //No se puede ordenar por naturaleza, mal puesto a type
+                //Saltará problema de keys
+                key: OrderFilter.Type,
+                content: (item) => (
+                  <div>{t(`pages.centers.nature.${item.nature}`)}</div>
+                ),
               },
               {
                 label: t("components.table.type"),
                 key: OrderFilter.Type,
-                content: (item) => <div>{item.type}</div>,
+                content: (item) => (
+                  <div>
+                    {item.type
+                      ?.map((elem) => t(`pages.centers.type.${elem}`))
+                      .join(", ")}
+                  </div>
+                ),
               },
             ]}
           />
@@ -185,7 +202,9 @@ const CentersPage: NextPage = () => {
             <ErrorContainer>
               <styles.P4>{t("pages.centers.data-error")}</styles.P4>
               <styles.P4>
-                <a>{t("pages.centers.data-error-options.0")}</a>{" "}
+                <a onClick={() => setModalOpen(true)}>
+                  {t("pages.centers.data-error-options.0")}
+                </a>{" "}
                 {t("pages.centers.data-error-options.1")}{" "}
                 <a>{t("pages.centers.data-error-options.2")}</a>
               </styles.P4>
@@ -200,7 +219,7 @@ const CentersPage: NextPage = () => {
 // export default withApollo(CentersPage);
 export default withApollo(CentersPage, { requiresAccess: false });
 
-const ContentDiv = styled.div`
+export const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -208,7 +227,7 @@ const ContentDiv = styled.div`
   flex-direction: column;
 `;
 
-const ErrorContainer = styled.div`
+export const ErrorContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -220,23 +239,23 @@ const ErrorContainer = styled.div`
   }
 `;
 
-const SubHeaderDiv = styled.div`
+export const SubHeaderDiv = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const GreyDivider = styled.div`
+export const GreyDivider = styled.div`
   width: calc(100% - 210px);
   margin: 40px 0 0 20px;
   background-color: ${colors.colors.gray40};
   height: 1px;
 `;
 
-const SubHeaderP4 = styled(styles.P4)`
+export const SubHeaderP4 = styled(styles.P4)`
   margin: 31px 0 0 40px;
 `;
 
-const DivHeader1 = styled.div`
+export const DivHeader1 = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -245,13 +264,13 @@ const DivHeader1 = styled.div`
   }
 `;
 
-const DivHeader2 = styled.div`
+export const DivHeader2 = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
-const RelativeDiv = styled.div`
+export const RelativeDiv = styled.div`
   position: relative;
   width: 270px;
   display: flex;
@@ -261,7 +280,7 @@ const RelativeDiv = styled.div`
   margin-right: 40px;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   height: 40px;
   width: 100%;
   border-radius: 5px;
@@ -279,7 +298,7 @@ const Input = styled.input`
   }
 `;
 
-const AdvanceSearch = styled.button`
+export const AdvanceSearch = styled.button`
   display: none;
   font-weight: bold;
   height: 40px;
@@ -291,7 +310,7 @@ const AdvanceSearch = styled.button`
   cursor: pointer;
 `;
 
-const LensSearch = styled(Icon)`
+export const LensSearch = styled(Icon)`
   color: ${colors.colors.grayBlue2};
   position: absolute;
   right: 20px;

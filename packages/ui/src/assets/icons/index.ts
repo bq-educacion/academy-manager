@@ -9,6 +9,8 @@ import OrderUp from "./order-up.svg";
 import OrderNon from "./order-non.svg";
 import CloseCross from "./close-cross.svg";
 import Tick from "./tick.svg";
+import User from "./user.svg";
+import Eliminate from "./eliminate.svg";
 
 export {
   ClosePannel,
@@ -22,4 +24,6 @@ export {
   OrderNon,
   CloseCross,
   Tick,
+  User,
+  Eliminate,
 };

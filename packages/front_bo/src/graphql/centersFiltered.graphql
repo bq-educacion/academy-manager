@@ -1,5 +1,17 @@
-query GetCentersF($searchText: String, $orderFilter: OrderFilter, $order: Number, $page: Int, $pageSize: Int) {
-  getCenters(searchText: $searchText, orderFilter: $orderFilter, order: $order, page: $page, pageSize: $pageSize) {
+query GetCentersF(
+  $searchText: String
+  $orderFilter: OrderFilter
+  $order: Number
+  $page: Int
+  $pageSize: Int
+) {
+  getCenters(
+    searchText: $searchText
+    orderFilter: $orderFilter
+    order: $order
+    page: $page
+    pageSize: $pageSize
+  ) {
     page
     pageSize
     totalPages
@@ -9,7 +21,7 @@ query GetCentersF($searchText: String, $orderFilter: OrderFilter, $order: Number
       name
       languages
       population
-      modality
+      nature
       type
     }
   }

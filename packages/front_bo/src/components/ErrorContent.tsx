@@ -10,11 +10,10 @@ export const ErrorContent: FC<{ error: number }> = ({ error }) => {
   return (
     <ErrorContainer>
       <div>
-        <styles.PG>{error}</styles.PG>
-        <styles.P2>{t(`components.error-content.${error}.title`)}</styles.P2>
-        <styles.P4>{t(`components.error-content.${error}.text`)}</styles.P4>
+        <PGError>{error}</PGError>
+        <P2Error>{t(`components.error-content.${error}.title`)}</P2Error>
+        <P4Error>{t(`components.error-content.${error}.text`)}</P4Error>
         <MButton
-          width="133px"
           text={t("components.error-content.button")}
           Click={() => {
             router.push("/");
@@ -43,15 +42,17 @@ const ErrorContainer = styled.div`
     width: calc(100% - 60px);
     height: calc(100% - 80px);
     background-color: ${colors.colors.white};
-
-    p:first-of-type {
-      margin-bottom: 20px;
-    }
-    p:nth-of-type(2) {
-      margin-bottom: 10px;
-    }
-    p:nth-of-type(3) {
-      margin-bottom: 20px;
-    }
   }
+`;
+
+const PGError = styled(styles.PG)`
+  margin-bottom: 20px;
+`;
+
+const P2Error = styled(styles.P2)`
+  margin-bottom: 10px;
+`;
+
+const P4Error = styled(styles.P4)`
+  margin-bottom: 20px;
 `;

@@ -1,0 +1,23 @@
+mutation CreateCenter(
+  $name: String!
+  $address: String!
+  $population: String!
+  $type: [CenterActivityType!]!
+  $nature: CenterNature!
+  $languages: [String!]!
+  $phone: String
+  $email: String
+) {
+  createCenter(
+    name: $name
+    address: $address
+    population: $population
+    type: $type
+    nature: $nature
+    languages: $languages
+    phone: $phone
+    email: $email
+  ) {
+    id
+  }
+}

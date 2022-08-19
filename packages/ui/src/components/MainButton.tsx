@@ -1,28 +1,44 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { colors } from "../theme";
+import { colors, styles } from "../theme";
 
-const MButton: FC<{ width: string; text: string; Click: () => void }> = ({
-  width,
-  text,
-  Click,
-}) => {
+const MButton: FC<{
+  color?: string;
+  backColor?: string;
+  text: string;
+  Click: () => void;
+}> = ({ text, Click, color, backColor }) => {
   return (
-    <MainButton width={width} onClick={Click}>
-      {text}
+    <MainButton color={color} backColor={backColor} onClick={Click}>
+      <styles.BoldP4>{text}</styles.BoldP4>
     </MainButton>
   );
 };
 
-const MainButton = styled.button<{ width: string }>`
+const MainButton = styled.button<{ color?: string; backColor?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${(props) => props.width};
+  width: max-content;
+  padding: 0 20px;
   height: 40px;
   border-radius: 4px;
-  background-color: ${colors.colors.blackBackground};
-  color: ${colors.colors.white};
+  ${(props) =>
+    props.color
+      ? `
+        color: ${props.color};
+    `
+      : `
+        color: ${colors.colors.white};
+    `}
+  ${(props) =>
+    props.backColor
+      ? `
+        background-color: ${props.backColor};
+    `
+      : `
+        background-color: ${colors.colors.blackBackground};
+    `}
   border: none;
   &:hover {
     background-color: ${colors.colors.grayBlue2};

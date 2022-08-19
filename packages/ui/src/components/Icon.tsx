@@ -12,6 +12,8 @@ import {
   OrderNon,
   CloseCross,
   Tick,
+  User,
+  Eliminate,
 } from "../assets/icons";
 import { colors } from "../theme";
 
@@ -51,6 +53,10 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <CloseCross {...rest} />;
     case "tick":
       return <Tick {...rest} />;
+    case "user":
+      return <User {...rest} />;
+    case "eliminate":
+      return <Eliminate {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

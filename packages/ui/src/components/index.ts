@@ -10,6 +10,8 @@ import FirstActionButton from "./FirstActionButton";
 import CloseButton from "./CloseButton";
 import DropDown from "./DropDown";
 import CheckBox from "./CheckBox";
+import DropDownUnique from "./DropDownUnique";
+import InputSuper from "./InputSuper";
 
 export {
   GoogleButton,
@@ -24,4 +26,6 @@ export {
   CloseButton,
   DropDown,
   CheckBox,
+  DropDownUnique,
+  InputSuper,
 };

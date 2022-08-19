@@ -5,12 +5,14 @@ type ILink = {
 
 export type ISection = {
   title: string;
+  bigTitle: string;
   links: ILink[];
 };
 
 export const sections: ISection[] = [
   {
     title: "general.sections.title",
+    bigTitle: "general.sections.big-title",
     links: [
       { label: "general.sections.links.dashboard", href: "/dashboard" },
       { label: "general.sections.links.centers", href: "/centers" },
@@ -20,3 +22,5 @@ export const sections: ISection[] = [
     ],
   },
 ];
+
+export const centerLanguages: string[] = ["English", "Spanish"];
