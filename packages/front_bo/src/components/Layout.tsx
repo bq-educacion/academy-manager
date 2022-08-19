@@ -9,6 +9,7 @@ const Layout: FC<{
   section: string;
   label: string;
   error?: number;
+  title?: string;
 }> = ({
   children,
   section,
@@ -16,6 +17,7 @@ const Layout: FC<{
   childrenHeader,
   label,
   childrenSubHeader,
+  title,
 }) => {
   return (
     <div>
@@ -24,7 +26,7 @@ const Layout: FC<{
         <ContentStart
           childrenSubHeader={childrenSubHeader}
           childrenHeader={childrenHeader}
-          section={section}
+          section={title || section}
         >
           {children}
         </ContentStart>

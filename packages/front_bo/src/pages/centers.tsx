@@ -83,6 +83,7 @@ const CentersPage: NextPage = () => {
         </Modal>
       )}
       <Layout
+        title={sections[0].bigTitle}
         childrenHeader={
           <>
             <DivHeader1>
@@ -218,7 +219,7 @@ const CentersPage: NextPage = () => {
 // export default withApollo(CentersPage);
 export default withApollo(CentersPage, { requiresAccess: false });
 
-const ContentDiv = styled.div`
+export const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -226,7 +227,7 @@ const ContentDiv = styled.div`
   flex-direction: column;
 `;
 
-const ErrorContainer = styled.div`
+export const ErrorContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -238,23 +239,23 @@ const ErrorContainer = styled.div`
   }
 `;
 
-const SubHeaderDiv = styled.div`
+export const SubHeaderDiv = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const GreyDivider = styled.div`
+export const GreyDivider = styled.div`
   width: calc(100% - 210px);
   margin: 40px 0 0 20px;
   background-color: ${colors.colors.gray40};
   height: 1px;
 `;
 
-const SubHeaderP4 = styled(styles.P4)`
+export const SubHeaderP4 = styled(styles.P4)`
   margin: 31px 0 0 40px;
 `;
 
-const DivHeader1 = styled.div`
+export const DivHeader1 = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -263,13 +264,13 @@ const DivHeader1 = styled.div`
   }
 `;
 
-const DivHeader2 = styled.div`
+export const DivHeader2 = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
-const RelativeDiv = styled.div`
+export const RelativeDiv = styled.div`
   position: relative;
   width: 270px;
   display: flex;
@@ -279,7 +280,7 @@ const RelativeDiv = styled.div`
   margin-right: 40px;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   height: 40px;
   width: 100%;
   border-radius: 5px;
@@ -297,7 +298,7 @@ const Input = styled.input`
   }
 `;
 
-const AdvanceSearch = styled.button`
+export const AdvanceSearch = styled.button`
   display: none;
   font-weight: bold;
   height: 40px;
@@ -309,7 +310,7 @@ const AdvanceSearch = styled.button`
   cursor: pointer;
 `;
 
-const LensSearch = styled(Icon)`
+export const LensSearch = styled(Icon)`
   color: ${colors.colors.grayBlue2};
   position: absolute;
   right: 20px;
