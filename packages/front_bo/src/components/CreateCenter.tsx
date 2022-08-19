@@ -78,7 +78,10 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.type`)}
             </styles.BoldP4>
             <DropDown
-              titles={Object.values(CenterActivityType)}
+              options={Object.values(CenterActivityType).map((type) => ({
+                key: type,
+                label: t(`pages.centers.type.${type}`),
+              }))}
               selected={typeSelection}
               setSelected={(selected) =>
                 setTypeSelection(selected as CenterActivityType[])
@@ -105,7 +108,10 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.languages`)}
             </styles.BoldP4>
             <DropDown
-              titles={centerLanguages}
+              options={centerLanguages.map((lang) => ({
+                key: lang,
+                label: t(`pages.centers.languages.${lang}`),
+              }))}
               selected={languagesSelection}
               setSelected={setLanguagesSelection}
               width="390px"
