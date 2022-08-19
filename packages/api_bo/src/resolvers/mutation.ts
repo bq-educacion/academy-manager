@@ -41,13 +41,17 @@ export const Mutation = {
       }
 
       const createdAt = new Date().toLocaleDateString("en-GB");
-      const idCenter = await centerCollection(ctx.db).insertOne({
+
+      const toInsert = {
         ...args,
         phone: args.phone || "",
         email: args.email || "",
         notes: args.notes || "",
+        contacts: args.contacts.map((c) => ({ ...c, _id: new ObjectId() })),
         createdAt,
-      });
+      };
+
+      const idCenter = await centerCollection(ctx.db).insertOne(toInsert);
 
       return {
         _id: idCenter,
@@ -84,8 +88,8 @@ export const Mutation = {
       if (!newCenterContact) {
         throw new Error("404, Center not found");
       }
-      return newCenterContact.contacts.filter((contact) =>
-        contact.email === args.email
+      return newCenterContact.contacts.filter(
+        (contact) => contact.email === args.email,
       )[0];
     } catch (error) {
       throw new Error("500, " + error);
@@ -391,8 +395,8 @@ export const Mutation = {
       if (!newStudentContact) {
         throw new Error("404, Student not found");
       }
-      return newStudentContact.contacts.filter((contact) =>
-        contact.email === args.email
+      return newStudentContact.contacts.filter(
+        (contact) => contact.email === args.email,
       )[0];
     } catch (error) {
       throw new Error("500, " + error);
@@ -519,16 +523,12 @@ export const Mutation = {
       });
       if (existsInstructor) throw new Error("404, Instructor already exists");
 
-      const existsCenter = await centerCollection(ctx.db).findById(
-        args.center,
-      );
+      const existsCenter = await centerCollection(ctx.db).findById(args.center);
       if (!existsCenter) {
         throw new Error("404, Center not found");
       }
 
-      const groups = args.groups?.map(
-        (group) => new ObjectId(group),
-      );
+      const groups = args.groups?.map((group) => new ObjectId(group));
       const existsGroups = await groupCollection(ctx.db)
         .find({
           _id: { $in: groups },
