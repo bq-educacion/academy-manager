@@ -9,7 +9,8 @@ import {
   useTranslate,
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
-import { FC, useState } from "react";
+import { useRouter } from "next/router";
+import { FC, useEffect, useState } from "react";
 import { centerLanguages } from "../config";
 import {
   CenterActivityType,
@@ -42,7 +43,7 @@ const CreateCenter: FC<{
   const [numberOfContacts, setNumberOfContacts] = useState<number>(1);
   const [contacts] = useState<CenterContact[]>([]);
 
-  const [createCenterMutation] = useCreateCenterMutation({
+  const [createCenterMutation, { error }] = useCreateCenterMutation({
     variables: {
       name: name,
       address: address,
@@ -54,6 +55,13 @@ const CreateCenter: FC<{
       email: email,
     },
   });
+
+  const route = useRouter();
+  useEffect(() => {
+    if (error) {
+      route.push("/500");
+    }
+  }, [error]);
 
   return (
     <Form>
@@ -255,6 +263,7 @@ const CreateCenter: FC<{
                 setTimeout(() => {
                   setStep(4);
                 }, 100);
+                createCenterMutation();
               }}
               text={t("components.create-center.3.create")}
               color={colors.colors.white}
@@ -267,7 +276,6 @@ const CreateCenter: FC<{
         <>
           <EndButton
             Click={() => {
-              createCenterMutation();
               refetch();
               close(false);
             }}
