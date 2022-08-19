@@ -201,7 +201,9 @@ const CentersPage: NextPage = () => {
             <ErrorContainer>
               <styles.P4>{t("pages.centers.data-error")}</styles.P4>
               <styles.P4>
-                <a>{t("pages.centers.data-error-options.0")}</a>{" "}
+                <a onClick={() => setModalOpen(true)}>
+                  {t("pages.centers.data-error-options.0")}
+                </a>{" "}
                 {t("pages.centers.data-error-options.1")}{" "}
                 <a>{t("pages.centers.data-error-options.2")}</a>
               </styles.P4>
