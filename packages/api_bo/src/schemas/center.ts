@@ -28,6 +28,12 @@ export const typeDefs = gql`
     phone: String!
   }
 
+  input CenterContactInput {
+    name: String!
+    email: String!
+    phone: String!
+  }
+
   type PaginatedCenters {
     page: Int!
     totalPages: Int!
@@ -73,6 +79,7 @@ export const typeDefs = gql`
       type: [CenterActivityType!]!
       nature: CenterNature!
       languages: [String!]!
+      contacts: [CenterContactInput!]!
       notes: String
     ): Center!
 

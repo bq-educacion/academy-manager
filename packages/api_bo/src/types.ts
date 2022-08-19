@@ -70,6 +70,12 @@ export type CenterContact = {
   phone: Scalars["String"];
 };
 
+export type CenterContactInput = {
+  email: Scalars["String"];
+  name: Scalars["String"];
+  phone: Scalars["String"];
+};
+
 export enum CenterNature {
   Concertado = "CONCERTADO",
   Private = "PRIVATE",
@@ -172,6 +178,7 @@ export type MutationAddStudentContactArgs = {
 
 export type MutationCreateCenterArgs = {
   address: Scalars["String"];
+  contacts: Array<CenterContactInput>;
   email?: InputMaybe<Scalars["String"]>;
   languages: Array<Scalars["String"]>;
   name: Scalars["String"];
@@ -221,6 +228,7 @@ export type MutationCreateStudentArgs = {
   alergies: Scalars["Boolean"];
   birthDate: Scalars["String"];
   collectionPermit: Scalars["String"];
+  contacts: Array<StudentContactInput>;
   course: Scalars["String"];
   descriptionAllergy?: InputMaybe<Scalars["String"]>;
   goesAlone: Scalars["Boolean"];
@@ -432,6 +440,14 @@ export type StudentContact = {
   send_info: Scalars["Boolean"];
 };
 
+export type StudentContactInput = {
+  email: Scalars["String"];
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  phone: Scalars["String"];
+  send_info: Scalars["Boolean"];
+};
+
 export enum StudentState {
   Active = "ACTIVE",
   Withdrawn = "WITHDRAWN",
@@ -589,6 +605,7 @@ export type ResolversTypes = ResolversObject<{
   Center: ResolverTypeWrapper<Center>;
   CenterActivityType: CenterActivityType;
   CenterContact: ResolverTypeWrapper<CenterContact>;
+  CenterContactInput: CenterContactInput;
   CenterNature: CenterNature;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
@@ -610,6 +627,7 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars["String"]>;
   Student: ResolverTypeWrapper<Student>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
+  StudentContactInput: StudentContactInput;
   StudentState: StudentState;
   Timetable: ResolverTypeWrapper<Timetable>;
   TimetableInput: TimetableInput;
@@ -626,6 +644,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"];
   Center: Center;
   CenterContact: CenterContact;
+  CenterContactInput: CenterContactInput;
   Group: Group;
   ID: Scalars["ID"];
   Instructor: Instructor;
@@ -639,6 +658,7 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars["String"];
   Student: Student;
   StudentContact: StudentContact;
+  StudentContactInput: StudentContactInput;
   Timetable: Timetable;
   TimetableInput: TimetableInput;
 }>;
@@ -829,7 +849,13 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateCenterArgs,
-      "address" | "languages" | "name" | "nature" | "population" | "type"
+      | "address"
+      | "contacts"
+      | "languages"
+      | "name"
+      | "nature"
+      | "population"
+      | "type"
     >
   >;
   createGroup?: Resolver<
@@ -878,6 +904,7 @@ export type MutationResolvers<
       | "alergies"
       | "birthDate"
       | "collectionPermit"
+      | "contacts"
       | "course"
       | "goesAlone"
       | "idCenter"

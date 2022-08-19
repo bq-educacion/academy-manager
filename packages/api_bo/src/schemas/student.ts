@@ -30,6 +30,14 @@ export const typeDefs = gql`
     notes: String
   }
 
+  input StudentContactInput {
+    name: String!
+    email: String!
+    phone: String!
+    send_info: Boolean!
+    notes: String
+  }
+
   type Student {
     id: ID!
     name: String!
@@ -76,6 +84,7 @@ export const typeDefs = gql`
       imageAuthorisation: Boolean!
       collectionPermit: String!
       goesAlone: Boolean!
+      contacts: [StudentContactInput!]!
       notes: String
     ): Student!
 
