@@ -191,6 +191,7 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.email`)}
               </styles.BoldP4>
               <InputSuper
+                type="email"
                 placeholder={t(
                   "components.create-center.2.subtitle.email-placeholder"
                 )}
@@ -260,10 +261,14 @@ const CreateCenter: FC<{
               Click={() => {
                 setFinish(true);
                 changeTitle("");
-                setTimeout(() => {
-                  setStep(4);
-                }, 100);
-                createCenterMutation();
+                if (name !== "" && address !== "" && population !== "") {
+                  createCenterMutation();
+                  setTimeout(() => {
+                    setStep(4);
+                  }, 100);
+                } else {
+                  alert("Please fill all the fields");
+                }
               }}
               text={t("components.create-center.3.create")}
               color={colors.colors.white}

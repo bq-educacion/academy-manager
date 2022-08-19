@@ -6,11 +6,12 @@ const InputSuper: FC<{
   placeholder?: string;
   setInput: (text: string) => void;
   input: string;
-}> = ({ placeholder, setInput, input }) => {
+  type?: string;
+}> = ({ placeholder, setInput, input, type }) => {
   return (
     <InputStyled
       placeholder={placeholder ? placeholder : ""}
-      type="text"
+      type={type ? type : "text"}
       value={input}
       onChange={(e) => setInput(e.target.value)}
     />
