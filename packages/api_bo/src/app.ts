@@ -1,7 +1,13 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { GraphQLHTTP } from "gql";
 import { Database, MongoClient } from "mongo";
-import { Center, Group, Query, Student } from "./resolvers/query.ts";
+import {
+  Center,
+  Group,
+  Instructor,
+  Query,
+  Student,
+} from "./resolvers/query.ts";
 import { Mutation } from "./resolvers/mutation.ts";
 import { typeDefs as center } from "./schemas/center.ts";
 import { typeDefs as student } from "./schemas/student.ts";
@@ -55,6 +61,7 @@ const resolvers = {
   Center,
   Group,
   Student,
+  Instructor,
   Mutation,
 };
 

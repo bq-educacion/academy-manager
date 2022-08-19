@@ -16,6 +16,7 @@ export const typeDefs = gql`
 
   enum OrderFilter {
     name
+    nature
     population
     type
     languages
