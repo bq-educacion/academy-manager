@@ -118,7 +118,7 @@ export type Instructor = {
   areas: Array<Scalars["String"]>;
   availability: Array<Availability>;
   center: Center;
-  coorporativeEmail: Scalars["String"];
+  corporateEmail: Scalars["String"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Group>;
   id: Scalars["ID"];
@@ -197,7 +197,7 @@ export type MutationCreateInstructorArgs = {
   areas: Array<Scalars["String"]>;
   availability: Array<AvailabilityInput>;
   center: Scalars["String"];
-  coorporativeEmail: Scalars["String"];
+  corporateEmail: Scalars["String"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Scalars["String"]>;
   knowledge: Scalars["String"];
@@ -742,11 +742,7 @@ export type InstructorResolvers<
     ContextType
   >;
   center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
-  coorporativeEmail?: Resolver<
-    ResolversTypes["String"],
-    ParentType,
-    ContextType
-  >;
+  corporateEmail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   geographicalAvailability?: Resolver<
     ResolversTypes["String"],
     ParentType,
@@ -854,7 +850,7 @@ export type MutationResolvers<
       | "areas"
       | "availability"
       | "center"
-      | "coorporativeEmail"
+      | "corporateEmail"
       | "geographicalAvailability"
       | "groups"
       | "knowledge"

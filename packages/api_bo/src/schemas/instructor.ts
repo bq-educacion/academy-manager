@@ -41,7 +41,7 @@ export const typeDefs = gql`
   type Instructor {
     id: ID!
     name: String!
-    coorporativeEmail: String!
+    corporateEmail: String!
     personalEmail: String!
     phone: String!
     state: StateInstructor!
@@ -72,7 +72,7 @@ export const typeDefs = gql`
   extend type Mutation {
     createInstructor(
       name: String!
-      coorporativeEmail: String!
+      corporateEmail: String!
       personalEmail: String!
       phone: String!
       state: StateInstructor!

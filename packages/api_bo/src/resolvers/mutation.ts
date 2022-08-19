@@ -498,7 +498,7 @@ export const Mutation = {
     try {
       const existsInstructor = await instructorCollection(ctx.db).findOne({
         $or: [
-          { coorporativeEmail: args.coorporativeEmail },
+          { corporateEmail: args.corporateEmail },
           { personalEmail: args.personalEmail },
         ],
       });
@@ -521,7 +521,7 @@ export const Mutation = {
         })
         .toArray();
 
-      if (existsGroups?.length !== groups?.length) {
+      if (existsGroups.length !== groups.length) {
         throw new Error("404, Groups not found in that center");
       }
 
