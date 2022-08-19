@@ -42,7 +42,7 @@ export const typeDefs = gql`
     population: String!
     phone: String
     email: String
-    type: CenterActivityType!
+    type: [CenterActivityType!]!
     nature: CenterNature!
     languages: [String!]!
     notes: String
@@ -69,7 +69,7 @@ export const typeDefs = gql`
       population: String!
       phone: String
       email: String
-      type: CenterActivityType!
+      type: [CenterActivityType!]!
       nature: CenterNature!
       languages: [String!]!
       notes: String
@@ -89,7 +89,7 @@ export const typeDefs = gql`
       population: String
       phone: String
       email: String
-      type: CenterActivityType
+      type: [CenterActivityType!]
       nature: CenterNature
       languages: [String!]
       notes: String

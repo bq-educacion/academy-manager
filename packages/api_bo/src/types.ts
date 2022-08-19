@@ -41,7 +41,7 @@ export type Center = {
   notes?: Maybe<Scalars["String"]>;
   phone?: Maybe<Scalars["String"]>;
   population: Scalars["String"];
-  type: CenterActivityType;
+  type: Array<CenterActivityType>;
 };
 
 export enum CenterActivityType {
@@ -165,7 +165,7 @@ export type MutationCreateCenterArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
   population: Scalars["String"];
-  type: CenterActivityType;
+  type: Array<CenterActivityType>;
 };
 
 export type MutationCreateGroupArgs = {
@@ -205,7 +205,7 @@ export type MutationEditCenterArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
   population?: InputMaybe<Scalars["String"]>;
-  type?: InputMaybe<CenterActivityType>;
+  type?: InputMaybe<Array<CenterActivityType>>;
 };
 
 export type MutationEditCenterContactsArgs = {
@@ -600,7 +600,7 @@ export type CenterResolvers<
   phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   population?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<
-    ResolversTypes["CenterActivityType"],
+    Array<ResolversTypes["CenterActivityType"]>,
     ParentType,
     ContextType
   >;
