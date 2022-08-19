@@ -34,7 +34,7 @@ const DropDown: FC<{
             {selected.length === 0
               ? t("components.Dropdown.title")
               : selected
-                  .map((s) => options.find((op) => op.key === s))
+                  .map((s) => options.find((op) => op.key === s)?.label)
                   .join(", ")}
           </styles.P4>
           <Icon name="triangle" />

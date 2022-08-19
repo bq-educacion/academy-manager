@@ -95,7 +95,10 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.nature`)}
             </styles.BoldP4>
             <DropDownUnique
-              titles={Object.values(CenterNature)}
+              options={Object.values(CenterNature).map((nature) => ({
+                key: nature,
+                label: t(`pages.centers.nature.${nature}`),
+              }))}
               width="390px"
               selected={natureSelection}
               setSelected={(selected) =>
