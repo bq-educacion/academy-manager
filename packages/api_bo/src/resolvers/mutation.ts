@@ -31,6 +31,8 @@ export const Mutation = {
       const createdAt = new Date().toLocaleDateString("en-GB");
       const idCenter = await centerCollection(ctx.db).insertOne({
         ...args,
+        phone: args.phone || "",
+        email: args.email || "",
         notes: args.notes || "",
         contacts: [],
         createdAt,
@@ -38,6 +40,8 @@ export const Mutation = {
       return {
         _id: idCenter,
         contacts: [],
+        phone: args.phone || "",
+        email: args.email || "",
         notes: args.notes || "",
         createdAt,
         ...args,
