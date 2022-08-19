@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import { Layout, Modal, Table } from "../../components";
-import { sections } from "../../config";
-import withApollo from "../../apollo/withApollo";
+import { Layout, Modal, Table } from "../components";
+import { sections } from "../config";
+import withApollo from "../apollo/withApollo";
 import {
   colors,
   DropDown,
@@ -12,11 +12,7 @@ import {
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import {
-  Center,
-  OrderFilter,
-  useGetCentersFQuery,
-} from "../../generated/graphql";
+import { Center, OrderFilter, useGetCentersFQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
 
 const CentersPage: NextPage = () => {

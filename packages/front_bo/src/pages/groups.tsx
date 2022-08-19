@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import { Layout } from "../../components";
-import { sections } from "../../config";
-import withApollo from "../../apollo/withApollo";
+import { Layout } from "../components";
+import { sections } from "../config";
+import withApollo from "../apollo/withApollo";
 
 const GroupsPage: NextPage = () => {
   return (
