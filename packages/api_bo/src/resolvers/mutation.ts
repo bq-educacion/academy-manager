@@ -34,18 +34,23 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
+      const emails = args.contacts.map((contact) => contact.email);
+      const uniqueEmails = [...new Set(emails)];
+      if (emails.length !== uniqueEmails.length) {
+        throw new Error("Email of center contact must be unique");
+      }
+
       const createdAt = new Date().toLocaleDateString("en-GB");
       const idCenter = await centerCollection(ctx.db).insertOne({
         ...args,
         phone: args.phone || "",
         email: args.email || "",
         notes: args.notes || "",
-        contacts: [],
         createdAt,
       });
+
       return {
         _id: idCenter,
-        contacts: [],
         phone: args.phone || "",
         email: args.email || "",
         notes: args.notes || "",
@@ -320,14 +325,24 @@ export const Mutation = {
         throw new Error("404, Group not found");
       }
 
+      const emails = args.contacts.map((contact) => contact.email);
+      const uniqueEmails = [...new Set(emails)];
+      if (emails.length !== uniqueEmails.length) {
+        throw new Error("Email of student contact must be unique");
+      }
+      const contacts = args.contacts.map((contact) => ({
+        ...contact,
+        notes: contact.notes || "",
+      }));
+
       const idStudent = await studentCollection(ctx.db).insertOne({
         ...args,
         birthDate,
+        contacts,
         state,
         registrationDate,
         descriptionAllergy: args.descriptionAllergy || "",
         notes: args.notes || "",
-        contacts: [],
       });
 
       await groupCollection(ctx.db).updateOne(
@@ -341,8 +356,8 @@ export const Mutation = {
         registrationDate,
         descriptionAllergy: args.descriptionAllergy || "",
         notes: args.notes || "",
-        contacts: [],
         ...args,
+        contacts,
         birthDate,
       };
     } catch (error) {
