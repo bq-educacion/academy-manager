@@ -53,6 +53,7 @@ const CreateCenter: FC<{
       languages: languagesSelection,
       phone,
       email,
+      contacts,
     },
   });
 

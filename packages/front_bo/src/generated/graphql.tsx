@@ -16,6 +16,18 @@ export type Scalars = {
   Number: any;
 };
 
+export type Availability = {
+  __typename?: 'Availability';
+  day: Days;
+  hours: Array<Scalars['String']>;
+  id_day: Scalars['Number'];
+};
+
+export type AvailabilityInput = {
+  day: Days;
+  hours: Array<Scalars['String']>;
+};
+
 export type Center = {
   __typename?: 'Center';
   address: Scalars['String'];
@@ -42,6 +54,12 @@ export enum CenterActivityType {
 
 export type CenterContact = {
   __typename?: 'CenterContact';
+  email: Scalars['String'];
+  name: Scalars['String'];
+  phone: Scalars['String'];
+};
+
+export type CenterContactInput = {
   email: Scalars['String'];
   name: Scalars['String'];
   phone: Scalars['String'];
@@ -92,27 +110,28 @@ export enum GroupType {
 
 export type Instructor = {
   __typename?: 'Instructor';
-  availability?: Maybe<Array<Scalars['String']>>;
-  center?: Maybe<Center>;
-  corporateEmail?: Maybe<Scalars['String']>;
-  expertise?: Maybe<Scalars['String']>;
-  formation?: Maybe<Scalars['String']>;
-  geographicalAvailability?: Maybe<Array<Scalars['String']>>;
-  id?: Maybe<Scalars['ID']>;
-  languages?: Maybe<Array<Scalars['String']>>;
-  materialExperience?: Maybe<Array<Scalars['String']>>;
-  name?: Maybe<Scalars['String']>;
+  areas: Array<Scalars['String']>;
+  availability: Array<Availability>;
+  center: Center;
+  corporateEmail: Scalars['String'];
+  geographicalAvailability: Scalars['String'];
+  groups: Array<Group>;
+  id: Scalars['ID'];
+  knowledge: Scalars['String'];
+  languages: Array<Scalars['String']>;
+  materialsExperience: Array<Scalars['String']>;
+  name: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
-  personalEmail?: Maybe<Scalars['String']>;
-  phone?: Maybe<Scalars['String']>;
-  platformEducationExperience?: Maybe<Array<Scalars['String']>>;
-  previousExperience?: Maybe<Scalars['String']>;
-  programmingExperience?: Maybe<Scalars['Boolean']>;
-  state?: Maybe<StateInstructor>;
-  summerAvailability?: Maybe<Scalars['String']>;
-  surname?: Maybe<Scalars['String']>;
-  typeVehicle?: Maybe<TypeVehicleInstructor>;
-  vehicle?: Maybe<Scalars['Boolean']>;
+  personalEmail: Scalars['String'];
+  phone: Scalars['String'];
+  platformEducationExperience: Array<Scalars['String']>;
+  previousExperience: PreviousExperienceInstructor;
+  programmingExperience: Scalars['Boolean'];
+  state: StateInstructor;
+  summerAvailability: SummerAvailabilityInstructor;
+  training: TrainingInstructor;
+  urlCV: Scalars['String'];
+  vehicle: TypeVehicleInstructor;
 };
 
 export type Mutation = {
@@ -121,6 +140,7 @@ export type Mutation = {
   addStudentContact: StudentContact;
   createCenter: Center;
   createGroup: Group;
+  createInstructor: Instructor;
   createStudent: Student;
   editCenter: Center;
   editCenterContacts: CenterContact;
@@ -150,6 +170,7 @@ export type MutationAddStudentContactArgs = {
 
 export type MutationCreateCenterArgs = {
   address: Scalars['String'];
+  contacts: Array<CenterContactInput>;
   email?: InputMaybe<Scalars['String']>;
   languages: Array<Scalars['String']>;
   name: Scalars['String'];
@@ -173,10 +194,36 @@ export type MutationCreateGroupArgs = {
 };
 
 
+export type MutationCreateInstructorArgs = {
+  areas: Array<Scalars['String']>;
+  availability: Array<AvailabilityInput>;
+  center: Scalars['String'];
+  corporateEmail: Scalars['String'];
+  geographicalAvailability: Scalars['String'];
+  groups: Array<Scalars['String']>;
+  knowledge: Scalars['String'];
+  languages: Array<Scalars['String']>;
+  materialsExperience: Array<Scalars['String']>;
+  name: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
+  personalEmail: Scalars['String'];
+  phone: Scalars['String'];
+  platformEducationExperience: Array<Scalars['String']>;
+  previousExperience: PreviousExperienceInstructor;
+  programmingExperience: Scalars['Boolean'];
+  state: StateInstructor;
+  summerAvailability: SummerAvailabilityInstructor;
+  training: TrainingInstructor;
+  urlCV: Scalars['String'];
+  vehicle: TypeVehicleInstructor;
+};
+
+
 export type MutationCreateStudentArgs = {
   alergies: Scalars['Boolean'];
   birthDate: Scalars['String'];
   collectionPermit: Scalars['String'];
+  contacts: Array<StudentContactInput>;
   course: Scalars['String'];
   descriptionAllergy?: InputMaybe<Scalars['String']>;
   goesAlone: Scalars['Boolean'];
@@ -255,6 +302,7 @@ export type MutationEditStudentContactsArgs = {
 export enum OrderFilter {
   Languages = 'languages',
   Name = 'name',
+  Nature = 'nature',
   Population = 'population',
   Type = 'type'
 }
@@ -311,6 +359,8 @@ export type Query = {
   getCenters: PaginatedCenters;
   getGroup: Group;
   getGroups: PaginatedGroups;
+  getInstructor: Instructor;
+  getInstructors: Array<Instructor>;
   getStudent: Student;
   getStudents: PaginatedStudents;
 };
@@ -341,6 +391,11 @@ export type QueryGetGroupsArgs = {
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
   searchText?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetInstructorArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -392,6 +447,14 @@ export type StudentContact = {
   send_info: Scalars['Boolean'];
 };
 
+export type StudentContactInput = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
+  phone: Scalars['String'];
+  send_info: Scalars['Boolean'];
+};
+
 export enum StudentState {
   Active = 'ACTIVE',
   Withdrawn = 'WITHDRAWN'
@@ -416,6 +479,23 @@ export enum TypeVehicleInstructor {
   PublicTransport = 'PUBLIC_TRANSPORT'
 }
 
+export enum PreviousExperienceInstructor {
+  No = 'NO',
+  NoButInterested = 'NO_BUT_INTERESTED',
+  Yes = 'YES'
+}
+
+export enum SummerAvailabilityInstructor {
+  ExtracurricularsOnly = 'EXTRACURRICULARS_ONLY',
+  No = 'NO',
+  Yes = 'YES'
+}
+
+export enum TrainingInstructor {
+  CareerInEducation = 'CAREER_IN_EDUCATION',
+  TechnicalCareer = 'TECHNICAL_CAREER'
+}
+
 export type CreateCenterMutationVariables = Exact<{
   name: Scalars['String'];
   address: Scalars['String'];
@@ -425,6 +505,7 @@ export type CreateCenterMutationVariables = Exact<{
   languages: Array<Scalars['String']> | Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
+  contacts: Array<CenterContactInput> | CenterContactInput;
 }>;
 
 
@@ -443,7 +524,7 @@ export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?
 
 
 export const CreateCenterDocument = gql`
-    mutation CreateCenter($name: String!, $address: String!, $population: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [String!]!, $phone: String, $email: String) {
+    mutation CreateCenter($name: String!, $address: String!, $population: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [String!]!, $phone: String, $email: String, $contacts: [CenterContactInput!]!) {
   createCenter(
     name: $name
     address: $address
@@ -453,6 +534,7 @@ export const CreateCenterDocument = gql`
     languages: $languages
     phone: $phone
     email: $email
+    contacts: $contacts
   ) {
     id
   }
@@ -481,6 +563,7 @@ export type CreateCenterMutationFn = Apollo.MutationFunction<CreateCenterMutatio
  *      languages: // value for 'languages'
  *      phone: // value for 'phone'
  *      email: // value for 'email'
+ *      contacts: // value for 'contacts'
  *   },
  * });
  */
