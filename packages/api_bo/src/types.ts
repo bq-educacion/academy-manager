@@ -41,8 +41,15 @@ export type Center = {
   notes?: Maybe<Scalars["String"]>;
   phone?: Maybe<Scalars["String"]>;
   population: Scalars["String"];
-  type: CenterType;
+  type: CenterActivityType;
 };
+
+export enum CenterActivityType {
+  Academy = "ACADEMY",
+  Campus = "CAMPUS",
+  NoAcademy = "NO_ACADEMY",
+  Others = "OTHERS",
+}
 
 export type CenterContact = {
   __typename?: "CenterContact";
@@ -52,16 +59,9 @@ export type CenterContact = {
 };
 
 export enum CenterNature {
-  Concerted = "CONCERTED",
+  Concertado = "CONCERTADO",
   Private = "PRIVATE",
   Public = "PUBLIC",
-}
-
-export enum CenterType {
-  Academy = "ACADEMY",
-  Campus = "CAMPUS",
-  NoAcademy = "NO_ACADEMY",
-  Others = "OTHERS",
 }
 
 export enum Days {
@@ -165,7 +165,7 @@ export type MutationCreateCenterArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
   population: Scalars["String"];
-  type: CenterType;
+  type: CenterActivityType;
 };
 
 export type MutationCreateGroupArgs = {
@@ -205,7 +205,7 @@ export type MutationEditCenterArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
   population?: InputMaybe<Scalars["String"]>;
-  type?: InputMaybe<CenterType>;
+  type?: InputMaybe<CenterActivityType>;
 };
 
 export type MutationEditCenterContactsArgs = {
@@ -523,9 +523,9 @@ export type DirectiveResolverFn<
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Center: ResolverTypeWrapper<Center>;
+  CenterActivityType: CenterActivityType;
   CenterContact: ResolverTypeWrapper<CenterContact>;
   CenterNature: CenterNature;
-  CenterType: CenterType;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
   GroupModality: GroupModality;
@@ -599,7 +599,11 @@ export type CenterResolvers<
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   population?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes["CenterType"], ParentType, ContextType>;
+  type?: Resolver<
+    ResolversTypes["CenterActivityType"],
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

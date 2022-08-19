@@ -1,7 +1,7 @@
 import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
-  enum CenterType {
+  enum CenterActivityType {
     ACADEMY
     NO_ACADEMY
     CAMPUS
@@ -11,7 +11,7 @@ export const typeDefs = gql`
   enum CenterNature {
     PRIVATE
     PUBLIC
-    CONCERTED
+    CONCERTADO
   }
 
   enum OrderFilter {
@@ -42,7 +42,7 @@ export const typeDefs = gql`
     population: String!
     phone: String
     email: String
-    type: CenterType!
+    type: CenterActivityType!
     nature: CenterNature!
     languages: [String!]!
     notes: String
@@ -69,7 +69,7 @@ export const typeDefs = gql`
       population: String!
       phone: String
       email: String
-      type: CenterType!
+      type: CenterActivityType!
       nature: CenterNature!
       languages: [String!]!
       notes: String
@@ -89,7 +89,7 @@ export const typeDefs = gql`
       population: String
       phone: String
       email: String
-      type: CenterType
+      type: CenterActivityType
       nature: CenterNature
       languages: [String!]
       notes: String
