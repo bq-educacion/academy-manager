@@ -41,20 +41,22 @@ const CreateCenter: FC<{
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [numberOfContacts, setNumberOfContacts] = useState<number>(1);
-  const [contacts] = useState<CenterContact[]>([]);
+  const [contacts, setContacts] = useState<CenterContact[]>([]);
 
   const [createCenterMutation, { error }] = useCreateCenterMutation({
     variables: {
-      name: name,
-      address: address,
-      population: population,
+      name,
+      address,
+      population,
       type: typeSelection,
       nature: natureSelection as CenterNature,
       languages: languagesSelection,
-      phone: phone,
-      email: email,
+      phone,
+      email,
     },
   });
+
+  //TODO: add contacts to query when available
 
   const route = useRouter();
   useEffect(() => {
@@ -75,12 +77,7 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.type`)}
             </styles.BoldP4>
             <DropDown
-              titles={[
-                CenterActivityType.Academy,
-                CenterActivityType.NoAcademy,
-                CenterActivityType.Campus,
-                CenterActivityType.Others,
-              ]}
+              titles={Object.values(CenterActivityType)}
               selected={typeSelection}
               setSelected={(selected) =>
                 setTypeSelection(selected as CenterActivityType[])
@@ -94,11 +91,7 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.nature`)}
             </styles.BoldP4>
             <DropDownUnique
-              titles={[
-                CenterNature.Concertado,
-                CenterNature.Private,
-                CenterNature.Public,
-              ]}
+              titles={Object.values(CenterNature)}
               width="390px"
               selected={natureSelection}
               setSelected={(selected) =>
@@ -231,7 +224,7 @@ const CreateCenter: FC<{
                     setNumberOfContacts={setNumberOfContacts}
                     numberOfContacts={numberOfContacts}
                     setContact={(contact) => {
-                      contacts.push(contact);
+                      setContacts([...contacts, contact]);
                     }}
                     finish={finish}
                   />

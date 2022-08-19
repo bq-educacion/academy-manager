@@ -27,6 +27,18 @@ export type Scalars = {
   Number: number;
 };
 
+export type Availability = {
+  __typename?: "Availability";
+  day: Days;
+  hours: Array<Scalars["String"]>;
+  id_day: Scalars["Number"];
+};
+
+export type AvailabilityInput = {
+  day: Days;
+  hours: Array<Scalars["String"]>;
+};
+
 export type Center = {
   __typename?: "Center";
   address: Scalars["String"];
@@ -103,27 +115,28 @@ export enum GroupType {
 
 export type Instructor = {
   __typename?: "Instructor";
-  availability?: Maybe<Array<Scalars["String"]>>;
-  center?: Maybe<Center>;
-  corporateEmail?: Maybe<Scalars["String"]>;
-  expertise?: Maybe<Scalars["String"]>;
-  formation?: Maybe<Scalars["String"]>;
-  geographicalAvailability?: Maybe<Array<Scalars["String"]>>;
-  id?: Maybe<Scalars["ID"]>;
-  languages?: Maybe<Array<Scalars["String"]>>;
-  materialExperience?: Maybe<Array<Scalars["String"]>>;
-  name?: Maybe<Scalars["String"]>;
+  areas: Array<Scalars["String"]>;
+  availability: Array<Availability>;
+  center: Center;
+  corporateEmail: Scalars["String"];
+  geographicalAvailability: Scalars["String"];
+  groups: Array<Group>;
+  id: Scalars["ID"];
+  knowledge: Scalars["String"];
+  languages: Array<Scalars["String"]>;
+  materialsExperience: Array<Scalars["String"]>;
+  name: Scalars["String"];
   notes?: Maybe<Scalars["String"]>;
-  personalEmail?: Maybe<Scalars["String"]>;
-  phone?: Maybe<Scalars["String"]>;
-  platformEducationExperience?: Maybe<Array<Scalars["String"]>>;
-  previousExperience?: Maybe<Scalars["String"]>;
-  programmingExperience?: Maybe<Scalars["Boolean"]>;
-  state?: Maybe<StateInstructor>;
-  summerAvailability?: Maybe<Scalars["String"]>;
-  surname?: Maybe<Scalars["String"]>;
-  typeVehicle?: Maybe<TypeVehicleInstructor>;
-  vehicle?: Maybe<Scalars["Boolean"]>;
+  personalEmail: Scalars["String"];
+  phone: Scalars["String"];
+  platformEducationExperience: Array<Scalars["String"]>;
+  previousExperience: PreviousExperienceInstructor;
+  programmingExperience: Scalars["Boolean"];
+  state: StateInstructor;
+  summerAvailability: SummerAvailabilityInstructor;
+  training: TrainingInstructor;
+  urlCV: Scalars["String"];
+  vehicle: TypeVehicleInstructor;
 };
 
 export type Mutation = {
@@ -132,6 +145,7 @@ export type Mutation = {
   addStudentContact: StudentContact;
   createCenter: Center;
   createGroup: Group;
+  createInstructor: Instructor;
   createStudent: Student;
   editCenter: Center;
   editCenterContacts: CenterContact;
@@ -177,6 +191,30 @@ export type MutationCreateGroupArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   timetable: Array<TimetableInput>;
   type: GroupType;
+};
+
+export type MutationCreateInstructorArgs = {
+  areas: Array<Scalars["String"]>;
+  availability: Array<AvailabilityInput>;
+  center: Scalars["String"];
+  corporateEmail: Scalars["String"];
+  geographicalAvailability: Scalars["String"];
+  groups: Array<Scalars["String"]>;
+  knowledge: Scalars["String"];
+  languages: Array<Scalars["String"]>;
+  materialsExperience: Array<Scalars["String"]>;
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  personalEmail: Scalars["String"];
+  phone: Scalars["String"];
+  platformEducationExperience: Array<Scalars["String"]>;
+  previousExperience: PreviousExperienceInstructor;
+  programmingExperience: Scalars["Boolean"];
+  state: StateInstructor;
+  summerAvailability: SummerAvailabilityInstructor;
+  training: TrainingInstructor;
+  urlCV: Scalars["String"];
+  vehicle: TypeVehicleInstructor;
 };
 
 export type MutationCreateStudentArgs = {
@@ -256,6 +294,7 @@ export type MutationEditStudentContactsArgs = {
 export enum OrderFilter {
   Languages = "languages",
   Name = "name",
+  Nature = "nature",
   Population = "population",
   Type = "type",
 }
@@ -312,6 +351,8 @@ export type Query = {
   getCenters: PaginatedCenters;
   getGroup: Group;
   getGroups: PaginatedGroups;
+  getInstructor: Instructor;
+  getInstructors: Array<Instructor>;
   getStudent: Student;
   getStudents: PaginatedStudents;
 };
@@ -338,6 +379,10 @@ export type QueryGetGroupsArgs = {
   page?: InputMaybe<Scalars["Int"]>;
   pageSize?: InputMaybe<Scalars["Int"]>;
   searchText?: InputMaybe<Scalars["String"]>;
+};
+
+export type QueryGetInstructorArgs = {
+  id: Scalars["String"];
 };
 
 export type QueryGetStudentArgs = {
@@ -409,6 +454,23 @@ export type TimetableInput = {
 export enum TypeVehicleInstructor {
   Own = "OWN",
   PublicTransport = "PUBLIC_TRANSPORT",
+}
+
+export enum PreviousExperienceInstructor {
+  No = "NO",
+  NoButInterested = "NO_BUT_INTERESTED",
+  Yes = "YES",
+}
+
+export enum SummerAvailabilityInstructor {
+  ExtracurricularsOnly = "EXTRACURRICULARS_ONLY",
+  No = "NO",
+  Yes = "YES",
+}
+
+export enum TrainingInstructor {
+  CareerInEducation = "CAREER_IN_EDUCATION",
+  TechnicalCareer = "TECHNICAL_CAREER",
 }
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -521,6 +583,8 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Availability: ResolverTypeWrapper<Availability>;
+  AvailabilityInput: AvailabilityInput;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Center: ResolverTypeWrapper<Center>;
   CenterActivityType: CenterActivityType;
@@ -550,10 +614,15 @@ export type ResolversTypes = ResolversObject<{
   Timetable: ResolverTypeWrapper<Timetable>;
   TimetableInput: TimetableInput;
   TypeVehicleInstructor: TypeVehicleInstructor;
+  previousExperienceInstructor: PreviousExperienceInstructor;
+  summerAvailabilityInstructor: SummerAvailabilityInstructor;
+  trainingInstructor: TrainingInstructor;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Availability: Availability;
+  AvailabilityInput: AvailabilityInput;
   Boolean: Scalars["Boolean"];
   Center: Center;
   CenterContact: CenterContact;
@@ -572,6 +641,17 @@ export type ResolversParentTypes = ResolversObject<{
   StudentContact: StudentContact;
   Timetable: Timetable;
   TimetableInput: TimetableInput;
+}>;
+
+export type AvailabilityResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Availability"] =
+    ResolversParentTypes["Availability"],
+> = ResolversObject<{
+  day?: Resolver<ResolversTypes["Days"], ParentType, ContextType>;
+  hours?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  id_day?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CenterResolvers<
@@ -655,83 +735,68 @@ export type InstructorResolvers<
   ParentType extends ResolversParentTypes["Instructor"] =
     ResolversParentTypes["Instructor"],
 > = ResolversObject<{
+  areas?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
   availability?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
+    Array<ResolversTypes["Availability"]>,
     ParentType,
     ContextType
   >;
-  center?: Resolver<Maybe<ResolversTypes["Center"]>, ParentType, ContextType>;
-  corporateEmail?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
-  expertise?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
-  formation?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
+  center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
+  corporateEmail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   geographicalAvailability?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
+    ResolversTypes["String"],
     ParentType,
     ContextType
   >;
-  id?: Resolver<Maybe<ResolversTypes["ID"]>, ParentType, ContextType>;
+  groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  knowledge?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   languages?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
+    Array<ResolversTypes["String"]>,
     ParentType,
     ContextType
   >;
-  materialExperience?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
+  materialsExperience?: Resolver<
+    Array<ResolversTypes["String"]>,
     ParentType,
     ContextType
   >;
-  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  personalEmail?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
-  phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  personalEmail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  phone?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   platformEducationExperience?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
+    Array<ResolversTypes["String"]>,
     ParentType,
     ContextType
   >;
   previousExperience?: Resolver<
-    Maybe<ResolversTypes["String"]>,
+    ResolversTypes["previousExperienceInstructor"],
     ParentType,
     ContextType
   >;
   programmingExperience?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+    ResolversTypes["Boolean"],
     ParentType,
     ContextType
   >;
-  state?: Resolver<
-    Maybe<ResolversTypes["StateInstructor"]>,
-    ParentType,
-    ContextType
-  >;
+  state?: Resolver<ResolversTypes["StateInstructor"], ParentType, ContextType>;
   summerAvailability?: Resolver<
-    Maybe<ResolversTypes["String"]>,
+    ResolversTypes["summerAvailabilityInstructor"],
     ParentType,
     ContextType
   >;
-  surname?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  typeVehicle?: Resolver<
-    Maybe<ResolversTypes["TypeVehicleInstructor"]>,
+  training?: Resolver<
+    ResolversTypes["trainingInstructor"],
     ParentType,
     ContextType
   >;
-  vehicle?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>;
+  urlCV?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  vehicle?: Resolver<
+    ResolversTypes["TypeVehicleInstructor"],
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -774,6 +839,34 @@ export type MutationResolvers<
     RequireFields<
       MutationCreateGroupArgs,
       "course" | "idCenter" | "modality" | "name" | "timetable" | "type"
+    >
+  >;
+  createInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationCreateInstructorArgs,
+      | "areas"
+      | "availability"
+      | "center"
+      | "corporateEmail"
+      | "geographicalAvailability"
+      | "groups"
+      | "knowledge"
+      | "languages"
+      | "materialsExperience"
+      | "name"
+      | "personalEmail"
+      | "phone"
+      | "platformEducationExperience"
+      | "previousExperience"
+      | "programmingExperience"
+      | "state"
+      | "summerAvailability"
+      | "training"
+      | "urlCV"
+      | "vehicle"
     >
   >;
   createStudent?: Resolver<
@@ -900,6 +993,17 @@ export type QueryResolvers<
     ContextType,
     Partial<QueryGetGroupsArgs>
   >;
+  getInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetInstructorArgs, "id">
+  >;
+  getInstructors?: Resolver<
+    Array<ResolversTypes["Instructor"]>,
+    ParentType,
+    ContextType
+  >;
   getStudent?: Resolver<
     ResolversTypes["Student"],
     ParentType,
@@ -985,6 +1089,7 @@ export type TimetableResolvers<
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  Availability?: AvailabilityResolvers<ContextType>;
   Center?: CenterResolvers<ContextType>;
   CenterContact?: CenterContactResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
