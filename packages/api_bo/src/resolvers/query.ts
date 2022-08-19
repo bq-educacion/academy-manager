@@ -37,15 +37,7 @@ export const Query = {
         { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { email: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        {
-          activityTypes: {
-            $regex: `.*${args.searchText}.*`,
-            $options: "i",
-          },
-        },
-        { modality: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { nature: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
@@ -73,7 +65,6 @@ export const Query = {
       name: "name",
       languages: "languages",
       population: "population",
-      modality: "modality",
       type: "type",
     };
     if (args.orderFilter && args.order) {
@@ -127,6 +118,7 @@ export const Query = {
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { modality: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
@@ -174,6 +166,7 @@ export const Query = {
     const OrderFilter = {
       id_group: "id_group",
       course: "course",
+      modality: "modality",
       instructors: "instructorsName.name",
       center: "centersName.name",
       id_day: "timetable.id_day",

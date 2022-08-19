@@ -6,6 +6,12 @@ export const typeDefs = gql`
     EXTERNAL
   }
 
+  enum GroupModality {
+    PRESENTIAL
+    SEMI_PRESENTIAL
+    ONLINE
+  }
+
   enum Days {
     MONDAY
     TUESDAY
@@ -24,6 +30,7 @@ export const typeDefs = gql`
     id_day
     start
     end
+    modality
   }
 
   type Timetable {
@@ -51,6 +58,7 @@ export const typeDefs = gql`
     id: ID!
     id_group: Number!
     name: String!
+    modality: GroupModality!
     type: GroupType!
     createdAt: String!
     course: String!
@@ -76,6 +84,7 @@ export const typeDefs = gql`
     createGroup(
       idCenter: String!
       name: String!
+      modality: GroupModality!
       type: GroupType!
       course: String!
       timetable: [TimetableInput!]!
@@ -86,6 +95,7 @@ export const typeDefs = gql`
     editGroup(
       id:String!,
       name: String,
+      modality: GroupModality,
       type: GroupType, 
       timetable: [TimetableInput!], 
       notes: String, 

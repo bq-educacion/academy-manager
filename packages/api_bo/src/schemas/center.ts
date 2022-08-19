@@ -7,18 +7,6 @@ export const typeDefs = gql`
     CAMPUS
   }
 
-  enum CenterActivityTypes {
-    EXTRACURRICULAR
-    WORKSHOPS
-    OTHERS
-  }
-
-  enum CenterModality {
-    PRESENTIAL
-    SEMI_PRESENTIAL
-    ONLINE
-  }
-
   enum CenterNature {
     PRIVATE
     PUBLIC
@@ -27,7 +15,6 @@ export const typeDefs = gql`
 
   enum OrderFilter {
     name
-    modality
     population
     type
     languages
@@ -52,13 +39,10 @@ export const typeDefs = gql`
     name: String!
     address: String!
     population: String!
-    phone: String!
+    phone: String
     email: String
     type: CenterType!
-    activityTypes: CenterActivityTypes!
-    modality: CenterModality!
     nature: CenterNature!
-    course: String!
     languages: [String!]!
     notes: String
     createdAt: String!
@@ -82,13 +66,10 @@ export const typeDefs = gql`
       name: String!
       address: String!
       population: String!
-      phone: String!
-      email: String!
+      phone: String
+      email: String
       type: CenterType!
-      activityTypes: CenterActivityTypes!
-      modality: CenterModality!
       nature: CenterNature!
-      course: String!
       languages: [String!]!
       notes: String
     ): Center!
@@ -108,10 +89,7 @@ export const typeDefs = gql`
       phone: String
       email: String
       type: CenterType
-      activityTypes: CenterActivityTypes
-      modality: CenterModality
       nature: CenterNature
-      course: String
       languages: [String!]
       notes: String
     ): Center!
