@@ -22,7 +22,7 @@
       "name": "Nombre",
       "languages": "Idiomas",
       "population": "Población",
-      "modality": "Modalidad",
+      "nature": "Naturaleza",
       "type": "Tipo"
     },
     "Dropdown": {
@@ -96,6 +96,21 @@
       "title": "Inicia sesión"
     },
     "centers": {
+      "languages": {
+        "English": "Ing",
+        "Spanish": "Esp"
+      },
+      "nature": {
+        "PRIVATE": "Privado",
+        "PUBLIC": "Público",
+        "CONCERTADO": "Concertado"
+      },
+      "type": {
+        "ACADEMY": "Academy",
+        "NO_ACADEMY": "No Academy",
+        "CAMPUS": "Campus",
+        "OTHERS": "Otros"
+      },
       "advance-search": "Búsqueda avanzada",
       "data-error": "No hay datos",
       "data-error-options": {

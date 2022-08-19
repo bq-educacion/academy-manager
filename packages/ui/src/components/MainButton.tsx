@@ -19,7 +19,7 @@ const MainButton = styled.button<{ color?: string; backColor?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: min-content;
+  width: max-content;
   padding: 0 20px;
   height: 40px;
   border-radius: 4px;

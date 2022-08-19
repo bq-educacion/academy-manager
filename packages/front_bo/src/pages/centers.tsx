@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import { Layout, Modal, Table } from "../../components";
-import { sections } from "../../config";
-import withApollo from "../../apollo/withApollo";
+import { Layout, Modal, Table } from "../components";
+import { sections } from "../config";
+import withApollo from "../apollo/withApollo";
 import {
   colors,
   FirstActionButton,
@@ -11,13 +11,9 @@ import {
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import {
-  Center,
-  OrderFilter,
-  useGetCentersFQuery,
-} from "../../generated/graphql";
+import { Center, OrderFilter, useGetCentersFQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
-import CreateCenter from "../../components/CreateCenter";
+import CreateCenter from "../components/CreateCenter";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -46,11 +42,8 @@ const CentersPage: NextPage = () => {
       page: 1,
       pageSize: 20,
     },
+    fetchPolicy: "network-only",
   });
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   useEffect(() => {
     data &&
@@ -82,7 +75,11 @@ const CentersPage: NextPage = () => {
           title={modalTitle}
           endTitle={t("pages.centers.modal-create.center.end-title")}
         >
-          <CreateCenter changeTitle={setModalTitle} close={setModalOpen} />
+          <CreateCenter
+            refetch={refetch}
+            changeTitle={setModalTitle}
+            close={setModalOpen}
+          />
         </Modal>
       )}
       <Layout
@@ -154,7 +151,14 @@ const CentersPage: NextPage = () => {
               {
                 label: t("components.table.languages"),
                 key: OrderFilter.Languages,
-                content: (item) => <div>{item.languages?.join(", ")}</div>,
+                // reduce to a string of languages
+                content: (item) => (
+                  <div>
+                    {item.languages
+                      ?.map((elem) => t(`pages.centers.languages.${elem}`))
+                      .join(", ")}
+                  </div>
+                ),
               },
               {
                 label: t("components.table.population"),
@@ -162,14 +166,25 @@ const CentersPage: NextPage = () => {
                 content: (item) => <div>{item.population}</div>,
               },
               {
-                label: t("components.table.modality"),
-                key: OrderFilter.Modality,
-                content: (item) => <div>{item.modality}</div>,
+                label: t("components.table.nature"),
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //No se puede ordenar por naturaleza, mal puesto a type
+                //Saltará problema de keys
+                key: OrderFilter.Type,
+                content: (item) => (
+                  <div>{t(`pages.centers.nature.${item.nature}`)}</div>
+                ),
               },
               {
                 label: t("components.table.type"),
                 key: OrderFilter.Type,
-                content: (item) => <div>{item.type}</div>,
+                content: (item) => (
+                  <div>
+                    {item.type
+                      ?.map((elem) => t(`pages.centers.type.${elem}`))
+                      .join(", ")}
+                  </div>
+                ),
               },
             ]}
           />

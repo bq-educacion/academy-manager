@@ -2,27 +2,21 @@ mutation CreateCenter(
   $name: String!
   $address: String!
   $population: String!
-  $phone: String!
-  $email: String!
-  $type: CenterType!
-  $activityTypes: CenterActivityTypes!
-  $modality: CenterModality!
+  $type: [CenterActivityType!]!
   $nature: CenterNature!
-  $course: String!
   $languages: [String!]!
+  $phone: String
+  $email: String
 ) {
   createCenter(
     name: $name
     address: $address
     population: $population
+    type: $type
+    nature: $nature
+    languages: $languages
     phone: $phone
     email: $email
-    type: $type
-    activityTypes: $activityTypes
-    modality: $modality
-    nature: $nature
-    course: $course
-    languages: $languages
   ) {
     id
   }

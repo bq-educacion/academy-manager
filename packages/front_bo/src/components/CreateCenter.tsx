@@ -12,11 +12,9 @@ import styled from "@emotion/styled";
 import { FC, useState } from "react";
 import { centerLanguages } from "../config";
 import {
-  CenterActivityTypes,
+  CenterActivityType,
   CenterContact,
-  CenterModality,
   CenterNature,
-  CenterType,
   useCreateCenterMutation,
 } from "../generated/graphql";
 import AddContact from "./AddContact";
@@ -24,18 +22,14 @@ import AddContact from "./AddContact";
 const CreateCenter: FC<{
   changeTitle: (title: string) => void;
   close: (action: boolean) => void;
-}> = ({ close, changeTitle }) => {
+  refetch: () => void;
+}> = ({ close, changeTitle, refetch }) => {
   const t = useTranslate();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [finish, setFinish] = useState<boolean>(false);
 
-  const [typeSelection, setTypeSelection] = useState<CenterType | undefined>(
-    undefined
-  );
-  const [modalitySelection, setModalitySelection] = useState<
-    CenterModality | undefined
-  >(undefined);
+  const [typeSelection, setTypeSelection] = useState<CenterActivityType[]>([]);
   const [natureSelection, setNatureSelection] = useState<
     CenterNature | undefined
   >(undefined);
@@ -53,14 +47,11 @@ const CreateCenter: FC<{
       name: name,
       address: address,
       population: population,
+      type: typeSelection,
+      nature: natureSelection as CenterNature,
+      languages: languagesSelection,
       phone: phone,
       email: email,
-      type: typeSelection as CenterType,
-      activityTypes: CenterActivityTypes.Workshops,
-      modality: modalitySelection as CenterModality,
-      nature: natureSelection as CenterNature,
-      course: "",
-      languages: languagesSelection,
     },
   });
 
@@ -71,49 +62,32 @@ const CreateCenter: FC<{
       )}
       {step === 1 && (
         <>
-          <FillInSectioned>
-            <FillIn>
-              <styles.BoldP4>
-                {t(`components.create-center.1.subtitle.type`)}
-              </styles.BoldP4>
-              <DropDownUnique
-                titles={[
-                  CenterType.Academy,
-                  CenterType.NoAcademy,
-                  CenterType.Campus,
-                ]}
-                width="190px"
-                selected={typeSelection}
-                setSelected={(selected) =>
-                  setTypeSelection(selected as CenterType)
-                }
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t(`components.create-center.1.subtitle.modality`)}
-              </styles.BoldP4>
-              <DropDownUnique
-                titles={[
-                  CenterModality.Online,
-                  CenterModality.Presential,
-                  CenterModality.SemiPresential,
-                ]}
-                width="190px"
-                selected={modalitySelection}
-                setSelected={(selected) =>
-                  setModalitySelection(selected as CenterModality)
-                }
-              />
-            </FillIn>
-          </FillInSectioned>
+          <FillIn>
+            <styles.BoldP4>
+              {t(`components.create-center.1.subtitle.type`)}
+            </styles.BoldP4>
+            <DropDown
+              titles={[
+                CenterActivityType.Academy,
+                CenterActivityType.NoAcademy,
+                CenterActivityType.Campus,
+                CenterActivityType.Others,
+              ]}
+              selected={typeSelection}
+              setSelected={(selected) =>
+                setTypeSelection(selected as CenterActivityType[])
+              }
+              width="390px"
+            />
+          </FillIn>
+
           <FillIn>
             <styles.BoldP4>
               {t(`components.create-center.1.subtitle.nature`)}
             </styles.BoldP4>
             <DropDownUnique
               titles={[
-                CenterNature.Concerted,
+                CenterNature.Concertado,
                 CenterNature.Private,
                 CenterNature.Public,
               ]}
@@ -294,6 +268,7 @@ const CreateCenter: FC<{
           <EndButton
             Click={() => {
               createCenterMutation();
+              refetch();
               close(false);
             }}
             text={t("general.actions.consent")}

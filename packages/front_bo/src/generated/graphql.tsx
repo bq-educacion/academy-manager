@@ -18,28 +18,26 @@ export type Scalars = {
 
 export type Center = {
   __typename?: 'Center';
-  activityTypes: CenterActivityTypes;
   address: Scalars['String'];
   contacts: Array<CenterContact>;
-  course: Scalars['String'];
   createdAt: Scalars['String'];
   email?: Maybe<Scalars['String']>;
   groups: Array<Group>;
   id: Scalars['ID'];
   languages: Array<Scalars['String']>;
-  modality: CenterModality;
   name: Scalars['String'];
   nature: CenterNature;
   notes?: Maybe<Scalars['String']>;
-  phone: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
   population: Scalars['String'];
-  type: CenterType;
+  type: Array<CenterActivityType>;
 };
 
-export enum CenterActivityTypes {
-  Extracurricular = 'EXTRACURRICULAR',
-  Others = 'OTHERS',
-  Workshops = 'WORKSHOPS'
+export enum CenterActivityType {
+  Academy = 'ACADEMY',
+  Campus = 'CAMPUS',
+  NoAcademy = 'NO_ACADEMY',
+  Others = 'OTHERS'
 }
 
 export type CenterContact = {
@@ -49,22 +47,10 @@ export type CenterContact = {
   phone: Scalars['String'];
 };
 
-export enum CenterModality {
-  Online = 'ONLINE',
-  Presential = 'PRESENTIAL',
-  SemiPresential = 'SEMI_PRESENTIAL'
-}
-
 export enum CenterNature {
-  Concerted = 'CONCERTED',
+  Concertado = 'CONCERTADO',
   Private = 'PRIVATE',
   Public = 'PUBLIC'
-}
-
-export enum CenterType {
-  Academy = 'ACADEMY',
-  Campus = 'CAMPUS',
-  NoAcademy = 'NO_ACADEMY'
 }
 
 export enum Days {
@@ -85,12 +71,19 @@ export type Group = {
   id: Scalars['ID'];
   id_group: Scalars['Number'];
   instructors: Array<Instructor>;
+  modality: GroupModality;
   name: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
   students: Array<Student>;
   timetable: Array<Timetable>;
   type: GroupType;
 };
+
+export enum GroupModality {
+  Online = 'ONLINE',
+  OnSite = 'ON_SITE',
+  SemiPresential = 'SEMI_PRESENTIAL'
+}
 
 export enum GroupType {
   External = 'EXTERNAL',
@@ -156,18 +149,15 @@ export type MutationAddStudentContactArgs = {
 
 
 export type MutationCreateCenterArgs = {
-  activityTypes: CenterActivityTypes;
   address: Scalars['String'];
-  course: Scalars['String'];
-  email: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
   languages: Array<Scalars['String']>;
-  modality: CenterModality;
   name: Scalars['String'];
   nature: CenterNature;
   notes?: InputMaybe<Scalars['String']>;
-  phone: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
   population: Scalars['String'];
-  type: CenterType;
+  type: Array<CenterActivityType>;
 };
 
 
@@ -175,6 +165,7 @@ export type MutationCreateGroupArgs = {
   course: Scalars['String'];
   idCenter: Scalars['String'];
   instructors?: InputMaybe<Array<Scalars['String']>>;
+  modality: GroupModality;
   name: Scalars['String'];
   notes?: InputMaybe<Scalars['String']>;
   timetable: Array<TimetableInput>;
@@ -200,19 +191,16 @@ export type MutationCreateStudentArgs = {
 
 
 export type MutationEditCenterArgs = {
-  activityTypes?: InputMaybe<CenterActivityTypes>;
   address?: InputMaybe<Scalars['String']>;
-  course?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   languages?: InputMaybe<Array<Scalars['String']>>;
-  modality?: InputMaybe<CenterModality>;
   name?: InputMaybe<Scalars['String']>;
   nature?: InputMaybe<CenterNature>;
   notes?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   population?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<CenterType>;
+  type?: InputMaybe<Array<CenterActivityType>>;
 };
 
 
@@ -229,6 +217,7 @@ export type MutationEditGroupArgs = {
   center?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   instructors?: InputMaybe<Array<Scalars['String']>>;
+  modality?: InputMaybe<GroupModality>;
   name?: InputMaybe<Scalars['String']>;
   notes?: InputMaybe<Scalars['String']>;
   timetable?: InputMaybe<Array<TimetableInput>>;
@@ -265,7 +254,6 @@ export type MutationEditStudentContactsArgs = {
 
 export enum OrderFilter {
   Languages = 'languages',
-  Modality = 'modality',
   Name = 'name',
   Population = 'population',
   Type = 'type'
@@ -278,6 +266,7 @@ export enum OrderFilterGroup {
   IdDay = 'id_day',
   IdGroup = 'id_group',
   Instructors = 'instructors',
+  Modality = 'modality',
   Start = 'start'
 }
 
@@ -431,29 +420,15 @@ export type CreateCenterMutationVariables = Exact<{
   name: Scalars['String'];
   address: Scalars['String'];
   population: Scalars['String'];
-  phone: Scalars['String'];
-  email: Scalars['String'];
-  type: CenterType;
-  activityTypes: CenterActivityTypes;
-  modality: CenterModality;
+  type: Array<CenterActivityType> | CenterActivityType;
   nature: CenterNature;
-  course: Scalars['String'];
   languages: Array<Scalars['String']> | Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type CreateCenterMutation = { __typename?: 'Mutation', createCenter: { __typename?: 'Center', id: string } };
-
-export type GetCentersQueryVariables = Exact<{
-  searchText?: InputMaybe<Scalars['String']>;
-  orderFilter?: InputMaybe<OrderFilter>;
-  order?: InputMaybe<Scalars['Number']>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type GetCentersQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Center', id: string, name: string, address: string, population: string, phone: string, email?: string | null, type: CenterType, activityTypes: CenterActivityTypes, modality: CenterModality, nature: CenterNature, course: string, languages: Array<string>, notes?: string | null, createdAt: string, contacts: Array<{ __typename?: 'CenterContact', phone: string, email: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, type: GroupType, createdAt: string, course: string, timetable: Array<{ __typename?: 'Timetable', day: Days }> }> }> } };
 
 export type GetCentersFQueryVariables = Exact<{
   searchText?: InputMaybe<Scalars['String']>;
@@ -464,23 +439,20 @@ export type GetCentersFQueryVariables = Exact<{
 }>;
 
 
-export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<string>, population: string, modality: CenterModality, type: CenterType }> } };
+export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<string>, population: string, nature: CenterNature, type: Array<CenterActivityType> }> } };
 
 
 export const CreateCenterDocument = gql`
-    mutation CreateCenter($name: String!, $address: String!, $population: String!, $phone: String!, $email: String!, $type: CenterType!, $activityTypes: CenterActivityTypes!, $modality: CenterModality!, $nature: CenterNature!, $course: String!, $languages: [String!]!) {
+    mutation CreateCenter($name: String!, $address: String!, $population: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [String!]!, $phone: String, $email: String) {
   createCenter(
     name: $name
     address: $address
     population: $population
+    type: $type
+    nature: $nature
+    languages: $languages
     phone: $phone
     email: $email
-    type: $type
-    activityTypes: $activityTypes
-    modality: $modality
-    nature: $nature
-    course: $course
-    languages: $languages
   ) {
     id
   }
@@ -504,14 +476,11 @@ export type CreateCenterMutationFn = Apollo.MutationFunction<CreateCenterMutatio
  *      name: // value for 'name'
  *      address: // value for 'address'
  *      population: // value for 'population'
+ *      type: // value for 'type'
+ *      nature: // value for 'nature'
+ *      languages: // value for 'languages'
  *      phone: // value for 'phone'
  *      email: // value for 'email'
- *      type: // value for 'type'
- *      activityTypes: // value for 'activityTypes'
- *      modality: // value for 'modality'
- *      nature: // value for 'nature'
- *      course: // value for 'course'
- *      languages: // value for 'languages'
  *   },
  * });
  */
@@ -522,86 +491,6 @@ export function useCreateCenterMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateCenterMutationHookResult = ReturnType<typeof useCreateCenterMutation>;
 export type CreateCenterMutationResult = Apollo.MutationResult<CreateCenterMutation>;
 export type CreateCenterMutationOptions = Apollo.BaseMutationOptions<CreateCenterMutation, CreateCenterMutationVariables>;
-export const GetCentersDocument = gql`
-    query GetCenters($searchText: String, $orderFilter: OrderFilter, $order: Number, $page: Int, $pageSize: Int) {
-  getCenters(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
-  ) {
-    page
-    totalPages
-    totalNumber
-    pageSize
-    data {
-      id
-      name
-      address
-      population
-      phone
-      email
-      type
-      activityTypes
-      modality
-      nature
-      course
-      languages
-      notes
-      createdAt
-      contacts {
-        phone
-        email
-        name
-      }
-      groups {
-        id
-        id_group
-        name
-        type
-        createdAt
-        course
-        timetable {
-          day
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetCentersQuery__
- *
- * To run a query within a React component, call `useGetCentersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCentersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCentersQuery({
- *   variables: {
- *      searchText: // value for 'searchText'
- *      orderFilter: // value for 'orderFilter'
- *      order: // value for 'order'
- *      page: // value for 'page'
- *      pageSize: // value for 'pageSize'
- *   },
- * });
- */
-export function useGetCentersQuery(baseOptions?: Apollo.QueryHookOptions<GetCentersQuery, GetCentersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCentersQuery, GetCentersQueryVariables>(GetCentersDocument, options);
-      }
-export function useGetCentersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCentersQuery, GetCentersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCentersQuery, GetCentersQueryVariables>(GetCentersDocument, options);
-        }
-export type GetCentersQueryHookResult = ReturnType<typeof useGetCentersQuery>;
-export type GetCentersLazyQueryHookResult = ReturnType<typeof useGetCentersLazyQuery>;
-export type GetCentersQueryResult = Apollo.QueryResult<GetCentersQuery, GetCentersQueryVariables>;
 export const GetCentersFDocument = gql`
     query GetCentersF($searchText: String, $orderFilter: OrderFilter, $order: Number, $page: Int, $pageSize: Int) {
   getCenters(
@@ -620,7 +509,7 @@ export const GetCentersFDocument = gql`
       name
       languages
       population
-      modality
+      nature
       type
     }
   }
