@@ -5,6 +5,7 @@ export const typeDefs = gql`
     ACADEMY
     NO_ACADEMY
     CAMPUS
+    OTHERS
   }
 
   enum CenterNature {

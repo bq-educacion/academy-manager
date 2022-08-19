@@ -7,7 +7,7 @@ export const typeDefs = gql`
   }
 
   enum GroupModality {
-    PRESENTIAL
+    ON_SITE
     SEMI_PRESENTIAL
     ONLINE
   }

@@ -61,6 +61,7 @@ export enum CenterType {
   Academy = "ACADEMY",
   Campus = "CAMPUS",
   NoAcademy = "NO_ACADEMY",
+  Others = "OTHERS",
 }
 
 export enum Days {
@@ -91,7 +92,7 @@ export type Group = {
 
 export enum GroupModality {
   Online = "ONLINE",
-  Presential = "PRESENTIAL",
+  OnSite = "ON_SITE",
   SemiPresential = "SEMI_PRESENTIAL",
 }
 
