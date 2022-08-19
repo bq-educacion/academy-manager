@@ -1,9 +1,11 @@
 import {
+  Availability,
   CenterContact,
   MutationAddCenterContactArgs,
   MutationAddStudentContactArgs,
   MutationCreateCenterArgs,
   MutationCreateGroupArgs,
+  MutationCreateInstructorArgs,
   MutationCreateStudentArgs,
   MutationEditCenterArgs,
   MutationEditCenterContactsArgs,
@@ -12,14 +14,18 @@ import {
   MutationEditStudentContactsArgs,
   StudentContact,
   StudentState,
+  Timetable,
 } from "../types.ts";
 import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { ObjectId } from "objectId";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
-import { instructorCollection } from "../models/InstructorModel.ts";
+import {
+  instructorCollection,
+  InstructorModel,
+} from "../models/InstructorModel.ts";
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
-import { setIdTimetable } from "../lib/setIdTimetable.ts";
+import { setIdDays } from "../lib/setIdDays.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -196,7 +202,7 @@ export const Mutation = {
         }
       }
 
-      const timetable = setIdTimetable(args.timetable);
+      const timetable = setIdDays(args.timetable) as Timetable[];
 
       const idGroup = await groupCollection(ctx.db).insertOne({
         ...args,
@@ -259,7 +265,7 @@ export const Mutation = {
       }
 
       if (args.timetable) {
-        const timetable = setIdTimetable(args.timetable);
+        const timetable = setIdDays(args.timetable) as Timetable[];
         updateGroup = { ...updateGroup, timetable };
       }
 
@@ -479,6 +485,65 @@ export const Mutation = {
       );
 
       return contactUpdate as StudentContact;
+    } catch (error) {
+      throw new Error("500, " + error);
+    }
+  },
+
+  createInstructor: async (
+    _parent: unknown,
+    args: MutationCreateInstructorArgs,
+    ctx: Context,
+  ): Promise<InstructorModel> => {
+    try {
+      const existsInstructor = await instructorCollection(ctx.db).findOne({
+        $or: [
+          { corporateEmail: args.corporateEmail },
+          { personalEmail: args.personalEmail },
+        ],
+      });
+      if (existsInstructor) throw new Error("404, Instructor already exists");
+
+      const existsCenter = await centerCollection(ctx.db).findById(
+        args.center,
+      );
+      if (!existsCenter) {
+        throw new Error("404, Center not found");
+      }
+
+      const groups = args.groups?.map(
+        (group) => new ObjectId(group),
+      );
+      const existsGroups = await groupCollection(ctx.db)
+        .find({
+          _id: { $in: groups },
+          center: new ObjectId(args.center),
+        })
+        .toArray();
+
+      if (existsGroups.length !== groups.length) {
+        throw new Error("404, Groups not found in that center");
+      }
+
+      const availability = setIdDays(args.availability) as Availability[];
+
+      const idInstructor = await instructorCollection(ctx.db).insertOne({
+        ...args,
+        availability,
+        notes: args.notes || "",
+      });
+
+      await groupCollection(ctx.db).updateMany(
+        { _id: { $in: groups } },
+        { $push: { instructors: { $each: [idInstructor] } } },
+      );
+
+      return {
+        _id: idInstructor,
+        ...args,
+        notes: args.notes || "",
+        availability,
+      };
     } catch (error) {
       throw new Error("500, " + error);
     }
