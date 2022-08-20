@@ -107,6 +107,9 @@ const CentersPage: NextPage = () => {
                   placeholder={t("components.content-start.search-placeholder")}
                   onChange={(e) => {
                     setInputText(e.target.value);
+                    if (e.target.value === "") {
+                      setSearchText("");
+                    }
                   }}
                   onKeyDownCapture={(e) => {
                     {
