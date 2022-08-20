@@ -1,11 +1,11 @@
-query GetCentersF(
+query GetGroups(
   $searchText: String
-  $orderFilter: OrderFilter
+  $orderFilter: OrderFilterGroup
   $order: Number
   $page: Int
   $pageSize: Int
 ) {
-  getCenters(
+  getGroups(
     searchText: $searchText
     orderFilter: $orderFilter
     order: $order
@@ -13,16 +13,26 @@ query GetCentersF(
     pageSize: $pageSize
   ) {
     page
-    pageSize
     totalPages
     totalNumber
+    pageSize
     data {
       id
+      id_group
       name
-      languages
-      city
-      nature
-      type
+      timetable {
+        day
+        id_day
+        start
+        end
+      }
+      course
+      center {
+        name
+      }
+      instructors {
+        name
+      }
     }
   }
 }

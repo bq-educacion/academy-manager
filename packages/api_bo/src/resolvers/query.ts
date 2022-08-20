@@ -35,7 +35,7 @@ export const Query = {
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { address: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
-          population: { $regex: `.*${args.searchText}.*`, $options: "i" },
+          city: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
         { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { email: { $regex: `.*${args.searchText}.*`, $options: "i" } },
@@ -68,7 +68,7 @@ export const Query = {
       name: "name",
       nature: "nature",
       languages: "languages",
-      population: "population",
+      city: "city",
       type: "type",
     };
     if (args.orderFilter && args.order) {
@@ -528,7 +528,8 @@ export const Instructor = {
     _: unknown,
     ctx: Context,
   ): Promise<GroupModel[] | undefined> => {
-    return await groupCollection(ctx.db).find({ instructors: parent._id })
+    return await groupCollection(ctx.db)
+      .find({ instructors: parent._id })
       .toArray();
   },
 };

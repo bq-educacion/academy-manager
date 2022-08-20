@@ -21,9 +21,25 @@
     "table": {
       "name": "Nombre",
       "languages": "Idiomas",
-      "population": "Población",
+      "city": "Población",
       "nature": "Naturaleza",
-      "type": "Tipo"
+      "type": "Tipo",
+      "id": "ID",
+      "center": "Colegio",
+      "instructor": "Monitor",
+      "days": "Días",
+      "time-table": {
+        "MONDAY": "L",
+        "TUESDAY": "M",
+        "WEDNESDAY": "X",
+        "THURSDAY": "J",
+        "FRIDAY": "V",
+        "SATURDAY": "S",
+        "SUNDAY": "D"
+      },
+      "start-time": "Inicio",
+      "end-time": "Fin",
+      "course": "Cursos"
     },
     "Dropdown": {
       "title": "Seleccionar"
@@ -45,7 +61,7 @@
           "name-placeholder": "Nombre completo del centro",
           "address": "Dirección del centro",
           "address-placeholder": "Calle y el número",
-          "population": "Población",
+          "city": "Población",
           "phone": "Teléfono (Opcional)",
           "phone-placeholder": "Teléfono",
           "email": "Email (Opcional)",
@@ -129,6 +145,12 @@
           "title": "Crear centro",
           "end-title": "Centro creado"
         }
+      }
+    },
+    "groups": {
+      "data-error": {
+        "0": "Crear un nuevo grupo",
+        "1": "varios grupos"
       }
     }
   }

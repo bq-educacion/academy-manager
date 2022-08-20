@@ -17,7 +17,7 @@ export const typeDefs = gql`
   enum OrderFilter {
     name
     nature
-    population
+    city
     type
     languages
   }
@@ -46,7 +46,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     address: String!
-    population: String!
+    city: String!
     phone: String
     email: String
     type: [CenterActivityType!]!
@@ -73,7 +73,7 @@ export const typeDefs = gql`
     createCenter(
       name: String!
       address: String!
-      population: String!
+      city: String!
       phone: String
       email: String
       type: [CenterActivityType!]!
@@ -94,7 +94,7 @@ export const typeDefs = gql`
       id: String!
       name: String
       address: String
-      population: String
+      city: String
       phone: String
       email: String
       type: [CenterActivityType!]
