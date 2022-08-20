@@ -37,6 +37,26 @@ export const typeDefs = gql`
     day: Days!
     hours: [String!]!
   }
+  
+  enum OrderFilterInstructor {
+    name
+    center
+    areas
+    id_day
+    state
+    id_group
+    vehicle
+    languages
+    summerAvailability
+  }
+
+  type PaginatedInstructors {
+    page: Int!
+    totalPages: Int!
+    totalNumber: Int!
+    pageSize: Int!
+    data: [Instructor!]!
+  }
 
   type Instructor {
     id: ID!
@@ -64,7 +84,13 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    getInstructors: [Instructor!]!
+    getInstructors(
+      searchText: String
+      orderFilter: OrderFilterInstructor
+      order: Number
+      page: Int
+      pageSize: Int
+    ): PaginatedInstructors!
 
     getInstructor(id: String!): Instructor!
   }
