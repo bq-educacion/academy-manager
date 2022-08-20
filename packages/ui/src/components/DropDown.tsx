@@ -85,7 +85,6 @@ const OptionBox = styled.div<{ clicked: boolean }>`
   justify-content: flex-start;
   cursor: pointer;
   padding: 3px 0;
-  padding-left: 20px;
   height: 26px;
   & > p {
     margin-left: 10px;
@@ -125,6 +124,9 @@ const InputBox = styled.div<{ clicked: boolean; width: string }>`
 `;
 
 const OptionsBox = styled.div<{ width: string }>`
+  padding-top: 6px;
+  padding-left: 20px;
+  padding-bottom: 6px;
   position: relative;
   left: 20px;
   top: -22px;
