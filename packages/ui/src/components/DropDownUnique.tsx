@@ -5,12 +5,17 @@ import { colors, styles } from "../theme";
 import Icon from "./Icon";
 import Popover from "./Popover";
 
+type Option = {
+  key: string;
+  label: string;
+};
+
 const DropDownUnique: FC<{
   width: string;
-  titles: string[];
+  options: Option[];
   selected?: string;
   setSelected: (selected: string) => void;
-}> = ({ width, titles, setSelected, selected }) => {
+}> = ({ width, options, setSelected, selected }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
   return (
@@ -24,23 +29,25 @@ const DropDownUnique: FC<{
           width={width}
         >
           <styles.P4>
-            {!selected ? t("components.Dropdown.title") : selected}
+            {!selected
+              ? t("components.Dropdown.title")
+              : options.find((s) => s.key === selected)?.label}
           </styles.P4>
           <Icon name="triangle" />
         </InputBox>
       }
       content={
         <OptionsBox width={width}>
-          {titles.map((title) => {
-            const clicked = selected === title;
+          {options.map((option) => {
+            const clicked = selected === option.key;
             return (
               <OptionBox
-                key={title}
+                key={option.key}
                 clicked={clicked}
-                onClick={() => setSelected(title)}
+                onClick={() => setSelected(option.key)}
               >
                 {clicked && <Check name="tick" />}
-                <styles.P4>{title}</styles.P4>
+                <styles.P4>{option.label}</styles.P4>
               </OptionBox>
             );
           })}

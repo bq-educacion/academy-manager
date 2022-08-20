@@ -6,12 +6,17 @@ import CheckBox from "./CheckBox";
 import Icon from "./Icon";
 import Popover from "./Popover";
 
+type Option = {
+  key: string;
+  label: string;
+};
+
 const DropDown: FC<{
   width: string;
-  titles: string[];
+  options: Option[];
   selected: string[];
   setSelected: (selected: string[]) => void;
-}> = ({ width, titles, setSelected, selected }) => {
+}> = ({ width, options, setSelected, selected }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
   return (
@@ -28,24 +33,26 @@ const DropDown: FC<{
           <styles.P4>
             {selected.length === 0
               ? t("components.Dropdown.title")
-              : selected.join(", ")}
+              : selected
+                  .map((s) => options.find((op) => op.key === s)?.label)
+                  .join(", ")}
           </styles.P4>
           <Icon name="triangle" />
         </InputBox>
       }
       content={
         <OptionsBox width={width}>
-          {titles.map((title) => {
-            const clicked = selected.includes(title);
+          {options.map((option) => {
+            const clicked = selected.includes(option.key);
             return (
               <OptionBox
-                key={title}
+                key={option.key}
                 clicked={clicked}
                 onClick={() =>
                   setSelected(
                     clicked
-                      ? selected.filter((elem) => elem != title)
-                      : [...selected, title]
+                      ? selected.filter((elem) => elem !== option.key)
+                      : [...selected, option.key]
                   )
                 }
               >
@@ -54,12 +61,12 @@ const DropDown: FC<{
                   setOption={() =>
                     setSelected(
                       clicked
-                        ? selected.filter((elem) => elem != title)
-                        : [...selected, title]
+                        ? selected.filter((elem) => elem != option.key)
+                        : [...selected, option.key]
                     )
                   }
                 />
-                <styles.P4>{title}</styles.P4>
+                <styles.P4>{option.label}</styles.P4>
               </OptionBox>
             );
           })}
