@@ -9,12 +9,14 @@ import {
 import {
   PaginatedCenters,
   PaginatedGroups,
+  PaginatedInstructors,
   PaginatedStudents,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
   QueryGetInstructorArgs,
+  QueryGetInstructorsArgs,
   QueryGetStudentArgs,
   QueryGetStudentsArgs,
 } from "../types.ts";
@@ -306,8 +308,117 @@ export const Query = {
     }
   },
 
-  getInstructors: async (_parent: unknown, _args: unknown, ctx: Context) => {
-    return await instructorCollection(ctx.db).find({}).toArray();
+  getInstructors: (
+    _parent: unknown,
+    args: QueryGetInstructorsArgs,
+    ctx: Context,
+  ): Promise<PaginatedInstructors> => {
+    const filter: Filter<PaginatedInstructors> = { $or: [{}] };
+    if (args.searchText) {
+      filter["$or"] = [
+        { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { corporateEmail: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { personalEmail: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { state: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { training: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          previousExperience: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        { knowledge: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { urlCV: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          materialsExperience: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          platformEducationExperience: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        { languages: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          "availability.day": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "availability.hours": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          summerAvailability: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        { vehicle: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          geographicalAvailability: {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        { areas: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        {
+          "centersName.name": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+        {
+          "groupsId.id_group": {
+            $regex: `.*${args.searchText}.*`,
+            $options: "i",
+          },
+        },
+      ];
+    }
+
+    let sortFilter = {};
+    const OrderFilter = {
+      name: "name",
+      center: "centersName.name",
+      areas: "areas",
+      id_day: "availability.id_day",
+      state: "state",
+      id_group: "groupsId.id_group",
+      vehicle: "vehicle",
+      languages: "languages",
+      summerAvailability: "summerAvailability",
+    };
+
+    if (args.orderFilter && args.order) {
+      if (args.order !== 1 && args.order !== -1) {
+        throw new Error("400, wrong order (1 or -1)");
+      }
+      sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
+    } else if (args.orderFilter && !args.order) {
+      throw new Error("400, order is required");
+    } else if (!args.orderFilter && args.order) {
+      throw new Error("400, orderFilter is required");
+    } else {
+      sortFilter = { name: 1 };
+    }
+
+    return paginatedFilters(
+      instructorCollection(ctx.db),
+      filter,
+      "instructors",
+      sortFilter,
+      args.page,
+      args.pageSize,
+    ) as Promise<PaginatedInstructors>;
   },
 
   getInstructor: async (

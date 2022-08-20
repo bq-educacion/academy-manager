@@ -324,6 +324,18 @@ export enum OrderFilterGroup {
   Start = "start",
 }
 
+export enum OrderFilterInstructor {
+  Areas = "areas",
+  Center = "center",
+  IdDay = "id_day",
+  IdGroup = "id_group",
+  Languages = "languages",
+  Name = "name",
+  State = "state",
+  SummerAvailability = "summerAvailability",
+  Vehicle = "vehicle",
+}
+
 export enum OrderFilterStudent {
   Center = "center",
   Course = "course",
@@ -350,6 +362,15 @@ export type PaginatedGroups = {
   totalPages: Scalars["Int"];
 };
 
+export type PaginatedInstructors = {
+  __typename?: "PaginatedInstructors";
+  data: Array<Instructor>;
+  page: Scalars["Int"];
+  pageSize: Scalars["Int"];
+  totalNumber: Scalars["Int"];
+  totalPages: Scalars["Int"];
+};
+
 export type PaginatedStudents = {
   __typename?: "PaginatedStudents";
   data: Array<Student>;
@@ -366,7 +387,7 @@ export type Query = {
   getGroup: Group;
   getGroups: PaginatedGroups;
   getInstructor: Instructor;
-  getInstructors: Array<Instructor>;
+  getInstructors: PaginatedInstructors;
   getStudent: Student;
   getStudents: PaginatedStudents;
 };
@@ -397,6 +418,14 @@ export type QueryGetGroupsArgs = {
 
 export type QueryGetInstructorArgs = {
   id: Scalars["String"];
+};
+
+export type QueryGetInstructorsArgs = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterInstructor>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
 };
 
 export type QueryGetStudentArgs = {
@@ -624,9 +653,11 @@ export type ResolversTypes = ResolversObject<{
   Number: ResolverTypeWrapper<Scalars["Number"]>;
   OrderFilter: OrderFilter;
   OrderFilterGroup: OrderFilterGroup;
+  OrderFilterInstructor: OrderFilterInstructor;
   OrderFilterStudent: OrderFilterStudent;
   PaginatedCenters: ResolverTypeWrapper<PaginatedCenters>;
   PaginatedGroups: ResolverTypeWrapper<PaginatedGroups>;
+  PaginatedInstructors: ResolverTypeWrapper<PaginatedInstructors>;
   PaginatedStudents: ResolverTypeWrapper<PaginatedStudents>;
   Query: ResolverTypeWrapper<{}>;
   StateInstructor: StateInstructor;
@@ -659,6 +690,7 @@ export type ResolversParentTypes = ResolversObject<{
   Number: Scalars["Number"];
   PaginatedCenters: PaginatedCenters;
   PaginatedGroups: PaginatedGroups;
+  PaginatedInstructors: PaginatedInstructors;
   PaginatedStudents: PaginatedStudents;
   Query: {};
   String: Scalars["String"];
@@ -978,6 +1010,19 @@ export type PaginatedGroupsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type PaginatedInstructorsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["PaginatedInstructors"] =
+    ResolversParentTypes["PaginatedInstructors"],
+> = ResolversObject<{
+  data?: Resolver<Array<ResolversTypes["Instructor"]>, ParentType, ContextType>;
+  page?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageSize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalNumber?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalPages?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type PaginatedStudentsResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["PaginatedStudents"] =
@@ -1027,9 +1072,10 @@ export type QueryResolvers<
     RequireFields<QueryGetInstructorArgs, "id">
   >;
   getInstructors?: Resolver<
-    Array<ResolversTypes["Instructor"]>,
+    ResolversTypes["PaginatedInstructors"],
     ParentType,
-    ContextType
+    ContextType,
+    Partial<QueryGetInstructorsArgs>
   >;
   getStudent?: Resolver<
     ResolversTypes["Student"],
@@ -1125,6 +1171,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Number?: GraphQLScalarType;
   PaginatedCenters?: PaginatedCentersResolvers<ContextType>;
   PaginatedGroups?: PaginatedGroupsResolvers<ContextType>;
+  PaginatedInstructors?: PaginatedInstructorsResolvers<ContextType>;
   PaginatedStudents?: PaginatedStudentsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
