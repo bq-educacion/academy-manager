@@ -522,6 +522,17 @@ export type GetCentersFQueryVariables = Exact<{
 
 export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<string>, population: string, nature: CenterNature, type: Array<CenterActivityType> }> } };
 
+export type GetGroupsQueryVariables = Exact<{
+  searchText?: InputMaybe<Scalars['String']>;
+  orderFilter?: InputMaybe<OrderFilterGroup>;
+  order?: InputMaybe<Scalars['Number']>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, course: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center: { __typename?: 'Center', name: string }, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
+
 
 export const CreateCenterDocument = gql`
     mutation CreateCenter($name: String!, $address: String!, $population: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [String!]!, $phone: String, $email: String, $contacts: [CenterContactInput!]!) {
@@ -630,3 +641,69 @@ export function useGetCentersFLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCentersFQueryHookResult = ReturnType<typeof useGetCentersFQuery>;
 export type GetCentersFLazyQueryHookResult = ReturnType<typeof useGetCentersFLazyQuery>;
 export type GetCentersFQueryResult = Apollo.QueryResult<GetCentersFQuery, GetCentersFQueryVariables>;
+export const GetGroupsDocument = gql`
+    query GetGroups($searchText: String, $orderFilter: OrderFilterGroup, $order: Number, $page: Int, $pageSize: Int) {
+  getGroups(
+    searchText: $searchText
+    orderFilter: $orderFilter
+    order: $order
+    page: $page
+    pageSize: $pageSize
+  ) {
+    page
+    totalPages
+    totalNumber
+    pageSize
+    data {
+      id
+      id_group
+      name
+      timetable {
+        day
+        id_day
+        start
+        end
+      }
+      course
+      center {
+        name
+      }
+      instructors {
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupsQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *      orderFilter: // value for 'orderFilter'
+ *      order: // value for 'order'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetGroupsQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupsQuery, GetGroupsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupsQuery, GetGroupsQueryVariables>(GetGroupsDocument, options);
+      }
+export function useGetGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupsQuery, GetGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupsQuery, GetGroupsQueryVariables>(GetGroupsDocument, options);
+        }
+export type GetGroupsQueryHookResult = ReturnType<typeof useGetGroupsQuery>;
+export type GetGroupsLazyQueryHookResult = ReturnType<typeof useGetGroupsLazyQuery>;
+export type GetGroupsQueryResult = Apollo.QueryResult<GetGroupsQuery, GetGroupsQueryVariables>;

@@ -36,10 +36,10 @@ const CentersPage: NextPage = () => {
 
   const { data, error, refetch } = useGetCentersFQuery({
     variables: {
-      searchText: searchText,
+      searchText,
       orderFilter: order.key,
       order: order.direction,
-      page: 1,
+      page: pageData.page,
       pageSize: 20,
     },
     fetchPolicy: "network-only",
@@ -107,6 +107,9 @@ const CentersPage: NextPage = () => {
                   placeholder={t("components.content-start.search-placeholder")}
                   onChange={(e) => {
                     setInputText(e.target.value);
+                    if (e.target.value === "") {
+                      setSearchText("");
+                    }
                   }}
                   onKeyDownCapture={(e) => {
                     {
@@ -142,7 +145,9 @@ const CentersPage: NextPage = () => {
           <Table<Partial<Center> & { id: string }>
             data={tableData}
             order={order}
-            onSetOrder={setOrder}
+            onSetOrder={(order) =>
+              setOrder(order as { key: OrderFilter; direction: number })
+            }
             columns={[
               {
                 label: t("components.table.name"),
@@ -152,7 +157,6 @@ const CentersPage: NextPage = () => {
               {
                 label: t("components.table.languages"),
                 key: OrderFilter.Languages,
-                // reduce to a string of languages
                 content: (item) => (
                   <div>
                     {item.languages
@@ -168,10 +172,7 @@ const CentersPage: NextPage = () => {
               },
               {
                 label: t("components.table.nature"),
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //No se puede ordenar por naturaleza, mal puesto a type
-                //Saltará problema de keys
-                key: OrderFilter.Type,
+                key: OrderFilter.Nature,
                 content: (item) => (
                   <div>{t(`pages.centers.nature.${item.nature}`)}</div>
                 ),

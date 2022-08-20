@@ -234,7 +234,9 @@ const CreateCenter: FC<{
                     setNumberOfContacts={setNumberOfContacts}
                     numberOfContacts={numberOfContacts}
                     setContact={(contact) => {
-                      setContacts([...contacts, contact]);
+                      if (contact.name !== "") {
+                        setContacts([...contacts, contact]);
+                      }
                     }}
                     finish={finish}
                   />
@@ -262,16 +264,18 @@ const CreateCenter: FC<{
             />
             <MButton
               Click={() => {
-                setFinish(true);
-                changeTitle("");
-                if (name !== "" && address !== "" && population !== "") {
-                  createCenterMutation();
-                  setTimeout(() => {
+                setTimeout(() => {
+                  setFinish(true);
+                  changeTitle("");
+                }, 10);
+                setTimeout(() => {
+                  if (name !== "" && address !== "" && population !== "") {
+                    createCenterMutation();
                     setStep(4);
-                  }, 100);
-                } else {
-                  alert("Please fill all the fields");
-                }
+                  } else {
+                    alert("Please fill all the fields");
+                  }
+                }, 20);
               }}
               text={t("components.create-center.3.create")}
               color={colors.colors.white}

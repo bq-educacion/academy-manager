@@ -1,7 +1,7 @@
 import { colors, Icon, styles } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import React, { Dispatch, SetStateAction } from "react";
-import { OrderFilter } from "../generated/graphql";
+import { OrderFilter, OrderFilterGroup } from "../generated/graphql";
 
 type Data = {
   id: string;
@@ -11,11 +11,13 @@ type TableProps<T> = {
   data: T[];
   columns: {
     label: string;
-    key: OrderFilter;
+    key: OrderFilterGroup | OrderFilter;
     content: (item: T) => React.ReactNode;
   }[];
-  order: { key: OrderFilter; direction: number };
-  onSetOrder: Dispatch<SetStateAction<{ key: OrderFilter; direction: number }>>;
+  order: { key: OrderFilter | OrderFilterGroup; direction: number };
+  onSetOrder: Dispatch<
+    SetStateAction<{ key: OrderFilter | OrderFilterGroup; direction: number }>
+  >;
 };
 
 const Table = <T extends Data>({
@@ -30,7 +32,10 @@ const Table = <T extends Data>({
         <HeaderCell
           key={column.key}
           onClick={() => {
-            onSetOrder({ key: column.key, direction: -order.direction });
+            onSetOrder({
+              key: column.key as OrderFilter,
+              direction: -order.direction,
+            });
           }}
         >
           <styles.BoldP4>{column.label}</styles.BoldP4>
