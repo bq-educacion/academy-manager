@@ -1,13 +1,15 @@
 import { NextPage } from "next";
-import { Layout } from "../components";
+import { Layout, Table } from "../components";
 import { sections } from "../config";
 import withApollo from "../apollo/withApollo";
 import { FirstActionButton, styles, useTranslate } from "@academy-manager/ui";
 // import { useState } from "react";
 import {
   AdvanceSearch,
+  ContentDiv,
   DivHeader1,
   DivHeader2,
+  ErrorContainer,
   GreyDivider,
   Input,
   LensSearch,
@@ -15,21 +17,64 @@ import {
   SubHeaderDiv,
   SubHeaderP4,
 } from "./centers";
+import {
+  Group,
+  OrderFilterGroup,
+  useGetGroupsQuery,
+} from "../generated/graphql";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const GroupsPage: NextPage = () => {
   const t = useTranslate();
-  // const [inputText, setInputText] = useState<string>("");
-  // const [searchText, setSearchText] = useState<string>("");
+  const [inputText, setInputText] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>("");
   // const [modalOpen, setModalOpen] = useState<boolean>(false);
-  // const [tableData, setTableData] = useState<
-  //   Array<Partial<Group> & { id: string }>
-  // >([]);
+  const [tableData, setTableData] = useState<
+    Array<Partial<Group> & { id: string }>
+  >([]);
+  const [order, setOrder] = useState<{
+    key: OrderFilterGroup;
+    direction: number;
+  }>({
+    key: OrderFilterGroup.IdGroup,
+    direction: 1,
+  });
 
-  // const [pageData, setPageData] = useState<{
-  //   page: number;
-  //   pageSize: number;
-  //   total: number;
-  // }>({ page: 1, pageSize: 0, total: 0 });
+  const [pageData, setPageData] = useState<{
+    page: number;
+    pageSize: number;
+    total: number;
+  }>({ page: 1, pageSize: 0, total: 0 });
+
+  const { data, error } = useGetGroupsQuery({
+    variables: {
+      searchText,
+      orderFilter: order.key,
+      order: order.direction,
+      page: 1,
+      pageSize: 20,
+    },
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    data &&
+      setPageData({
+        page: data.getGroups.page,
+        pageSize: data.getGroups.pageSize,
+        total: data.getGroups.totalNumber,
+      });
+    data?.getGroups.data &&
+      setTableData(
+        data.getGroups.data as Array<Partial<Group> & { id: string }>
+      );
+  }, [data]);
+
+  const route = useRouter();
+  if (error) {
+    route.push("/500");
+  }
 
   return (
     <Layout
@@ -50,19 +95,19 @@ const GroupsPage: NextPage = () => {
           <DivHeader2>
             <RelativeDiv
               onClick={() => {
-                // setSearchText(inputText);
+                setSearchText(inputText);
               }}
             >
               <Input
                 placeholder={t("components.content-start.search-placeholder")}
-                // onChange={(e) => {
-                //   // setInputText(e.target.value);
-                // }}
-                // onKeyDownCapture={(e) => {
-                //   {
-                //     e.key === "Enter" && setSearchText(inputText);
-                //   }
-                // }}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                }}
+                onKeyDownCapture={(e) => {
+                  {
+                    e.key === "Enter" && setSearchText(inputText);
+                  }
+                }}
               />
               <LensSearch name="lens" />
             </RelativeDiv>
@@ -76,16 +121,99 @@ const GroupsPage: NextPage = () => {
         <SubHeaderDiv>
           <>
             <SubHeaderP4>
-              {/* {t("pages.paginate.first")} {tableData.length}{" "}
-              {t("pages.paginate.middle")} {pageData.total}
-              {" "} */}
+              {t("pages.paginate.first")} {tableData.length}{" "}
+              {t("pages.paginate.middle")} {pageData.total}{" "}
             </SubHeaderP4>
             <GreyDivider />
           </>
         </SubHeaderDiv>
       }
     >
-      <h1>Test</h1>
+      <ContentDiv>
+        <Table<Partial<Group> & { id: string }>
+          data={tableData}
+          order={order}
+          onSetOrder={(order) =>
+            setOrder(order as { key: OrderFilterGroup; direction: number })
+          }
+          columns={[
+            {
+              label: t("components.table.id"),
+              key: OrderFilterGroup.IdGroup,
+              content: (item) => <div>{item.id_group}</div>,
+            },
+            {
+              label: t("components.table.center"),
+              key: OrderFilterGroup.Center,
+              content: (item) => <div>{item.center?.name}</div>,
+            },
+            {
+              label: t("components.table.instructor"),
+              key: OrderFilterGroup.Instructors,
+              content: (item) => (
+                <div>
+                  {item.instructors?.map((elem) => elem.name).join(", ")}
+                </div>
+              ),
+            },
+            {
+              label: t("components.table.days"),
+              key: OrderFilterGroup.IdDay,
+              content: (item) => (
+                <div>
+                  {item.timetable
+                    ?.map((elem) =>
+                      t(`components.table.time-table.${elem.day}`)
+                    )
+                    .join(" - ")}
+                </div>
+              ),
+            },
+            {
+              label: t("components.table.start-time"),
+              key: OrderFilterGroup.Start,
+              content: (item) => (
+                <div>
+                  {item.timetable?.map((elem) => elem.start).join(", ")}
+                </div>
+              ),
+            },
+            {
+              label: t("components.table.end-time"),
+              key: OrderFilterGroup.End,
+              content: (item) => (
+                <div>{item.timetable?.map((elem) => elem.end).join(", ")}</div>
+              ),
+            },
+            {
+              label: t("components.table.course"),
+              key: OrderFilterGroup.Course,
+              content: (item) => <div>{item.course}</div>,
+            },
+          ]}
+        />
+        {tableData.length === 0 && searchText !== "" && (
+          <ErrorContainer>
+            <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
+            <styles.P4>
+              {t("pages.centers.search-error.1")}{" "}
+              <a>{t("pages.centers.search-error.2")}</a>
+            </styles.P4>
+          </ErrorContainer>
+        )}
+        {tableData.length === 0 && searchText === "" && (
+          <ErrorContainer>
+            <styles.P4>{t("pages.centers.data-error")}</styles.P4>
+            <styles.P4>
+              <a /*onClick={() => {} /*setModalOpen(true)}*/>
+                {t("pages.groups.data-error.0")}
+              </a>{" "}
+              {t("pages.centers.data-error-options.1")}{" "}
+              <a>{t("pages.groups.data-error.1")}</a>
+            </styles.P4>
+          </ErrorContainer>
+        )}
+      </ContentDiv>
     </Layout>
   );
 };

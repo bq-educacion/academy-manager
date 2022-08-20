@@ -36,10 +36,10 @@ const CentersPage: NextPage = () => {
 
   const { data, error, refetch } = useGetCentersFQuery({
     variables: {
-      searchText: searchText,
+      searchText,
       orderFilter: order.key,
       order: order.direction,
-      page: 1,
+      page: pageData.page,
       pageSize: 20,
     },
     fetchPolicy: "network-only",
@@ -142,7 +142,9 @@ const CentersPage: NextPage = () => {
           <Table<Partial<Center> & { id: string }>
             data={tableData}
             order={order}
-            onSetOrder={setOrder}
+            onSetOrder={(order) =>
+              setOrder(order as { key: OrderFilter; direction: number })
+            }
             columns={[
               {
                 label: t("components.table.name"),
@@ -152,7 +154,6 @@ const CentersPage: NextPage = () => {
               {
                 label: t("components.table.languages"),
                 key: OrderFilter.Languages,
-                // reduce to a string of languages
                 content: (item) => (
                   <div>
                     {item.languages

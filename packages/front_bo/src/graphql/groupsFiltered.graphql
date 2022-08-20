@@ -1,0 +1,38 @@
+query GetGroups(
+  $searchText: String
+  $orderFilter: OrderFilterGroup
+  $order: Number
+  $page: Int
+  $pageSize: Int
+) {
+  getGroups(
+    searchText: $searchText
+    orderFilter: $orderFilter
+    order: $order
+    page: $page
+    pageSize: $pageSize
+  ) {
+    page
+    totalPages
+    totalNumber
+    pageSize
+    data {
+      id
+      id_group
+      name
+      timetable {
+        day
+        id_day
+        start
+        end
+      }
+      course
+      center {
+        name
+      }
+      instructors {
+        name
+      }
+    }
+  }
+}
