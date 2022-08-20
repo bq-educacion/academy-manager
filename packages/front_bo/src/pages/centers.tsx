@@ -168,10 +168,7 @@ const CentersPage: NextPage = () => {
               },
               {
                 label: t("components.table.nature"),
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //No se puede ordenar por naturaleza, mal puesto a type
-                //Saltará problema de keys
-                key: OrderFilter.Type,
+                key: OrderFilter.Nature,
                 content: (item) => (
                   <div>{t(`pages.centers.nature.${item.nature}`)}</div>
                 ),
