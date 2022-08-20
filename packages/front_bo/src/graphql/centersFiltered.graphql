@@ -20,7 +20,7 @@ query GetCentersF(
       id
       name
       languages
-      population
+      city
       nature
       type
     }

@@ -10,13 +10,19 @@ export type Exact<T extends { [key: string]: unknown }> = {
 };
 export type MakeOptional<T, K extends keyof T> =
   & Omit<T, K>
-  & { [SubKey in K]?: Maybe<T[SubKey]> };
+  & {
+    [SubKey in K]?: Maybe<T[SubKey]>;
+  };
 export type MakeMaybe<T, K extends keyof T> =
   & Omit<T, K>
-  & { [SubKey in K]: Maybe<T[SubKey]> };
+  & {
+    [SubKey in K]: Maybe<T[SubKey]>;
+  };
 export type RequireFields<T, K extends keyof T> =
   & Omit<T, K>
-  & { [P in K]-?: NonNullable<T[P]> };
+  & {
+    [P in K]-?: NonNullable<T[P]>;
+  };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -52,7 +58,7 @@ export type Center = {
   nature: CenterNature;
   notes?: Maybe<Scalars["String"]>;
   phone?: Maybe<Scalars["String"]>;
-  population: Scalars["String"];
+  city: Scalars["String"];
   type: Array<CenterActivityType>;
 };
 
@@ -185,7 +191,7 @@ export type MutationCreateCenterArgs = {
   nature: CenterNature;
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
-  population: Scalars["String"];
+  city: Scalars["String"];
   type: Array<CenterActivityType>;
 };
 
@@ -250,7 +256,7 @@ export type MutationEditCenterArgs = {
   nature?: InputMaybe<CenterNature>;
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
-  population?: InputMaybe<Scalars["String"]>;
+  city?: InputMaybe<Scalars["String"]>;
   type?: InputMaybe<Array<CenterActivityType>>;
 };
 
@@ -303,7 +309,7 @@ export enum OrderFilter {
   Languages = "languages",
   Name = "name",
   Nature = "nature",
-  Population = "population",
+  city = "city",
   Type = "type",
 }
 
@@ -698,7 +704,7 @@ export type CenterResolvers<
   nature?: Resolver<ResolversTypes["CenterNature"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  population?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  city?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<
     Array<ResolversTypes["CenterActivityType"]>,
     ParentType,
@@ -849,13 +855,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateCenterArgs,
-      | "address"
-      | "contacts"
-      | "languages"
-      | "name"
-      | "nature"
-      | "population"
-      | "type"
+      "address" | "contacts" | "languages" | "name" | "nature" | "city" | "type"
     >
   >;
   createGroup?: Resolver<

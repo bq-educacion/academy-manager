@@ -37,7 +37,7 @@ const CreateCenter: FC<{
   const [languagesSelection, setLanguagesSelection] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [population, setPopulation] = useState<string>("");
+  const [city, setcity] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [numberOfContacts, setNumberOfContacts] = useState<number>(1);
@@ -47,7 +47,7 @@ const CreateCenter: FC<{
     variables: {
       name,
       address,
-      population,
+      city,
       type: typeSelection,
       nature: natureSelection as CenterNature,
       languages: languagesSelection,
@@ -165,14 +165,12 @@ const CreateCenter: FC<{
             </FillIn>
             <FillIn width="129px">
               <styles.BoldP4>
-                {t(`components.create-center.2.subtitle.population`)}
+                {t(`components.create-center.2.subtitle.city`)}
               </styles.BoldP4>
               <InputSuper
-                placeholder={t(
-                  "components.create-center.2.subtitle.population"
-                )}
-                input={population}
-                setInput={setPopulation}
+                placeholder={t("components.create-center.2.subtitle.city")}
+                input={city}
+                setInput={setcity}
               />
             </FillIn>
           </FillInSectioned>
@@ -269,7 +267,7 @@ const CreateCenter: FC<{
                   changeTitle("");
                 }, 10);
                 setTimeout(() => {
-                  if (name !== "" && address !== "" && population !== "") {
+                  if (name !== "" && address !== "" && city !== "") {
                     createCenterMutation();
                     setStep(4);
                   } else {

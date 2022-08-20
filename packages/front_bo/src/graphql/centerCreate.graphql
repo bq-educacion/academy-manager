@@ -1,7 +1,7 @@
 mutation CreateCenter(
   $name: String!
   $address: String!
-  $population: String!
+  $city: String!
   $type: [CenterActivityType!]!
   $nature: CenterNature!
   $languages: [String!]!
@@ -12,7 +12,7 @@ mutation CreateCenter(
   createCenter(
     name: $name
     address: $address
-    population: $population
+    city: $city
     type: $type
     nature: $nature
     languages: $languages

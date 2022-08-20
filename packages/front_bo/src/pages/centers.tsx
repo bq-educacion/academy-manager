@@ -166,9 +166,9 @@ const CentersPage: NextPage = () => {
                 ),
               },
               {
-                label: t("components.table.population"),
-                key: OrderFilter.Population,
-                content: (item) => <div>{item.population}</div>,
+                label: t("components.table.city"),
+                key: OrderFilter.city,
+                content: (item) => <div>{item.city}</div>,
               },
               {
                 label: t("components.table.nature"),

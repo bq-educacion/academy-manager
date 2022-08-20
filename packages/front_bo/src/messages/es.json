@@ -21,7 +21,7 @@
     "table": {
       "name": "Nombre",
       "languages": "Idiomas",
-      "population": "Población",
+      "city": "Población",
       "nature": "Naturaleza",
       "type": "Tipo",
       "id": "ID",
@@ -61,7 +61,7 @@
           "name-placeholder": "Nombre completo del centro",
           "address": "Dirección del centro",
           "address-placeholder": "Calle y el número",
-          "population": "Población",
+          "city": "Población",
           "phone": "Teléfono (Opcional)",
           "phone-placeholder": "Teléfono",
           "email": "Email (Opcional)",
