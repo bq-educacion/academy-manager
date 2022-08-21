@@ -1,0 +1,8 @@
+query SimpleInstructorsName {
+  getInstructors {
+    data {
+      name
+      id
+    }
+  }
+}

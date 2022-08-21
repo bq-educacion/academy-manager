@@ -1,0 +1,22 @@
+mutation CreateGroup(
+  $idCenter: String!
+  $name: String!
+  $modality: GroupModality!
+  $type: GroupType!
+  $course: String!
+  $timetable: [TimetableInput!]!
+  $instructors: [String!]
+) {
+  createGroup(
+    idCenter: $idCenter
+    name: $name
+    modality: $modality
+    type: $type
+    course: $course
+    timetable: $timetable
+    instructors: $instructors
+  ) {
+    name
+    id_group
+  }
+}
