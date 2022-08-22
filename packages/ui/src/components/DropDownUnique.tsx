@@ -65,8 +65,7 @@ const OptionBox = styled.div<{ clicked: boolean }>`
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
-  padding: 3px 0;
-  padding: 0 20px;
+  padding: 3px 20px;
   height: 26px;
   & > p {
     ${(props) => props.clicked && `font-weight: bold;`}
