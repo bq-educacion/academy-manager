@@ -61,16 +61,16 @@ const GroupsPage: NextPage = () => {
   });
 
   useEffect(() => {
-    data &&
+    if (data) {
       setPageData({
         page: data.getGroups.page,
         pageSize: data.getGroups.pageSize,
         total: data.getGroups.totalNumber,
       });
-    data?.getGroups.data &&
       setTableData(
         data.getGroups.data as Array<Partial<Group> & { id: string }>
       );
+    }
   }, [data]);
 
   const route = useRouter();

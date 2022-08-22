@@ -61,16 +61,16 @@ const StudentsPage: NextPage = () => {
   });
 
   useEffect(() => {
-    data &&
+    if (data) {
       setPageData({
         page: data.getStudents.page,
         pageSize: data.getStudents.pageSize,
         total: data.getStudents.totalNumber,
       });
-    data?.getStudents.data &&
       setTableData(
         data.getStudents.data as Array<Partial<Student> & { id: string }>
       );
+    }
   }, [data]);
 
   const route = useRouter();
