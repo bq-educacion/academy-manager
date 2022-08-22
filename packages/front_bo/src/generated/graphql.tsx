@@ -144,6 +144,7 @@ export type Mutation = {
   editCenter: Center;
   editCenterContacts: CenterContact;
   editGroup: Group;
+  editInstructor: Instructor;
   editStudent: Student;
   editStudentContacts: StudentContact;
 };
@@ -238,6 +239,7 @@ export type MutationCreateStudentArgs = {
 export type MutationEditCenterArgs = {
   address?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<CenterContactInput>>;
   email?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   languages?: InputMaybe<Array<Scalars['String']>>;
@@ -270,10 +272,36 @@ export type MutationEditGroupArgs = {
 };
 
 
+export type MutationEditInstructorArgs = {
+  areas?: InputMaybe<Array<Scalars['String']>>;
+  availability?: InputMaybe<Array<AvailabilityInput>>;
+  corporateEmail?: InputMaybe<Scalars['String']>;
+  geographicalAvailability?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  id: Scalars['String'];
+  knowledge?: InputMaybe<Scalars['String']>;
+  languages?: InputMaybe<Array<Scalars['String']>>;
+  materialsExperience?: InputMaybe<Array<Scalars['String']>>;
+  name?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  personalEmail?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
+  previousExperience?: InputMaybe<PreviousExperienceInstructor>;
+  programmingExperience?: InputMaybe<Scalars['Boolean']>;
+  state?: InputMaybe<StateInstructor>;
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training?: InputMaybe<TrainingInstructor>;
+  urlCV?: InputMaybe<Scalars['String']>;
+  vehicle?: InputMaybe<TypeVehicleInstructor>;
+};
+
+
 export type MutationEditStudentArgs = {
   alergies?: InputMaybe<Scalars['Boolean']>;
   birthDate?: InputMaybe<Scalars['String']>;
   collectionPermit?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
   course?: InputMaybe<Scalars['String']>;
   descriptionAllergy?: InputMaybe<Scalars['String']>;
   group?: InputMaybe<Scalars['String']>;
@@ -297,7 +325,7 @@ export type MutationEditStudentContactsArgs = {
   send_info?: InputMaybe<Scalars['Boolean']>;
 };
 
-export enum OrderFilter {
+export enum OrderFilterCenter {
   City = 'city',
   Languages = 'languages',
   Name = 'name',
@@ -391,7 +419,7 @@ export type QueryGetCenterArgs = {
 
 export type QueryGetCentersArgs = {
   order?: InputMaybe<Scalars['Number']>;
-  orderFilter?: InputMaybe<OrderFilter>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
   searchText?: InputMaybe<Scalars['String']>;
@@ -540,7 +568,7 @@ export type CreateCenterMutation = { __typename?: 'Mutation', createCenter: { __
 
 export type GetCentersFQueryVariables = Exact<{
   searchText?: InputMaybe<Scalars['String']>;
-  orderFilter?: InputMaybe<OrderFilter>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
   order?: InputMaybe<Scalars['Number']>;
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
@@ -571,6 +599,17 @@ export type GetGroupsQueryVariables = Exact<{
 
 
 export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center: { __typename?: 'Center', name: string }, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
+
+export type GetInstructorsQueryVariables = Exact<{
+  searchText?: InputMaybe<Scalars['String']>;
+  orderFilter?: InputMaybe<OrderFilterInstructor>;
+  order?: InputMaybe<Scalars['Number']>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, state: StateInstructor, vehicle: TypeVehicleInstructor, languages: Array<string>, summerAvailability: SummerAvailabilityInstructor, areas: Array<string>, center: { __typename?: 'Center', name: string, id: string }, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
 
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -646,7 +685,7 @@ export type CreateCenterMutationHookResult = ReturnType<typeof useCreateCenterMu
 export type CreateCenterMutationResult = Apollo.MutationResult<CreateCenterMutation>;
 export type CreateCenterMutationOptions = Apollo.BaseMutationOptions<CreateCenterMutation, CreateCenterMutationVariables>;
 export const GetCentersFDocument = gql`
-    query GetCentersF($searchText: String, $orderFilter: OrderFilter, $order: Number, $page: Int, $pageSize: Int) {
+    query GetCentersF($searchText: String, $orderFilter: OrderFilterCenter, $order: Number, $page: Int, $pageSize: Int) {
   getCenters(
     searchText: $searchText
     orderFilter: $orderFilter
@@ -812,6 +851,76 @@ export function useGetGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetGroupsQueryHookResult = ReturnType<typeof useGetGroupsQuery>;
 export type GetGroupsLazyQueryHookResult = ReturnType<typeof useGetGroupsLazyQuery>;
 export type GetGroupsQueryResult = Apollo.QueryResult<GetGroupsQuery, GetGroupsQueryVariables>;
+export const GetInstructorsDocument = gql`
+    query GetInstructors($searchText: String, $orderFilter: OrderFilterInstructor, $order: Number, $page: Int, $pageSize: Int) {
+  getInstructors(
+    searchText: $searchText
+    orderFilter: $orderFilter
+    order: $order
+    page: $page
+    pageSize: $pageSize
+  ) {
+    page
+    totalPages
+    totalNumber
+    pageSize
+    data {
+      id
+      name
+      center {
+        name
+        id
+      }
+      geographicalAvailability
+      state
+      availability {
+        day
+      }
+      vehicle
+      languages
+      summerAvailability
+      areas
+      groups {
+        name
+        id
+        id_group
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetInstructorsQuery__
+ *
+ * To run a query within a React component, call `useGetInstructorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInstructorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInstructorsQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *      orderFilter: // value for 'orderFilter'
+ *      order: // value for 'order'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetInstructorsQuery(baseOptions?: Apollo.QueryHookOptions<GetInstructorsQuery, GetInstructorsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInstructorsQuery, GetInstructorsQueryVariables>(GetInstructorsDocument, options);
+      }
+export function useGetInstructorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInstructorsQuery, GetInstructorsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInstructorsQuery, GetInstructorsQueryVariables>(GetInstructorsDocument, options);
+        }
+export type GetInstructorsQueryHookResult = ReturnType<typeof useGetInstructorsQuery>;
+export type GetInstructorsLazyQueryHookResult = ReturnType<typeof useGetInstructorsLazyQuery>;
+export type GetInstructorsQueryResult = Apollo.QueryResult<GetInstructorsQuery, GetInstructorsQueryVariables>;
 export const SimpleCentersNameDocument = gql`
     query SimpleCentersName {
   getCenters {

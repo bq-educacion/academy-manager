@@ -2,8 +2,9 @@ import { colors, Icon, styles } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import React, { Dispatch, SetStateAction } from "react";
 import {
-  OrderFilter,
+  OrderFilterCenter,
   OrderFilterGroup,
+  OrderFilterInstructor,
   OrderFilterStudent,
 } from "../generated/graphql";
 
@@ -15,16 +16,28 @@ type TableProps<T> = {
   data: T[];
   columns: {
     label: string;
-    key: OrderFilterGroup | OrderFilter | OrderFilterStudent;
+    key:
+      | OrderFilterGroup
+      | OrderFilterCenter
+      | OrderFilterInstructor
+      | OrderFilterStudent;
     content: (item: T) => React.ReactNode;
   }[];
   order: {
-    key: OrderFilterStudent | OrderFilter | OrderFilterGroup;
+    key:
+      | OrderFilterCenter
+      | OrderFilterGroup
+      | OrderFilterInstructor
+      | OrderFilterStudent;
     direction: number;
   };
   onSetOrder: Dispatch<
     SetStateAction<{
-      key: OrderFilterStudent | OrderFilter | OrderFilterGroup;
+      key:
+        | OrderFilterCenter
+        | OrderFilterGroup
+        | OrderFilterInstructor
+        | OrderFilterStudent;
       direction: number;
     }>
   >;

@@ -101,6 +101,15 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
+      if (args.contacts) {
+        const uniqueEmails = [
+          ...new Set(args.contacts.map((contact) => contact.email)),
+        ];
+        if (args.contacts.length !== uniqueEmails.length) {
+          throw new Error("400, Emails of center contacts must be unique");
+        }
+      }
+
       // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
       const newCenter = await centerCollection(ctx.db).findAndModify(
         { _id: new ObjectId(args.id) },
@@ -409,6 +418,20 @@ export const Mutation = {
   ): Promise<StudentModel> => {
     try {
       let updateStudent = { ...args } as Partial<StudentModel>;
+
+      if (args.contacts) {
+        const uniqueEmails = [
+          ...new Set(args.contacts.map((contact) => contact.email)),
+        ];
+        if (args.contacts.length !== uniqueEmails.length) {
+          throw new Error("400, Emails of student contacts must be unique");
+        }
+        const contacts = args.contacts.map((contact) => ({
+          ...contact,
+          notes: contact.notes || "",
+        }));
+        updateStudent = { ...updateStudent, contacts };
+      }
 
       if (args.group) {
         const existsGroup = await groupCollection(ctx.db).findOne({

@@ -47,6 +47,24 @@
         "title": "Estado",
         "ACTIVE": "Activo",
         "WITHDRAWN": "Baja"
+      },
+      "zone": "Zonas",
+      "active": {
+        "ACTIVE": "Activo",
+        "INACTIVE": "Inactivo"
+      },
+      "time": "Disp. Horaria",
+      "groups": "Grupos",
+      "vehicle": {
+        "title": "Vehículo",
+        "OWN": "Propio",
+        "PUBLIC_TRANSPORT": "Público"
+      },
+      "summer": {
+        "title": "Disp. Verano",
+        "YES": "Sí",
+        "NO": "No",
+        "EXTRACURRICULARS_ONLY": "Sólo Extracurriculares"
       }
     },
     "Dropdown": {
@@ -212,6 +230,15 @@
         "0": "Crear un nuevo alumno",
         "1": "o",
         "2": "varios alumnos"
+      }
+    },
+    "instructors": {
+      "modal-create": {
+        "title": "Crear monitor"
+      },
+      "data-error": {
+        "0": "Crear un nuevo monitor",
+        "1": "varios monitores"
       }
     }
   }

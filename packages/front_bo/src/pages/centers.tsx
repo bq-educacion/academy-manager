@@ -11,7 +11,11 @@ import {
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Center, OrderFilter, useGetCentersFQuery } from "../generated/graphql";
+import {
+  Center,
+  OrderFilterCenter,
+  useGetCentersFQuery,
+} from "../generated/graphql";
 import { useRouter } from "next/router";
 import CreateCenter from "../components/CreateCenter";
 
@@ -19,8 +23,11 @@ const CentersPage: NextPage = () => {
   const t = useTranslate();
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
-  const [order, setOrder] = useState<{ key: OrderFilter; direction: number }>({
-    key: OrderFilter.Name,
+  const [order, setOrder] = useState<{
+    key: OrderFilterCenter;
+    direction: number;
+  }>({
+    key: OrderFilterCenter.Name,
     direction: 1,
   });
 
@@ -147,17 +154,17 @@ const CentersPage: NextPage = () => {
             data={tableData}
             order={order}
             onSetOrder={(order) =>
-              setOrder(order as { key: OrderFilter; direction: number })
+              setOrder(order as { key: OrderFilterCenter; direction: number })
             }
             columns={[
               {
                 label: t("components.table.name"),
-                key: OrderFilter.Name,
+                key: OrderFilterCenter.Name,
                 content: (item) => <div>{item.name}</div>,
               },
               {
                 label: t("components.table.languages"),
-                key: OrderFilter.Languages,
+                key: OrderFilterCenter.Languages,
                 content: (item) => (
                   <div>
                     {item.languages
@@ -168,19 +175,19 @@ const CentersPage: NextPage = () => {
               },
               {
                 label: t("components.table.city"),
-                key: OrderFilter.City,
+                key: OrderFilterCenter.City,
                 content: (item) => <div>{item.city}</div>,
               },
               {
                 label: t("components.table.nature"),
-                key: OrderFilter.Nature,
+                key: OrderFilterCenter.Nature,
                 content: (item) => (
                   <div>{t(`pages.centers.nature.${item.nature}`)}</div>
                 ),
               },
               {
                 label: t("components.table.type"),
-                key: OrderFilter.Type,
+                key: OrderFilterCenter.Type,
                 content: (item) => (
                   <div>
                     {item.type
