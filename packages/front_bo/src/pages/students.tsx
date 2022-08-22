@@ -23,13 +23,16 @@ import {
   SubHeaderDiv,
   SubHeaderP4,
 } from "./centers";
+import CreateCenter from "../components/CreateCenter";
 
 const StudentsPage: NextPage = () => {
   const t = useTranslate();
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [modalTitle] = useState<string>(t("pages.students.modal-create.title"));
+  const [modalTitle, setModalTitle] = useState<string>(
+    t("pages.students.modal-create.title")
+  );
 
   const [tableData, setTableData] = useState<
     Array<Partial<Student> & { id: string }>
@@ -49,7 +52,7 @@ const StudentsPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error } = useGetStudentsQuery({
+  const { data, error, refetch } = useGetStudentsQuery({
     variables: {
       searchText,
       orderFilter: order.key,
@@ -86,7 +89,11 @@ const StudentsPage: NextPage = () => {
           title={modalTitle}
           endTitle={t("pages.groups.end-title")}
         >
-          <p>Test modal</p>
+          <CreateCenter
+            changeTitle={setModalTitle}
+            close={setModalOpen}
+            refetch={refetch}
+          />
         </Modal>
       )}
       <Layout
