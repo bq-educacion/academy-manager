@@ -98,18 +98,19 @@ export const typeDefs = gql`
     ): StudentContact!
     
     editStudent(
-      id:String!,
-      group: String,
-      course: String,
-      registrationDate: String,
-      name: String,
-      birthDate: String,
-      alergies: Boolean,
-      descriptionAllergy: String,
-      oldStudent: Boolean,
-      signedMandate: Boolean,
-      imageAuthorisation: Boolean,
-      collectionPermit: String,
+      id:String!
+      group: String
+      course: String
+      registrationDate: String
+      name: String
+      birthDate: String
+      alergies: Boolean
+      descriptionAllergy: String
+      oldStudent: Boolean
+      signedMandate: Boolean
+      imageAuthorisation: Boolean
+      collectionPermit: String
+      contacts: [StudentContactInput!]
       notes: String): Student!
 
     editStudentContacts(

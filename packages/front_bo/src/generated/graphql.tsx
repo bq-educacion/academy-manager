@@ -239,6 +239,7 @@ export type MutationCreateStudentArgs = {
 export type MutationEditCenterArgs = {
   address?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<CenterContactInput>>;
   email?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   languages?: InputMaybe<Array<Scalars['String']>>;
@@ -300,6 +301,7 @@ export type MutationEditStudentArgs = {
   alergies?: InputMaybe<Scalars['Boolean']>;
   birthDate?: InputMaybe<Scalars['String']>;
   collectionPermit?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
   course?: InputMaybe<Scalars['String']>;
   descriptionAllergy?: InputMaybe<Scalars['String']>;
   group?: InputMaybe<Scalars['String']>;
@@ -323,7 +325,7 @@ export type MutationEditStudentContactsArgs = {
   send_info?: InputMaybe<Scalars['Boolean']>;
 };
 
-export enum OrderFilter {
+export enum OrderFilterCenter {
   City = 'city',
   Languages = 'languages',
   Name = 'name',
@@ -417,7 +419,7 @@ export type QueryGetCenterArgs = {
 
 export type QueryGetCentersArgs = {
   order?: InputMaybe<Scalars['Number']>;
-  orderFilter?: InputMaybe<OrderFilter>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
   searchText?: InputMaybe<Scalars['String']>;
@@ -566,7 +568,7 @@ export type CreateCenterMutation = { __typename?: 'Mutation', createCenter: { __
 
 export type GetCentersFQueryVariables = Exact<{
   searchText?: InputMaybe<Scalars['String']>;
-  orderFilter?: InputMaybe<OrderFilter>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
   order?: InputMaybe<Scalars['Number']>;
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
@@ -672,7 +674,7 @@ export type CreateCenterMutationHookResult = ReturnType<typeof useCreateCenterMu
 export type CreateCenterMutationResult = Apollo.MutationResult<CreateCenterMutation>;
 export type CreateCenterMutationOptions = Apollo.BaseMutationOptions<CreateCenterMutation, CreateCenterMutationVariables>;
 export const GetCentersFDocument = gql`
-    query GetCentersF($searchText: String, $orderFilter: OrderFilter, $order: Number, $page: Int, $pageSize: Int) {
+    query GetCentersF($searchText: String, $orderFilter: OrderFilterCenter, $order: Number, $page: Int, $pageSize: Int) {
   getCenters(
     searchText: $searchText
     orderFilter: $orderFilter
