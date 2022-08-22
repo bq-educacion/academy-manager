@@ -40,6 +40,6 @@ const PopoverTitle = styled.div`
 const PopoverContent = styled.div<{ open: boolean }>`
   display: ${(props) => (props.open ? "flex" : "none")};
   position: absolute;
-  z-index: 20;
+  z-index: 2;
   margin-top: 55px;
 `;
