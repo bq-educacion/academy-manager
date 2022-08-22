@@ -167,7 +167,7 @@ const CentersPage: NextPage = () => {
               },
               {
                 label: t("components.table.city"),
-                key: OrderFilter.city,
+                key: OrderFilter.City,
                 content: (item) => <div>{item.city}</div>,
               },
               {

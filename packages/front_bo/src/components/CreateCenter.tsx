@@ -283,15 +283,13 @@ const CreateCenter: FC<{
         </>
       )}
       {step === 4 && (
-        <>
-          <EndButton
-            Click={() => {
-              refetch();
-              close(false);
-            }}
-            text={t("general.actions.consent")}
-          />
-        </>
+        <EndButton
+          Click={() => {
+            refetch();
+            close(false);
+          }}
+          text={t("general.actions.consent")}
+        />
       )}
     </Form>
   );

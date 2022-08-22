@@ -83,6 +83,44 @@
       "4": {
         "title": "El centro ha sido creado satisfactoriamente."
       }
+    },
+    "create-group": {
+      "1": {
+        "title": "Paso 1 de 2 - Información del grupo",
+        "subtitle": {
+          "center": "Centro",
+          "name": "Nombre del grupo",
+          "name-placeholder": "Nombre completo del grupo",
+          "modality": "Modalidad",
+          "modality-ON_SITE": "En el centro",
+          "modality-ONLINE": "Remoto",
+          "modality-SEMI_PRESENTIAL": "Semipresencial",
+          "type": "Tipo",
+          "type-INTERNAL": "Interno",
+          "type-EXTERNAL": "Externo",
+          "instructor": "Monitor"
+        }
+      },
+      "2": {
+        "title": "Paso 2 de 2 - Horario del grupo",
+        "subtitle": {
+          "day": "Día",
+          "start-time": "Hora de inicio",
+          "end-time": "Hora de fin",
+          "MONDAY": "Lunes",
+          "TUESDAY": "Martes",
+          "WEDNESDAY": "Miércoles",
+          "THURSDAY": "Jueves",
+          "FRIDAY": "Viernes",
+          "SATURDAY": "Sábado",
+          "SUNDAY": "Domingo",
+          "placeholder-start": "8:30",
+          "placeholder-end": "14:30"
+        }
+      },
+      "3": {
+        "title": "El grupo ha sido creado satisfactoriamente."
+      }
     }
   },
   "general": {
@@ -94,14 +132,15 @@
         "centers": "Centros",
         "groups": "Grupos",
         "students": "Alumnos",
-        "monitors": "Monitores"
+        "instructors": "Monitores"
       }
     },
     "actions": {
       "back": "Atrás",
       "next": "Continuar",
       "cancel": "Cancelar",
-      "consent": "Aceptar"
+      "consent": "Aceptar",
+      "create": "Crear"
     }
   },
   "pages": {
@@ -148,9 +187,13 @@
       }
     },
     "groups": {
+      "end-title": "Grupo creado",
       "data-error": {
         "0": "Crear un nuevo grupo",
         "1": "varios grupos"
+      },
+      "modal-create": {
+        "title": "Crear grupo"
       }
     }
   }

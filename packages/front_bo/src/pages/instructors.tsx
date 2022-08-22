@@ -3,7 +3,7 @@ import { Layout } from "../components";
 import { sections } from "../config";
 import withApollo from "../apollo/withApollo";
 
-const MonitorsPage: NextPage = () => {
+const InstructorsPage: NextPage = () => {
   return (
     <Layout
       title={sections[0].bigTitle}
@@ -15,4 +15,4 @@ const MonitorsPage: NextPage = () => {
   );
 };
 
-export default withApollo(MonitorsPage, { requiresAccess: false });
+export default withApollo(InstructorsPage, { requiresAccess: false });

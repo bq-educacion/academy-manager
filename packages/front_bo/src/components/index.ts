@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import Table from "./Table";
 import Modal from "./Modal";
 import AddContact from "./AddContact";
+import CreateGroup from "./CreateGroup";
 
 export {
   ContentStart,
@@ -16,4 +17,5 @@ export {
   Table,
   Modal,
   AddContact,
+  CreateGroup,
 };

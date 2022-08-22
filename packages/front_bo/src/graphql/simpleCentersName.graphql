@@ -1,0 +1,8 @@
+query SimpleCentersName {
+  getCenters {
+    data {
+      name
+      id
+    }
+  }
+}
