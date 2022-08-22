@@ -78,23 +78,6 @@ const DropDown: FC<{
 
 export default DropDown;
 
-const OptionBox = styled.div<{ clicked: boolean }>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  cursor: pointer;
-  padding: 3px 0;
-  height: 26px;
-  & > p {
-    margin-left: 10px;
-    ${(props) => props.clicked && `font-weight: bold;`}
-  }
-  &:hover {
-    background-color: ${colors.colors.blue2};
-  }
-`;
-
 const InputBox = styled.div<{ clicked: boolean; width: string }>`
   display: flex;
   align-items: center;
@@ -124,9 +107,6 @@ const InputBox = styled.div<{ clicked: boolean; width: string }>`
 `;
 
 const OptionsBox = styled.div<{ width: string }>`
-  padding-top: 6px;
-  padding-left: 20px;
-  padding-bottom: 6px;
   position: relative;
   left: 20px;
   top: -22px;
@@ -137,4 +117,24 @@ const OptionsBox = styled.div<{ width: string }>`
   box-shadow: 0 10px 20px 0 ${colors.colors.shadow2};
   border-radius: 3px;
   overflow-y: scroll;
+`;
+
+const OptionBox = styled.div<{ clicked: boolean }>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  padding: 3px 0;
+  height: 26px;
+  & > p {
+    margin-left: 10px;
+    ${(props) => props.clicked && `font-weight: bold;`}
+  }
+  & > div {
+    margin-left: 22px;
+  }
+  &:hover {
+    background-color: ${colors.colors.blue2};
+  }
 `;

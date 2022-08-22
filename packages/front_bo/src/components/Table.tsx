@@ -5,6 +5,7 @@ import {
   OrderFilterCenter,
   OrderFilterGroup,
   OrderFilterInstructor,
+  OrderFilterStudent,
 } from "../generated/graphql";
 
 type Data = {
@@ -15,16 +16,28 @@ type TableProps<T> = {
   data: T[];
   columns: {
     label: string;
-    key: OrderFilterGroup | OrderFilterCenter | OrderFilterInstructor;
+    key:
+      | OrderFilterGroup
+      | OrderFilterCenter
+      | OrderFilterInstructor
+      | OrderFilterStudent;
     content: (item: T) => React.ReactNode;
   }[];
   order: {
-    key: OrderFilterCenter | OrderFilterGroup | OrderFilterInstructor;
+    key:
+      | OrderFilterCenter
+      | OrderFilterGroup
+      | OrderFilterInstructor
+      | OrderFilterStudent;
     direction: number;
   };
   onSetOrder: Dispatch<
     SetStateAction<{
-      key: OrderFilterCenter | OrderFilterGroup | OrderFilterInstructor;
+      key:
+        | OrderFilterCenter
+        | OrderFilterGroup
+        | OrderFilterInstructor
+        | OrderFilterStudent;
       direction: number;
     }>
   >;
@@ -43,7 +56,7 @@ const Table = <T extends Data>({
           key={column.key}
           onClick={() => {
             onSetOrder({
-              key: column.key as OrderFilterCenter,
+              key: column.key,
               direction: -order.direction,
             });
           }}

@@ -53,13 +53,14 @@ const CentersPage: NextPage = () => {
   });
 
   useEffect(() => {
-    data &&
+    if (data) {
       setPageData({
         page: data.getCenters.page,
         pageSize: data.getCenters.pageSize,
         total: data.getCenters.totalNumber,
       });
-    data?.getCenters.data && setTableData(data.getCenters.data);
+      setTableData(data.getCenters.data);
+    }
   }, [data]);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);

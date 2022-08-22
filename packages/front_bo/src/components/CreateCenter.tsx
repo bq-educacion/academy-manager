@@ -264,12 +264,13 @@ const CreateCenter: FC<{
               Click={() => {
                 setTimeout(() => {
                   setFinish(true);
-                  changeTitle("");
                 }, 10);
                 setTimeout(() => {
                   if (name !== "" && address !== "" && city !== "") {
-                    createCenterMutation();
-                    setStep(4);
+                    createCenterMutation().then(() => {
+                      changeTitle("");
+                      setStep(4);
+                    });
                   } else {
                     alert("Please fill all the fields");
                   }
@@ -286,6 +287,7 @@ const CreateCenter: FC<{
         <EndButton
           Click={() => {
             refetch();
+            changeTitle(t("pages.centers.modal-create.center.title"));
             close(false);
           }}
           text={t("general.actions.consent")}

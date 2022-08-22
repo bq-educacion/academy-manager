@@ -223,6 +223,7 @@ const CreateGroup: FC<{
           <MButton
             Click={() => {
               refetch();
+              changeTitle(t("pages.groups.modal-create.title"));
               close(false);
             }}
             text={t("general.actions.consent")}

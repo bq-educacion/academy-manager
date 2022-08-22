@@ -40,6 +40,14 @@
       "start-time": "Inicio",
       "end-time": "Fin",
       "course": "Cursos",
+      "institude": "Centro",
+      "group": "Grupo",
+      "course-student": "Curso",
+      "state": {
+        "title": "Estado",
+        "ACTIVE": "Activo",
+        "WITHDRAWN": "Baja"
+      },
       "zone": "Zonas",
       "active": {
         "ACTIVE": "Activo",
@@ -212,6 +220,16 @@
       },
       "modal-create": {
         "title": "Crear grupo"
+      }
+    },
+    "students": {
+      "modal-create": {
+        "title": "Crear alumno"
+      },
+      "data-error-options": {
+        "0": "Crear un nuevo alumno",
+        "1": "o",
+        "2": "varios alumnos"
       }
     },
     "instructors": {
