@@ -1,0 +1,34 @@
+query GetStudents(
+  $searchText: String
+  $orderFilter: OrderFilterStudent
+  $order: Number
+  $page: Int
+  $pageSize: Int
+) {
+  getStudents(
+    searchText: $searchText
+    orderFilter: $orderFilter
+    order: $order
+    page: $page
+    pageSize: $pageSize
+  ) {
+    data {
+      id
+      name
+      group {
+        name
+        id
+      }
+      center {
+        name
+        id
+      }
+      course
+      state
+    }
+    page
+    totalPages
+    totalNumber
+    pageSize
+  }
+}

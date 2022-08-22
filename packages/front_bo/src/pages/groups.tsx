@@ -225,7 +225,7 @@ const GroupsPage: NextPage = () => {
             <ErrorContainer>
               <styles.P4>{t("pages.centers.data-error")}</styles.P4>
               <styles.P4>
-                <a /*onClick={() => {} /*setModalOpen(true)}*/>
+                <a onClick={() => setModalOpen(true)}>
                   {t("pages.groups.data-error.0")}
                 </a>{" "}
                 {t("pages.centers.data-error-options.1")}{" "}

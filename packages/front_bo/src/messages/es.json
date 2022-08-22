@@ -39,7 +39,15 @@
       },
       "start-time": "Inicio",
       "end-time": "Fin",
-      "course": "Cursos"
+      "course": "Cursos",
+      "institude": "Centro",
+      "group": "Grupo",
+      "course-student": "Curso",
+      "state": {
+        "title": "Estado",
+        "ACTIVE": "Activo",
+        "WITHDRAWN": "Baja"
+      }
     },
     "Dropdown": {
       "title": "Seleccionar"
@@ -194,6 +202,16 @@
       },
       "modal-create": {
         "title": "Crear grupo"
+      }
+    },
+    "students": {
+      "modal-create": {
+        "title": "Crear alumno"
+      },
+      "data-error-options": {
+        "0": "Crear un nuevo alumno",
+        "1": "o",
+        "2": "varios alumnos"
       }
     }
   }

@@ -582,6 +582,17 @@ export type SimpleInstructorsNameQueryVariables = Exact<{ [key: string]: never; 
 
 export type SimpleInstructorsNameQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', data: Array<{ __typename?: 'Instructor', name: string, id: string }> } };
 
+export type GetStudentsQueryVariables = Exact<{
+  searchText?: InputMaybe<Scalars['String']>;
+  orderFilter?: InputMaybe<OrderFilterStudent>;
+  order?: InputMaybe<Scalars['Number']>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, course: string, state: StudentState, group: { __typename?: 'Group', name: string, id: string }, center: { __typename?: 'Center', name: string, id: string } }> } };
+
 
 export const CreateCenterDocument = gql`
     mutation CreateCenter($name: String!, $address: String!, $city: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [String!]!, $phone: String, $email: String, $contacts: [CenterContactInput!]!) {
@@ -875,3 +886,65 @@ export function useSimpleInstructorsNameLazyQuery(baseOptions?: Apollo.LazyQuery
 export type SimpleInstructorsNameQueryHookResult = ReturnType<typeof useSimpleInstructorsNameQuery>;
 export type SimpleInstructorsNameLazyQueryHookResult = ReturnType<typeof useSimpleInstructorsNameLazyQuery>;
 export type SimpleInstructorsNameQueryResult = Apollo.QueryResult<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>;
+export const GetStudentsDocument = gql`
+    query GetStudents($searchText: String, $orderFilter: OrderFilterStudent, $order: Number, $page: Int, $pageSize: Int) {
+  getStudents(
+    searchText: $searchText
+    orderFilter: $orderFilter
+    order: $order
+    page: $page
+    pageSize: $pageSize
+  ) {
+    data {
+      id
+      name
+      group {
+        name
+        id
+      }
+      center {
+        name
+        id
+      }
+      course
+      state
+    }
+    page
+    totalPages
+    totalNumber
+    pageSize
+  }
+}
+    `;
+
+/**
+ * __useGetStudentsQuery__
+ *
+ * To run a query within a React component, call `useGetStudentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStudentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStudentsQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *      orderFilter: // value for 'orderFilter'
+ *      order: // value for 'order'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetStudentsQuery(baseOptions?: Apollo.QueryHookOptions<GetStudentsQuery, GetStudentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStudentsQuery, GetStudentsQueryVariables>(GetStudentsDocument, options);
+      }
+export function useGetStudentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStudentsQuery, GetStudentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStudentsQuery, GetStudentsQueryVariables>(GetStudentsDocument, options);
+        }
+export type GetStudentsQueryHookResult = ReturnType<typeof useGetStudentsQuery>;
+export type GetStudentsLazyQueryHookResult = ReturnType<typeof useGetStudentsLazyQuery>;
+export type GetStudentsQueryResult = Apollo.QueryResult<GetStudentsQuery, GetStudentsQueryVariables>;
