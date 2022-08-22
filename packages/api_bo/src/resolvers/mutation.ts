@@ -424,7 +424,7 @@ export const Mutation = {
           ...new Set(args.contacts.map((contact) => contact.email)),
         ];
         if (args.contacts.length !== uniqueEmails.length) {
-          throw new Error("400, Emails of center contacts must be unique");
+          throw new Error("400, Emails of student contacts must be unique");
         }
         const contacts = args.contacts.map((contact) => ({
           ...contact,
