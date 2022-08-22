@@ -1,0 +1,42 @@
+query GetInstructors(
+  $searchText: String
+  $orderFilter: OrderFilterInstructor
+  $order: Number
+  $page: Int
+  $pageSize: Int
+) {
+  getInstructors(
+    searchText: $searchText
+    orderFilter: $orderFilter
+    order: $order
+    page: $page
+    pageSize: $pageSize
+  ) {
+    page
+    totalPages
+    totalNumber
+    pageSize
+    data {
+      id
+      name
+      center {
+        name
+        id
+      }
+      geographicalAvailability
+      state
+      availability {
+        day
+      }
+      vehicle
+      languages
+      summerAvailability
+      areas
+      groups {
+        name
+        id
+        id_group
+      }
+    }
+  }
+}
