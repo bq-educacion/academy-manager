@@ -38,7 +38,7 @@ export const Mutation = {
       const emails = args.contacts.map((contact) => contact.email);
       const uniqueEmails = [...new Set(emails)];
       if (emails.length !== uniqueEmails.length) {
-        throw new Error("Email of center contact must be unique");
+        throw new Error("400, Email of center contact must be unique");
       }
 
       const createdAt = new Date().toLocaleDateString("en-GB");
@@ -576,7 +576,7 @@ export const Mutation = {
         });
         if (existsPersonalEmail) {
           throw new Error(
-            "404, Instructor already exists, personal email must be unique",
+            "400, Instructor already exists, personal email must be unique",
           );
         }
       }
@@ -589,7 +589,7 @@ export const Mutation = {
         );
         if (existsCorporateEmail) {
           throw new Error(
-            "404, Instructor already exists, corporate email must be unique",
+            "400, Instructor already exists, corporate email must be unique",
           );
         }
       }
