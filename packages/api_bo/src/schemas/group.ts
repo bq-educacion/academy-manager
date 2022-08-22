@@ -24,7 +24,6 @@ export const typeDefs = gql`
 
   enum OrderFilterGroup {
     id_group
-    course
     center
     instructors
     id_day
@@ -61,7 +60,6 @@ export const typeDefs = gql`
     modality: GroupModality!
     type: GroupType!
     createdAt: String!
-    course: String!
     timetable: [Timetable!]!
     notes: String
     center: Center!
@@ -86,7 +84,6 @@ export const typeDefs = gql`
       name: String!
       modality: GroupModality!
       type: GroupType!
-      course: String!
       timetable: [TimetableInput!]!
       instructors: [String!]
       notes: String

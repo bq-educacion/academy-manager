@@ -121,7 +121,6 @@ export const Query = {
         { id_group: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-        { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         { modality: { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
@@ -169,7 +168,6 @@ export const Query = {
     let sortFilter = {};
     const OrderFilter = {
       id_group: "id_group",
-      course: "course",
       modality: "modality",
       instructors: "instructorsName.name",
       center: "centersName.name",
