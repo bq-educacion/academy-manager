@@ -18,7 +18,7 @@ export const sections: ISection[] = [
       { label: "general.sections.links.centers", href: "/centers" },
       { label: "general.sections.links.groups", href: "/groups" },
       { label: "general.sections.links.students", href: "/students" },
-      { label: "general.sections.links.monitors", href: "/instructors" },
+      { label: "general.sections.links.instructors", href: "/instructors" },
     ],
   },
 ];

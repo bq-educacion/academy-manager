@@ -10,6 +10,7 @@ import {
   MutationEditCenterArgs,
   MutationEditCenterContactsArgs,
   MutationEditGroupArgs,
+  MutationEditInstructorArgs,
   MutationEditStudentArgs,
   MutationEditStudentContactsArgs,
   StudentContact,
@@ -37,7 +38,7 @@ export const Mutation = {
       const emails = args.contacts.map((contact) => contact.email);
       const uniqueEmails = [...new Set(emails)];
       if (emails.length !== uniqueEmails.length) {
-        throw new Error("Email of center contact must be unique");
+        throw new Error("400, Email of center contact must be unique");
       }
 
       const createdAt = new Date().toLocaleDateString("en-GB");
@@ -557,6 +558,114 @@ export const Mutation = {
         notes: args.notes || "",
         availability,
       };
+    } catch (error) {
+      throw new Error("500, " + error);
+    }
+  },
+  editInstructor: async (
+    _parent: unknown,
+    args: MutationEditInstructorArgs,
+    ctx: Context,
+  ): Promise<InstructorModel> => {
+    try {
+      let updateInstructor = { ...args } as Partial<InstructorModel>;
+
+      if (args.personalEmail) {
+        const existsPersonalEmail = await instructorCollection(ctx.db).findOne({
+          personalEmail: args.personalEmail,
+        });
+        if (existsPersonalEmail) {
+          throw new Error(
+            "400, Instructor already exists, personal email must be unique",
+          );
+        }
+      }
+
+      if (args.corporateEmail) {
+        const existsCorporateEmail = await instructorCollection(ctx.db).findOne(
+          {
+            corporateEmail: args.corporateEmail,
+          },
+        );
+        if (existsCorporateEmail) {
+          throw new Error(
+            "400, Instructor already exists, corporate email must be unique",
+          );
+        }
+      }
+
+      if (args.availability) {
+        const availability = setIdDays(args.availability) as Availability[];
+        updateInstructor = { ...updateInstructor, availability };
+      }
+
+      if (args.groups) {
+        const groups = args.groups?.map((group) => new ObjectId(group));
+        const existsGroups = await groupCollection(ctx.db)
+          .find({
+            _id: { $in: groups },
+          })
+          .toArray();
+
+        if (existsGroups.length !== groups.length) {
+          throw new Error("404, Groups not found");
+        }
+
+        const instructorGroups = await groupCollection(ctx.db)
+          .find({
+            instructors: new ObjectId(args.id),
+          }).toArray();
+
+        existsGroups.map((group) => {
+          const existsCenter = instructorGroups.find((instructorGroup) =>
+            instructorGroup.center.equals(group.center)
+          );
+          if (!existsCenter) {
+            throw new Error("404, Groups not found in that center");
+          }
+        });
+
+        const instructorGroupsIds = instructorGroups.map((group) => group._id);
+
+        //add instructor to new groups
+        groups.map(async (group) => {
+          const existsGroup = instructorGroupsIds.find((g) =>
+            g?.toString() === group.toString()
+          );
+          if (!existsGroup) {
+            instructorGroupsIds.push(group);
+            await groupCollection(ctx.db).updateOne(
+              { _id: new ObjectId(group) },
+              { $push: { instructors: { $each: [new ObjectId(args.id)] } } },
+            );
+          }
+        });
+
+        //remove instructor from old groups
+        instructorGroupsIds.map(async (group) => {
+          const existsGroup = groups.find((g) =>
+            g.toString() === group?.toString()
+          );
+          if (!existsGroup) {
+            await groupCollection(ctx.db).updateOne(
+              { _id: group },
+              { $pull: { instructors: new ObjectId(args.id) } },
+            );
+          }
+        });
+      }
+
+      const newInstructor = await instructorCollection(ctx.db).findAndModify(
+        { _id: new ObjectId(args.id) },
+        {
+          update: { $set: updateInstructor },
+          new: true,
+        },
+      );
+      if (!newInstructor) {
+        throw new Error("404, Instructor not found");
+      }
+      return newInstructor;
     } catch (error) {
       throw new Error("500, " + error);
     }

@@ -155,6 +155,7 @@ export type Mutation = {
   editCenter: Center;
   editCenterContacts: CenterContact;
   editGroup: Group;
+  editInstructor: Instructor;
   editStudent: Student;
   editStudentContacts: StudentContact;
 };
@@ -269,6 +270,30 @@ export type MutationEditGroupArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   timetable?: InputMaybe<Array<TimetableInput>>;
   type?: InputMaybe<GroupType>;
+};
+
+export type MutationEditInstructorArgs = {
+  areas?: InputMaybe<Array<Scalars["String"]>>;
+  availability?: InputMaybe<Array<AvailabilityInput>>;
+  corporateEmail?: InputMaybe<Scalars["String"]>;
+  geographicalAvailability?: InputMaybe<Scalars["String"]>;
+  groups?: InputMaybe<Array<Scalars["String"]>>;
+  id: Scalars["String"];
+  knowledge?: InputMaybe<Scalars["String"]>;
+  languages?: InputMaybe<Array<Scalars["String"]>>;
+  materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  personalEmail?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
+  previousExperience?: InputMaybe<PreviousExperienceInstructor>;
+  programmingExperience?: InputMaybe<Scalars["Boolean"]>;
+  state?: InputMaybe<StateInstructor>;
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training?: InputMaybe<TrainingInstructor>;
+  urlCV?: InputMaybe<Scalars["String"]>;
+  vehicle?: InputMaybe<TypeVehicleInstructor>;
 };
 
 export type MutationEditStudentArgs = {
@@ -954,6 +979,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationEditGroupArgs, "id">
+  >;
+  editInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditInstructorArgs, "id">
   >;
   editStudent?: Resolver<
     ResolversTypes["Student"],
