@@ -14,7 +14,7 @@ export const typeDefs = gql`
     CONCERTADO
   }
 
-  enum OrderFilter {
+  enum OrderFilterCenter {
     name
     nature
     city
@@ -61,7 +61,7 @@ export const typeDefs = gql`
   type Query {
     getCenters(
       searchText: String
-      orderFilter: OrderFilter
+      orderFilter: OrderFilterCenter
       order: Number
       page: Int
       pageSize: Int
@@ -100,6 +100,7 @@ export const typeDefs = gql`
       type: [CenterActivityType!]
       nature: CenterNature
       languages: [String!]
+      contacts: [CenterContactInput!]
       notes: String
     ): Center!
 
