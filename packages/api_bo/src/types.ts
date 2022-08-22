@@ -10,19 +10,13 @@ export type Exact<T extends { [key: string]: unknown }> = {
 };
 export type MakeOptional<T, K extends keyof T> =
   & Omit<T, K>
-  & {
-    [SubKey in K]?: Maybe<T[SubKey]>;
-  };
+  & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> =
   & Omit<T, K>
-  & {
-    [SubKey in K]: Maybe<T[SubKey]>;
-  };
+  & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> =
   & Omit<T, K>
-  & {
-    [P in K]-?: NonNullable<T[P]>;
-  };
+  & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -48,6 +42,7 @@ export type AvailabilityInput = {
 export type Center = {
   __typename?: "Center";
   address: Scalars["String"];
+  city: Scalars["String"];
   contacts: Array<CenterContact>;
   createdAt: Scalars["String"];
   email?: Maybe<Scalars["String"]>;
@@ -58,7 +53,6 @@ export type Center = {
   nature: CenterNature;
   notes?: Maybe<Scalars["String"]>;
   phone?: Maybe<Scalars["String"]>;
-  city: Scalars["String"];
   type: Array<CenterActivityType>;
 };
 
@@ -101,7 +95,6 @@ export enum Days {
 export type Group = {
   __typename?: "Group";
   center: Center;
-  course: Scalars["String"];
   createdAt: Scalars["String"];
   id: Scalars["ID"];
   id_group: Scalars["Number"];
@@ -162,6 +155,7 @@ export type Mutation = {
   editCenter: Center;
   editCenterContacts: CenterContact;
   editGroup: Group;
+  editInstructor: Instructor;
   editStudent: Student;
   editStudentContacts: StudentContact;
 };
@@ -184,6 +178,7 @@ export type MutationAddStudentContactArgs = {
 
 export type MutationCreateCenterArgs = {
   address: Scalars["String"];
+  city: Scalars["String"];
   contacts: Array<CenterContactInput>;
   email?: InputMaybe<Scalars["String"]>;
   languages: Array<Scalars["String"]>;
@@ -191,12 +186,10 @@ export type MutationCreateCenterArgs = {
   nature: CenterNature;
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
-  city: Scalars["String"];
   type: Array<CenterActivityType>;
 };
 
 export type MutationCreateGroupArgs = {
-  course: Scalars["String"];
   idCenter: Scalars["String"];
   instructors?: InputMaybe<Array<Scalars["String"]>>;
   modality: GroupModality;
@@ -249,6 +242,7 @@ export type MutationCreateStudentArgs = {
 
 export type MutationEditCenterArgs = {
   address?: InputMaybe<Scalars["String"]>;
+  city?: InputMaybe<Scalars["String"]>;
   email?: InputMaybe<Scalars["String"]>;
   id: Scalars["String"];
   languages?: InputMaybe<Array<Scalars["String"]>>;
@@ -256,7 +250,6 @@ export type MutationEditCenterArgs = {
   nature?: InputMaybe<CenterNature>;
   notes?: InputMaybe<Scalars["String"]>;
   phone?: InputMaybe<Scalars["String"]>;
-  city?: InputMaybe<Scalars["String"]>;
   type?: InputMaybe<Array<CenterActivityType>>;
 };
 
@@ -277,6 +270,30 @@ export type MutationEditGroupArgs = {
   notes?: InputMaybe<Scalars["String"]>;
   timetable?: InputMaybe<Array<TimetableInput>>;
   type?: InputMaybe<GroupType>;
+};
+
+export type MutationEditInstructorArgs = {
+  areas?: InputMaybe<Array<Scalars["String"]>>;
+  availability?: InputMaybe<Array<AvailabilityInput>>;
+  corporateEmail?: InputMaybe<Scalars["String"]>;
+  geographicalAvailability?: InputMaybe<Scalars["String"]>;
+  groups?: InputMaybe<Array<Scalars["String"]>>;
+  id: Scalars["String"];
+  knowledge?: InputMaybe<Scalars["String"]>;
+  languages?: InputMaybe<Array<Scalars["String"]>>;
+  materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  personalEmail?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
+  previousExperience?: InputMaybe<PreviousExperienceInstructor>;
+  programmingExperience?: InputMaybe<Scalars["Boolean"]>;
+  state?: InputMaybe<StateInstructor>;
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training?: InputMaybe<TrainingInstructor>;
+  urlCV?: InputMaybe<Scalars["String"]>;
+  vehicle?: InputMaybe<TypeVehicleInstructor>;
 };
 
 export type MutationEditStudentArgs = {
@@ -306,16 +323,15 @@ export type MutationEditStudentContactsArgs = {
 };
 
 export enum OrderFilter {
+  City = "city",
   Languages = "languages",
   Name = "name",
   Nature = "nature",
-  city = "city",
   Type = "type",
 }
 
 export enum OrderFilterGroup {
   Center = "center",
-  Course = "course",
   End = "end",
   IdDay = "id_day",
   IdGroup = "id_group",
@@ -718,6 +734,7 @@ export type CenterResolvers<
     ResolversParentTypes["Center"],
 > = ResolversObject<{
   address?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  city?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   contacts?: Resolver<
     Array<ResolversTypes["CenterContact"]>,
     ParentType,
@@ -736,7 +753,6 @@ export type CenterResolvers<
   nature?: Resolver<ResolversTypes["CenterNature"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  city?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<
     Array<ResolversTypes["CenterActivityType"]>,
     ParentType,
@@ -762,7 +778,6 @@ export type GroupResolvers<
     ResolversParentTypes["Group"],
 > = ResolversObject<{
   center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
-  course?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   id_group?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
@@ -887,7 +902,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateCenterArgs,
-      "address" | "contacts" | "languages" | "name" | "nature" | "city" | "type"
+      "address" | "city" | "contacts" | "languages" | "name" | "nature" | "type"
     >
   >;
   createGroup?: Resolver<
@@ -896,7 +911,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateGroupArgs,
-      "course" | "idCenter" | "modality" | "name" | "timetable" | "type"
+      "idCenter" | "modality" | "name" | "timetable" | "type"
     >
   >;
   createInstructor?: Resolver<
@@ -964,6 +979,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationEditGroupArgs, "id">
+  >;
+  editInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditInstructorArgs, "id">
   >;
   editStudent?: Resolver<
     ResolversTypes["Student"],

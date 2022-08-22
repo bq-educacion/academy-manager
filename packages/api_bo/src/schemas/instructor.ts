@@ -119,6 +119,30 @@ export const typeDefs = gql`
       center: String!
       groups: [String!]!
     ): Instructor!
+
+    editInstructor(
+      id:String!
+      name:String
+      personalEmail: String
+      corporateEmail:String
+      phone:String
+      state:StateInstructor
+      notes:String
+      training:trainingInstructor
+      previousExperience:previousExperienceInstructor
+      programmingExperience:Boolean
+      knowledge:String
+      urlCV:String
+      materialsExperience: [String!]
+      platformEducationExperience: [String!]
+      languages: [String!]
+      vehicle:TypeVehicleInstructor
+      geographicalAvailability:String
+      areas: [String!]
+      availability: [AvailabilityInput!]
+      summerAvailability: summerAvailabilityInstructor
+      groups: [String!]
+    ): Instructor!
   }
 
 `;
