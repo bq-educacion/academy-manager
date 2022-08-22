@@ -1,6 +1,6 @@
 query GetCentersF(
   $searchText: String
-  $orderFilter: OrderFilter
+  $orderFilter: OrderFilterCenter
   $order: Number
   $page: Int
   $pageSize: Int
