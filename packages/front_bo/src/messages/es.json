@@ -39,7 +39,25 @@
       },
       "start-time": "Inicio",
       "end-time": "Fin",
-      "course": "Cursos"
+      "course": "Cursos",
+      "zone": "Zonas",
+      "active": {
+        "ACTIVE": "Activo",
+        "INACTIVE": "Inactivo"
+      },
+      "time": "Disp. Horaria",
+      "groups": "Grupos",
+      "vehicle": {
+        "title": "Vehículo",
+        "OWN": "Propio",
+        "PUBLIC_TRANSPORT": "Público"
+      },
+      "summer": {
+        "title": "Disp. Verano",
+        "YES": "Sí",
+        "NO": "No",
+        "EXTRACURRICULARS_ONLY": "Sólo Extracurriculares"
+      }
     },
     "Dropdown": {
       "title": "Seleccionar"
@@ -194,6 +212,15 @@
       },
       "modal-create": {
         "title": "Crear grupo"
+      }
+    },
+    "instructors": {
+      "modal-create": {
+        "title": "Crear monitor"
+      },
+      "data-error": {
+        "0": "Crear un nuevo monitor",
+        "1": "varios monitores"
       }
     }
   }
