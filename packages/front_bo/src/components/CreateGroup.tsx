@@ -62,7 +62,6 @@ const CreateGroup: FC<{
             name,
             modality,
             type,
-            course: "to be designed",
             timetable: timeTable,
             instructors,
           },

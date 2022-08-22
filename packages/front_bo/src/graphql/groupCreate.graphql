@@ -3,7 +3,6 @@ mutation CreateGroup(
   $name: String!
   $modality: GroupModality!
   $type: GroupType!
-  $course: String!
   $timetable: [TimetableInput!]!
   $instructors: [String!]
 ) {
@@ -12,7 +11,6 @@ mutation CreateGroup(
     name: $name
     modality: $modality
     type: $type
-    course: $course
     timetable: $timetable
     instructors: $instructors
   ) {

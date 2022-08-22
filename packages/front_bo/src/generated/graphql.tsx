@@ -84,7 +84,6 @@ export enum Days {
 export type Group = {
   __typename?: 'Group';
   center: Center;
-  course: Scalars['String'];
   createdAt: Scalars['String'];
   id: Scalars['ID'];
   id_group: Scalars['Number'];
@@ -183,7 +182,6 @@ export type MutationCreateCenterArgs = {
 
 
 export type MutationCreateGroupArgs = {
-  course: Scalars['String'];
   idCenter: Scalars['String'];
   instructors?: InputMaybe<Array<Scalars['String']>>;
   modality: GroupModality;
@@ -309,7 +307,6 @@ export enum OrderFilter {
 
 export enum OrderFilterGroup {
   Center = 'center',
-  Course = 'course',
   End = 'end',
   IdDay = 'id_day',
   IdGroup = 'id_group',
@@ -557,7 +554,6 @@ export type CreateGroupMutationVariables = Exact<{
   name: Scalars['String'];
   modality: GroupModality;
   type: GroupType;
-  course: Scalars['String'];
   timetable: Array<TimetableInput> | TimetableInput;
   instructors?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
@@ -574,7 +570,7 @@ export type GetGroupsQueryVariables = Exact<{
 }>;
 
 
-export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, course: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center: { __typename?: 'Center', name: string }, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
+export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center: { __typename?: 'Center', name: string }, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
 
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -695,13 +691,12 @@ export type GetCentersFQueryHookResult = ReturnType<typeof useGetCentersFQuery>;
 export type GetCentersFLazyQueryHookResult = ReturnType<typeof useGetCentersFLazyQuery>;
 export type GetCentersFQueryResult = Apollo.QueryResult<GetCentersFQuery, GetCentersFQueryVariables>;
 export const CreateGroupDocument = gql`
-    mutation CreateGroup($idCenter: String!, $name: String!, $modality: GroupModality!, $type: GroupType!, $course: String!, $timetable: [TimetableInput!]!, $instructors: [String!]) {
+    mutation CreateGroup($idCenter: String!, $name: String!, $modality: GroupModality!, $type: GroupType!, $timetable: [TimetableInput!]!, $instructors: [String!]) {
   createGroup(
     idCenter: $idCenter
     name: $name
     modality: $modality
     type: $type
-    course: $course
     timetable: $timetable
     instructors: $instructors
   ) {
@@ -729,7 +724,6 @@ export type CreateGroupMutationFn = Apollo.MutationFunction<CreateGroupMutation,
  *      name: // value for 'name'
  *      modality: // value for 'modality'
  *      type: // value for 'type'
- *      course: // value for 'course'
  *      timetable: // value for 'timetable'
  *      instructors: // value for 'instructors'
  *   },
@@ -765,7 +759,6 @@ export const GetGroupsDocument = gql`
         start
         end
       }
-      course
       center {
         name
       }

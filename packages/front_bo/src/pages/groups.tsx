@@ -3,7 +3,6 @@ import { CreateGroup, Layout, Modal, Table } from "../components";
 import { sections } from "../config";
 import withApollo from "../apollo/withApollo";
 import { FirstActionButton, styles, useTranslate } from "@academy-manager/ui";
-// import { useState } from "react";
 import {
   AdvanceSearch,
   ContentDiv,
@@ -210,11 +209,6 @@ const GroupsPage: NextPage = () => {
                     {item.timetable?.map((elem) => elem.end).join(", ")}
                   </div>
                 ),
-              },
-              {
-                label: t("components.table.course"),
-                key: OrderFilterGroup.Course,
-                content: (item) => <div>{item.course}</div>,
               },
             ]}
           />
