@@ -243,6 +243,7 @@ export type MutationCreateStudentArgs = {
 export type MutationEditCenterArgs = {
   address?: InputMaybe<Scalars["String"]>;
   city?: InputMaybe<Scalars["String"]>;
+  contacts?: InputMaybe<Array<CenterContactInput>>;
   email?: InputMaybe<Scalars["String"]>;
   id: Scalars["String"];
   languages?: InputMaybe<Array<Scalars["String"]>>;
@@ -300,6 +301,7 @@ export type MutationEditStudentArgs = {
   alergies?: InputMaybe<Scalars["Boolean"]>;
   birthDate?: InputMaybe<Scalars["String"]>;
   collectionPermit?: InputMaybe<Scalars["String"]>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
   course?: InputMaybe<Scalars["String"]>;
   descriptionAllergy?: InputMaybe<Scalars["String"]>;
   group?: InputMaybe<Scalars["String"]>;
@@ -322,7 +324,7 @@ export type MutationEditStudentContactsArgs = {
   send_info?: InputMaybe<Scalars["Boolean"]>;
 };
 
-export enum OrderFilter {
+export enum OrderFilterCenter {
   City = "city",
   Languages = "languages",
   Name = "name",
@@ -414,7 +416,7 @@ export type QueryGetCenterArgs = {
 
 export type QueryGetCentersArgs = {
   order?: InputMaybe<Scalars["Number"]>;
-  orderFilter?: InputMaybe<OrderFilter>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
   page?: InputMaybe<Scalars["Int"]>;
   pageSize?: InputMaybe<Scalars["Int"]>;
   searchText?: InputMaybe<Scalars["String"]>;
@@ -667,7 +669,7 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Mutation: ResolverTypeWrapper<{}>;
   Number: ResolverTypeWrapper<Scalars["Number"]>;
-  OrderFilter: OrderFilter;
+  OrderFilterCenter: OrderFilterCenter;
   OrderFilterGroup: OrderFilterGroup;
   OrderFilterInstructor: OrderFilterInstructor;
   OrderFilterStudent: OrderFilterStudent;
