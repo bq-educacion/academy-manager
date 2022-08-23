@@ -442,7 +442,7 @@ export const Mutation = {
         );
         const groupsToRemove = studentGroupsIds.filter(
           (group) => {
-            if (group !== undefined) return !groups.includes(group);
+            if (group) return !groups.includes(group);
           },
         );
 
@@ -644,7 +644,7 @@ export const Mutation = {
         const instructorGroupsIds = instructorGroups.map((group) => group._id);
         const groupsToRemove = instructorGroupsIds.filter(
           (group) => {
-            if (group !== undefined) return !groups.includes(group);
+            if (group) return !groups.includes(group);
           },
         );
         const groupsToAdd = groups.filter(
