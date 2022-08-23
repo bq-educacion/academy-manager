@@ -211,12 +211,21 @@ const CreateStudent: FC<{
               </styles.P4>
             </CheckOption>
             <FillIn>
-              <styles.BoldP4>
-                {t(
-                  `components.create-student.1.subtitle.allergies-description`
-                )}
-              </styles.BoldP4>
+              {allergies ? (
+                <styles.BoldP4>
+                  {t(
+                    `components.create-student.1.subtitle.allergies-description`
+                  )}
+                </styles.BoldP4>
+              ) : (
+                <DisabledText>
+                  {t(
+                    `components.create-student.1.subtitle.allergies-description`
+                  )}
+                </DisabledText>
+              )}
               <InputSuper
+                disabled={!allergies}
                 input={descriptionAllergy}
                 setInput={setdescriptionAllergy}
                 placeholder={t(
@@ -435,4 +444,8 @@ const ScrollDiv = styled.div`
   & > p {
     margin-bottom: 30px;
   }
+`;
+
+const DisabledText = styled(styles.BoldP4)`
+  color: ${colors.colors.gray2};
 `;
