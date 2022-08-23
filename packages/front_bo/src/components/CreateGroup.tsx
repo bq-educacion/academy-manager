@@ -122,7 +122,7 @@ const CreateGroup: FC<{
                 options={Object.values(GroupModality).map((modality) => ({
                   key: modality,
                   label: t(
-                    `components.create-group.1.subtitle.modality-${modality}`
+                    `components.create-group.1.subtitle.modality-${modality.toLowerCase()}`
                   ),
                 }))}
                 width="190px"
@@ -139,7 +139,9 @@ const CreateGroup: FC<{
               <DropDownUnique
                 options={Object.values(GroupType).map((type) => ({
                   key: type,
-                  label: t(`components.create-group.1.subtitle.type-${type}`),
+                  label: t(
+                    `components.create-group.1.subtitle.type-${type.toLowerCase()}`
+                  ),
                 }))}
                 width="190px"
                 setSelected={(type) => setType(type as GroupType)}

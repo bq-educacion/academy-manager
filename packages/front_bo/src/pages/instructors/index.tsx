@@ -166,10 +166,12 @@ const InstructorsPage: NextPage = () => {
                 content: (item) => <div>{item.areas?.join(", ")}</div>,
               },
               {
-                label: t("components.table.active.ACTIVE"),
+                label: t("components.table.active.active"),
                 key: OrderFilterInstructor.State,
                 content: (item) => (
-                  <div>{t(`components.table.active.${item.state}`)}</div>
+                  <div>
+                    {t(`components.table.active.${item.state?.toLowerCase()}`)}
+                  </div>
                 ),
               },
               {
@@ -179,7 +181,9 @@ const InstructorsPage: NextPage = () => {
                   <div>
                     {item.availability
                       ?.map((elem) =>
-                        t(`components.table.time-table.${elem.day}`)
+                        t(
+                          `components.table.time-table.${elem.day.toLowerCase()}`
+                        )
                       )
                       .join(" - ")}
                   </div>
@@ -194,7 +198,11 @@ const InstructorsPage: NextPage = () => {
                 label: t("components.table.vehicle.title"),
                 key: OrderFilterInstructor.Vehicle,
                 content: (item) => (
-                  <div>{t(`components.table.vehicle.${item.vehicle}`)}</div>
+                  <div>
+                    {t(
+                      `components.table.vehicle.${item.vehicle?.toLowerCase()}`
+                    )}
+                  </div>
                 ),
               },
               {
@@ -203,7 +211,9 @@ const InstructorsPage: NextPage = () => {
                 content: (item) => (
                   <div>
                     {item.languages
-                      ?.map((elem) => t(`pages.centers.languages.${elem}`))
+                      ?.map((elem) =>
+                        t(`pages.centers.languages.${elem.toLowerCase()}`)
+                      )
                       .join(", ")}
                   </div>
                 ),
@@ -213,7 +223,9 @@ const InstructorsPage: NextPage = () => {
                 key: OrderFilterInstructor.SummerAvailability,
                 content: (item) => (
                   <div>
-                    {t(`components.table.summer.${item.summerAvailability}`)}
+                    {t(
+                      `components.table.summer.${item.summerAvailability?.toLowerCase()}`
+                    )}
                   </div>
                 ),
               },

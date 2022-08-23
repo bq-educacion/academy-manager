@@ -171,7 +171,9 @@ const CentersPage: NextPage = () => {
                 content: (item) => (
                   <div>
                     {item.languages
-                      ?.map((elem) => t(`pages.centers.languages.${elem}`))
+                      ?.map((elem) =>
+                        t(`pages.centers.languages.${elem.toLowerCase()}`)
+                      )
                       .join(", ")}
                   </div>
                 ),
@@ -185,7 +187,9 @@ const CentersPage: NextPage = () => {
                 label: t("components.table.nature"),
                 key: OrderFilterCenter.Nature,
                 content: (item) => (
-                  <div>{t(`pages.centers.nature.${item.nature}`)}</div>
+                  <div>
+                    {t(`pages.centers.nature.${item.nature?.toLowerCase()}`)}
+                  </div>
                 ),
               },
               {
@@ -194,7 +198,9 @@ const CentersPage: NextPage = () => {
                 content: (item) => (
                   <div>
                     {item.type
-                      ?.map((elem) => t(`pages.centers.type.${elem}`))
+                      ?.map((elem) =>
+                        t(`pages.centers.type.${elem.toLowerCase()}`)
+                      )
                       .join(", ")}
                   </div>
                 ),

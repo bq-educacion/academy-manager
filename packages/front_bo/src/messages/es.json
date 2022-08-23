@@ -29,13 +29,13 @@
       "instructor": "Monitor",
       "days": "Días",
       "time-table": {
-        "MONDAY": "L",
-        "TUESDAY": "M",
-        "WEDNESDAY": "X",
-        "THURSDAY": "J",
-        "FRIDAY": "V",
-        "SATURDAY": "S",
-        "SUNDAY": "D"
+        "monday": "L",
+        "tuesday": "M",
+        "wednesday": "X",
+        "thursday": "J",
+        "friday": "V",
+        "saturday": "S",
+        "sunday": "D"
       },
       "start-time": "Inicio",
       "end-time": "Fin",
@@ -45,26 +45,26 @@
       "course-student": "Curso",
       "state": {
         "title": "Estado",
-        "ACTIVE": "Activo",
-        "WITHDRAWN": "Baja"
+        "active": "Activo",
+        "withdrawn": "Baja"
       },
       "zone": "Zonas",
       "active": {
-        "ACTIVE": "Activo",
-        "INACTIVE": "Inactivo"
+        "active": "Activo",
+        "inactive": "Inactivo"
       },
       "time": "Disp. Horaria",
       "groups": "Grupos",
       "vehicle": {
         "title": "Vehículo",
-        "OWN": "Propio",
-        "PUBLIC_TRANSPORT": "Público"
+        "own": "Propio",
+        "public_transport": "Público"
       },
       "summer": {
         "title": "Disp. Verano",
-        "YES": "Sí",
-        "NO": "No",
-        "EXTRACURRICULARS_ONLY": "Sólo Extracurriculares"
+        "yes": "Sí",
+        "no": "No",
+        "extracurriculars_only": "Sólo Extracurriculares"
       }
     },
     "dropdown": {
@@ -118,12 +118,12 @@
           "name": "Nombre del grupo",
           "name-placeholder": "Nombre completo del grupo",
           "modality": "Modalidad",
-          "modality-ON_SITE": "En el centro",
-          "modality-ONLINE": "Remoto",
-          "modality-SEMI_PRESENTIAL": "Semipresencial",
+          "modality-on_site": "En el centro",
+          "modality-online": "Remoto",
+          "modality-semi_presential": "Semipresencial",
           "type": "Tipo",
-          "type-INTERNAL": "Interno",
-          "type-EXTERNAL": "Externo",
+          "type-internal": "Interno",
+          "type-external": "Externo",
           "instructor": "Monitor"
         }
       },
@@ -133,13 +133,13 @@
           "day": "Día",
           "start-time": "Hora de inicio",
           "end-time": "Hora de fin",
-          "MONDAY": "Lunes",
-          "TUESDAY": "Martes",
-          "WEDNESDAY": "Miércoles",
-          "THURSDAY": "Jueves",
-          "FRIDAY": "Viernes",
-          "SATURDAY": "Sábado",
-          "SUNDAY": "Domingo",
+          "monday": "Lunes",
+          "tuesday": "Martes",
+          "wednesday": "Miércoles",
+          "thursday": "Jueves",
+          "friday": "Viernes",
+          "saturday": "Sábado",
+          "sunday": "Domingo",
           "placeholder-start": "8:30",
           "placeholder-end": "14:30"
         }
@@ -230,19 +230,19 @@
     },
     "centers": {
       "languages": {
-        "English": "Ing",
-        "Spanish": "Esp"
+        "english": "Ing",
+        "spanish": "Esp"
       },
       "nature": {
-        "PRIVATE": "Privado",
-        "PUBLIC": "Público",
-        "CONCERTADO": "Concertado"
+        "private": "Privado",
+        "public": "Público",
+        "concertado": "Concertado"
       },
       "type": {
-        "ACADEMY": "Academy",
-        "NO_ACADEMY": "No Academy",
-        "CAMPUS": "Campus",
-        "OTHERS": "Otros"
+        "academy": "Academy",
+        "no_academy": "No Academy",
+        "campus": "Campus",
+        "others": "Otros"
       },
       "advance-search": "Búsqueda avanzada",
       "data-error": "No hay datos",

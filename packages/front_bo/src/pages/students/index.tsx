@@ -189,7 +189,9 @@ const StudentsPage: NextPage = () => {
                 label: t("components.table.state.title"),
                 key: OrderFilterStudent.State,
                 content: (item) => (
-                  <div>{t(`components.table.state.${item.state}`)}</div>
+                  <div>
+                    {t(`components.table.state.${item.state?.toLowerCase()}`)}
+                  </div>
                 ),
               },
             ]}

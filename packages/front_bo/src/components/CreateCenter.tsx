@@ -80,7 +80,7 @@ const CreateCenter: FC<{
             <DropDown
               options={Object.values(CenterActivityType).map((type) => ({
                 key: type,
-                label: t(`pages.centers.type.${type}`),
+                label: t(`pages.centers.type.${type.toLowerCase()}`),
               }))}
               selected={typeSelection}
               setSelected={(selected) =>
@@ -97,7 +97,7 @@ const CreateCenter: FC<{
             <DropDownUnique
               options={Object.values(CenterNature).map((nature) => ({
                 key: nature,
-                label: t(`pages.centers.nature.${nature}`),
+                label: t(`pages.centers.nature.${nature.toLowerCase()}`),
               }))}
               width="390px"
               selected={natureSelection}
@@ -113,7 +113,7 @@ const CreateCenter: FC<{
             <DropDown
               options={centerLanguages.map((lang) => ({
                 key: lang,
-                label: t(`pages.centers.languages.${lang}`),
+                label: t(`pages.centers.languages.${lang.toLowerCase()}`),
               }))}
               selected={languagesSelection}
               setSelected={setLanguagesSelection}

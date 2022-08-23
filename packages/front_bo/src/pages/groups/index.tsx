@@ -189,7 +189,9 @@ const GroupsPage: NextPage = () => {
                   <div>
                     {item.timetable
                       ?.map((elem) =>
-                        t(`components.table.time-table.${elem.day}`)
+                        t(
+                          `components.table.time-table.${elem.day.toLowerCase()}`
+                        )
                       )
                       .join(" - ")}
                   </div>
