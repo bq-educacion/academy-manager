@@ -79,7 +79,6 @@ export const typeDefs = gql`
     geographicalAvailability: String!
     areas: [String!]!
     notes: String
-    center: Center!
     groups: [Group!]!
   }
 
@@ -116,7 +115,6 @@ export const typeDefs = gql`
       geographicalAvailability: String!
       areas: [String!]!
       notes: String
-      center: String!
       groups: [String!]!
     ): Instructor!
 

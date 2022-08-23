@@ -122,7 +122,6 @@ export type Instructor = {
   __typename?: "Instructor";
   areas: Array<Scalars["String"]>;
   availability: Array<Availability>;
-  center: Center;
   corporateEmail: Scalars["String"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Group>;
@@ -202,7 +201,6 @@ export type MutationCreateGroupArgs = {
 export type MutationCreateInstructorArgs = {
   areas: Array<Scalars["String"]>;
   availability: Array<AvailabilityInput>;
-  center: Scalars["String"];
   corporateEmail: Scalars["String"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Scalars["String"]>;
@@ -237,6 +235,7 @@ export type MutationCreateStudentArgs = {
   name: Scalars["String"];
   notes?: InputMaybe<Scalars["String"]>;
   oldStudent: Scalars["Boolean"];
+  registrationDate: Scalars["String"];
   signedMandate: Scalars["Boolean"];
 };
 
@@ -816,7 +815,6 @@ export type InstructorResolvers<
     ParentType,
     ContextType
   >;
-  center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
   corporateEmail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   geographicalAvailability?: Resolver<
     ResolversTypes["String"],
@@ -924,7 +922,6 @@ export type MutationResolvers<
       MutationCreateInstructorArgs,
       | "areas"
       | "availability"
-      | "center"
       | "corporateEmail"
       | "geographicalAvailability"
       | "groups"
@@ -961,6 +958,7 @@ export type MutationResolvers<
       | "imageAuthorisation"
       | "name"
       | "oldStudent"
+      | "registrationDate"
       | "signedMandate"
     >
   >;

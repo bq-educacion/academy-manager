@@ -27,6 +27,7 @@ import {
 } from "../models/InstructorModel.ts";
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
 import { setIdDays } from "../lib/setIdDays.ts";
+import { validDate } from "../lib/validDate.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -315,18 +316,10 @@ export const Mutation = {
         throw new Error("404, Center not found");
       }
 
-      const [d, m, y] = args.birthDate.split("/");
-      if (!d || !m || !y) {
-        throw new Error("400, Invalid birthDate");
-      }
-      const date = new Date(`${y}/${m}/${d}`).toString();
-      if (date === "Invalid Date") {
-        throw new Error("400, Invalid birthDate");
-      }
-      const birthDate = `${d}/${m}/${y}`;
+      const birthDate = validDate(args.birthDate);
+      const registrationDate = validDate(args.registrationDate);
 
       const state = StudentState.Active;
-      const registrationDate = new Date().toLocaleDateString("en-GB");
 
       const group = new ObjectId(args.idGroup);
       const existsGroup = await groupCollection(ctx.db).findOne({
@@ -365,11 +358,11 @@ export const Mutation = {
       return {
         _id: idStudent,
         state,
-        registrationDate,
         descriptionAllergy: args.descriptionAllergy || "",
         notes: args.notes || "",
         ...args,
         contacts,
+        registrationDate,
         birthDate,
       };
     } catch (error) {
@@ -453,15 +446,13 @@ export const Mutation = {
       }
 
       if (args.birthDate) {
-        const [d, m, y] = args.birthDate.split("/");
-        if (!d || !m || !y) {
-          throw new Error("400, Invalid birthDate");
-        }
-        const date = new Date(`${y}/${m}/${d}`).toString();
-        if (date === "Invalid Date") {
-          throw new Error("400, Invalid birthDate");
-        }
-        updateStudent = { ...updateStudent, birthDate: `${d}/${m}/${y}` };
+        const birthDate = validDate(args.birthDate);
+        updateStudent = { ...updateStudent, birthDate };
+      }
+
+      if (args.registrationDate) {
+        const registrationDate = validDate(args.registrationDate);
+        updateStudent = { ...updateStudent, registrationDate };
       }
 
       const newStudent = await studentCollection(ctx.db).findAndModify(
@@ -545,21 +536,15 @@ export const Mutation = {
       });
       if (existsInstructor) throw new Error("404, Instructor already exists");
 
-      const existsCenter = await centerCollection(ctx.db).findById(args.center);
-      if (!existsCenter) {
-        throw new Error("404, Center not found");
-      }
-
       const groups = args.groups?.map((group) => new ObjectId(group));
       const existsGroups = await groupCollection(ctx.db)
         .find({
           _id: { $in: groups },
-          center: new ObjectId(args.center),
         })
         .toArray();
 
       if (existsGroups.length !== groups.length) {
-        throw new Error("404, Groups not found in that center");
+        throw new Error("404, Groups not found");
       }
 
       const availability = setIdDays(args.availability) as Availability[];
@@ -638,15 +623,6 @@ export const Mutation = {
           .find({
             instructors: new ObjectId(args.id),
           }).toArray();
-
-        existsGroups.map((group) => {
-          const existsCenter = instructorGroups.find((instructorGroup) =>
-            instructorGroup.center.equals(group.center)
-          );
-          if (!existsCenter) {
-            throw new Error("404, Groups not found in that center");
-          }
-        });
 
         const instructorGroupsIds = instructorGroups.map((group) => group._id);
 

@@ -511,16 +511,6 @@ export const Instructor = {
   id: (parent: InstructorModel): string => {
     return String(parent._id!);
   },
-  center: async (
-    parent: InstructorModel,
-    _: unknown,
-    ctx: Context,
-  ): Promise<CenterModel | undefined> => {
-    const group = await groupCollection(ctx.db).findOne({
-      instructors: parent._id,
-    });
-    return await centerCollection(ctx.db).findOne({ _id: group?.center });
-  },
   groups: async (
     parent: InstructorModel,
     _: unknown,

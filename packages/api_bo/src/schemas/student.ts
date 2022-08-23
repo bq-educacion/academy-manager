@@ -77,6 +77,7 @@ export const typeDefs = gql`
       name: String!
       birthDate: String!
       course: String!
+      registrationDate: String!
       alergies: Boolean!
       descriptionAllergy: String
       oldStudent: Boolean!
