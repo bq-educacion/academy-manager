@@ -54,8 +54,7 @@ export const typeDefs = gql`
     goesAlone: Boolean!
     notes: String
     contacts: [StudentContact!]!
-    center: Center!
-    group: Group!
+    groups: [Group!]!
   }
 
   extend type Query {
@@ -72,11 +71,11 @@ export const typeDefs = gql`
   
   extend type Mutation {
     createStudent(
-      idCenter: String!
-      idGroup: String!
+      idGroups: [String!]!
       name: String!
       birthDate: String!
       course: String!
+      registrationDate: String!
       alergies: Boolean!
       descriptionAllergy: String
       oldStudent: Boolean!
@@ -99,7 +98,7 @@ export const typeDefs = gql`
     
     editStudent(
       id:String!
-      group: String
+      groups: [String!]
       course: String
       registrationDate: String
       name: String
