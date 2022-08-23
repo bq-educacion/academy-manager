@@ -2,6 +2,8 @@ import {
   CheckBox,
   colors,
   DropDownUnique,
+  FillIn,
+  FillInSectioned,
   InputSuper,
   MButton,
   styles,
@@ -388,27 +390,6 @@ const Form = styled.div`
   & > p {
     align-self: flex-start;
     margin-bottom: 30px;
-  }
-`;
-
-export const FillInSectioned = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  & > :not(div:first-child) {
-    margin-left: 10px;
-  }
-`;
-export const FillIn = styled.div<{ width?: string }>`
-  display: flex;
-  ${({ width }) => (width ? `width: ${width}` : "width: 100%")};
-  flex-direction: column;
-  margin-bottom: 20px;
-  & > p {
-    margin-bottom: 5px;
-  }
-  & > div {
-    align-items: flex-start;
   }
 `;
 

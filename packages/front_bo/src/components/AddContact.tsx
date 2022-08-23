@@ -1,5 +1,7 @@
 import {
   colors,
+  FillIn,
+  FillInSectioned,
   Icon,
   InputSuper,
   styles,
@@ -8,7 +10,6 @@ import {
 import styled from "@emotion/styled";
 import { FC, useEffect, useState } from "react";
 import { CenterContact } from "../generated/graphql";
-import { FillIn, FillInSectioned } from "./CreateCenter";
 
 const AddContact: FC<{
   setContact: (contacts: CenterContact) => void;
