@@ -33,7 +33,7 @@ const DropDown: FC<{
           <styles.P4>
             {selected.length === 0
               ? Number(width.match(/\d/g)?.join("")) > 170
-                ? t("components.Dropdown.title")
+                ? t("components.dropdown.title")
                 : "-"
               : selected
                   .map((s) => options.find((op) => op.key === s)?.label)

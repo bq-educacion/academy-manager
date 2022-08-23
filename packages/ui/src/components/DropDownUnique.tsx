@@ -31,7 +31,7 @@ const DropDownUnique: FC<{
           <styles.P4>
             {!selected
               ? Number(width.match(/\d/g)?.join("")) > 170
-                ? t("components.Dropdown.title")
+                ? t("components.dropdown.title")
                 : "-"
               : options.find((s) => s.key === selected)?.label}
           </styles.P4>
