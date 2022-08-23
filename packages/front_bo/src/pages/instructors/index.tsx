@@ -9,7 +9,6 @@ import {
 } from "../../generated/graphql";
 import { FirstActionButton, styles, useTranslate } from "@academy-manager/ui";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import {
   AdvanceSearch,
   ContentDiv,
@@ -23,6 +22,7 @@ import {
   SubHeaderDiv,
   SubHeaderP4,
 } from "../centers";
+import { ApolloError } from "@apollo/client";
 
 const InstructorsPage: NextPage = () => {
   const t = useTranslate();
@@ -70,9 +70,9 @@ const InstructorsPage: NextPage = () => {
     }
   }, [data]);
 
-  const route = useRouter();
-  if (error) {
-    route.push("/500");
+  const [componentError] = useState<ApolloError | undefined>(undefined);
+  if (error || componentError) {
+    return <Layout section={sections[4].title} error={500} label={""} />;
   }
 
   return (
@@ -159,11 +159,6 @@ const InstructorsPage: NextPage = () => {
                 label: t("components.table.name"),
                 key: OrderFilterInstructor.Name,
                 content: (item) => <div>{item.name}</div>,
-              },
-              {
-                label: t("components.table.center"),
-                key: OrderFilterInstructor.Center,
-                content: (item) => <div>{item.center?.name}</div>,
               },
               {
                 label: t("components.table.zone"),

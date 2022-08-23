@@ -22,7 +22,7 @@ import {
   useGetGroupsQuery,
 } from "../../generated/graphql";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { ApolloError } from "@apollo/client";
 
 const GroupsPage: NextPage = () => {
   const t = useTranslate();
@@ -73,9 +73,11 @@ const GroupsPage: NextPage = () => {
     }
   }, [data]);
 
-  const route = useRouter();
-  if (error) {
-    route.push("/500");
+  const [componentError, setComponentError] = useState<ApolloError | undefined>(
+    undefined
+  );
+  if (error || componentError) {
+    return <Layout section={sections[2].title} error={500} label={""} />;
   }
 
   return (
@@ -87,6 +89,7 @@ const GroupsPage: NextPage = () => {
           endTitle={t("pages.groups.end-title")}
         >
           <CreateGroup
+            setError={setComponentError}
             changeTitle={setModalTitle}
             close={setModalOpen}
             refetch={refetch}

@@ -7,8 +7,8 @@ import {
   styles,
   useTranslate,
 } from "@academy-manager/ui";
+import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import {
   GroupModality,
@@ -24,7 +24,8 @@ const CreateGroup: FC<{
   changeTitle: (title: string) => void;
   close: (action: boolean) => void;
   refetch: () => void;
-}> = ({ close, changeTitle, refetch }) => {
+  setError: (error: ApolloError) => void;
+}> = ({ close, changeTitle, refetch, setError }) => {
   const t = useTranslate();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -71,12 +72,9 @@ const CreateGroup: FC<{
 
   //TODO: add contacts to query when available
 
-  const route = useRouter();
-  useEffect(() => {
-    if (error) {
-      route.push("/500");
-    }
-  }, [error]);
+  if (error) {
+    setError(error);
+  }
 
   return (
     <Form>

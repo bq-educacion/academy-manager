@@ -9,7 +9,6 @@ import {
   Student,
   useGetStudentsQuery,
 } from "../../generated/graphql";
-import { useRouter } from "next/router";
 import {
   AdvanceSearch,
   ContentDiv,
@@ -24,6 +23,7 @@ import {
   SubHeaderP4,
 } from "../centers";
 import CreateStudent from "../../components/CreateStudent";
+import { ApolloError } from "@apollo/client";
 
 const StudentsPage: NextPage = () => {
   const t = useTranslate();
@@ -76,9 +76,11 @@ const StudentsPage: NextPage = () => {
     }
   }, [data]);
 
-  const route = useRouter();
-  if (error) {
-    route.push("/500");
+  const [componentError, setComponentError] = useState<ApolloError | undefined>(
+    undefined
+  );
+  if (error || componentError) {
+    return <Layout section={sections[3].title} error={500} label={""} />;
   }
 
   return (
@@ -90,6 +92,7 @@ const StudentsPage: NextPage = () => {
           endTitle={t("pages.students.end-title")}
         >
           <CreateStudent
+            setError={setComponentError}
             changeTitle={setModalTitle}
             close={setModalOpen}
             refetch={refetch}
@@ -169,14 +172,11 @@ const StudentsPage: NextPage = () => {
                 content: (item) => <div>{item.name}</div>,
               },
               {
-                label: t("components.table.institude"),
-                key: OrderFilterStudent.Center,
-                content: (item) => <div>{item.center?.name}</div>,
-              },
-              {
                 label: t("components.table.group"),
                 key: OrderFilterStudent.Group,
-                content: (item) => <div>{item.group?.name}</div>,
+                content: (item) => (
+                  <div>{item.groups?.map((elem) => elem.name).join(", ")}</div>
+                ),
               },
               {
                 label: t("components.table.course-student"),

@@ -1,6 +1,4 @@
 mutation CreateStudent(
-  $idCenter: String!
-  $idGroup: String!
   $name: String!
   $birthDate: String!
   $course: String!
@@ -12,10 +10,10 @@ mutation CreateStudent(
   $goesAlone: Boolean!
   $contacts: [StudentContactInput!]!
   $descriptionAllergy: String
+  $registrationDate: String!
+  $idGroups: [String!]!
 ) {
   createStudent(
-    idCenter: $idCenter
-    idGroup: $idGroup
     name: $name
     birthDate: $birthDate
     course: $course
@@ -27,6 +25,8 @@ mutation CreateStudent(
     goesAlone: $goesAlone
     contacts: $contacts
     descriptionAllergy: $descriptionAllergy
+    registrationDate: $registrationDate
+    idGroups: $idGroups
   ) {
     name
     id

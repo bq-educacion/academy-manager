@@ -7,8 +7,8 @@ import {
   styles,
   useTranslate,
 } from "@academy-manager/ui";
+import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import { courses } from "../config";
 import {
@@ -23,7 +23,8 @@ const CreateStudent: FC<{
   changeTitle: (title: string) => void;
   close: (action: boolean) => void;
   refetch: () => void;
-}> = ({ close, changeTitle, refetch }) => {
+  setError: (error: ApolloError) => void;
+}> = ({ close, changeTitle, refetch, setError }) => {
   const t = useTranslate();
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
@@ -33,12 +34,12 @@ const CreateStudent: FC<{
   const [course, setCourse] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [inscriptionDay, setInscriptionDay] = useState<string>("");
-  const [birthday, setBirthday] = useState<string>("");
+  const [birthDate, setbirthDate] = useState<string>("");
   const [allergies, setAllergies] = useState<boolean>(false);
-  const [descriptionAllergies, setDescriptionAllergies] = useState<string>("");
+  const [descriptionAllergy, setdescriptionAllergy] = useState<string>("");
   const [oldStudent, setOldStudent] = useState<boolean>(false);
   const [signedMandate, setSignedMandate] = useState<boolean>(false);
-  const [imageAuthorization, setImageAuthorization] = useState<boolean>(false);
+  const [imageAuthorisation, setImageAuthorisation] = useState<boolean>(false);
   const [goesAlone, setGoesAlone] = useState<boolean>(false);
   const [collectionPermit, setCollectionPermit] = useState<string>("");
   const [contactName, setContactName] = useState<string>("");
@@ -66,15 +67,15 @@ const CreateStudent: FC<{
 
   const [createStudentMutation, { error }] = useCreateStudentMutation({
     variables: {
-      idCenter: center,
-      idGroup: group,
+      registrationDate: inscriptionDay,
+      idGroups: [group],
       name,
-      birthDate: birthday,
+      birthDate,
       course: course,
       alergies: allergies,
       oldStudent,
       signedMandate,
-      imageAuthorisation: imageAuthorization,
+      imageAuthorisation,
       collectionPermit,
       goesAlone,
       contacts: [
@@ -85,16 +86,13 @@ const CreateStudent: FC<{
           send_info: sendInfoToContact,
         } as StudentContactInput,
       ],
-      descriptionAllergy: descriptionAllergies,
+      descriptionAllergy: descriptionAllergy,
     },
   });
 
-  const route = useRouter();
-  useEffect(() => {
-    if (error) {
-      route.push("/500");
-    }
-  }, [error]);
+  if (error) {
+    setError(error);
+  }
 
   return (
     <Form>
@@ -195,8 +193,8 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.birth-date`)}
                 </styles.BoldP4>
                 <InputSuper
-                  input={birthday}
-                  setInput={setBirthday}
+                  input={birthDate}
+                  setInput={setbirthDate}
                   placeholder={t(
                     `components.create-student.1.subtitle.birth-date-placeholder`
                   )}
@@ -217,8 +215,8 @@ const CreateStudent: FC<{
                 )}
               </styles.BoldP4>
               <InputSuper
-                input={descriptionAllergies}
-                setInput={setDescriptionAllergies}
+                input={descriptionAllergy}
+                setInput={setdescriptionAllergy}
                 placeholder={t(
                   `components.create-student.1.subtitle.allergies-description-placeholder`
                 )}
@@ -238,8 +236,8 @@ const CreateStudent: FC<{
             </CheckOption>
             <CheckOption>
               <CheckBox
-                option={imageAuthorization}
-                setOption={setImageAuthorization}
+                option={imageAuthorisation}
+                setOption={setImageAuthorisation}
               />
               <styles.P4>
                 {t(`components.create-student.1.subtitle.images`)}
@@ -338,6 +336,11 @@ const CreateStudent: FC<{
               Click={() => {
                 if (
                   name !== "" &&
+                  group !== "" &&
+                  birthDate !== "" &&
+                  course !== "" &&
+                  inscriptionDay !== "" &&
+                  collectionPermit !== "" &&
                   contactName !== "" &&
                   contactEmail !== "" &&
                   contactPhone !== ""

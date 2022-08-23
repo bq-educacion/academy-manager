@@ -16,8 +16,8 @@ import {
   OrderFilterCenter,
   useGetCentersFQuery,
 } from "../../generated/graphql";
-import { useRouter } from "next/router";
 import CreateCenter from "../../components/CreateCenter";
+import { ApolloError } from "@apollo/client";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -70,9 +70,11 @@ const CentersPage: NextPage = () => {
 
   //TODO: Advance Search
 
-  const route = useRouter();
-  if (error) {
-    route.push("/500");
+  const [componentError, setComponentError] = useState<ApolloError | undefined>(
+    undefined
+  );
+  if (error || componentError) {
+    return <Layout section={sections[1].title} error={500} label={""} />;
   }
 
   return (
@@ -84,6 +86,7 @@ const CentersPage: NextPage = () => {
           endTitle={t("pages.centers.modal-create.center.end-title")}
         >
           <CreateCenter
+            setError={setComponentError}
             refetch={refetch}
             changeTitle={setModalTitle}
             close={setModalOpen}

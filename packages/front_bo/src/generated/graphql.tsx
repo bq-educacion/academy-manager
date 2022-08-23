@@ -111,7 +111,6 @@ export type Instructor = {
   __typename?: 'Instructor';
   areas: Array<Scalars['String']>;
   availability: Array<Availability>;
-  center: Center;
   corporateEmail: Scalars['String'];
   geographicalAvailability: Scalars['String'];
   groups: Array<Group>;
@@ -196,7 +195,6 @@ export type MutationCreateGroupArgs = {
 export type MutationCreateInstructorArgs = {
   areas: Array<Scalars['String']>;
   availability: Array<AvailabilityInput>;
-  center: Scalars['String'];
   corporateEmail: Scalars['String'];
   geographicalAvailability: Scalars['String'];
   groups: Array<Scalars['String']>;
@@ -226,12 +224,12 @@ export type MutationCreateStudentArgs = {
   course: Scalars['String'];
   descriptionAllergy?: InputMaybe<Scalars['String']>;
   goesAlone: Scalars['Boolean'];
-  idCenter: Scalars['String'];
-  idGroup: Scalars['String'];
+  idGroups: Array<Scalars['String']>;
   imageAuthorisation: Scalars['Boolean'];
   name: Scalars['String'];
   notes?: InputMaybe<Scalars['String']>;
   oldStudent: Scalars['Boolean'];
+  registrationDate: Scalars['String'];
   signedMandate: Scalars['Boolean'];
 };
 
@@ -304,7 +302,7 @@ export type MutationEditStudentArgs = {
   contacts?: InputMaybe<Array<StudentContactInput>>;
   course?: InputMaybe<Scalars['String']>;
   descriptionAllergy?: InputMaybe<Scalars['String']>;
-  group?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<Scalars['String']>>;
   id: Scalars['String'];
   imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
@@ -476,13 +474,12 @@ export type Student = {
   __typename?: 'Student';
   alergies: Scalars['Boolean'];
   birthDate: Scalars['String'];
-  center: Center;
   collectionPermit: Scalars['String'];
   contacts: Array<StudentContact>;
   course: Scalars['String'];
   descriptionAllergy?: Maybe<Scalars['String']>;
   goesAlone: Scalars['Boolean'];
-  group: Group;
+  groups: Array<Group>;
   id: Scalars['ID'];
   imageAuthorisation: Scalars['Boolean'];
   name: Scalars['String'];
@@ -609,7 +606,7 @@ export type GetInstructorsQueryVariables = Exact<{
 }>;
 
 
-export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, state: StateInstructor, vehicle: TypeVehicleInstructor, languages: Array<string>, summerAvailability: SummerAvailabilityInstructor, areas: Array<string>, center: { __typename?: 'Center', name: string, id: string }, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
+export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, state: StateInstructor, vehicle: TypeVehicleInstructor, languages: Array<string>, summerAvailability: SummerAvailabilityInstructor, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
 
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -627,8 +624,6 @@ export type SimpleInstructorsNameQueryVariables = Exact<{ [key: string]: never; 
 export type SimpleInstructorsNameQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', data: Array<{ __typename?: 'Instructor', name: string, id: string }> } };
 
 export type CreateStudentMutationVariables = Exact<{
-  idCenter: Scalars['String'];
-  idGroup: Scalars['String'];
   name: Scalars['String'];
   birthDate: Scalars['String'];
   course: Scalars['String'];
@@ -640,6 +635,8 @@ export type CreateStudentMutationVariables = Exact<{
   goesAlone: Scalars['Boolean'];
   contacts: Array<StudentContactInput> | StudentContactInput;
   descriptionAllergy?: InputMaybe<Scalars['String']>;
+  registrationDate: Scalars['String'];
+  idGroups: Array<Scalars['String']> | Scalars['String'];
 }>;
 
 
@@ -654,7 +651,7 @@ export type GetStudentsQueryVariables = Exact<{
 }>;
 
 
-export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, course: string, state: StudentState, group: { __typename?: 'Group', name: string, id: string }, center: { __typename?: 'Center', name: string, id: string } }> } };
+export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, course: string, state: StudentState, groups: Array<{ __typename?: 'Group', name: string, id: string }> }> } };
 
 
 export const CreateCenterDocument = gql`
@@ -891,10 +888,6 @@ export const GetInstructorsDocument = gql`
     data {
       id
       name
-      center {
-        name
-        id
-      }
       geographicalAvailability
       state
       availability {
@@ -1061,10 +1054,8 @@ export type SimpleInstructorsNameQueryHookResult = ReturnType<typeof useSimpleIn
 export type SimpleInstructorsNameLazyQueryHookResult = ReturnType<typeof useSimpleInstructorsNameLazyQuery>;
 export type SimpleInstructorsNameQueryResult = Apollo.QueryResult<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>;
 export const CreateStudentDocument = gql`
-    mutation CreateStudent($idCenter: String!, $idGroup: String!, $name: String!, $birthDate: String!, $course: String!, $alergies: Boolean!, $oldStudent: Boolean!, $signedMandate: Boolean!, $imageAuthorisation: Boolean!, $collectionPermit: String!, $goesAlone: Boolean!, $contacts: [StudentContactInput!]!, $descriptionAllergy: String) {
+    mutation CreateStudent($name: String!, $birthDate: String!, $course: String!, $alergies: Boolean!, $oldStudent: Boolean!, $signedMandate: Boolean!, $imageAuthorisation: Boolean!, $collectionPermit: String!, $goesAlone: Boolean!, $contacts: [StudentContactInput!]!, $descriptionAllergy: String, $registrationDate: String!, $idGroups: [String!]!) {
   createStudent(
-    idCenter: $idCenter
-    idGroup: $idGroup
     name: $name
     birthDate: $birthDate
     course: $course
@@ -1076,6 +1067,8 @@ export const CreateStudentDocument = gql`
     goesAlone: $goesAlone
     contacts: $contacts
     descriptionAllergy: $descriptionAllergy
+    registrationDate: $registrationDate
+    idGroups: $idGroups
   ) {
     name
     id
@@ -1097,8 +1090,6 @@ export type CreateStudentMutationFn = Apollo.MutationFunction<CreateStudentMutat
  * @example
  * const [createStudentMutation, { data, loading, error }] = useCreateStudentMutation({
  *   variables: {
- *      idCenter: // value for 'idCenter'
- *      idGroup: // value for 'idGroup'
  *      name: // value for 'name'
  *      birthDate: // value for 'birthDate'
  *      course: // value for 'course'
@@ -1110,6 +1101,8 @@ export type CreateStudentMutationFn = Apollo.MutationFunction<CreateStudentMutat
  *      goesAlone: // value for 'goesAlone'
  *      contacts: // value for 'contacts'
  *      descriptionAllergy: // value for 'descriptionAllergy'
+ *      registrationDate: // value for 'registrationDate'
+ *      idGroups: // value for 'idGroups'
  *   },
  * });
  */
@@ -1132,11 +1125,7 @@ export const GetStudentsDocument = gql`
     data {
       id
       name
-      group {
-        name
-        id
-      }
-      center {
+      groups {
         name
         id
       }
