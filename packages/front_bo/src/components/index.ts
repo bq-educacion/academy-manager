@@ -9,6 +9,7 @@ import AddContact from "./AddContact";
 import CreateGroup from "./CreateGroup";
 import CreateStudent from "./CreateStudent";
 import CreateCenter from "./CreateCenter";
+import CreateInstructor from "./CreateInstructor";
 
 export {
   ContentStart,
@@ -22,4 +23,5 @@ export {
   CreateGroup,
   CreateStudent,
   CreateCenter,
+  CreateInstructor,
 };

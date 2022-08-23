@@ -42,3 +42,37 @@ export const courses: DropDownItem[] = [
   { label: "general.courses.3e", key: "3e" },
   { label: "general.courses.4e", key: "4e" },
 ];
+
+export const Tools: DropDownItem[] = [
+  { label: "general.tools.makey", key: "makey" },
+  { label: "general.tools.micro", key: "micro" },
+  { label: "general.tools.arduino", key: "arduino" },
+  { label: "general.tools.3d", key: "3d" },
+  { label: "general.tools.zumkit", key: "zumkit" },
+  { label: "general.tools.other", key: "other" },
+];
+
+export const Platforms: DropDownItem[] = [
+  { label: "general.platforms.cospace", key: "cospace" },
+  { label: "general.platforms.bitbloq", key: "bitbloq" },
+  { label: "general.platforms.inventor", key: "inventor" },
+  { label: "general.platforms.scratch", key: "scratch" },
+  { label: "general.platforms.tinker", key: "tinker" },
+  { label: "general.platforms.other", key: "other" },
+];
+
+export const schedule: string[] = [
+  "8:00 a 8:59",
+  "9:00 a 9:59",
+  "10:00 a 10:59",
+  "11:00 a 11:59",
+  "12:00 a 12:59",
+  "13:00 a 13:59",
+  "14:00 a 14:59",
+  "15:00 a 15:59",
+  "16:00 a 16:59",
+  "17:00 a 17:59",
+  "18:00 a 18:59",
+  "19:00 a 19:59",
+  "20:00 a 20:59",
+];
