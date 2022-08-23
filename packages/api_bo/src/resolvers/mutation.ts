@@ -194,16 +194,18 @@ export const Mutation = {
       const createdAt = new Date().toLocaleDateString("en-GB");
 
       const ids = await groupCollection(ctx.db)
-        .find({
-          center: new ObjectId(args.idCenter),
-        })
-        .sort({ id_group: 1 })
+        .find({})
+        .sort({ id_group: -1 })
         .toArray();
       let id_group = 1;
       if (ids.length > 0) {
         id_group = (ids[0].id_group as number) + 1;
       }
 
+      const centerExists = await centerCollection(ctx.db).findById(
+        args.idCenter,
+      );
+      if (!centerExists) throw new Error("404, Center not found");
       const center = new ObjectId(args.idCenter);
 
       const instructors = args.instructors?.map(
@@ -425,7 +427,7 @@ export const Mutation = {
             _id: { $in: groups },
           })
           .toArray();
-        if (!existsGroups) {
+        if (existsGroups.length === 0) {
           throw new Error("404, Groups not found");
         }
 
@@ -440,7 +442,7 @@ export const Mutation = {
         );
         const groupsToRemove = studentGroupsIds.filter(
           (group) => {
-            if (group != undefined) return !groups.includes(group);
+            if (group !== undefined) return !groups.includes(group);
           },
         );
 
@@ -642,7 +644,7 @@ export const Mutation = {
         const instructorGroupsIds = instructorGroups.map((group) => group._id);
         const groupsToRemove = instructorGroupsIds.filter(
           (group) => {
-            if (group != undefined) return !groups.includes(group);
+            if (group !== undefined) return !groups.includes(group);
           },
         );
         const groupsToAdd = groups.filter(
