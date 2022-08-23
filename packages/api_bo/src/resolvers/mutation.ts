@@ -27,6 +27,7 @@ import {
 } from "../models/InstructorModel.ts";
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
 import { setIdDays } from "../lib/setIdDays.ts";
+import { validDate } from "../lib/validDate.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -308,33 +309,17 @@ export const Mutation = {
     ctx: Context,
   ): Promise<StudentModel> => {
     try {
-      const existsCenter = await centerCollection(ctx.db).findById(
-        args.idCenter,
-      );
-      if (!existsCenter) {
-        throw new Error("404, Center not found");
-      }
-
-      const [d, m, y] = args.birthDate.split("/");
-      if (!d || !m || !y) {
-        throw new Error("400, Invalid birthDate");
-      }
-      const date = new Date(`${y}/${m}/${d}`).toString();
-      if (date === "Invalid Date") {
-        throw new Error("400, Invalid birthDate");
-      }
-      const birthDate = `${d}/${m}/${y}`;
+      const birthDate = validDate(args.birthDate);
+      const registrationDate = validDate(args.registrationDate);
 
       const state = StudentState.Active;
-      const registrationDate = new Date().toLocaleDateString("en-GB");
 
-      const group = new ObjectId(args.idGroup);
-      const existsGroup = await groupCollection(ctx.db).findOne({
-        _id: group,
-        center: new ObjectId(args.idCenter),
-      });
-      if (!existsGroup) {
-        throw new Error("404, Group not found");
+      const groups = args.idGroups?.map((group) => new ObjectId(group));
+      const existsGroups = await groupCollection(ctx.db).find({
+        _id: { $in: groups },
+      }).toArray();
+      if (existsGroups.length !== groups.length) {
+        throw new Error("404, Groups not found");
       }
 
       const emails = args.contacts.map((contact) => contact.email);
@@ -357,19 +342,19 @@ export const Mutation = {
         notes: args.notes || "",
       });
 
-      await groupCollection(ctx.db).updateOne(
-        { _id: group },
+      await groupCollection(ctx.db).updateMany(
+        { _id: { $in: groups } },
         { $push: { students: { $each: [idStudent] } } },
       );
 
       return {
         _id: idStudent,
         state,
-        registrationDate,
         descriptionAllergy: args.descriptionAllergy || "",
         notes: args.notes || "",
         ...args,
         contacts,
+        registrationDate,
         birthDate,
       };
     } catch (error) {
@@ -433,35 +418,56 @@ export const Mutation = {
         updateStudent = { ...updateStudent, contacts };
       }
 
-      if (args.group) {
-        const existsGroup = await groupCollection(ctx.db).findOne({
-          _id: new ObjectId(args.group),
-        });
-        if (!existsGroup) {
-          throw new Error("404, Group not found");
+      if (args.groups) {
+        const groups = args.groups.map((group) => new ObjectId(group));
+        const existsGroups = await groupCollection(ctx.db)
+          .find({
+            _id: { $in: groups },
+          })
+          .toArray();
+        if (!existsGroups) {
+          throw new Error("404, Groups not found");
         }
-        //delete student from old group
-        await groupCollection(ctx.db).updateOne(
-          { students: new ObjectId(args.id) },
-          { $pull: { students: new ObjectId(args.id) } },
+
+        const studentGroups = await groupCollection(ctx.db)
+          .find({
+            students: new ObjectId(args.id),
+          }).toArray();
+
+        const studentGroupsIds = studentGroups.map((group) => group._id);
+        const groupsToAdd = groups.filter(
+          (group) => !studentGroupsIds.includes(group),
         );
-        //add student to new group
-        await groupCollection(ctx.db).updateOne(
-          { _id: new ObjectId(args.group) },
-          { $push: { students: { $each: [new ObjectId(args.id)] } } },
+        const groupsToRemove = studentGroupsIds.filter(
+          (group) => {
+            if (group != undefined) return !groups.includes(group);
+          },
         );
+
+        //delete student from old groups
+        if (groupsToRemove.length > 0) {
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: groupsToRemove } },
+            { $pull: { students: new ObjectId(args.id) } },
+          );
+        }
+        //add student to new groups
+        if (groupsToAdd.length > 0) {
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: groupsToAdd } },
+            { $push: { students: { $each: [new ObjectId(args.id)] } } },
+          );
+        }
       }
 
       if (args.birthDate) {
-        const [d, m, y] = args.birthDate.split("/");
-        if (!d || !m || !y) {
-          throw new Error("400, Invalid birthDate");
-        }
-        const date = new Date(`${y}/${m}/${d}`).toString();
-        if (date === "Invalid Date") {
-          throw new Error("400, Invalid birthDate");
-        }
-        updateStudent = { ...updateStudent, birthDate: `${d}/${m}/${y}` };
+        const birthDate = validDate(args.birthDate);
+        updateStudent = { ...updateStudent, birthDate };
+      }
+
+      if (args.registrationDate) {
+        const registrationDate = validDate(args.registrationDate);
+        updateStudent = { ...updateStudent, registrationDate };
       }
 
       const newStudent = await studentCollection(ctx.db).findAndModify(
@@ -545,21 +551,15 @@ export const Mutation = {
       });
       if (existsInstructor) throw new Error("404, Instructor already exists");
 
-      const existsCenter = await centerCollection(ctx.db).findById(args.center);
-      if (!existsCenter) {
-        throw new Error("404, Center not found");
-      }
-
       const groups = args.groups?.map((group) => new ObjectId(group));
       const existsGroups = await groupCollection(ctx.db)
         .find({
           _id: { $in: groups },
-          center: new ObjectId(args.center),
         })
         .toArray();
 
       if (existsGroups.length !== groups.length) {
-        throw new Error("404, Groups not found in that center");
+        throw new Error("404, Groups not found");
       }
 
       const availability = setIdDays(args.availability) as Availability[];
@@ -623,7 +623,7 @@ export const Mutation = {
       }
 
       if (args.groups) {
-        const groups = args.groups?.map((group) => new ObjectId(group));
+        const groups = args.groups.map((group) => new ObjectId(group));
         const existsGroups = await groupCollection(ctx.db)
           .find({
             _id: { $in: groups },
@@ -639,43 +639,30 @@ export const Mutation = {
             instructors: new ObjectId(args.id),
           }).toArray();
 
-        existsGroups.map((group) => {
-          const existsCenter = instructorGroups.find((instructorGroup) =>
-            instructorGroup.center.equals(group.center)
-          );
-          if (!existsCenter) {
-            throw new Error("404, Groups not found in that center");
-          }
-        });
-
         const instructorGroupsIds = instructorGroups.map((group) => group._id);
-
+        const groupsToRemove = instructorGroupsIds.filter(
+          (group) => {
+            if (group != undefined) return !groups.includes(group);
+          },
+        );
+        const groupsToAdd = groups.filter(
+          (group) => !instructorGroupsIds.includes(group),
+        );
         //add instructor to new groups
-        groups.map(async (group) => {
-          const existsGroup = instructorGroupsIds.find((g) =>
-            g?.toString() === group.toString()
+        if (groupsToAdd.length > 0) {
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: groupsToAdd } },
+            { $push: { instructors: { $each: [new ObjectId(args.id)] } } },
           );
-          if (!existsGroup) {
-            instructorGroupsIds.push(group);
-            await groupCollection(ctx.db).updateOne(
-              { _id: new ObjectId(group) },
-              { $push: { instructors: { $each: [new ObjectId(args.id)] } } },
-            );
-          }
-        });
+        }
 
         //remove instructor from old groups
-        instructorGroupsIds.map(async (group) => {
-          const existsGroup = groups.find((g) =>
-            g.toString() === group?.toString()
+        if (groupsToRemove.length > 0) {
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: groupsToRemove } },
+            { $pull: { instructors: new ObjectId(args.id) } },
           );
-          if (!existsGroup) {
-            await groupCollection(ctx.db).updateOne(
-              { _id: group },
-              { $pull: { instructors: new ObjectId(args.id) } },
-            );
-          }
-        });
+        }
       }
 
       const newInstructor = await instructorCollection(ctx.db).findAndModify(

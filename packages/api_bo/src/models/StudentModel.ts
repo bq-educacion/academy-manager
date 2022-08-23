@@ -3,7 +3,7 @@ import { ObjectId } from "objectId";
 import { Collection, Database } from "mongo";
 import { FindById } from "./types.ts";
 
-export type StudentModel = Omit<Student, "id" | "center" | "group"> & {
+export type StudentModel = Omit<Student, "id" | "center" | "groups"> & {
   _id?: ObjectId;
 };
 
