@@ -80,7 +80,7 @@ const StudentsPage: NextPage = () => {
     undefined
   );
   if (error || componentError) {
-    return <Layout section={sections[3].title} error={500} label={""} />;
+    return <Layout section={sections[0].title} error={500} label={""} />;
   }
 
   return (

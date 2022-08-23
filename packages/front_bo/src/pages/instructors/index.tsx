@@ -72,7 +72,7 @@ const InstructorsPage: NextPage = () => {
 
   const [componentError] = useState<ApolloError | undefined>(undefined);
   if (error || componentError) {
-    return <Layout section={sections[4].title} error={500} label={""} />;
+    return <Layout section={sections[0].title} error={500} label={""} />;
   }
 
   return (
