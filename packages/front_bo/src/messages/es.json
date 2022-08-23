@@ -145,11 +145,62 @@
         }
       },
       "3": {
+        "title": "El alumno ha sido creado satisfactoriamente."
+      }
+    },
+    "create-student": {
+      "1": {
+        "title": "Paso 1 de 2 - Información del alumno",
+        "subtitle": {
+          "center": "Centro",
+          "group": "Grupo",
+          "course": "Curso",
+          "name": "Nombre y apellidos",
+          "name-placeholder": "Nombre y apellidos del alumno",
+          "inscription-date": "Fecha de inscripción",
+          "inscription-date-placeholder": "Fecha",
+          "birth-date": "Fecha de nacimiento",
+          "birth-date-placeholder": "Fecha",
+          "allergies": "Tiene alergias",
+          "allergies-description": "Descripción de alergia",
+          "allergies-description-placeholder": "Celíaco",
+          "old-student": "Es un antiguo alumno",
+          "mandate": "Mandato firmado",
+          "images": "Autorización imágenes",
+          "alone": "Sale sólo",
+          "collectionPermit": "Autorización de recogida",
+          "collectionPermit-placeholder": "Introduce aquí el nombre de la persona de recogida"
+        }
+      },
+      "2": {
+        "title": "Paso 2 de 2 - Información de contacto",
+        "subtitle": {
+          "name": "Nombre y apellidos",
+          "name-placeholder": "Nombre y apellidos del contacto",
+          "email": "Email",
+          "email-placeholder": "Dirección de correo del contacto",
+          "phone": "Teléfono",
+          "send": "Enviar información"
+        }
+      },
+      "3": {
         "title": "El grupo ha sido creado satisfactoriamente."
       }
     }
   },
   "general": {
+    "courses": {
+      "1p": "1ºEPO",
+      "2p": "2ºEPO",
+      "3p": "3ºEPO",
+      "4p": "4ºEPO",
+      "5p": "5ºEPO",
+      "6p": "6ºEPO",
+      "1e": "1ºESO",
+      "2e": "2ºESO",
+      "3e": "3ºESO",
+      "4e": "4ºESO"
+    },
     "sections": {
       "title": "Extraescolares",
       "big-title": "Gestión de extraescolares",
@@ -223,6 +274,7 @@
       }
     },
     "students": {
+      "end-title": "Alumno creado",
       "modal-create": {
         "title": "Crear alumno"
       },

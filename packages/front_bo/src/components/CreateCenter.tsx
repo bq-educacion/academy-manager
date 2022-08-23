@@ -284,14 +284,16 @@ const CreateCenter: FC<{
         </>
       )}
       {step === 4 && (
-        <EndButton
-          Click={() => {
-            refetch();
-            changeTitle(t("pages.centers.modal-create.center.title"));
-            close(false);
-          }}
-          text={t("general.actions.consent")}
-        />
+        <FillIn>
+          <EndButton
+            Click={() => {
+              refetch();
+              changeTitle(t("pages.centers.modal-create.center.title"));
+              close(false);
+            }}
+            text={t("general.actions.consent")}
+          />
+        </FillIn>
       )}
     </Form>
   );

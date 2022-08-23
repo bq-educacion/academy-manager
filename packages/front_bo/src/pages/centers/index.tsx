@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import { Layout, Modal, Table } from "../components";
-import { sections } from "../config";
-import withApollo from "../apollo/withApollo";
+import { Layout, Modal, Table } from "../../components";
+import { sections } from "../../config";
+import withApollo from "../../apollo/withApollo";
 import {
   colors,
   FirstActionButton,
@@ -15,9 +15,9 @@ import {
   Center,
   OrderFilterCenter,
   useGetCentersFQuery,
-} from "../generated/graphql";
+} from "../../generated/graphql";
 import { useRouter } from "next/router";
-import CreateCenter from "../components/CreateCenter";
+import CreateCenter from "../../components/CreateCenter";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -201,10 +201,10 @@ const CentersPage: NextPage = () => {
           {tableData.length === 0 && searchText !== "" && (
             <ErrorContainer>
               <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
-              <styles.P4>
+              {/* <styles.P4>
                 {t("pages.centers.search-error.1")}{" "}
                 <a>{t("pages.centers.search-error.2")}</a>
-              </styles.P4>
+              </styles.P4> */}
             </ErrorContainer>
           )}
           {tableData.length === 0 && searchText === "" && (
@@ -213,9 +213,10 @@ const CentersPage: NextPage = () => {
               <styles.P4>
                 <a onClick={() => setModalOpen(true)}>
                   {t("pages.centers.data-error-options.0")}
-                </a>{" "}
+                </a>
+                {/*{" "}
                 {t("pages.centers.data-error-options.1")}{" "}
-                <a>{t("pages.centers.data-error-options.2")}</a>
+          <a>{t("pages.centers.data-error-options.2")}</a>*/}
               </styles.P4>
             </ErrorContainer>
           )}

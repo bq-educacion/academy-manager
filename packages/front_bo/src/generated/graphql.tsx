@@ -616,10 +616,34 @@ export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SimpleCentersNameQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', data: Array<{ __typename?: 'Center', name: string, id: string }> } };
 
+export type SimpleGroupsNameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SimpleGroupsNameQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center: { __typename?: 'Center', id: string } }> } };
+
 export type SimpleInstructorsNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SimpleInstructorsNameQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', data: Array<{ __typename?: 'Instructor', name: string, id: string }> } };
+
+export type CreateStudentMutationVariables = Exact<{
+  idCenter: Scalars['String'];
+  idGroup: Scalars['String'];
+  name: Scalars['String'];
+  birthDate: Scalars['String'];
+  course: Scalars['String'];
+  alergies: Scalars['Boolean'];
+  oldStudent: Scalars['Boolean'];
+  signedMandate: Scalars['Boolean'];
+  imageAuthorisation: Scalars['Boolean'];
+  collectionPermit: Scalars['String'];
+  goesAlone: Scalars['Boolean'];
+  contacts: Array<StudentContactInput> | StudentContactInput;
+  descriptionAllergy?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateStudentMutation = { __typename?: 'Mutation', createStudent: { __typename?: 'Student', name: string, id: string } };
 
 export type GetStudentsQueryVariables = Exact<{
   searchText?: InputMaybe<Scalars['String']>;
@@ -958,6 +982,47 @@ export function useSimpleCentersNameLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type SimpleCentersNameQueryHookResult = ReturnType<typeof useSimpleCentersNameQuery>;
 export type SimpleCentersNameLazyQueryHookResult = ReturnType<typeof useSimpleCentersNameLazyQuery>;
 export type SimpleCentersNameQueryResult = Apollo.QueryResult<SimpleCentersNameQuery, SimpleCentersNameQueryVariables>;
+export const SimpleGroupsNameDocument = gql`
+    query simpleGroupsName {
+  getGroups {
+    data {
+      center {
+        id
+      }
+      id
+      id_group
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useSimpleGroupsNameQuery__
+ *
+ * To run a query within a React component, call `useSimpleGroupsNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleGroupsNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleGroupsNameQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSimpleGroupsNameQuery(baseOptions?: Apollo.QueryHookOptions<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>(SimpleGroupsNameDocument, options);
+      }
+export function useSimpleGroupsNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>(SimpleGroupsNameDocument, options);
+        }
+export type SimpleGroupsNameQueryHookResult = ReturnType<typeof useSimpleGroupsNameQuery>;
+export type SimpleGroupsNameLazyQueryHookResult = ReturnType<typeof useSimpleGroupsNameLazyQuery>;
+export type SimpleGroupsNameQueryResult = Apollo.QueryResult<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>;
 export const SimpleInstructorsNameDocument = gql`
     query SimpleInstructorsName {
   getInstructors {
@@ -995,6 +1060,66 @@ export function useSimpleInstructorsNameLazyQuery(baseOptions?: Apollo.LazyQuery
 export type SimpleInstructorsNameQueryHookResult = ReturnType<typeof useSimpleInstructorsNameQuery>;
 export type SimpleInstructorsNameLazyQueryHookResult = ReturnType<typeof useSimpleInstructorsNameLazyQuery>;
 export type SimpleInstructorsNameQueryResult = Apollo.QueryResult<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>;
+export const CreateStudentDocument = gql`
+    mutation CreateStudent($idCenter: String!, $idGroup: String!, $name: String!, $birthDate: String!, $course: String!, $alergies: Boolean!, $oldStudent: Boolean!, $signedMandate: Boolean!, $imageAuthorisation: Boolean!, $collectionPermit: String!, $goesAlone: Boolean!, $contacts: [StudentContactInput!]!, $descriptionAllergy: String) {
+  createStudent(
+    idCenter: $idCenter
+    idGroup: $idGroup
+    name: $name
+    birthDate: $birthDate
+    course: $course
+    alergies: $alergies
+    oldStudent: $oldStudent
+    signedMandate: $signedMandate
+    imageAuthorisation: $imageAuthorisation
+    collectionPermit: $collectionPermit
+    goesAlone: $goesAlone
+    contacts: $contacts
+    descriptionAllergy: $descriptionAllergy
+  ) {
+    name
+    id
+  }
+}
+    `;
+export type CreateStudentMutationFn = Apollo.MutationFunction<CreateStudentMutation, CreateStudentMutationVariables>;
+
+/**
+ * __useCreateStudentMutation__
+ *
+ * To run a mutation, you first call `useCreateStudentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStudentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStudentMutation, { data, loading, error }] = useCreateStudentMutation({
+ *   variables: {
+ *      idCenter: // value for 'idCenter'
+ *      idGroup: // value for 'idGroup'
+ *      name: // value for 'name'
+ *      birthDate: // value for 'birthDate'
+ *      course: // value for 'course'
+ *      alergies: // value for 'alergies'
+ *      oldStudent: // value for 'oldStudent'
+ *      signedMandate: // value for 'signedMandate'
+ *      imageAuthorisation: // value for 'imageAuthorisation'
+ *      collectionPermit: // value for 'collectionPermit'
+ *      goesAlone: // value for 'goesAlone'
+ *      contacts: // value for 'contacts'
+ *      descriptionAllergy: // value for 'descriptionAllergy'
+ *   },
+ * });
+ */
+export function useCreateStudentMutation(baseOptions?: Apollo.MutationHookOptions<CreateStudentMutation, CreateStudentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStudentMutation, CreateStudentMutationVariables>(CreateStudentDocument, options);
+      }
+export type CreateStudentMutationHookResult = ReturnType<typeof useCreateStudentMutation>;
+export type CreateStudentMutationResult = Apollo.MutationResult<CreateStudentMutation>;
+export type CreateStudentMutationOptions = Apollo.BaseMutationOptions<CreateStudentMutation, CreateStudentMutationVariables>;
 export const GetStudentsDocument = gql`
     query GetStudents($searchText: String, $orderFilter: OrderFilterStudent, $order: Number, $page: Int, $pageSize: Int) {
   getStudents(

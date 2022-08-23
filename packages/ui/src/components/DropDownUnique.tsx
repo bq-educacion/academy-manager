@@ -30,7 +30,9 @@ const DropDownUnique: FC<{
         >
           <styles.P4>
             {!selected
-              ? t("components.Dropdown.title")
+              ? Number(width.match(/\d/g)?.join("")) > 170
+                ? t("components.Dropdown.title")
+                : "-"
               : options.find((s) => s.key === selected)?.label}
           </styles.P4>
           <Icon name="triangle" />

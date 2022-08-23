@@ -1,0 +1,34 @@
+mutation CreateStudent(
+  $idCenter: String!
+  $idGroup: String!
+  $name: String!
+  $birthDate: String!
+  $course: String!
+  $alergies: Boolean!
+  $oldStudent: Boolean!
+  $signedMandate: Boolean!
+  $imageAuthorisation: Boolean!
+  $collectionPermit: String!
+  $goesAlone: Boolean!
+  $contacts: [StudentContactInput!]!
+  $descriptionAllergy: String
+) {
+  createStudent(
+    idCenter: $idCenter
+    idGroup: $idGroup
+    name: $name
+    birthDate: $birthDate
+    course: $course
+    alergies: $alergies
+    oldStudent: $oldStudent
+    signedMandate: $signedMandate
+    imageAuthorisation: $imageAuthorisation
+    collectionPermit: $collectionPermit
+    goesAlone: $goesAlone
+    contacts: $contacts
+    descriptionAllergy: $descriptionAllergy
+  ) {
+    name
+    id
+  }
+}
