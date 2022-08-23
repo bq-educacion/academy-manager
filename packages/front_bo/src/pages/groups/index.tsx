@@ -1,15 +1,8 @@
 import { NextPage } from "next";
-import { Layout, Modal, Table } from "../components";
-import { sections } from "../config";
-import withApollo from "../apollo/withApollo";
+import { CreateGroup, Layout, Modal, Table } from "../../components";
+import { sections } from "../../config";
+import withApollo from "../../apollo/withApollo";
 import { FirstActionButton, styles, useTranslate } from "@academy-manager/ui";
-import { useEffect, useState } from "react";
-import {
-  OrderFilterStudent,
-  Student,
-  useGetStudentsQuery,
-} from "../generated/graphql";
-import { useRouter } from "next/router";
 import {
   AdvanceSearch,
   ContentDiv,
@@ -22,27 +15,31 @@ import {
   RelativeDiv,
   SubHeaderDiv,
   SubHeaderP4,
-} from "./centers";
-import CreateCenter from "../components/CreateCenter";
+} from "../centers";
+import {
+  Group,
+  OrderFilterGroup,
+  useGetGroupsQuery,
+} from "../../generated/graphql";
+import { useEffect, useState } from "react";
+import { ApolloError } from "@apollo/client";
 
-const StudentsPage: NextPage = () => {
+const GroupsPage: NextPage = () => {
   const t = useTranslate();
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>(
-    t("pages.students.modal-create.title")
+    t("pages.groups.modal-create.title")
   );
-
   const [tableData, setTableData] = useState<
-    Array<Partial<Student> & { id: string }>
+    Array<Partial<Group> & { id: string }>
   >([]);
-
   const [order, setOrder] = useState<{
-    key: OrderFilterStudent;
+    key: OrderFilterGroup;
     direction: number;
   }>({
-    key: OrderFilterStudent.Name,
+    key: OrderFilterGroup.IdGroup,
     direction: 1,
   });
 
@@ -52,7 +49,7 @@ const StudentsPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error, refetch } = useGetStudentsQuery({
+  const { data, error, refetch } = useGetGroupsQuery({
     variables: {
       searchText,
       orderFilter: order.key,
@@ -66,19 +63,21 @@ const StudentsPage: NextPage = () => {
   useEffect(() => {
     if (data) {
       setPageData({
-        page: data.getStudents.page,
-        pageSize: data.getStudents.pageSize,
-        total: data.getStudents.totalNumber,
+        page: data.getGroups.page,
+        pageSize: data.getGroups.pageSize,
+        total: data.getGroups.totalNumber,
       });
       setTableData(
-        data.getStudents.data as Array<Partial<Student> & { id: string }>
+        data.getGroups.data as Array<Partial<Group> & { id: string }>
       );
     }
   }, [data]);
 
-  const route = useRouter();
-  if (error) {
-    route.push("/500");
+  const [componentError, setComponentError] = useState<ApolloError | undefined>(
+    undefined
+  );
+  if (error || componentError) {
+    return <Layout section={sections[0].title} error={500} label={""} />;
   }
 
   return (
@@ -89,7 +88,8 @@ const StudentsPage: NextPage = () => {
           title={modalTitle}
           endTitle={t("pages.groups.end-title")}
         >
-          <CreateCenter
+          <CreateGroup
+            setError={setComponentError}
             changeTitle={setModalTitle}
             close={setModalOpen}
             refetch={refetch}
@@ -97,9 +97,9 @@ const StudentsPage: NextPage = () => {
         </Modal>
       )}
       <Layout
-        title={sections[0].bigTitle}
         section={sections[0].title}
-        label={sections[0].links[3].label}
+        label={sections[0].links[2].label}
+        title={sections[0].bigTitle}
         childrenHeader={
           <>
             <DivHeader1>
@@ -109,7 +109,7 @@ const StudentsPage: NextPage = () => {
                 }}
               />
               <styles.BoldP2>
-                {t("general.sections.links.students")}
+                {t("general.sections.links.groups")}
               </styles.BoldP2>
             </DivHeader1>
 
@@ -156,38 +156,63 @@ const StudentsPage: NextPage = () => {
         }
       >
         <ContentDiv>
-          <Table<Partial<Student> & { id: string }>
+          <Table<Partial<Group> & { id: string }>
             data={tableData}
             order={order}
             onSetOrder={(order) =>
-              setOrder(order as { key: OrderFilterStudent; direction: number })
+              setOrder(order as { key: OrderFilterGroup; direction: number })
             }
             columns={[
               {
-                label: t("components.table.name"),
-                key: OrderFilterStudent.Name,
-                content: (item) => <div>{item.name}</div>,
+                label: t("components.table.id"),
+                key: OrderFilterGroup.IdGroup,
+                content: (item) => <div>{item.id_group}</div>,
               },
               {
-                label: t("components.table.institude"),
-                key: OrderFilterStudent.Center,
+                label: t("components.table.center"),
+                key: OrderFilterGroup.Center,
                 content: (item) => <div>{item.center?.name}</div>,
               },
               {
-                label: t("components.table.group"),
-                key: OrderFilterStudent.Group,
-                content: (item) => <div>{item.group?.name}</div>,
-              },
-              {
-                label: t("components.table.course-student"),
-                key: OrderFilterStudent.Course,
-                content: (item) => <div>{item.course}</div>,
-              },
-              {
-                label: t("components.table.state.title"),
-                key: OrderFilterStudent.State,
+                label: t("components.table.instructor"),
+                key: OrderFilterGroup.Instructors,
                 content: (item) => (
-                  <div>{t(`components.table.state.${item.state}`)}</div>
+                  <div>
+                    {item.instructors?.map((elem) => elem.name).join(", ")}
+                  </div>
+                ),
+              },
+              {
+                label: t("components.table.days"),
+                key: OrderFilterGroup.IdDay,
+                content: (item) => (
+                  <div>
+                    {item.timetable
+                      ?.map((elem) =>
+                        t(
+                          `components.table.time-table.${elem.day.toLowerCase()}`
+                        )
+                      )
+                      .join(" - ")}
+                  </div>
+                ),
+              },
+              {
+                label: t("components.table.start-time"),
+                key: OrderFilterGroup.Start,
+                content: (item) => (
+                  <div>
+                    {item.timetable?.map((elem) => elem.start).join(", ")}
+                  </div>
+                ),
+              },
+              {
+                label: t("components.table.end-time"),
+                key: OrderFilterGroup.End,
+                content: (item) => (
+                  <div>
+                    {item.timetable?.map((elem) => elem.end).join(", ")}
+                  </div>
                 ),
               },
             ]}
@@ -195,10 +220,10 @@ const StudentsPage: NextPage = () => {
           {tableData.length === 0 && searchText !== "" && (
             <ErrorContainer>
               <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
-              <styles.P4>
+              {/* <styles.P4>
                 {t("pages.centers.search-error.1")}{" "}
                 <a>{t("pages.centers.search-error.2")}</a>
-              </styles.P4>
+              </styles.P4> */}
             </ErrorContainer>
           )}
           {tableData.length === 0 && searchText === "" && (
@@ -206,10 +231,11 @@ const StudentsPage: NextPage = () => {
               <styles.P4>{t("pages.centers.data-error")}</styles.P4>
               <styles.P4>
                 <a onClick={() => setModalOpen(true)}>
-                  {t("pages.students.data-error-options.0")}
-                </a>{" "}
-                {t("pages.students.data-error-options.1")}{" "}
-                <a>{t("pages.students.data-error-options.2")}</a>
+                  {t("pages.groups.data-error.0")}
+                </a>
+                {/*{" "}
+                {t("pages.centers.data-error-options.1")}{" "}
+          <a>{t("pages.groups.data-error.1")}</a>*/}
               </styles.P4>
             </ErrorContainer>
           )}
@@ -219,4 +245,4 @@ const StudentsPage: NextPage = () => {
   );
 };
 
-export default withApollo(StudentsPage, { requiresAccess: false });
+export default withApollo(GroupsPage, { requiresAccess: false });

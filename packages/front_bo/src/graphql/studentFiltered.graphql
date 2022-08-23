@@ -15,11 +15,7 @@ query GetStudents(
     data {
       id
       name
-      group {
-        name
-        id
-      }
-      center {
+      groups {
         name
         id
       }

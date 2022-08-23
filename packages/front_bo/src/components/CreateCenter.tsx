@@ -2,15 +2,17 @@ import {
   colors,
   DropDown,
   DropDownUnique,
+  FillIn,
+  FillInSectioned,
   Icon,
   InputSuper,
   MButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
+import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { centerLanguages } from "../config";
 import {
   CenterActivityType,
@@ -24,7 +26,8 @@ const CreateCenter: FC<{
   changeTitle: (title: string) => void;
   close: (action: boolean) => void;
   refetch: () => void;
-}> = ({ close, changeTitle, refetch }) => {
+  setError: (error: ApolloError) => void;
+}> = ({ close, changeTitle, refetch, setError }) => {
   const t = useTranslate();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
@@ -59,12 +62,9 @@ const CreateCenter: FC<{
 
   //TODO: add contacts to query when available
 
-  const route = useRouter();
-  useEffect(() => {
-    if (error) {
-      route.push("/500");
-    }
-  }, [error]);
+  if (error) {
+    setError(error);
+  }
 
   return (
     <Form>
@@ -80,7 +80,7 @@ const CreateCenter: FC<{
             <DropDown
               options={Object.values(CenterActivityType).map((type) => ({
                 key: type,
-                label: t(`pages.centers.type.${type}`),
+                label: t(`pages.centers.type.${type.toLowerCase()}`),
               }))}
               selected={typeSelection}
               setSelected={(selected) =>
@@ -97,7 +97,7 @@ const CreateCenter: FC<{
             <DropDownUnique
               options={Object.values(CenterNature).map((nature) => ({
                 key: nature,
-                label: t(`pages.centers.nature.${nature}`),
+                label: t(`pages.centers.nature.${nature.toLowerCase()}`),
               }))}
               width="390px"
               selected={natureSelection}
@@ -113,7 +113,7 @@ const CreateCenter: FC<{
             <DropDown
               options={centerLanguages.map((lang) => ({
                 key: lang,
-                label: t(`pages.centers.languages.${lang}`),
+                label: t(`pages.centers.languages.${lang.toLowerCase()}`),
               }))}
               selected={languagesSelection}
               setSelected={setLanguagesSelection}
@@ -284,14 +284,16 @@ const CreateCenter: FC<{
         </>
       )}
       {step === 4 && (
-        <EndButton
-          Click={() => {
-            refetch();
-            changeTitle(t("pages.centers.modal-create.center.title"));
-            close(false);
-          }}
-          text={t("general.actions.consent")}
-        />
+        <FillIn>
+          <EndButton
+            Click={() => {
+              refetch();
+              changeTitle(t("pages.centers.modal-create.center.title"));
+              close(false);
+            }}
+            text={t("general.actions.consent")}
+          />
+        </FillIn>
       )}
     </Form>
   );
@@ -309,27 +311,6 @@ const Form = styled.div`
   & > p {
     align-self: flex-start;
     margin-bottom: 30px;
-  }
-`;
-
-export const FillInSectioned = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  & > :not(div:first-child) {
-    margin-left: 10px;
-  }
-`;
-export const FillIn = styled.div<{ width?: string }>`
-  display: flex;
-  ${({ width }) => (width ? `width: ${width}` : "width: 100%")};
-  flex-direction: column;
-  margin-bottom: 20px;
-  & > p {
-    margin-bottom: 5px;
-  }
-  & > div {
-    align-items: flex-start;
   }
 `;
 

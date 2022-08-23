@@ -12,6 +12,8 @@ import DropDown from "./DropDown";
 import CheckBox from "./CheckBox";
 import DropDownUnique from "./DropDownUnique";
 import InputSuper from "./InputSuper";
+import FillIn from "./FillIn";
+import FillInSectioned from "./FillInSectioned";
 
 export {
   GoogleButton,
@@ -28,4 +30,6 @@ export {
   CheckBox,
   DropDownUnique,
   InputSuper,
+  FillIn,
+  FillInSectioned,
 };
