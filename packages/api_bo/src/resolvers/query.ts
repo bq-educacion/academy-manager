@@ -488,22 +488,13 @@ export const Student = {
   id: (parent: StudentModel): string => {
     return String(parent._id!);
   },
-  center: async (
+  groups: async (
     parent: StudentModel,
     _: unknown,
     ctx: Context,
-  ): Promise<CenterModel | undefined> => {
-    const group = await groupCollection(ctx.db).findOne({
-      students: parent._id,
-    });
-    return await centerCollection(ctx.db).findOne({ _id: group?.center });
-  },
-  group: async (
-    parent: StudentModel,
-    _: unknown,
-    ctx: Context,
-  ): Promise<GroupModel | undefined> => {
-    return await groupCollection(ctx.db).findOne({ students: parent._id });
+  ): Promise<GroupModel[] | undefined> => {
+    return await groupCollection(ctx.db).find({ students: parent._id })
+      .toArray();
   },
 };
 

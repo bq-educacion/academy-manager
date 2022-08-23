@@ -229,8 +229,7 @@ export type MutationCreateStudentArgs = {
   course: Scalars["String"];
   descriptionAllergy?: InputMaybe<Scalars["String"]>;
   goesAlone: Scalars["Boolean"];
-  idCenter: Scalars["String"];
-  idGroup: Scalars["String"];
+  idGroups: Array<Scalars["String"]>;
   imageAuthorisation: Scalars["Boolean"];
   name: Scalars["String"];
   notes?: InputMaybe<Scalars["String"]>;
@@ -303,7 +302,7 @@ export type MutationEditStudentArgs = {
   contacts?: InputMaybe<Array<StudentContactInput>>;
   course?: InputMaybe<Scalars["String"]>;
   descriptionAllergy?: InputMaybe<Scalars["String"]>;
-  group?: InputMaybe<Scalars["String"]>;
+  groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
   imageAuthorisation?: InputMaybe<Scalars["Boolean"]>;
   name?: InputMaybe<Scalars["String"]>;
@@ -466,13 +465,12 @@ export type Student = {
   __typename?: "Student";
   alergies: Scalars["Boolean"];
   birthDate: Scalars["String"];
-  center: Center;
   collectionPermit: Scalars["String"];
   contacts: Array<StudentContact>;
   course: Scalars["String"];
   descriptionAllergy?: Maybe<Scalars["String"]>;
   goesAlone: Scalars["Boolean"];
-  group: Group;
+  groups: Array<Group>;
   id: Scalars["ID"];
   imageAuthorisation: Scalars["Boolean"];
   name: Scalars["String"];
@@ -953,8 +951,7 @@ export type MutationResolvers<
       | "contacts"
       | "course"
       | "goesAlone"
-      | "idCenter"
-      | "idGroup"
+      | "idGroups"
       | "imageAuthorisation"
       | "name"
       | "oldStudent"
@@ -1119,7 +1116,6 @@ export type StudentResolvers<
 > = ResolversObject<{
   alergies?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   birthDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
   collectionPermit?: Resolver<
     ResolversTypes["String"],
     ParentType,
@@ -1137,7 +1133,7 @@ export type StudentResolvers<
     ContextType
   >;
   goesAlone?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
+  groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   imageAuthorisation?: Resolver<
     ResolversTypes["Boolean"],
