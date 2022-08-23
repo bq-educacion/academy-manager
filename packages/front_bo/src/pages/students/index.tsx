@@ -181,7 +181,9 @@ const StudentsPage: NextPage = () => {
               {
                 label: t("components.table.course-student"),
                 key: OrderFilterStudent.Course,
-                content: (item) => <div>{item.course}</div>,
+                content: (item) => (
+                  <div>{t(`general.courses.${item.course}`)}</div>
+                ),
               },
               {
                 label: t("components.table.state.title"),
