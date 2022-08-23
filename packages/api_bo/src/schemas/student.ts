@@ -45,7 +45,7 @@ export const typeDefs = gql`
     course: String!
     state: StudentState!
     registrationDate: String!
-    alergies: Boolean!
+    allergies: Boolean!
     descriptionAllergy: String
     oldStudent: Boolean!
     signedMandate: Boolean!
@@ -76,7 +76,7 @@ export const typeDefs = gql`
       birthDate: String!
       course: String!
       registrationDate: String!
-      alergies: Boolean!
+      allergies: Boolean!
       descriptionAllergy: String
       oldStudent: Boolean!
       signedMandate: Boolean!
@@ -103,7 +103,7 @@ export const typeDefs = gql`
       registrationDate: String
       name: String
       birthDate: String
-      alergies: Boolean
+      allergies: Boolean
       descriptionAllergy: String
       oldStudent: Boolean
       signedMandate: Boolean
