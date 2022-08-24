@@ -186,9 +186,102 @@
       "3": {
         "title": "El grupo ha sido creado satisfactoriamente."
       }
+    },
+    "create-instructor": {
+      "1": {
+        "title": "Paso 1 de 5 - Información del monitor",
+        "name": "Nombre y apellidos",
+        "name-placeholder": "Nombre y apellidos del monitor",
+        "email-pro": "Email corporativo",
+        "email-pro-placeholder": "Dirección de correo de BQ",
+        "email-personal": "Email personal",
+        "email-personal-placeholder": "Dirección de correo personal del monitor",
+        "phone": "Teléfono",
+        "state": "Estado",
+        "state-active": "Activo",
+        "state-inactive": "Inactivo"
+      },
+      "2": {
+        "title": "Paso 2 de 5 - Formación y experiencia",
+        "education": "Formación",
+        "education-1": "Carrera o formación profesional de educación",
+        "education-2": "Formación profesional o carreras técnicas",
+        "experience": "Experiencia previa como formador",
+        "si": "Si",
+        "no": "No",
+        "experience-noBut": "No, pero me interesa mucho",
+        "programming": "Sabe programación",
+        "knowledge": "Qué conocimientos tiene",
+        "knowledge-placeholder": "Qué conocimientos de programación tiene",
+        "cv-link": "Url al curriculum",
+        "cv-link-placeholder": "Link al archivo en Google Drive",
+        "tools": "Experiencia con materiales",
+        "platforms": "Experiencia con plataformas educativas",
+        "languages": "Idiomas en los que puede dar clase"
+      },
+      "3": {
+        "title": "Paso 3 de 5 - Disponibilidad horaria",
+        "subtitles": {
+          "summer": "Contactar para campamentos de verano durante junio-julio de 9.00 a 15.00",
+          "si": "Sí",
+          "no": "No",
+          "ex": "Sólo extraescolares"
+        }
+      },
+      "4": {
+        "title": "Paso 4 de 5 - Movilidad",
+        "subtitle": {
+          "vehicle": "Tipo de desplazamiento",
+          "vehicle-own": "Vehículo propio",
+          "vehicle-public": "Transporte público",
+          "zones": "Disponibilidad geográfica",
+          "zones-1": "Zonas"
+        }
+      },
+      "5": {
+        "title": "Paso 5 de 5 - Asignar centros y grupos",
+        "subtitle": {
+          "center": "Centro",
+          "group": "Grupo"
+        }
+      },
+      "6": {
+        "title": "El monitor ha sido creado satisfactoriamente."
+      }
     }
   },
   "general": {
+    "times": {
+      "8:00 a 8:59": "8:00 a 8:59",
+      "9:00 a 9:59": "9:00 a 9:59",
+      "10:00 a 10:59": "10:00 a 10:59",
+      "11:00 a 11:59": "11:00 a 11:59",
+      "12:00 a 12:59": "12:00 a 12:59",
+      "13:00 a 13:59": "13:00 a 13:59",
+      "14:00 a 14:59": "14:00 a 14:59",
+      "15:00 a 15:59": "15:00 a 15:59",
+      "16:00 a 16:59": "16:00 a 16:59",
+      "17:00 a 17:59": "17:00 a 17:59",
+      "18:00 a 18:59": "18:00 a 18:59",
+      "19:00 a 19:59": "19:00 a 19:59",
+      "20:00 a 20:59": "20:00 a 20:59"
+    },
+    "platforms": {
+      "cospace": "Cospace",
+      "bitbloq": "Bitbloq",
+      "inventor": "App Inventor",
+      "scratch": "Scratch",
+      "tinker": "Tinkercad",
+      "other": "Otro"
+    },
+    "tools": {
+      "makey": "Makey Makey",
+      "micro": "Micro:bit",
+      "arduino": "Arduino",
+      "3d": "Impresoras 3D",
+      "zumkit": "Zumkit de BQ",
+      "other": "Otro"
+    },
     "courses": {
       "1p": "1ºEPO",
       "2p": "2ºEPO",
@@ -285,6 +378,7 @@
       }
     },
     "instructors": {
+      "end-title": "Monitor creado",
       "modal-create": {
         "title": "Crear monitor"
       },

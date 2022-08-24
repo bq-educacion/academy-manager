@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Layout, Modal, Table } from "../../components";
+import { CreateInstructor, Layout, Modal, Table } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
 import {
@@ -29,7 +29,9 @@ const InstructorsPage: NextPage = () => {
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [modalTitle] = useState<string>(t("pages.groups.modal-create.title"));
+  const [modalTitle, setModalTitle] = useState<string>(
+    t("pages.instructors.modal-create.title")
+  );
   const [tableData, setTableData] = useState<
     Array<Partial<Instructor> & { id: string }>
   >([]);
@@ -46,7 +48,7 @@ const InstructorsPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error } = useGetInstructorsQuery({
+  const { data, error, refetch } = useGetInstructorsQuery({
     variables: {
       searchText,
       orderFilter: order.key,
@@ -70,7 +72,9 @@ const InstructorsPage: NextPage = () => {
     }
   }, [data]);
 
-  const [componentError] = useState<ApolloError | undefined>(undefined);
+  const [componentError, setComponentError] = useState<ApolloError | undefined>(
+    undefined
+  );
   if (error || componentError) {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
@@ -83,7 +87,12 @@ const InstructorsPage: NextPage = () => {
           title={modalTitle}
           endTitle={t("pages.instructors.end-title")}
         >
-          <p>Test modal</p>
+          <CreateInstructor
+            setError={setComponentError}
+            changeTitle={setModalTitle}
+            close={setModalOpen}
+            refetch={refetch}
+          />
         </Modal>
       )}
       <Layout
