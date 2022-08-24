@@ -62,6 +62,19 @@ const CreateInstructor: FC<{
   const [friday, setFriday] = useState<string[]>([]);
   const [saturday, setSaturday] = useState<string[]>([]);
   const [sunday, setSunday] = useState<string[]>([]);
+  const week: {
+    day: string;
+    key: string[];
+    function: (txt: string[]) => void;
+  }[] = [
+    { day: "monday", key: monday, function: setMonday },
+    { day: "tuesday", key: tuesday, function: setTuesday },
+    { day: "wednesday", key: wednesday, function: setWednesday },
+    { day: "thursday", key: thursday, function: setThursday },
+    { day: "friday", key: friday, function: setFriday },
+    { day: "saturday", key: saturday, function: setSaturday },
+    { day: "sunday", key: sunday, function: setSunday },
+  ];
   const [vehicle, setVehicle] = useState<TypeVehicleInstructor>();
   const [LocalZones, setLocalZones] = useState<string[]>([]);
   const [orderName, setOrderName] = useState<boolean>(false);
@@ -430,119 +443,28 @@ const CreateInstructor: FC<{
       {step === 3 && (
         <>
           <ScrollDiv>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-group.2.subtitle.monday")}
-              </styles.BoldP4>
-              <DropDown
-                options={schedule.map((elem) => {
-                  return {
-                    key: elem,
-                    label: elem,
-                  };
-                })}
-                width="388px"
-                setSelected={setMonday}
-                selected={monday}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-group.2.subtitle.tuesday")}
-              </styles.BoldP4>
-              <DropDown
-                options={schedule.map((elem) => {
-                  return {
-                    key: elem,
-                    label: elem,
-                  };
-                })}
-                width="388px"
-                setSelected={setTuesday}
-                selected={tuesday}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-group.2.subtitle.wednesday")}
-              </styles.BoldP4>
-              <DropDown
-                options={schedule.map((elem) => {
-                  return {
-                    key: elem,
-                    label: elem,
-                  };
-                })}
-                width="388px"
-                setSelected={setWednesday}
-                selected={wednesday}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-group.2.subtitle.thursday")}
-              </styles.BoldP4>
-              <DropDown
-                options={schedule.map((elem) => {
-                  return {
-                    key: elem,
-                    label: elem,
-                  };
-                })}
-                width="388px"
-                setSelected={setThursday}
-                selected={thursday}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-group.2.subtitle.friday")}
-              </styles.BoldP4>
-              <DropDown
-                options={schedule.map((elem) => {
-                  return {
-                    key: elem,
-                    label: elem,
-                  };
-                })}
-                width="388px"
-                setSelected={setFriday}
-                selected={friday}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-group.2.subtitle.saturday")}
-              </styles.BoldP4>
-              <DropDown
-                options={schedule.map((elem) => {
-                  return {
-                    key: elem,
-                    label: elem,
-                  };
-                })}
-                width="388px"
-                setSelected={setSaturday}
-                selected={saturday}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-group.2.subtitle.sunday")}
-              </styles.BoldP4>
-              <DropDown
-                options={schedule.map((elem) => {
-                  return {
-                    key: elem,
-                    label: elem,
-                  };
-                })}
-                width="388px"
-                setSelected={setSunday}
-                selected={sunday}
-              />
-            </FillIn>
-
+            <>
+              {week.map((elem) => {
+                return (
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t(`components.create-group.2.subtitle.${elem.day}`)}
+                    </styles.BoldP4>
+                    <DropDown
+                      options={schedule.map((elem) => {
+                        return {
+                          key: elem,
+                          label: t(`general.times.${elem}`),
+                        };
+                      })}
+                      width="388px"
+                      setSelected={elem.function}
+                      selected={elem.key}
+                    />
+                  </FillIn>
+                );
+              })}
+            </>
             <FillIn width="306px">
               <styles.BoldP4>
                 {t("components.create-instructor.3.subtitles.summer")}
