@@ -597,6 +597,31 @@ export type GetGroupsQueryVariables = Exact<{
 
 export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center: { __typename?: 'Center', name: string }, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
 
+export type CreateInstructorMutationVariables = Exact<{
+  name: Scalars['String'];
+  corporateEmail: Scalars['String'];
+  personalEmail: Scalars['String'];
+  phone: Scalars['String'];
+  state: StateInstructor;
+  training: TrainingInstructor;
+  previousExperience: PreviousExperienceInstructor;
+  programmingExperience: Scalars['Boolean'];
+  knowledge: Scalars['String'];
+  urlCv: Scalars['String'];
+  materialsExperience: Array<Scalars['String']> | Scalars['String'];
+  platformEducationExperience: Array<Scalars['String']> | Scalars['String'];
+  languages: Array<Scalars['String']> | Scalars['String'];
+  availability: Array<AvailabilityInput> | AvailabilityInput;
+  summerAvailability: SummerAvailabilityInstructor;
+  vehicle: TypeVehicleInstructor;
+  geographicalAvailability: Scalars['String'];
+  areas: Array<Scalars['String']> | Scalars['String'];
+  groups: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type CreateInstructorMutation = { __typename?: 'Mutation', createInstructor: { __typename?: 'Instructor', name: string, id: string } };
+
 export type GetInstructorsQueryVariables = Exact<{
   searchText?: InputMaybe<Scalars['String']>;
   orderFilter?: InputMaybe<OrderFilterInstructor>;
@@ -872,6 +897,78 @@ export function useGetGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetGroupsQueryHookResult = ReturnType<typeof useGetGroupsQuery>;
 export type GetGroupsLazyQueryHookResult = ReturnType<typeof useGetGroupsLazyQuery>;
 export type GetGroupsQueryResult = Apollo.QueryResult<GetGroupsQuery, GetGroupsQueryVariables>;
+export const CreateInstructorDocument = gql`
+    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $state: StateInstructor!, $training: trainingInstructor!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [String!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: String!, $areas: [String!]!, $groups: [String!]!) {
+  createInstructor(
+    name: $name
+    corporateEmail: $corporateEmail
+    personalEmail: $personalEmail
+    phone: $phone
+    state: $state
+    training: $training
+    previousExperience: $previousExperience
+    programmingExperience: $programmingExperience
+    knowledge: $knowledge
+    urlCV: $urlCv
+    materialsExperience: $materialsExperience
+    platformEducationExperience: $platformEducationExperience
+    languages: $languages
+    availability: $availability
+    summerAvailability: $summerAvailability
+    vehicle: $vehicle
+    geographicalAvailability: $geographicalAvailability
+    areas: $areas
+    groups: $groups
+  ) {
+    name
+    id
+  }
+}
+    `;
+export type CreateInstructorMutationFn = Apollo.MutationFunction<CreateInstructorMutation, CreateInstructorMutationVariables>;
+
+/**
+ * __useCreateInstructorMutation__
+ *
+ * To run a mutation, you first call `useCreateInstructorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateInstructorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createInstructorMutation, { data, loading, error }] = useCreateInstructorMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      corporateEmail: // value for 'corporateEmail'
+ *      personalEmail: // value for 'personalEmail'
+ *      phone: // value for 'phone'
+ *      state: // value for 'state'
+ *      training: // value for 'training'
+ *      previousExperience: // value for 'previousExperience'
+ *      programmingExperience: // value for 'programmingExperience'
+ *      knowledge: // value for 'knowledge'
+ *      urlCv: // value for 'urlCv'
+ *      materialsExperience: // value for 'materialsExperience'
+ *      platformEducationExperience: // value for 'platformEducationExperience'
+ *      languages: // value for 'languages'
+ *      availability: // value for 'availability'
+ *      summerAvailability: // value for 'summerAvailability'
+ *      vehicle: // value for 'vehicle'
+ *      geographicalAvailability: // value for 'geographicalAvailability'
+ *      areas: // value for 'areas'
+ *      groups: // value for 'groups'
+ *   },
+ * });
+ */
+export function useCreateInstructorMutation(baseOptions?: Apollo.MutationHookOptions<CreateInstructorMutation, CreateInstructorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInstructorMutation, CreateInstructorMutationVariables>(CreateInstructorDocument, options);
+      }
+export type CreateInstructorMutationHookResult = ReturnType<typeof useCreateInstructorMutation>;
+export type CreateInstructorMutationResult = Apollo.MutationResult<CreateInstructorMutation>;
+export type CreateInstructorMutationOptions = Apollo.BaseMutationOptions<CreateInstructorMutation, CreateInstructorMutationVariables>;
 export const GetInstructorsDocument = gql`
     query GetInstructors($searchText: String, $orderFilter: OrderFilterInstructor, $order: Number, $page: Int, $pageSize: Int) {
   getInstructors(

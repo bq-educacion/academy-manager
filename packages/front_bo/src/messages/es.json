@@ -189,7 +189,7 @@
     },
     "create-instructor": {
       "1": {
-        "title": "Paso 1 de 6 - Información del monitor",
+        "title": "Paso 1 de 5 - Información del monitor",
         "name": "Nombre y apellidos",
         "name-placeholder": "Nombre y apellidos del monitor",
         "email-pro": "Email corporativo",
@@ -202,7 +202,7 @@
         "state-inactive": "Inactivo"
       },
       "2": {
-        "title": "Paso 2 de 6 - Formación y experiencia",
+        "title": "Paso 2 de 5 - Formación y experiencia",
         "education": "Formación",
         "education-1": "Carrera o formación profesional de educación",
         "education-2": "Formación profesional o carreras técnicas",
@@ -220,7 +220,33 @@
         "languages": "Idiomas en los que puede dar clase"
       },
       "3": {
-        "title": "Paso 3 de 6 - Disponibilidad horaria"
+        "title": "Paso 3 de 5 - Disponibilidad horaria",
+        "subtitles": {
+          "summer": "Contactar para campamentos de verano durante junio-julio de 9.00 a 15.00",
+          "si": "Sí",
+          "no": "No",
+          "ex": "Sólo extraescolares"
+        }
+      },
+      "4": {
+        "title": "Paso 4 de 5 - Movilidad",
+        "subtitle": {
+          "vehicle": "Tipo de desplazamiento",
+          "vehicle-own": "Vehículo propio",
+          "vehicle-public": "Transporte público",
+          "zones": "Disponibilidad geográfica",
+          "zones-1": "Zonas"
+        }
+      },
+      "5": {
+        "title": "Paso 5 de 5 - Asignar centros y grupos",
+        "subtitle": {
+          "center": "Centro",
+          "group": "Grupo"
+        }
+      },
+      "6": {
+        "title": "El monitor ha sido creado satisfactoriamente."
       }
     }
   },

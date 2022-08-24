@@ -1,0 +1,46 @@
+mutation CreateInstructor(
+  $name: String!
+  $corporateEmail: String!
+  $personalEmail: String!
+  $phone: String!
+  $state: StateInstructor!
+  $training: trainingInstructor!
+  $previousExperience: previousExperienceInstructor!
+  $programmingExperience: Boolean!
+  $knowledge: String!
+  $urlCv: String!
+  $materialsExperience: [String!]!
+  $platformEducationExperience: [String!]!
+  $languages: [String!]!
+  $availability: [AvailabilityInput!]!
+  $summerAvailability: summerAvailabilityInstructor!
+  $vehicle: TypeVehicleInstructor!
+  $geographicalAvailability: String!
+  $areas: [String!]!
+  $groups: [String!]!
+) {
+  createInstructor(
+    name: $name
+    corporateEmail: $corporateEmail
+    personalEmail: $personalEmail
+    phone: $phone
+    state: $state
+    training: $training
+    previousExperience: $previousExperience
+    programmingExperience: $programmingExperience
+    knowledge: $knowledge
+    urlCV: $urlCv
+    materialsExperience: $materialsExperience
+    platformEducationExperience: $platformEducationExperience
+    languages: $languages
+    availability: $availability
+    summerAvailability: $summerAvailability
+    vehicle: $vehicle
+    geographicalAvailability: $geographicalAvailability
+    areas: $areas
+    groups: $groups
+  ) {
+    name
+    id
+  }
+}

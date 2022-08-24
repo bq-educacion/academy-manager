@@ -15,14 +15,16 @@ const DropDown: FC<{
   width: string;
   options: Option[];
   selected: string[];
+  disabled?: boolean;
   setSelected: (selected: string[]) => void;
-}> = ({ width, options, setSelected, selected }) => {
+}> = ({ width, options, setSelected, selected, disabled }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
   return (
     <Popover
       title={
         <InputBox
+          disabled={disabled ? true : false}
           onClick={() => {
             setClicked(!clicked);
             setSelected(selected);
@@ -43,36 +45,38 @@ const DropDown: FC<{
         </InputBox>
       }
       content={
-        <OptionsBox width={width}>
-          {options.map((option) => {
-            const clicked = selected.includes(option.key);
-            return (
-              <OptionBox
-                key={option.key}
-                clicked={clicked}
-                onClick={() =>
-                  setSelected(
-                    clicked
-                      ? selected.filter((elem) => elem !== option.key)
-                      : [...selected, option.key]
-                  )
-                }
-              >
-                <CheckBox
-                  option={clicked}
-                  setOption={() =>
+        !disabled && (
+          <OptionsBox width={width}>
+            {options.map((option) => {
+              const clicked = selected.includes(option.key);
+              return (
+                <OptionBox
+                  key={option.key}
+                  clicked={clicked}
+                  onClick={() =>
                     setSelected(
                       clicked
-                        ? selected.filter((elem) => elem != option.key)
+                        ? selected.filter((elem) => elem !== option.key)
                         : [...selected, option.key]
                     )
                   }
-                />
-                <styles.P4>{option.label}</styles.P4>
-              </OptionBox>
-            );
-          })}
-        </OptionsBox>
+                >
+                  <CheckBox
+                    option={clicked}
+                    setOption={() =>
+                      setSelected(
+                        clicked
+                          ? selected.filter((elem) => elem != option.key)
+                          : [...selected, option.key]
+                      )
+                    }
+                  />
+                  <styles.P4>{option.label}</styles.P4>
+                </OptionBox>
+              );
+            })}
+          </OptionsBox>
+        )
       }
     />
   );
@@ -80,7 +84,11 @@ const DropDown: FC<{
 
 export default DropDown;
 
-const InputBox = styled.div<{ clicked: boolean; width: string }>`
+const InputBox = styled.div<{
+  clicked: boolean;
+  width: string;
+  disabled: boolean;
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -92,6 +100,7 @@ const InputBox = styled.div<{ clicked: boolean; width: string }>`
   color: ${colors.colors.grayBlue2};
   cursor: pointer;
   overflow: scroll;
+  ${(props) => props.disabled && `background-color: ${colors.colors.gray2}`};
   & > svg {
     transform-origin: center;
     transition: transform 0.2s ease-in-out;

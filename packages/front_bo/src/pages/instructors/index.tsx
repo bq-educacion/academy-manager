@@ -48,7 +48,7 @@ const InstructorsPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error } = useGetInstructorsQuery({
+  const { data, error, refetch } = useGetInstructorsQuery({
     variables: {
       searchText,
       orderFilter: order.key,
@@ -91,9 +91,7 @@ const InstructorsPage: NextPage = () => {
             setError={setComponentError}
             changeTitle={setModalTitle}
             close={setModalOpen}
-            refetch={() => {
-              alert("refetch");
-            }}
+            refetch={refetch}
           />
         </Modal>
       )}
