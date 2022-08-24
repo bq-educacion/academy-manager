@@ -201,6 +201,9 @@ export const Mutation = {
       if (ids.length > 0) {
         id_group = (ids[0].id_group as number) + 1;
       }
+      while (await groupCollection(ctx.db).findOne({ id_group })) {
+        id_group = id_group + 1;
+      }
 
       const centerExists = await centerCollection(ctx.db).findById(
         args.idCenter,
