@@ -74,7 +74,7 @@ const CreateStudent: FC<{
       name,
       birthDate,
       course: course,
-      alergies: allergies,
+      allergies,
       oldStudent,
       signedMandate,
       imageAuthorisation,

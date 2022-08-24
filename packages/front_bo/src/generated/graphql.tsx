@@ -217,7 +217,7 @@ export type MutationCreateInstructorArgs = {
 
 
 export type MutationCreateStudentArgs = {
-  alergies: Scalars['Boolean'];
+  allergies: Scalars['Boolean'];
   birthDate: Scalars['String'];
   collectionPermit: Scalars['String'];
   contacts: Array<StudentContactInput>;
@@ -296,7 +296,7 @@ export type MutationEditInstructorArgs = {
 
 
 export type MutationEditStudentArgs = {
-  alergies?: InputMaybe<Scalars['Boolean']>;
+  allergies?: InputMaybe<Scalars['Boolean']>;
   birthDate?: InputMaybe<Scalars['String']>;
   collectionPermit?: InputMaybe<Scalars['String']>;
   contacts?: InputMaybe<Array<StudentContactInput>>;
@@ -472,7 +472,7 @@ export enum StateInstructor {
 
 export type Student = {
   __typename?: 'Student';
-  alergies: Scalars['Boolean'];
+  allergies: Scalars['Boolean'];
   birthDate: Scalars['String'];
   collectionPermit: Scalars['String'];
   contacts: Array<StudentContact>;
@@ -652,7 +652,7 @@ export type CreateStudentMutationVariables = Exact<{
   name: Scalars['String'];
   birthDate: Scalars['String'];
   course: Scalars['String'];
-  alergies: Scalars['Boolean'];
+  allergies: Scalars['Boolean'];
   oldStudent: Scalars['Boolean'];
   signedMandate: Scalars['Boolean'];
   imageAuthorisation: Scalars['Boolean'];
@@ -1151,12 +1151,12 @@ export type SimpleInstructorsNameQueryHookResult = ReturnType<typeof useSimpleIn
 export type SimpleInstructorsNameLazyQueryHookResult = ReturnType<typeof useSimpleInstructorsNameLazyQuery>;
 export type SimpleInstructorsNameQueryResult = Apollo.QueryResult<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>;
 export const CreateStudentDocument = gql`
-    mutation CreateStudent($name: String!, $birthDate: String!, $course: String!, $alergies: Boolean!, $oldStudent: Boolean!, $signedMandate: Boolean!, $imageAuthorisation: Boolean!, $collectionPermit: String!, $goesAlone: Boolean!, $contacts: [StudentContactInput!]!, $descriptionAllergy: String, $registrationDate: String!, $idGroups: [String!]!) {
+    mutation CreateStudent($name: String!, $birthDate: String!, $course: String!, $allergies: Boolean!, $oldStudent: Boolean!, $signedMandate: Boolean!, $imageAuthorisation: Boolean!, $collectionPermit: String!, $goesAlone: Boolean!, $contacts: [StudentContactInput!]!, $descriptionAllergy: String, $registrationDate: String!, $idGroups: [String!]!) {
   createStudent(
     name: $name
     birthDate: $birthDate
     course: $course
-    alergies: $alergies
+    allergies: $allergies
     oldStudent: $oldStudent
     signedMandate: $signedMandate
     imageAuthorisation: $imageAuthorisation
@@ -1190,7 +1190,7 @@ export type CreateStudentMutationFn = Apollo.MutationFunction<CreateStudentMutat
  *      name: // value for 'name'
  *      birthDate: // value for 'birthDate'
  *      course: // value for 'course'
- *      alergies: // value for 'alergies'
+ *      allergies: // value for 'allergies'
  *      oldStudent: // value for 'oldStudent'
  *      signedMandate: // value for 'signedMandate'
  *      imageAuthorisation: // value for 'imageAuthorisation'

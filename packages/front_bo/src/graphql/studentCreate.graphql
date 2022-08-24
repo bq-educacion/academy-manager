@@ -2,7 +2,7 @@ mutation CreateStudent(
   $name: String!
   $birthDate: String!
   $course: String!
-  $alergies: Boolean!
+  $allergies: Boolean!
   $oldStudent: Boolean!
   $signedMandate: Boolean!
   $imageAuthorisation: Boolean!
@@ -17,7 +17,7 @@ mutation CreateStudent(
     name: $name
     birthDate: $birthDate
     course: $course
-    alergies: $alergies
+    allergies: $allergies
     oldStudent: $oldStudent
     signedMandate: $signedMandate
     imageAuthorisation: $imageAuthorisation
