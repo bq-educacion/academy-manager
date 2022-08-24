@@ -19,10 +19,6 @@ query GetInstructors(
     data {
       id
       name
-      center {
-        name
-        id
-      }
       geographicalAvailability
       state
       availability {

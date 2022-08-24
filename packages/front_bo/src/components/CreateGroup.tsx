@@ -2,13 +2,15 @@ import {
   colors,
   DropDown,
   DropDownUnique,
+  FillIn,
+  FillInSectioned,
   InputSuper,
   MButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
+import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import {
   GroupModality,
@@ -24,7 +26,8 @@ const CreateGroup: FC<{
   changeTitle: (title: string) => void;
   close: (action: boolean) => void;
   refetch: () => void;
-}> = ({ close, changeTitle, refetch }) => {
+  setError: (error: ApolloError) => void;
+}> = ({ close, changeTitle, refetch, setError }) => {
   const t = useTranslate();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -71,12 +74,9 @@ const CreateGroup: FC<{
 
   //TODO: add contacts to query when available
 
-  const route = useRouter();
-  useEffect(() => {
-    if (error) {
-      route.push("/500");
-    }
-  }, [error]);
+  if (error) {
+    setError(error);
+  }
 
   return (
     <Form>
@@ -122,7 +122,7 @@ const CreateGroup: FC<{
                 options={Object.values(GroupModality).map((modality) => ({
                   key: modality,
                   label: t(
-                    `components.create-group.1.subtitle.modality-${modality}`
+                    `components.create-group.1.subtitle.modality-${modality.toLowerCase()}`
                   ),
                 }))}
                 width="190px"
@@ -139,7 +139,9 @@ const CreateGroup: FC<{
               <DropDownUnique
                 options={Object.values(GroupType).map((type) => ({
                   key: type,
-                  label: t(`components.create-group.1.subtitle.type-${type}`),
+                  label: t(
+                    `components.create-group.1.subtitle.type-${type.toLowerCase()}`
+                  ),
                 }))}
                 width="190px"
                 setSelected={(type) => setType(type as GroupType)}
@@ -246,27 +248,6 @@ const Form = styled.div`
   & > p {
     align-self: flex-start;
     margin-bottom: 30px;
-  }
-`;
-
-export const FillInSectioned = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  & > :not(div:first-child) {
-    margin-left: 10px;
-  }
-`;
-export const FillIn = styled.div<{ width?: string }>`
-  display: flex;
-  ${({ width }) => (width ? `width: ${width}` : "width: 100%")};
-  flex-direction: column;
-  margin-bottom: 20px;
-  & > p {
-    margin-bottom: 5px;
-  }
-  & > div {
-    align-items: flex-start;
   }
 `;
 

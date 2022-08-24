@@ -8,9 +8,11 @@ const InputSuper: FC<{
   input: string;
   backgroundColor?: string;
   type?: string;
-}> = ({ placeholder, setInput, input, type, backgroundColor }) => {
+  disabled?: boolean;
+}> = ({ placeholder, setInput, input, type, backgroundColor, disabled }) => {
   return (
     <InputStyled
+      disabled={disabled}
       placeholder={placeholder ? placeholder : ""}
       type={type ? type : "text"}
       value={input}
@@ -22,12 +24,15 @@ const InputSuper: FC<{
 
 export default InputSuper;
 
-const InputStyled = styled.input<{ background?: string }>`
+const InputStyled = styled.input<{ disabled?: boolean; background?: string }>`
   padding-left: 20px;
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray};
   height: 40px;
-  ${({ background }) => background && `background-color: ${background};`}
+  ${({ background, disabled }) =>
+    disabled
+      ? `background-color: ${colors.colors.gray2}`
+      : background && `background-color: ${background};`}
   &::placeholder {
     font-style: italic;
     line-height: 1.07;

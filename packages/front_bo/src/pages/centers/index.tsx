@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import { Layout, Modal, Table } from "../components";
-import { sections } from "../config";
-import withApollo from "../apollo/withApollo";
+import { Layout, Modal, Table } from "../../components";
+import { sections } from "../../config";
+import withApollo from "../../apollo/withApollo";
 import {
   colors,
   FirstActionButton,
@@ -15,9 +15,9 @@ import {
   Center,
   OrderFilterCenter,
   useGetCentersFQuery,
-} from "../generated/graphql";
-import { useRouter } from "next/router";
-import CreateCenter from "../components/CreateCenter";
+} from "../../generated/graphql";
+import CreateCenter from "../../components/CreateCenter";
+import { ApolloError } from "@apollo/client";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -70,9 +70,11 @@ const CentersPage: NextPage = () => {
 
   //TODO: Advance Search
 
-  const route = useRouter();
-  if (error) {
-    route.push("/500");
+  const [componentError, setComponentError] = useState<ApolloError | undefined>(
+    undefined
+  );
+  if (error || componentError) {
+    return <Layout section={sections[0].title} error={500} label={""} />;
   }
 
   return (
@@ -84,6 +86,7 @@ const CentersPage: NextPage = () => {
           endTitle={t("pages.centers.modal-create.center.end-title")}
         >
           <CreateCenter
+            setError={setComponentError}
             refetch={refetch}
             changeTitle={setModalTitle}
             close={setModalOpen}
@@ -168,7 +171,9 @@ const CentersPage: NextPage = () => {
                 content: (item) => (
                   <div>
                     {item.languages
-                      ?.map((elem) => t(`pages.centers.languages.${elem}`))
+                      ?.map((elem) =>
+                        t(`pages.centers.languages.${elem.toLowerCase()}`)
+                      )
                       .join(", ")}
                   </div>
                 ),
@@ -182,7 +187,9 @@ const CentersPage: NextPage = () => {
                 label: t("components.table.nature"),
                 key: OrderFilterCenter.Nature,
                 content: (item) => (
-                  <div>{t(`pages.centers.nature.${item.nature}`)}</div>
+                  <div>
+                    {t(`pages.centers.nature.${item.nature?.toLowerCase()}`)}
+                  </div>
                 ),
               },
               {
@@ -191,7 +198,9 @@ const CentersPage: NextPage = () => {
                 content: (item) => (
                   <div>
                     {item.type
-                      ?.map((elem) => t(`pages.centers.type.${elem}`))
+                      ?.map((elem) =>
+                        t(`pages.centers.type.${elem.toLowerCase()}`)
+                      )
                       .join(", ")}
                   </div>
                 ),
@@ -201,10 +210,10 @@ const CentersPage: NextPage = () => {
           {tableData.length === 0 && searchText !== "" && (
             <ErrorContainer>
               <styles.P4>{t("pages.centers.search-error.0")}</styles.P4>
-              <styles.P4>
+              {/* <styles.P4>
                 {t("pages.centers.search-error.1")}{" "}
                 <a>{t("pages.centers.search-error.2")}</a>
-              </styles.P4>
+              </styles.P4> */}
             </ErrorContainer>
           )}
           {tableData.length === 0 && searchText === "" && (
@@ -213,9 +222,10 @@ const CentersPage: NextPage = () => {
               <styles.P4>
                 <a onClick={() => setModalOpen(true)}>
                   {t("pages.centers.data-error-options.0")}
-                </a>{" "}
+                </a>
+                {/*{" "}
                 {t("pages.centers.data-error-options.1")}{" "}
-                <a>{t("pages.centers.data-error-options.2")}</a>
+          <a>{t("pages.centers.data-error-options.2")}</a>*/}
               </styles.P4>
             </ErrorContainer>
           )}

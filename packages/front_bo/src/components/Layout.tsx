@@ -7,7 +7,7 @@ const Layout: FC<{
   childrenHeader?: ReactNode;
   childrenSubHeader?: ReactNode;
   section: string;
-  label: string;
+  label?: string;
   error?: number;
   title?: string;
 }> = ({

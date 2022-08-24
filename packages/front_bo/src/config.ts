@@ -3,6 +3,11 @@ type ILink = {
   href: string;
 };
 
+type DropDownItem = {
+  label: string;
+  key: string;
+};
+
 export type ISection = {
   title: string;
   bigTitle: string;
@@ -24,3 +29,16 @@ export const sections: ISection[] = [
 ];
 
 export const centerLanguages: string[] = ["English", "Spanish"];
+
+export const courses: DropDownItem[] = [
+  { label: "general.courses.1p", key: "1p" },
+  { label: "general.courses.2p", key: "2p" },
+  { label: "general.courses.3p", key: "3p" },
+  { label: "general.courses.4p", key: "4p" },
+  { label: "general.courses.5p", key: "5p" },
+  { label: "general.courses.6p", key: "6p" },
+  { label: "general.courses.1e", key: "1e" },
+  { label: "general.courses.2e", key: "2e" },
+  { label: "general.courses.3e", key: "3e" },
+  { label: "general.courses.4e", key: "4e" },
+];

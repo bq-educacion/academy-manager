@@ -78,7 +78,7 @@ const AddTimeTable: FC<{
             }
           }}
         />
-        <styles.P4>{t("components.create-group.2.subtitle.MONDAY")}</styles.P4>
+        <styles.P4>{t("components.create-group.2.subtitle.monday")}</styles.P4>
       </DayDiv>
       <InputDiv>
         <InputSuper
@@ -129,7 +129,7 @@ const AddTimeTable: FC<{
             }
           }}
         />
-        <styles.P4>{t("components.create-group.2.subtitle.TUESDAY")}</styles.P4>
+        <styles.P4>{t("components.create-group.2.subtitle.tuesday")}</styles.P4>
       </DayDiv>
       <InputDiv>
         <InputSuper
@@ -181,7 +181,7 @@ const AddTimeTable: FC<{
           }}
         />
         <styles.P4>
-          {t("components.create-group.2.subtitle.WEDNESDAY")}
+          {t("components.create-group.2.subtitle.wednesday")}
         </styles.P4>
       </DayDiv>
       <InputDiv>
@@ -234,7 +234,7 @@ const AddTimeTable: FC<{
           }}
         />
         <styles.P4>
-          {t("components.create-group.2.subtitle.THURSDAY")}
+          {t("components.create-group.2.subtitle.thursday")}
         </styles.P4>
       </DayDiv>
       <InputDiv>
@@ -286,7 +286,7 @@ const AddTimeTable: FC<{
             }
           }}
         />
-        <styles.P4>{t("components.create-group.2.subtitle.FRIDAY")}</styles.P4>
+        <styles.P4>{t("components.create-group.2.subtitle.friday")}</styles.P4>
       </DayDiv>
       <InputDiv>
         <InputSuper
@@ -338,7 +338,7 @@ const AddTimeTable: FC<{
           }}
         />
         <styles.P4>
-          {t("components.create-group.2.subtitle.SATURDAY")}
+          {t("components.create-group.2.subtitle.saturday")}
         </styles.P4>
       </DayDiv>
       <InputDiv>
@@ -390,7 +390,7 @@ const AddTimeTable: FC<{
             }
           }}
         />
-        <styles.P4>{t("components.create-group.2.subtitle.SUNDAY")}</styles.P4>
+        <styles.P4>{t("components.create-group.2.subtitle.sunday")}</styles.P4>
       </DayDiv>
       <InputDiv>
         <InputSuper

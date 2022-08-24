@@ -1,0 +1,12 @@
+query simpleGroupsName {
+  getGroups {
+    data {
+      center {
+        id
+      }
+      id
+      id_group
+      name
+    }
+  }
+}

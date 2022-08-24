@@ -7,6 +7,8 @@ import Table from "./Table";
 import Modal from "./Modal";
 import AddContact from "./AddContact";
 import CreateGroup from "./CreateGroup";
+import CreateStudent from "./CreateStudent";
+import CreateCenter from "./CreateCenter";
 
 export {
   ContentStart,
@@ -18,4 +20,6 @@ export {
   Modal,
   AddContact,
   CreateGroup,
+  CreateStudent,
+  CreateCenter,
 };
