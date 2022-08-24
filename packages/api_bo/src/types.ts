@@ -222,7 +222,7 @@ export type MutationCreateInstructorArgs = {
 };
 
 export type MutationCreateStudentArgs = {
-  alergies: Scalars["Boolean"];
+  allergies: Scalars["Boolean"];
   birthDate: Scalars["String"];
   collectionPermit: Scalars["String"];
   contacts: Array<StudentContactInput>;
@@ -296,7 +296,7 @@ export type MutationEditInstructorArgs = {
 };
 
 export type MutationEditStudentArgs = {
-  alergies?: InputMaybe<Scalars["Boolean"]>;
+  allergies?: InputMaybe<Scalars["Boolean"]>;
   birthDate?: InputMaybe<Scalars["String"]>;
   collectionPermit?: InputMaybe<Scalars["String"]>;
   contacts?: InputMaybe<Array<StudentContactInput>>;
@@ -463,7 +463,7 @@ export enum StateInstructor {
 
 export type Student = {
   __typename?: "Student";
-  alergies: Scalars["Boolean"];
+  allergies: Scalars["Boolean"];
   birthDate: Scalars["String"];
   collectionPermit: Scalars["String"];
   contacts: Array<StudentContact>;
@@ -945,7 +945,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateStudentArgs,
-      | "alergies"
+      | "allergies"
       | "birthDate"
       | "collectionPermit"
       | "contacts"
@@ -1114,7 +1114,7 @@ export type StudentResolvers<
   ParentType extends ResolversParentTypes["Student"] =
     ResolversParentTypes["Student"],
 > = ResolversObject<{
-  alergies?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  allergies?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   birthDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   collectionPermit?: Resolver<
     ResolversTypes["String"],
