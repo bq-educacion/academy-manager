@@ -104,6 +104,12 @@ const HeaderCell = styled.div`
   & > * {
     cursor: pointer;
   }
+  min-width: max-content;
+  & > div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 `;
 
 const Cell = styled.div`
@@ -112,10 +118,15 @@ const Cell = styled.div`
   align-items: center;
   border-bottom: solid 1px ${colors.colors.grayBlue};
   border-left: solid 1px ${colors.colors.grayBlue};
-  min-width: max-content;
   justify-content: flex-start;
   padding: 0 2em;
-  overflow: visible;
+  overflow: hidden;
+  white-space: nowrap;
+  & > div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 `;
 
 export default Table;
