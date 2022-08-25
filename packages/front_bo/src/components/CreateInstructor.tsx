@@ -1,4 +1,5 @@
 import {
+  Button,
   CheckBox,
   colors,
   DropDown,
@@ -6,7 +7,6 @@ import {
   FillIn,
   FillInSectioned,
   InputSuper,
-  MButton,
   OptionsBox,
   OptionsBoxOrdered,
   RadioButton,
@@ -225,17 +225,15 @@ const CreateInstructor: FC<{
             </FillIn>
           </FillInSectioned>
           <NavDiv>
-            <MButton
-              Click={() => close(false)}
+            <Button
+              secondary
+              onClick={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(2)}
+            <Button
+              main
+              onClick={() => setStep(2)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -425,17 +423,15 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
-              Click={() => setStep(1)}
+            <Button
+              secondary
+              onClick={() => setStep(1)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(3)}
+            <Button
+              main
+              onClick={() => setStep(3)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDivScroll>
         </>
@@ -522,17 +518,15 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
-              Click={() => setStep(2)}
+            <Button
+              secondary
+              onClick={() => setStep(2)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(4)}
+            <Button
+              main
+              onClick={() => setStep(4)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDivScroll>
         </>
@@ -627,17 +621,15 @@ const CreateInstructor: FC<{
             )}
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
-              Click={() => setStep(3)}
+            <Button
+              secondary
+              onClick={() => setStep(3)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(5)}
+            <Button
+              main
+              onClick={() => setStep(5)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDivScroll>
         </>
@@ -689,14 +681,14 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
-              Click={() => setStep(4)}
+            <Button
+              secondary
+              onClick={() => setStep(4)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => {
+            <Button
+              create
+              onClick={() => {
                 if (
                   name !== "" &&
                   emailPro !== "" &&
@@ -746,8 +738,6 @@ const CreateInstructor: FC<{
                 }
               }}
               text={t("general.actions.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDivScroll>
         </>
@@ -755,7 +745,7 @@ const CreateInstructor: FC<{
       {step === 6 && (
         <FillIn>
           <EndButton
-            Click={() => {
+            onClick={() => {
               refetch();
               changeTitle(t("pages.instructors.modal-create.title"));
               close(false);
@@ -770,7 +760,7 @@ const CreateInstructor: FC<{
 
 export default CreateInstructor;
 
-const EndButton = styled(MButton)`
+const EndButton = styled(Button)`
   align-self: flex-start;
 `;
 

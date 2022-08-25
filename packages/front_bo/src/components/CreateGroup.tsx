@@ -1,11 +1,10 @@
 import {
-  colors,
+  Button,
   DropDown,
   DropDownUnique,
   FillIn,
   FillInSectioned,
   InputSuper,
-  MButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -168,17 +167,15 @@ const CreateGroup: FC<{
             />
           </FillIn>
           <NavDiv>
-            <MButton
-              Click={() => close(false)}
+            <Button
+              secondary
+              onClick={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(2)}
+            <Button
+              main
+              onClick={() => setStep(2)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -187,14 +184,14 @@ const CreateGroup: FC<{
         <>
           <AddTimeTable setTimeTable={setTimeTableOnChange} />
           <NavDiv>
-            <MButton
-              Click={() => setStep(1)}
+            <Button
+              secondary
+              onClick={() => setStep(1)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => {
+            <Button
+              create
+              onClick={() => {
                 setTimeTable(timeTableOnChange);
 
                 setTimeout(() => {
@@ -214,16 +211,15 @@ const CreateGroup: FC<{
                 }, 100);
               }}
               text={t("general.actions.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDiv>
         </>
       )}
       {step === 3 && (
         <EndButton>
-          <MButton
-            Click={() => {
+          <Button
+            main
+            onClick={() => {
               refetch();
               changeTitle(t("pages.groups.modal-create.title"));
               close(false);

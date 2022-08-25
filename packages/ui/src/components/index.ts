@@ -1,7 +1,6 @@
 import Icon from "./Icon";
 import GoogleButton from "./GoogleButton";
 import LoadingOvercast from "./Loading";
-import MButton from "./MainButton";
 import OptionsButton from "./OptionsButton";
 import SecondActionButton from "./SecondActionButton";
 import UserButton from "./UserButton";
@@ -17,12 +16,12 @@ import FillInSectioned from "./FillInSectioned";
 import RadioButton from "./RadioButton";
 import OptionsBox from "./OptionsBox";
 import OptionsBoxOrdered from "./OptionsBoxOrdered";
+import Button from "./Button";
 
 export {
   GoogleButton,
   Icon,
   LoadingOvercast,
-  MButton,
   OptionsButton,
   SecondActionButton,
   UserButton,
@@ -38,4 +37,5 @@ export {
   RadioButton,
   OptionsBox,
   OptionsBoxOrdered,
+  Button,
 };

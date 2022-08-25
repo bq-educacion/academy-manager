@@ -1,11 +1,11 @@
 import {
+  Button,
   CheckBox,
   colors,
   DropDownUnique,
   FillIn,
   FillInSectioned,
   InputSuper,
-  MButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -274,17 +274,15 @@ const CreateStudent: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivStep1>
-            <MButton
-              Click={() => close(false)}
+            <Button
+              secondary
+              onClick={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(2)}
+            <Button
+              main
+              onClick={() => setStep(2)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDivStep1>
         </>
@@ -337,14 +335,14 @@ const CreateStudent: FC<{
             </styles.P4>
           </CheckOption>
           <NavDiv>
-            <MButton
-              Click={() => setStep(1)}
+            <Button
+              secondary
+              onClick={() => setStep(1)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => {
+            <Button
+              create
+              onClick={() => {
                 if (
                   name !== "" &&
                   group !== "" &&
@@ -365,8 +363,6 @@ const CreateStudent: FC<{
                 }
               }}
               text={t("general.actions.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDiv>
         </>
@@ -374,7 +370,7 @@ const CreateStudent: FC<{
       {step === 3 && (
         <FillIn>
           <EndButton
-            Click={() => {
+            onClick={() => {
               refetch();
               changeTitle(t("pages.students.modal-create.title"));
               close(false);
@@ -420,7 +416,7 @@ const NavDivStep1 = styled.div`
   background-color: ${colors.colors.white};
 `;
 
-const EndButton = styled(MButton)`
+const EndButton = styled(Button)`
   align-self: flex-start;
 `;
 

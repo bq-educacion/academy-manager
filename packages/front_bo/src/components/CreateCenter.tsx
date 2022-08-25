@@ -1,4 +1,5 @@
 import {
+  Button,
   colors,
   DropDown,
   DropDownUnique,
@@ -6,7 +7,6 @@ import {
   FillInSectioned,
   Icon,
   InputSuper,
-  MButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -121,17 +121,15 @@ const CreateCenter: FC<{
             />
           </FillIn>
           <NavDiv>
-            <MButton
-              Click={() => close(false)}
+            <Button
+              secondary
+              onClick={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(2)}
+            <Button
+              main
+              onClick={() => setStep(2)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -202,17 +200,15 @@ const CreateCenter: FC<{
             </FillIn>
           </FillInSectioned>
           <NavDiv>
-            <MButton
-              Click={() => setStep(1)}
+            <Button
+              secondary
+              onClick={() => setStep(1)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => setStep(3)}
+            <Button
+              main
+              onClick={() => setStep(3)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -254,14 +250,14 @@ const CreateCenter: FC<{
             </AddContactButton>
           </ContactsDiv>
           <NavDivStep3>
-            <MButton
-              Click={() => setStep(2)}
+            <Button
+              secondary
+              onClick={() => setStep(2)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
-              Click={() => {
+            <Button
+              create
+              onClick={() => {
                 setTimeout(() => {
                   setFinish(true);
                 }, 10);
@@ -277,8 +273,6 @@ const CreateCenter: FC<{
                 }, 20);
               }}
               text={t("components.create-center.3.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDivStep3>
         </>
@@ -286,7 +280,7 @@ const CreateCenter: FC<{
       {step === 4 && (
         <FillIn>
           <EndButton
-            Click={() => {
+            onClick={() => {
               refetch();
               changeTitle(t("pages.centers.modal-create.center.title"));
               close(false);
@@ -358,6 +352,6 @@ const AddContactButton = styled.button`
   }
 `;
 
-const EndButton = styled(MButton)`
+const EndButton = styled(Button)`
   align-self: flex-start;
 `;

@@ -94,6 +94,9 @@ const HeaderCell = styled.div`
   display: flex;
   grid-row-start: 1;
   grid-row-end: 1;
+  position: sticky;
+  top: 0;
+  background-color: ${colors.colors.white};
   & > svg {
     margin-left: 5px;
   }
