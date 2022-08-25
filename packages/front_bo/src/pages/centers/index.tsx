@@ -305,6 +305,9 @@ export const Input = styled.input`
   border-radius: 5px;
   border: solid 1px ${colors.colors.gray};
   padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.07;
+
   &::placeholder {
     font-family: Roboto;
     font-size: 14px;
