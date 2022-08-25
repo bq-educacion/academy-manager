@@ -1,4 +1,5 @@
 import {
+  CButton,
   CheckBox,
   colors,
   DropDownUnique,
@@ -6,6 +7,7 @@ import {
   FillInSectioned,
   InputSuper,
   MButton,
+  SButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -274,11 +276,9 @@ const CreateStudent: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivStep1>
-            <MButton
+            <SButton
               Click={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(2)}
@@ -337,13 +337,11 @@ const CreateStudent: FC<{
             </styles.P4>
           </CheckOption>
           <NavDiv>
-            <MButton
+            <SButton
               Click={() => setStep(1)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
+            <CButton
               Click={() => {
                 if (
                   name !== "" &&
@@ -365,8 +363,6 @@ const CreateStudent: FC<{
                 }
               }}
               text={t("general.actions.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDiv>
         </>

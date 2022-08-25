@@ -1,4 +1,5 @@
 import {
+  CButton,
   CheckBox,
   colors,
   DropDown,
@@ -10,6 +11,7 @@ import {
   OptionsBox,
   OptionsBoxOrdered,
   RadioButton,
+  SButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -225,11 +227,9 @@ const CreateInstructor: FC<{
             </FillIn>
           </FillInSectioned>
           <NavDiv>
-            <MButton
+            <SButton
               Click={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(2)}
@@ -425,11 +425,9 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
+            <SButton
               Click={() => setStep(1)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(3)}
@@ -522,11 +520,9 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
+            <SButton
               Click={() => setStep(2)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(4)}
@@ -627,11 +623,9 @@ const CreateInstructor: FC<{
             )}
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
+            <SButton
               Click={() => setStep(3)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(5)}
@@ -689,13 +683,11 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <MButton
+            <SButton
               Click={() => setStep(4)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
+            <CButton
               Click={() => {
                 if (
                   name !== "" &&
@@ -746,8 +738,6 @@ const CreateInstructor: FC<{
                 }
               }}
               text={t("general.actions.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDivScroll>
         </>

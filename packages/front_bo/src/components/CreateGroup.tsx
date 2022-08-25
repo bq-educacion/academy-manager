@@ -1,4 +1,5 @@
 import {
+  CButton,
   colors,
   DropDown,
   DropDownUnique,
@@ -6,6 +7,7 @@ import {
   FillInSectioned,
   InputSuper,
   MButton,
+  SButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -168,11 +170,9 @@ const CreateGroup: FC<{
             />
           </FillIn>
           <NavDiv>
-            <MButton
+            <SButton
               Click={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(2)}
@@ -187,13 +187,11 @@ const CreateGroup: FC<{
         <>
           <AddTimeTable setTimeTable={setTimeTableOnChange} />
           <NavDiv>
-            <MButton
+            <SButton
               Click={() => setStep(1)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
+            <CButton
               Click={() => {
                 setTimeTable(timeTableOnChange);
 
@@ -214,8 +212,6 @@ const CreateGroup: FC<{
                 }, 100);
               }}
               text={t("general.actions.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDiv>
         </>

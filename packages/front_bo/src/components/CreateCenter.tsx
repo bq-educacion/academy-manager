@@ -1,4 +1,5 @@
 import {
+  CButton,
   colors,
   DropDown,
   DropDownUnique,
@@ -7,6 +8,7 @@ import {
   Icon,
   InputSuper,
   MButton,
+  SButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -121,11 +123,9 @@ const CreateCenter: FC<{
             />
           </FillIn>
           <NavDiv>
-            <MButton
+            <SButton
               Click={() => close(false)}
               text={t("general.actions.cancel")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(2)}
@@ -202,11 +202,9 @@ const CreateCenter: FC<{
             </FillIn>
           </FillInSectioned>
           <NavDiv>
-            <MButton
+            <SButton
               Click={() => setStep(1)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
             <MButton
               Click={() => setStep(3)}
@@ -254,13 +252,11 @@ const CreateCenter: FC<{
             </AddContactButton>
           </ContactsDiv>
           <NavDivStep3>
-            <MButton
+            <SButton
               Click={() => setStep(2)}
               text={t("general.actions.back")}
-              color={colors.colors.blackBackground}
-              backColor={colors.colors.gray60}
             />
-            <MButton
+            <CButton
               Click={() => {
                 setTimeout(() => {
                   setFinish(true);
@@ -277,8 +273,6 @@ const CreateCenter: FC<{
                 }, 20);
               }}
               text={t("components.create-center.3.create")}
-              color={colors.colors.white}
-              backColor={colors.colors.green80}
             />
           </NavDivStep3>
         </>

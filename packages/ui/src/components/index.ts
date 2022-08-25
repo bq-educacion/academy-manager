@@ -17,6 +17,8 @@ import FillInSectioned from "./FillInSectioned";
 import RadioButton from "./RadioButton";
 import OptionsBox from "./OptionsBox";
 import OptionsBoxOrdered from "./OptionsBoxOrdered";
+import SButton from "./SecondaryButton";
+import CButton from "./CreateButton";
 
 export {
   GoogleButton,
@@ -38,4 +40,6 @@ export {
   RadioButton,
   OptionsBox,
   OptionsBoxOrdered,
+  SButton,
+  CButton,
 };
