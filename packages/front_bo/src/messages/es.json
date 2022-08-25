@@ -19,6 +19,7 @@
       }
     },
     "table": {
+      "no-instructor": "Sin asignar",
       "name": "Nombre",
       "languages": "Idiomas",
       "city": "Población",
