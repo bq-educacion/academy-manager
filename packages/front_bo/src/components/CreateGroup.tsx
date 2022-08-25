@@ -1,13 +1,10 @@
 import {
-  CButton,
-  colors,
+  Button,
   DropDown,
   DropDownUnique,
   FillIn,
   FillInSectioned,
   InputSuper,
-  MButton,
-  SButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -170,15 +167,15 @@ const CreateGroup: FC<{
             />
           </FillIn>
           <NavDiv>
-            <SButton
+            <Button
+              secondary
               onClick={() => close(false)}
               text={t("general.actions.cancel")}
             />
-            <MButton
+            <Button
+              main
               onClick={() => setStep(2)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -187,11 +184,13 @@ const CreateGroup: FC<{
         <>
           <AddTimeTable setTimeTable={setTimeTableOnChange} />
           <NavDiv>
-            <SButton
+            <Button
+              secondary
               onClick={() => setStep(1)}
               text={t("general.actions.back")}
             />
-            <CButton
+            <Button
+              create
               onClick={() => {
                 setTimeTable(timeTableOnChange);
 
@@ -218,7 +217,8 @@ const CreateGroup: FC<{
       )}
       {step === 3 && (
         <EndButton>
-          <MButton
+          <Button
+            main
             onClick={() => {
               refetch();
               changeTitle(t("pages.groups.modal-create.title"));

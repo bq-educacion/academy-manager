@@ -1,5 +1,5 @@
 import {
-  CButton,
+  Button,
   colors,
   DropDown,
   DropDownUnique,
@@ -7,8 +7,6 @@ import {
   FillInSectioned,
   Icon,
   InputSuper,
-  MButton,
-  SButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -123,15 +121,15 @@ const CreateCenter: FC<{
             />
           </FillIn>
           <NavDiv>
-            <SButton
+            <Button
+              secondary
               onClick={() => close(false)}
               text={t("general.actions.cancel")}
             />
-            <MButton
+            <Button
+              main
               onClick={() => setStep(2)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -202,15 +200,15 @@ const CreateCenter: FC<{
             </FillIn>
           </FillInSectioned>
           <NavDiv>
-            <SButton
+            <Button
+              secondary
               onClick={() => setStep(1)}
               text={t("general.actions.back")}
             />
-            <MButton
+            <Button
+              main
               onClick={() => setStep(3)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -252,11 +250,13 @@ const CreateCenter: FC<{
             </AddContactButton>
           </ContactsDiv>
           <NavDivStep3>
-            <SButton
+            <Button
+              secondary
               onClick={() => setStep(2)}
               text={t("general.actions.back")}
             />
-            <CButton
+            <Button
+              create
               onClick={() => {
                 setTimeout(() => {
                   setFinish(true);
@@ -352,6 +352,6 @@ const AddContactButton = styled.button`
   }
 `;
 
-const EndButton = styled(MButton)`
+const EndButton = styled(Button)`
   align-self: flex-start;
 `;

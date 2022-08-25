@@ -1,5 +1,5 @@
 import {
-  CButton,
+  Button,
   CheckBox,
   colors,
   DropDown,
@@ -7,11 +7,9 @@ import {
   FillIn,
   FillInSectioned,
   InputSuper,
-  MButton,
   OptionsBox,
   OptionsBoxOrdered,
   RadioButton,
-  SButton,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -227,15 +225,15 @@ const CreateInstructor: FC<{
             </FillIn>
           </FillInSectioned>
           <NavDiv>
-            <SButton
+            <Button
+              secondary
               onClick={() => close(false)}
               text={t("general.actions.cancel")}
             />
-            <MButton
+            <Button
+              main
               onClick={() => setStep(2)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDiv>
         </>
@@ -425,15 +423,15 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <SButton
+            <Button
+              secondary
               onClick={() => setStep(1)}
               text={t("general.actions.back")}
             />
-            <MButton
+            <Button
+              main
               onClick={() => setStep(3)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDivScroll>
         </>
@@ -520,15 +518,15 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <SButton
+            <Button
+              secondary
               onClick={() => setStep(2)}
               text={t("general.actions.back")}
             />
-            <MButton
+            <Button
+              main
               onClick={() => setStep(4)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDivScroll>
         </>
@@ -623,15 +621,15 @@ const CreateInstructor: FC<{
             )}
           </ScrollDiv>
           <NavDivScroll>
-            <SButton
+            <Button
+              secondary
               onClick={() => setStep(3)}
               text={t("general.actions.back")}
             />
-            <MButton
+            <Button
+              main
               onClick={() => setStep(5)}
               text={t("general.actions.next")}
-              color={colors.colors.white}
-              backColor={colors.colors.blackBackground}
             />
           </NavDivScroll>
         </>
@@ -683,11 +681,13 @@ const CreateInstructor: FC<{
             </FillIn>
           </ScrollDiv>
           <NavDivScroll>
-            <SButton
+            <Button
+              secondary
               onClick={() => setStep(4)}
               text={t("general.actions.back")}
             />
-            <CButton
+            <Button
+              create
               onClick={() => {
                 if (
                   name !== "" &&
@@ -760,7 +760,7 @@ const CreateInstructor: FC<{
 
 export default CreateInstructor;
 
-const EndButton = styled(MButton)`
+const EndButton = styled(Button)`
   align-self: flex-start;
 `;
 

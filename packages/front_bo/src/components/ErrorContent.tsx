@@ -1,4 +1,4 @@
-import { styles, MButton, colors, useTranslate } from "@academy-manager/ui";
+import { styles, colors, useTranslate, Button } from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { useRouter } from "next/router";
@@ -13,12 +13,13 @@ export const ErrorContent: FC<{ error: number }> = ({ error }) => {
         <PGError>{error}</PGError>
         <P2Error>{t(`components.error-content.${error}.title`)}</P2Error>
         <P4Error>{t(`components.error-content.${error}.text`)}</P4Error>
-        <MButton
+        <Button
+          main
           text={t("components.error-content.button")}
           onClick={() => {
             router.push("/");
           }}
-        ></MButton>
+        ></Button>
       </div>
     </ErrorContainer>
   );
