@@ -40,19 +40,25 @@ const DropDownUnique: FC<{
       }
       content={
         <OptionsBox width={width}>
-          {options.map((option) => {
-            const clicked = selected === option.key;
-            return (
-              <OptionBox
-                key={option.key}
-                clicked={clicked}
-                onClick={() => setSelected(option.key)}
-              >
-                {clicked && <Check name="tick" />}
-                <styles.P4>{option.label}</styles.P4>
-              </OptionBox>
-            );
-          })}
+          {options.length > 0 &&
+            options.map((option) => {
+              const clicked = selected === option.key;
+              return (
+                <OptionBox
+                  key={option.key}
+                  clicked={clicked}
+                  onClick={() => setSelected(option.key)}
+                >
+                  {clicked && <Check name="tick" />}
+                  <styles.P4>{option.label}</styles.P4>
+                </OptionBox>
+              );
+            })}
+          {options.length === 0 && (
+            <NoData>
+              <styles.P4>{t("general.no-data")}</styles.P4>
+            </NoData>
+          )}
         </OptionsBox>
       }
     />
@@ -75,6 +81,13 @@ const OptionBox = styled.div<{ clicked: boolean }>`
   &:hover {
     background-color: ${colors.colors.blue2};
   }
+`;
+
+const NoData = styled.div`
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const InputBox = styled.div<{ clicked: boolean; width: string }>`

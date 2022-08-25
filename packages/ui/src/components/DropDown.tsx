@@ -47,34 +47,40 @@ const DropDown: FC<{
       content={
         !disabled && (
           <OptionsBox width={width}>
-            {options.map((option) => {
-              const clicked = selected.includes(option.key);
-              return (
-                <OptionBox
-                  key={option.key}
-                  clicked={clicked}
-                  onClick={() =>
-                    setSelected(
-                      clicked
-                        ? selected.filter((elem) => elem !== option.key)
-                        : [...selected, option.key]
-                    )
-                  }
-                >
-                  <CheckBox
-                    option={clicked}
-                    setOption={() =>
+            {options.length > 0 &&
+              options.map((option) => {
+                const clicked = selected.includes(option.key);
+                return (
+                  <OptionBox
+                    key={option.key}
+                    clicked={clicked}
+                    onClick={() =>
                       setSelected(
                         clicked
-                          ? selected.filter((elem) => elem != option.key)
+                          ? selected.filter((elem) => elem !== option.key)
                           : [...selected, option.key]
                       )
                     }
-                  />
-                  <styles.P4>{option.label}</styles.P4>
-                </OptionBox>
-              );
-            })}
+                  >
+                    <CheckBox
+                      option={clicked}
+                      setOption={() =>
+                        setSelected(
+                          clicked
+                            ? selected.filter((elem) => elem != option.key)
+                            : [...selected, option.key]
+                        )
+                      }
+                    />
+                    <styles.P4>{option.label}</styles.P4>
+                  </OptionBox>
+                );
+              })}
+            {options.length === 0 && (
+              <NoData>
+                <styles.P4>{t("general.no-data")}</styles.P4>
+              </NoData>
+            )}
           </OptionsBox>
         )
       }
@@ -83,6 +89,13 @@ const DropDown: FC<{
 };
 
 export default DropDown;
+
+const NoData = styled.div`
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+`;
 
 const InputBox = styled.div<{
   clicked: boolean;
