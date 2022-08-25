@@ -44,9 +44,6 @@ const MainButton = styled.button<{ color?: string; backColor?: string }>`
     background-color: ${colors.colors.grayBlue2};
     cursor: pointer;
   }
-  &:active {
-    border: 1px solid ${colors.colors.grayBlue};
-  }
 `;
 
 export default MButton;
