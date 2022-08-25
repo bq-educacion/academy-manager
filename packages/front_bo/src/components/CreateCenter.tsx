@@ -124,11 +124,11 @@ const CreateCenter: FC<{
           </FillIn>
           <NavDiv>
             <SButton
-              Click={() => close(false)}
+              onClick={() => close(false)}
               text={t("general.actions.cancel")}
             />
             <MButton
-              Click={() => setStep(2)}
+              onClick={() => setStep(2)}
               text={t("general.actions.next")}
               color={colors.colors.white}
               backColor={colors.colors.blackBackground}
@@ -203,11 +203,11 @@ const CreateCenter: FC<{
           </FillInSectioned>
           <NavDiv>
             <SButton
-              Click={() => setStep(1)}
+              onClick={() => setStep(1)}
               text={t("general.actions.back")}
             />
             <MButton
-              Click={() => setStep(3)}
+              onClick={() => setStep(3)}
               text={t("general.actions.next")}
               color={colors.colors.white}
               backColor={colors.colors.blackBackground}
@@ -253,11 +253,11 @@ const CreateCenter: FC<{
           </ContactsDiv>
           <NavDivStep3>
             <SButton
-              Click={() => setStep(2)}
+              onClick={() => setStep(2)}
               text={t("general.actions.back")}
             />
             <CButton
-              Click={() => {
+              onClick={() => {
                 setTimeout(() => {
                   setFinish(true);
                 }, 10);
@@ -280,7 +280,7 @@ const CreateCenter: FC<{
       {step === 4 && (
         <FillIn>
           <EndButton
-            Click={() => {
+            onClick={() => {
               refetch();
               changeTitle(t("pages.centers.modal-create.center.title"));
               close(false);

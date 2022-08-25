@@ -171,11 +171,11 @@ const CreateGroup: FC<{
           </FillIn>
           <NavDiv>
             <SButton
-              Click={() => close(false)}
+              onClick={() => close(false)}
               text={t("general.actions.cancel")}
             />
             <MButton
-              Click={() => setStep(2)}
+              onClick={() => setStep(2)}
               text={t("general.actions.next")}
               color={colors.colors.white}
               backColor={colors.colors.blackBackground}
@@ -188,11 +188,11 @@ const CreateGroup: FC<{
           <AddTimeTable setTimeTable={setTimeTableOnChange} />
           <NavDiv>
             <SButton
-              Click={() => setStep(1)}
+              onClick={() => setStep(1)}
               text={t("general.actions.back")}
             />
             <CButton
-              Click={() => {
+              onClick={() => {
                 setTimeTable(timeTableOnChange);
 
                 setTimeout(() => {
@@ -219,7 +219,7 @@ const CreateGroup: FC<{
       {step === 3 && (
         <EndButton>
           <MButton
-            Click={() => {
+            onClick={() => {
               refetch();
               changeTitle(t("pages.groups.modal-create.title"));
               close(false);

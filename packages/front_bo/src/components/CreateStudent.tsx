@@ -277,11 +277,11 @@ const CreateStudent: FC<{
           </ScrollDiv>
           <NavDivStep1>
             <SButton
-              Click={() => close(false)}
+              onClick={() => close(false)}
               text={t("general.actions.cancel")}
             />
             <MButton
-              Click={() => setStep(2)}
+              onClick={() => setStep(2)}
               text={t("general.actions.next")}
               color={colors.colors.white}
               backColor={colors.colors.blackBackground}
@@ -338,11 +338,11 @@ const CreateStudent: FC<{
           </CheckOption>
           <NavDiv>
             <SButton
-              Click={() => setStep(1)}
+              onClick={() => setStep(1)}
               text={t("general.actions.cancel")}
             />
             <CButton
-              Click={() => {
+              onClick={() => {
                 if (
                   name !== "" &&
                   group !== "" &&
@@ -370,7 +370,7 @@ const CreateStudent: FC<{
       {step === 3 && (
         <FillIn>
           <EndButton
-            Click={() => {
+            onClick={() => {
               refetch();
               changeTitle(t("pages.students.modal-create.title"));
               close(false);

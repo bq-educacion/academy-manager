@@ -15,7 +15,7 @@ export const ErrorContent: FC<{ error: number }> = ({ error }) => {
         <P4Error>{t(`components.error-content.${error}.text`)}</P4Error>
         <MButton
           text={t("components.error-content.button")}
-          Click={() => {
+          onClick={() => {
             router.push("/");
           }}
         ></MButton>

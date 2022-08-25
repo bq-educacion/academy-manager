@@ -4,10 +4,10 @@ import { colors, styles } from "../theme";
 
 const CButton: FC<{
   text: string;
-  Click: () => void;
-}> = ({ text, Click }) => {
+  onClick: () => void;
+}> = ({ text, onClick }) => {
   return (
-    <CreateButton onClick={Click}>
+    <CreateButton onClick={onClick}>
       <styles.BoldP4>{text}</styles.BoldP4>
     </CreateButton>
   );

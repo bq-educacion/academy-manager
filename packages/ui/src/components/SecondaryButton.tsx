@@ -4,10 +4,10 @@ import { colors, styles } from "../theme";
 
 const SButton: FC<{
   text: string;
-  Click: () => void;
-}> = ({ text, Click }) => {
+  onClick: () => void;
+}> = ({ text, onClick }) => {
   return (
-    <SecondaryButton onClick={Click}>
+    <SecondaryButton onClick={onClick}>
       <styles.BoldP4>{text}</styles.BoldP4>
     </SecondaryButton>
   );

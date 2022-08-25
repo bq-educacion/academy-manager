@@ -6,10 +6,10 @@ const MButton: FC<{
   color?: string;
   backColor?: string;
   text: string;
-  Click: () => void;
-}> = ({ text, Click, color, backColor }) => {
+  onClick: () => void;
+}> = ({ text, onClick, color, backColor }) => {
   return (
-    <MainButton color={color} backColor={backColor} onClick={Click}>
+    <MainButton color={color} backColor={backColor} onClick={onClick}>
       <styles.BoldP4>{text}</styles.BoldP4>
     </MainButton>
   );
