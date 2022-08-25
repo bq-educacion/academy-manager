@@ -43,14 +43,16 @@ const InputStyled = styled.input<{
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray};
   height: ${(props) => (props.height ? props.height : "40px")};
+  &::placeholder {
+    font-style: italic;
+  }
   ${({ background, disabled }) =>
     disabled
       ? `background-color: ${colors.colors.gray2}`
       : background && `background-color: ${background};`}
   &::placeholder {
     height: ${(props) => props.height && "position: absolute;top: 15px;"};
-    font-style: italic;
     line-height: 1.07;
     color: ${colors.colors.gray2};
-  }
+  } ;
 `;
