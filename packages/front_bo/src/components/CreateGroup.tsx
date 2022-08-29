@@ -77,6 +77,10 @@ const CreateGroup: FC<{
     setError(error);
   }
 
+  if (step === 1) {
+    changeTitle(t("pages.groups.modal-create.title"));
+  }
+
   return (
     <Form>
       <styles.P4>{t(`components.create-group.${step}.title`)}</styles.P4>
@@ -204,6 +208,7 @@ const CreateGroup: FC<{
                   ) {
                     setFinished(true);
                     changeTitle("");
+                    refetch();
                     setStep(3);
                   } else {
                     alert("Please fill all the fields");
@@ -220,7 +225,6 @@ const CreateGroup: FC<{
           <Button
             main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.groups.modal-create.title"));
               close(false);
             }}

@@ -60,10 +60,12 @@ const CreateCenter: FC<{
     },
   });
 
-  //TODO: add contacts to query when available
-
   if (error) {
     setError(error);
+  }
+
+  if (step === 1) {
+    changeTitle(t("pages.centers.modal-create.center.title"));
   }
 
   return (
@@ -265,6 +267,7 @@ const CreateCenter: FC<{
                   if (name !== "" && address !== "" && city !== "") {
                     createCenterMutation().then(() => {
                       changeTitle("");
+                      refetch();
                       setStep(4);
                     });
                   } else {
@@ -282,7 +285,6 @@ const CreateCenter: FC<{
           <EndButton
             main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.centers.modal-create.center.title"));
               close(false);
             }}

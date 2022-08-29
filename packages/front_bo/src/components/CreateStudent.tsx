@@ -96,6 +96,10 @@ const CreateStudent: FC<{
     setError(error);
   }
 
+  if (step === 1) {
+    changeTitle(t("pages.students.modal-create.title"));
+  }
+
   return (
     <Form>
       {step !== 1 && (
@@ -355,6 +359,7 @@ const CreateStudent: FC<{
                   contactPhone !== ""
                 ) {
                   createStudentMutation().then(() => {
+                    refetch();
                     changeTitle("");
                     setStep(3);
                   });
@@ -372,7 +377,6 @@ const CreateStudent: FC<{
           <EndButton
             main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.students.modal-create.title"));
               close(false);
             }}

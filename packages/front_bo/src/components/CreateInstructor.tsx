@@ -150,6 +150,10 @@ const CreateInstructor: FC<{
     setavailability(Localavailability);
   }, [monday, tuesday, wednesday, thursday, friday, saturday, sunday]);
 
+  if (step === 1) {
+    changeTitle(t("pages.instructors.modal-create.title"));
+  }
+
   return (
     <Form>
       {step !== 2 && step !== 4 && step !== 5 && (
@@ -731,6 +735,7 @@ const CreateInstructor: FC<{
                     },
                   }).then(() => {
                     changeTitle("");
+                    refetch();
                     setStep(6);
                   });
                 } else {
@@ -747,7 +752,6 @@ const CreateInstructor: FC<{
           <EndButton
             main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.instructors.modal-create.title"));
               close(false);
             }}
