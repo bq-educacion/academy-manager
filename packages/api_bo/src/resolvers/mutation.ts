@@ -28,6 +28,17 @@ import {
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { validDate } from "../lib/validDate.ts";
+import {
+  checkNotNullCenter,
+  checkNotNullEditCenter,
+  checkNotNullEditCenterContact,
+  checkNotNullEditGroup,
+  checkNotNullEditInstructor,
+  checkNotNullEditStudent,
+  checkNotNullEditStudentContact,
+  checkNotNullGroup,
+  checkNotNullInstructor,
+} from "../lib/checkNotNull.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -36,6 +47,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
+      checkNotNullCenter(args);
       if (args.email) {
         const email = await centerCollection(ctx.db).findOne({
           email: args.email,
@@ -98,6 +110,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
+      checkNotNullEditCenter(args);
       // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
       const newCenter = await centerCollection(ctx.db).findAndModify(
         { _id: new ObjectId(args.id) },
@@ -121,6 +134,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterContact> => {
     try {
+      checkNotNullEditCenterContact(args);
       const contactsCenter = await centerCollection(ctx.db)
         .find(
           {
@@ -172,6 +186,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<GroupModel> => {
     try {
+      checkNotNullGroup(args);
       const group = await groupCollection(ctx.db).findOne({
         center: new ObjectId(args.idCenter),
         name: { $regex: args.name, $options: "i" },
@@ -241,6 +256,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<GroupModel> => {
     try {
+      checkNotNullEditGroup(args);
       let updateGroup = { ...args } as Partial<GroupModel>;
 
       if (args.instructors) {
@@ -376,6 +392,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<StudentModel> => {
     try {
+      checkNotNullEditStudent(args);
       let updateStudent = { ...args } as Partial<StudentModel>;
 
       if (args.groups) {
@@ -452,6 +469,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<StudentContact> => {
     try {
+      checkNotNullEditStudentContact(args);
       const contactsStudents = await studentCollection(ctx.db)
         .find(
           {
@@ -502,6 +520,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<InstructorModel> => {
     try {
+      checkNotNullInstructor(args);
       if (args.corporateEmail) {
         const existsInstructor = await instructorCollection(ctx.db).findOne({
           corporateEmail: args.corporateEmail,
@@ -551,6 +570,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<InstructorModel> => {
     try {
+      checkNotNullEditInstructor(args);
       let updateInstructor = { ...args } as Partial<InstructorModel>;
 
       if (args.corporateEmail) {
