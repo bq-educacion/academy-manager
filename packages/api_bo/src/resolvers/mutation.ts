@@ -39,6 +39,7 @@ import {
   checkNotNullGroup,
   checkNotNullInstructor,
 } from "../lib/checkNotNull.ts";
+import { validHour } from "../lib/validHour.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -228,6 +229,7 @@ export const Mutation = {
       }
 
       const timetable = setIdDays(args.timetable) as Timetable[];
+      validHour(timetable);
       const newGroup = {
         ...args,
         id_group,
@@ -286,6 +288,7 @@ export const Mutation = {
 
       if (args.timetable) {
         const timetable = setIdDays(args.timetable) as Timetable[];
+        validHour(timetable);
         updateGroup = { ...updateGroup, timetable };
       }
 
