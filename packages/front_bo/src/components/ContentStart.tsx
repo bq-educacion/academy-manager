@@ -77,15 +77,28 @@ const ContentBody = styled.div`
   overflow: scroll;
   overflow-x: hidden;
   overflow-y: overlay;
-  &::-webkit-scrollbar:vertical {
+  ::-webkit-scrollbar:vertical {
     display: block;
+  }
+  ::-webkit-scrollbar {
     width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 9999px;
     border: 3px solid transparent;
     background-clip: padding-box;
-    border-top: 45px solid transparent;
-    background-clip: padding-box;
   }
+  ::-webkit-scrollbar-button {
+    height: 20px;
+  }
+  /*
+   ::-webkit-scrollbar-track { 
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 6px solid transparent;
+    background-clip: padding-box; 
+    border-radius: 10px;
+  } */
 `;
