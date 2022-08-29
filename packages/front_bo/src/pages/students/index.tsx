@@ -2,7 +2,12 @@ import { NextPage } from "next";
 import { Layout, Modal, Table } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
-import { FirstActionButton, styles, useTranslate } from "@academy-manager/ui";
+import {
+  FirstActionButton,
+  LoadingOvercast,
+  styles,
+  useTranslate,
+} from "@academy-manager/ui";
 import { useEffect, useState } from "react";
 import {
   OrderFilterStudent,
@@ -52,7 +57,7 @@ const StudentsPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error, refetch } = useGetStudentsQuery({
+  const { data, error, refetch, loading } = useGetStudentsQuery({
     variables: {
       searchText,
       orderFilter: order.key,
@@ -83,8 +88,20 @@ const StudentsPage: NextPage = () => {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
 
+  const [loadingAnimation, setLoadingAnimation] = useState<boolean>(false);
+  useEffect(() => {
+    if (loading) {
+      setLoadingAnimation(true);
+    } else {
+      setTimeout(() => {
+        setLoadingAnimation(false);
+      }, 1000);
+    }
+  }, [loading]);
+
   return (
     <>
+      {loadingAnimation && <LoadingOvercast />}
       {modalOpen && (
         <Modal
           setModal={setModalOpen}
@@ -205,7 +222,7 @@ const StudentsPage: NextPage = () => {
               </styles.P4> */}
             </ErrorContainer>
           )}
-          {tableData.length === 0 && searchText === "" && (
+          {!loading && tableData.length === 0 && searchText === "" && (
             <ErrorContainer>
               <styles.P4>{t("pages.centers.data-error")}</styles.P4>
               <styles.P4>
