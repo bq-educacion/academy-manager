@@ -8,11 +8,11 @@ import {
   MutationCreateInstructorArgs,
   MutationCreateStudentArgs,
   MutationEditCenterArgs,
-  MutationEditCenterContactsArgs,
+  MutationEditCenterContactArgs,
   MutationEditGroupArgs,
   MutationEditInstructorArgs,
   MutationEditStudentArgs,
-  MutationEditStudentContactsArgs,
+  MutationEditStudentContactArgs,
   StudentContact,
   StudentState,
   Timetable,
@@ -36,30 +36,26 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
-      const emails = args.contacts.map((contact) => contact.email);
+      const emails = args.contacts?.map((contact) => contact.email);
       const uniqueEmails = [...new Set(emails)];
-      if (emails.length !== uniqueEmails.length) {
+      if (emails?.length !== uniqueEmails.length) {
         throw new Error("400, Email of center contact must be unique");
       }
 
       const createdAt = new Date().toLocaleDateString("en-GB");
 
-      const idCenter = await centerCollection(ctx.db).insertOne({
+      const center = {
         ...args,
-        phone: args.phone || "",
-        email: args.email || "",
-        notes: args.notes || "",
-        contacts: args.contacts.map((c) => ({ ...c })),
+        contacts: args.contacts?.map((c) => ({ ...c })),
         createdAt,
+      };
+      const idCenter = await centerCollection(ctx.db).insertOne({
+        ...center,
       });
 
       return {
         _id: idCenter,
-        phone: args.phone || "",
-        email: args.email || "",
-        notes: args.notes || "",
-        createdAt,
-        ...args,
+        ...center,
       };
     } catch (error) {
       throw new Error("500, " + error);
@@ -88,9 +84,9 @@ export const Mutation = {
       if (!newCenterContact) {
         throw new Error("404, Center not found");
       }
-      return newCenterContact.contacts.filter(
-        (contact) => contact.email === args.email,
-      )[0];
+      return {
+        ...args,
+      };
     } catch (error) {
       throw new Error("500, " + error);
     }
@@ -128,9 +124,9 @@ export const Mutation = {
     }
   },
 
-  editCenterContacts: async (
+  editCenterContact: async (
     _parent: unknown,
-    args: MutationEditCenterContactsArgs,
+    args: MutationEditCenterContactArgs,
     ctx: Context,
   ): Promise<CenterContact> => {
     try {
@@ -226,28 +222,22 @@ export const Mutation = {
       }
 
       const timetable = setIdDays(args.timetable) as Timetable[];
-
-      const idGroup = await groupCollection(ctx.db).insertOne({
+      const newGroup = {
         ...args,
         id_group,
         timetable,
         center,
-        notes: args.notes || "",
         instructors: instructors || [],
         createdAt,
         students: [],
+      };
+      const idGroup = await groupCollection(ctx.db).insertOne({
+        ...newGroup,
       });
 
       return {
         _id: idGroup,
-        ...args,
-        timetable,
-        id_group,
-        center,
-        students: [],
-        instructors: instructors || [],
-        notes: args.notes || "",
-        createdAt,
+        ...newGroup,
       };
     } catch (error) {
       throw new Error("500, " + error);
@@ -314,10 +304,22 @@ export const Mutation = {
     ctx: Context,
   ): Promise<StudentModel> => {
     try {
-      const birthDate = validDate(args.birthDate);
-      const registrationDate = validDate(args.registrationDate);
-
       const state = StudentState.Active;
+      let newStudent = {
+        ...args,
+        state,
+        contacts: args.contacts?.map((c) => ({ ...c })),
+      };
+
+      if (args.birthDate) {
+        const birthDate = validDate(args.birthDate);
+        newStudent = { ...newStudent, birthDate };
+      }
+
+      if (args.registrationDate) {
+        const registrationDate = validDate(args.registrationDate);
+        newStudent = { ...newStudent, registrationDate };
+      }
 
       const groups = args.idGroups?.map((group) => new ObjectId(group));
       const existsGroups = await groupCollection(ctx.db).find({
@@ -327,24 +329,16 @@ export const Mutation = {
         throw new Error("404, Groups not found");
       }
 
-      const emails = args.contacts.map((contact) => contact.email);
-      const uniqueEmails = [...new Set(emails)];
-      if (emails.length !== uniqueEmails.length) {
-        throw new Error("Email of student contact must be unique");
+      if (args.contacts) {
+        const emails = args.contacts.map((contact) => contact.email);
+        const uniqueEmails = [...new Set(emails)];
+        if (emails.length !== uniqueEmails.length) {
+          throw new Error("Email of student contact must be unique");
+        }
       }
-      const contacts = args.contacts.map((contact) => ({
-        ...contact,
-        notes: contact.notes || "",
-      }));
 
       const idStudent = await studentCollection(ctx.db).insertOne({
-        ...args,
-        birthDate,
-        contacts,
-        state,
-        registrationDate,
-        descriptionAllergy: args.descriptionAllergy || "",
-        notes: args.notes || "",
+        ...newStudent,
       });
 
       await groupCollection(ctx.db).updateMany(
@@ -354,13 +348,7 @@ export const Mutation = {
 
       return {
         _id: idStudent,
-        state,
-        descriptionAllergy: args.descriptionAllergy || "",
-        notes: args.notes || "",
-        ...args,
-        contacts,
-        registrationDate,
-        birthDate,
+        ...newStudent,
       };
     } catch (error) {
       throw new Error("500, " + error);
@@ -384,7 +372,7 @@ export const Mutation = {
         {
           update: {
             $push: {
-              contacts: { $each: [{ ...args, notes: args.notes || "" }] },
+              contacts: { $each: [{ ...args }] },
             },
           },
           new: true,
@@ -393,9 +381,7 @@ export const Mutation = {
       if (!newStudentContact) {
         throw new Error("404, Student not found");
       }
-      return newStudentContact.contacts.filter(
-        (contact) => contact.email === args.email,
-      )[0];
+      return { ...args };
     } catch (error) {
       throw new Error("500, " + error);
     }
@@ -416,11 +402,6 @@ export const Mutation = {
         if (args.contacts.length !== uniqueEmails.length) {
           throw new Error("400, Emails of student contacts must be unique");
         }
-        const contacts = args.contacts.map((contact) => ({
-          ...contact,
-          notes: contact.notes || "",
-        }));
-        updateStudent = { ...updateStudent, contacts };
       }
 
       if (args.groups) {
@@ -491,9 +472,9 @@ export const Mutation = {
     }
   },
 
-  editStudentContacts: async (
+  editStudentContact: async (
     _parent: unknown,
-    args: MutationEditStudentContactsArgs,
+    args: MutationEditStudentContactArgs,
     ctx: Context,
   ): Promise<StudentContact> => {
     try {
@@ -522,7 +503,6 @@ export const Mutation = {
             send_info: args.send_info === undefined
               ? contact.send_info
               : args.send_info,
-            notes: args.notes || contact.notes,
           };
           return contactUpdate;
         }
@@ -569,10 +549,12 @@ export const Mutation = {
 
       const availability = setIdDays(args.availability) as Availability[];
 
-      const idInstructor = await instructorCollection(ctx.db).insertOne({
+      const newInstructor = {
         ...args,
         availability,
-        notes: args.notes || "",
+      };
+      const idInstructor = await instructorCollection(ctx.db).insertOne({
+        ...newInstructor,
       });
 
       await groupCollection(ctx.db).updateMany(
@@ -582,9 +564,7 @@ export const Mutation = {
 
       return {
         _id: idInstructor,
-        ...args,
-        notes: args.notes || "",
-        availability,
+        ...newInstructor,
       };
     } catch (error) {
       throw new Error("500, " + error);
