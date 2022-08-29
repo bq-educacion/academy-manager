@@ -370,6 +370,7 @@ const CreateStudent: FC<{
       {step === 3 && (
         <FillIn>
           <EndButton
+            main
             onClick={() => {
               refetch();
               changeTitle(t("pages.students.modal-create.title"));

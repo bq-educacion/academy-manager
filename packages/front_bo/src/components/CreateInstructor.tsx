@@ -745,6 +745,7 @@ const CreateInstructor: FC<{
       {step === 6 && (
         <FillIn>
           <EndButton
+            main
             onClick={() => {
               refetch();
               changeTitle(t("pages.instructors.modal-create.title"));

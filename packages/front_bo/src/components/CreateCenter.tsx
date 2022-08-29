@@ -280,6 +280,7 @@ const CreateCenter: FC<{
       {step === 4 && (
         <FillIn>
           <EndButton
+            main
             onClick={() => {
               refetch();
               changeTitle(t("pages.centers.modal-create.center.title"));
