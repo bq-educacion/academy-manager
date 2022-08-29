@@ -181,7 +181,7 @@ const GroupsPage: NextPage = () => {
                     {item.instructors?.map((elem) => elem.name).join(", ")}
                     {(item.instructors === undefined ||
                       item.instructors?.length === 0) &&
-                      t("components.table.no-instructor")}
+                      "-"}
                   </div>
                 ),
               },
@@ -208,8 +208,10 @@ const GroupsPage: NextPage = () => {
                 key: OrderFilterGroup.Start,
                 content: (item) => (
                   <div>
-                    {item.timetable?.map((elem) => elem.start).join(", ")}
-                    {(item.timetable === undefined ||
+                    {item.timetable?.every((elem) => elem.start !== "") &&
+                      item.timetable?.map((elem) => elem.start).join(", ")}
+                    {(item.timetable?.every((elem) => elem.start == "") ||
+                      item.timetable === undefined ||
                       item.timetable?.length === 0) &&
                       "-"}
                   </div>
@@ -220,8 +222,10 @@ const GroupsPage: NextPage = () => {
                 key: OrderFilterGroup.End,
                 content: (item) => (
                   <div>
-                    {item.timetable?.map((elem) => elem.end).join(", ")}
-                    {(item.timetable === undefined ||
+                    {item.timetable?.every((elem) => elem.end !== "") &&
+                      item.timetable?.map((elem) => elem.end).join(", ")}
+                    {(item.timetable?.every((elem) => elem.start == "") ||
+                      item.timetable === undefined ||
                       item.timetable?.length === 0) &&
                       "-"}
                   </div>
