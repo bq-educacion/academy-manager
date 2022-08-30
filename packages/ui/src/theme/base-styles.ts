@@ -146,7 +146,10 @@ const baseStyles = css`
     padding: 0;
     vertical-align: baseline;
   }
-  ::-webkit-scrollbar:vertical {
+  :not(.scrollbar)::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar::-webkit-scrollbar:vertical {
     display: block;
     width: 10px;
   }

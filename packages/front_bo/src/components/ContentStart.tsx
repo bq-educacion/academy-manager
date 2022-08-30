@@ -20,7 +20,7 @@ export const ContentStart: FC<{
       <styles.RainbowDivider />
       <ContentSubHeader>{childrenHeader}</ContentSubHeader>
       {childrenSubHeader && <>{childrenSubHeader}</>}
-      <ContentBody>{children}</ContentBody>
+      <ContentBody className="scrollbar">{children}</ContentBody>
     </ContentLayout>
   );
 };
