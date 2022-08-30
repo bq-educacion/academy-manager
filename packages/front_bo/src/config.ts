@@ -28,8 +28,6 @@ export const sections: ISection[] = [
   },
 ];
 
-export const centerLanguages: string[] = ["English", "Spanish"];
-
 export const courses: DropDownItem[] = [
   { label: "general.courses.1p", key: "1p" },
   { label: "general.courses.2p", key: "2p" },

@@ -16,15 +16,16 @@ import {
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
 import { FC, useEffect, useState } from "react";
-import { centerLanguages, Platforms, schedule, Tools, zones } from "../config";
+import { Platforms, schedule, Tools, zones } from "../config";
 import {
   AvailabilityInput,
   Days,
+  Languages,
   OrderFilterGroup,
   PreviousExperienceInstructor,
   StateInstructor,
   SummerAvailabilityInstructor,
-  TrainingInstructor,
+  TrainingInstructorInput,
   TypeVehicleInstructor,
   useCreateInstructorMutation,
   useGetGroupsQuery,
@@ -46,14 +47,14 @@ const CreateInstructor: FC<{
   const [emailPersonal, setEmailPersonal] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [state, setState] = useState<StateInstructor>();
-  const [education, setEducation] = useState<TrainingInstructor>();
+  const [education, setEducation] = useState<TrainingInstructorInput>();
   const [experience, setExperience] = useState<PreviousExperienceInstructor>();
   const [programming, setProgramming] = useState<boolean>();
   const [knowledge, setKnowledge] = useState<string>("");
   const [cvUrl, setCvUrl] = useState<string>("");
   const [tools, setTools] = useState<string[]>([]);
   const [platforms, setPlatforms] = useState<string[]>([]);
-  const [languages, setLanguages] = useState<string[]>([]);
+  const [languages, setLanguages] = useState<Languages[]>([]);
   const [availability, setavailability] = useState<AvailabilityInput[]>([]);
   const [monday, setMonday] = useState<string[]>([]);
   const [tuesday, setTuesday] = useState<string[]>([]);
@@ -254,13 +255,13 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <CheckBox
-                  option={education === TrainingInstructor.CareerInEducation}
+                  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                  option={education?.careerInEducation ? true : false}
                   setOption={() => {
-                    {
-                      education !== TrainingInstructor.CareerInEducation
-                        ? setEducation(TrainingInstructor.CareerInEducation)
-                        : setEducation(undefined);
-                    }
+                    setEducation({
+                      ...education,
+                      careerInEducation: !education?.careerInEducation,
+                    });
                   }}
                 />
                 <styles.P4>
@@ -269,13 +270,12 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <CheckBox
-                  option={education === TrainingInstructor.TechnicalCareer}
+                  option={education?.technicalCareer ? true : false}
                   setOption={() => {
-                    {
-                      education !== TrainingInstructor.TechnicalCareer
-                        ? setEducation(TrainingInstructor.TechnicalCareer)
-                        : setEducation(undefined);
-                    }
+                    setEducation({
+                      ...education,
+                      technicalCareer: !education?.technicalCareer,
+                    });
                   }}
                 />
                 <styles.P4>
@@ -414,15 +414,13 @@ const CreateInstructor: FC<{
             </FillIn>
             <FillIn>
               <OptionsBox
-                options={centerLanguages.map((elem) => {
-                  return {
-                    key: elem,
-                    label: t(`pages.centers.languages.${elem.toLowerCase()}`),
-                  };
-                })}
+                options={Object.values(Languages).map((language) => ({
+                  key: language,
+                  label: t(`pages.centers.languages.${language.toLowerCase()}`),
+                }))}
                 title={t("components.create-instructor.2.languages")}
                 results={languages}
-                setResults={setLanguages}
+                setResults={setLanguages as (languages: string[]) => void}
               />
             </FillIn>
           </ScrollDiv>

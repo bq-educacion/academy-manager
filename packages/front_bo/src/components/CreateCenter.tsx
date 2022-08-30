@@ -13,11 +13,11 @@ import {
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
 import { FC, useState } from "react";
-import { centerLanguages } from "../config";
 import {
   CenterActivityType,
   CenterContact,
   CenterNature,
+  Languages,
   useCreateCenterMutation,
 } from "../generated/graphql";
 import AddContact from "./AddContact";
@@ -37,7 +37,7 @@ const CreateCenter: FC<{
   const [natureSelection, setNatureSelection] = useState<
     CenterNature | undefined
   >(undefined);
-  const [languagesSelection, setLanguagesSelection] = useState<string[]>([]);
+  const [languagesSelection, setLanguagesSelection] = useState<Languages[]>([]);
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [city, setcity] = useState<string>("");
@@ -113,12 +113,14 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.languages`)}
             </styles.BoldP4>
             <DropDown
-              options={centerLanguages.map((lang) => ({
-                key: lang,
-                label: t(`pages.centers.languages.${lang.toLowerCase()}`),
+              options={Object.values(Languages).map((language) => ({
+                key: language,
+                label: t(`pages.centers.languages.${language.toLowerCase()}`),
               }))}
               selected={languagesSelection}
-              setSelected={setLanguagesSelection}
+              setSelected={
+                setLanguagesSelection as (selected: string[]) => void
+              }
               width="390px"
             />
           </FillIn>
@@ -192,7 +194,6 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.email`)}
               </styles.BoldP4>
               <InputSuper
-                type="email"
                 placeholder={t(
                   "components.create-center.2.subtitle.email-placeholder"
                 )}

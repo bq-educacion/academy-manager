@@ -1,6 +1,5 @@
 import {
   CheckBox,
-  colors,
   InputSuper,
   styles,
   useTranslate,
@@ -95,7 +94,6 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
@@ -111,7 +109,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -146,7 +143,6 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
@@ -162,7 +158,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -199,7 +194,6 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
@@ -215,7 +209,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -252,7 +245,6 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
@@ -268,7 +260,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -303,7 +294,6 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
@@ -319,7 +309,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -356,7 +345,6 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
@@ -372,7 +360,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -407,7 +394,6 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
@@ -423,7 +409,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
     </GridEnclouser>

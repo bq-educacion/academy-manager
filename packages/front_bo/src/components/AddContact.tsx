@@ -72,7 +72,6 @@ const AddContact: FC<{
             {t(`components.create-center.2.subtitle.email`)}
           </styles.BoldP4>
           <InputSuper
-            type="email"
             placeholder={t(
               "components.create-center.2.subtitle.email-placeholder"
             )}
