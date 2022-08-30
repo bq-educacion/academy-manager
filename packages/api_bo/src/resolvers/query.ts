@@ -126,6 +126,8 @@ export const Query = {
         {
           createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
+        { "course.ESO": { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { "course.EPO": { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           "timetable.day": {
             $regex: `.*${args.searchText}.*`,
@@ -170,6 +172,7 @@ export const Query = {
     const OrderFilter = {
       id_group: "id_group",
       modality: "modality",
+      course: "course",
       instructors: "instructorsName.name",
       center: "centersName.name",
       id_day: "timetable.id_day",

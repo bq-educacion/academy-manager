@@ -82,6 +82,12 @@ export enum CenterNature {
   Public = "PUBLIC",
 }
 
+export type Course = {
+  __typename?: "Course";
+  EPO: Array<Scalars["String"]>;
+  ESO: Array<Scalars["String"]>;
+};
+
 export enum Days {
   Friday = "FRIDAY",
   Monday = "MONDAY",
@@ -95,6 +101,7 @@ export enum Days {
 export type Group = {
   __typename?: "Group";
   center: Center;
+  course: Course;
   createdAt: Scalars["String"];
   id: Scalars["ID"];
   id_group: Scalars["Number"];
@@ -156,6 +163,7 @@ export type Mutation = {
   createGroup: Group;
   createInstructor: Instructor;
   createStudent: Student;
+  dropCollections: Scalars["String"];
   editCenter: Center;
   editCenterContact: CenterContact;
   editGroup: Group;
@@ -335,6 +343,7 @@ export enum OrderFilterCenter {
 
 export enum OrderFilterGroup {
   Center = "center",
+  Course = "course",
   End = "end",
   IdDay = "id_day",
   IdGroup = "id_group",
@@ -669,6 +678,7 @@ export type ResolversTypes = ResolversObject<{
   CenterContact: ResolverTypeWrapper<CenterContact>;
   CenterContactInput: CenterContactInput;
   CenterNature: CenterNature;
+  Course: ResolverTypeWrapper<Course>;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
   GroupModality: GroupModality;
@@ -711,6 +721,7 @@ export type ResolversParentTypes = ResolversObject<{
   Center: Center;
   CenterContact: CenterContact;
   CenterContactInput: CenterContactInput;
+  Course: Course;
   Group: Group;
   ID: Scalars["ID"];
   Instructor: Instructor;
@@ -787,12 +798,23 @@ export type CenterContactResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type CourseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Course"] =
+    ResolversParentTypes["Course"],
+> = ResolversObject<{
+  EPO?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  ESO?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type GroupResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Group"] =
     ResolversParentTypes["Group"],
 > = ResolversObject<{
   center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
+  course?: Resolver<ResolversTypes["Course"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   id_group?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
@@ -964,6 +986,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateStudentArgs, "course" | "idGroups" | "name">
   >;
+  dropCollections?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   editCenter?: Resolver<
     ResolversTypes["Center"],
     ParentType,
@@ -1230,6 +1253,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Availability?: AvailabilityResolvers<ContextType>;
   Center?: CenterResolvers<ContextType>;
   CenterContact?: CenterContactResolvers<ContextType>;
+  Course?: CourseResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
   Instructor?: InstructorResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

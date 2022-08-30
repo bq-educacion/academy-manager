@@ -25,11 +25,17 @@ export const typeDefs = gql`
   enum OrderFilterGroup {
     id_group
     center
+    course
     instructors
     id_day
     start
     end
     modality
+  }
+
+  type Course{
+    EPO:[String!]!
+    ESO:[String!]!
   }
 
   type Timetable {
@@ -57,6 +63,7 @@ export const typeDefs = gql`
     id: ID!
     id_group: Number!
     name: String!
+    course: Course!
     modality: GroupModality!
     type: GroupType!
     createdAt: String!
@@ -79,6 +86,7 @@ export const typeDefs = gql`
     getGroup(id: String!): Group!
   }
   extend type Mutation {
+    dropCollections: String!
     createGroup(
       idCenter: String!
       name: String!
