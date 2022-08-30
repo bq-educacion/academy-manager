@@ -77,17 +77,6 @@ const ContentBody = styled.div`
   overflow: scroll;
   overflow-x: scroll;
   overflow-y: overlay;
-  ::-webkit-scrollbar:vertical {
-    display: block;
-    width: 10px;
-  }
-  ::-webkit-scrollbar-thumb {
-    padding-top: 30px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 9999px;
-    border: 3px solid transparent;
-    background-clip: padding-box;
-  }
   ::-webkit-scrollbar-track {
     margin-top: 40px;
   }

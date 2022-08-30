@@ -146,6 +146,16 @@ const baseStyles = css`
     padding: 0;
     vertical-align: baseline;
   }
+  ::-webkit-scrollbar:vertical {
+    display: block;
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
 `;
 
 export default baseStyles;
