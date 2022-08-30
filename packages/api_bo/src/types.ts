@@ -401,6 +401,7 @@ export type PaginatedStudents = {
 
 export type Query = {
   __typename?: "Query";
+  checkCorporateEmail: Scalars["String"];
   getCenter: Center;
   getCenters: PaginatedCenters;
   getGroup: Group;
@@ -409,6 +410,10 @@ export type Query = {
   getInstructors: PaginatedInstructors;
   getStudent: Student;
   getStudents: PaginatedStudents;
+};
+
+export type QueryCheckCorporateEmailArgs = {
+  email: Scalars["String"];
 };
 
 export type QueryGetCenterArgs = {
@@ -1059,6 +1064,12 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes["Query"] =
     ResolversParentTypes["Query"],
 > = ResolversObject<{
+  checkCorporateEmail?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryCheckCorporateEmailArgs, "email">
+  >;
   getCenter?: Resolver<
     ResolversTypes["Center"],
     ParentType,

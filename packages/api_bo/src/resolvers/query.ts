@@ -11,6 +11,7 @@ import {
   PaginatedGroups,
   PaginatedInstructors,
   PaginatedStudents,
+  QueryCheckCorporateEmailArgs,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
@@ -301,6 +302,24 @@ export const Query = {
         throw new Error("404, Student not found");
       }
       return student;
+    } catch (error) {
+      throw new Error("500, " + error);
+    }
+  },
+
+  checkCorporateEmail: async (
+    _parent: unknown,
+    args: QueryCheckCorporateEmailArgs,
+    ctx: Context,
+  ): Promise<string> => {
+    try {
+      const instructor = await instructorCollection(ctx.db).findOne({
+        corporateEmail: args.email,
+      });
+      if (instructor) {
+        throw new Error("400, Corporate email must be unique");
+      }
+      return args.email;
     } catch (error) {
       throw new Error("500, " + error);
     }

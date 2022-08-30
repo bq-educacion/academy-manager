@@ -88,6 +88,8 @@ export const typeDefs = gql`
   }
 
   extend type Query {
+    checkCorporateEmail(email: String!): String!
+
     getInstructors(
       searchText: String
       orderFilter: OrderFilterInstructor
