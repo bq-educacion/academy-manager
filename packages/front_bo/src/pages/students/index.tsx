@@ -2,12 +2,7 @@ import { NextPage } from "next";
 import { Layout, Modal, Table } from "../../components";
 import { sections } from "../../config";
 import withApollo from "../../apollo/withApollo";
-import {
-  FirstActionButton,
-  LoadingOvercast,
-  styles,
-  useTranslate,
-} from "@academy-manager/ui";
+import { FirstActionButton, styles, useTranslate } from "@academy-manager/ui";
 import { useEffect, useState } from "react";
 import {
   OrderFilterStudent,
@@ -88,20 +83,20 @@ const StudentsPage: NextPage = () => {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
 
-  const [loadingAnimation, setLoadingAnimation] = useState<boolean>(false);
-  useEffect(() => {
-    if (loading) {
-      setLoadingAnimation(true);
-    } else {
-      setTimeout(() => {
-        setLoadingAnimation(false);
-      }, 500);
-    }
-  }, [loading]);
+  // const [loadingAnimation, setLoadingAnimation] = useState<boolean>(false);
+  // useEffect(() => {
+  //   if (loading) {
+  //     setLoadingAnimation(true);
+  //   } else {
+  //     setTimeout(() => {
+  //       setLoadingAnimation(false);
+  //     }, 500);
+  //   }
+  // }, [loading]);
 
   return (
     <>
-      {loadingAnimation && <LoadingOvercast />}
+      {/* {loadingAnimation && <LoadingOvercast />} */}
       {modalOpen && (
         <Modal
           setModal={setModalOpen}

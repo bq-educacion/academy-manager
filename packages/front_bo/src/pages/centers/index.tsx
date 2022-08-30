@@ -6,7 +6,6 @@ import {
   colors,
   FirstActionButton,
   Icon,
-  LoadingOvercast,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
@@ -77,20 +76,20 @@ const CentersPage: NextPage = () => {
   if (error || componentError) {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
-  const [loadingAnimation, setLoadingAnimation] = useState<boolean>(false);
-  useEffect(() => {
-    if (loading) {
-      setLoadingAnimation(true);
-    } else {
-      setTimeout(() => {
-        setLoadingAnimation(false);
-      }, 500);
-    }
-  }, [loading]);
+  // const [loadingAnimation, setLoadingAnimation] = useState<boolean>(false);
+  // useEffect(() => {
+  //   if (loading) {
+  //     setLoadingAnimation(true);
+  //   } else {
+  //     setTimeout(() => {
+  //       setLoadingAnimation(false);
+  //     }, 500);
+  //   }
+  // }, [loading]);
 
   return (
     <>
-      {loadingAnimation && <LoadingOvercast />}
+      {/* {loadingAnimation && <LoadingOvercast />} */}
       {modalOpen && (
         <Modal
           setModal={setModalOpen}
