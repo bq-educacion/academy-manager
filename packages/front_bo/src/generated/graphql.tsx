@@ -32,12 +32,12 @@ export type Center = {
   __typename?: 'Center';
   address: Scalars['String'];
   city: Scalars['String'];
-  contacts: Array<CenterContact>;
+  contacts?: Maybe<Array<CenterContact>>;
   createdAt: Scalars['String'];
   email?: Maybe<Scalars['String']>;
   groups: Array<Group>;
   id: Scalars['ID'];
-  languages: Array<Scalars['String']>;
+  languages: Array<Languages>;
   name: Scalars['String'];
   nature: CenterNature;
   notes?: Maybe<Scalars['String']>;
@@ -111,26 +111,31 @@ export type Instructor = {
   __typename?: 'Instructor';
   areas: Array<Scalars['String']>;
   availability: Array<Availability>;
-  corporateEmail: Scalars['String'];
+  corporateEmail?: Maybe<Scalars['String']>;
   geographicalAvailability: Scalars['String'];
   groups: Array<Group>;
   id: Scalars['ID'];
-  knowledge: Scalars['String'];
-  languages: Array<Scalars['String']>;
-  materialsExperience: Array<Scalars['String']>;
+  knowledge?: Maybe<Scalars['String']>;
+  languages?: Maybe<Array<Languages>>;
+  materialsExperience?: Maybe<Array<Scalars['String']>>;
   name: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
-  personalEmail: Scalars['String'];
-  phone: Scalars['String'];
-  platformEducationExperience: Array<Scalars['String']>;
+  personalEmail?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  platformEducationExperience?: Maybe<Array<Scalars['String']>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars['Boolean'];
   state: StateInstructor;
-  summerAvailability: SummerAvailabilityInstructor;
+  summerAvailability?: Maybe<SummerAvailabilityInstructor>;
   training: TrainingInstructor;
-  urlCV: Scalars['String'];
+  urlCV?: Maybe<Scalars['String']>;
   vehicle: TypeVehicleInstructor;
 };
+
+export enum Languages {
+  English = 'English',
+  Spanish = 'Spanish'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -141,11 +146,11 @@ export type Mutation = {
   createInstructor: Instructor;
   createStudent: Student;
   editCenter: Center;
-  editCenterContacts: CenterContact;
+  editCenterContact: CenterContact;
   editGroup: Group;
   editInstructor: Instructor;
   editStudent: Student;
-  editStudentContacts: StudentContact;
+  editStudentContact: StudentContact;
 };
 
 
@@ -161,7 +166,6 @@ export type MutationAddStudentContactArgs = {
   email: Scalars['String'];
   idStudent: Scalars['String'];
   name: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
   phone: Scalars['String'];
   send_info: Scalars['Boolean'];
 };
@@ -170,9 +174,9 @@ export type MutationAddStudentContactArgs = {
 export type MutationCreateCenterArgs = {
   address: Scalars['String'];
   city: Scalars['String'];
-  contacts: Array<CenterContactInput>;
+  contacts?: InputMaybe<Array<CenterContactInput>>;
   email?: InputMaybe<Scalars['String']>;
-  languages: Array<Scalars['String']>;
+  languages: Array<Languages>;
   name: Scalars['String'];
   nature: CenterNature;
   notes?: InputMaybe<Scalars['String']>;
@@ -195,42 +199,42 @@ export type MutationCreateGroupArgs = {
 export type MutationCreateInstructorArgs = {
   areas: Array<Scalars['String']>;
   availability: Array<AvailabilityInput>;
-  corporateEmail: Scalars['String'];
+  corporateEmail?: InputMaybe<Scalars['String']>;
   geographicalAvailability: Scalars['String'];
   groups: Array<Scalars['String']>;
-  knowledge: Scalars['String'];
-  languages: Array<Scalars['String']>;
-  materialsExperience: Array<Scalars['String']>;
+  knowledge?: InputMaybe<Scalars['String']>;
+  languages?: InputMaybe<Array<Languages>>;
+  materialsExperience?: InputMaybe<Array<Scalars['String']>>;
   name: Scalars['String'];
   notes?: InputMaybe<Scalars['String']>;
-  personalEmail: Scalars['String'];
-  phone: Scalars['String'];
-  platformEducationExperience: Array<Scalars['String']>;
+  personalEmail?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars['Boolean'];
   state: StateInstructor;
-  summerAvailability: SummerAvailabilityInstructor;
-  training: TrainingInstructor;
-  urlCV: Scalars['String'];
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training: TrainingInstructorInput;
+  urlCV?: InputMaybe<Scalars['String']>;
   vehicle: TypeVehicleInstructor;
 };
 
 
 export type MutationCreateStudentArgs = {
-  allergies: Scalars['Boolean'];
-  birthDate: Scalars['String'];
-  collectionPermit: Scalars['String'];
-  contacts: Array<StudentContactInput>;
+  allergies?: InputMaybe<Scalars['Boolean']>;
+  birthDate?: InputMaybe<Scalars['String']>;
+  collectionPermit?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
   course: Scalars['String'];
   descriptionAllergy?: InputMaybe<Scalars['String']>;
-  goesAlone: Scalars['Boolean'];
+  goesAlone?: InputMaybe<Scalars['Boolean']>;
   idGroups: Array<Scalars['String']>;
-  imageAuthorisation: Scalars['Boolean'];
+  imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
   notes?: InputMaybe<Scalars['String']>;
-  oldStudent: Scalars['Boolean'];
-  registrationDate: Scalars['String'];
-  signedMandate: Scalars['Boolean'];
+  oldStudent?: InputMaybe<Scalars['Boolean']>;
+  registrationDate?: InputMaybe<Scalars['String']>;
+  signedMandate?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -240,7 +244,7 @@ export type MutationEditCenterArgs = {
   contacts?: InputMaybe<Array<CenterContactInput>>;
   email?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
-  languages?: InputMaybe<Array<Scalars['String']>>;
+  languages?: InputMaybe<Array<Languages>>;
   name?: InputMaybe<Scalars['String']>;
   nature?: InputMaybe<CenterNature>;
   notes?: InputMaybe<Scalars['String']>;
@@ -249,7 +253,7 @@ export type MutationEditCenterArgs = {
 };
 
 
-export type MutationEditCenterContactsArgs = {
+export type MutationEditCenterContactArgs = {
   email?: InputMaybe<Scalars['String']>;
   idCenter: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
@@ -278,7 +282,7 @@ export type MutationEditInstructorArgs = {
   groups?: InputMaybe<Array<Scalars['String']>>;
   id: Scalars['String'];
   knowledge?: InputMaybe<Scalars['String']>;
-  languages?: InputMaybe<Array<Scalars['String']>>;
+  languages?: InputMaybe<Array<Languages>>;
   materialsExperience?: InputMaybe<Array<Scalars['String']>>;
   name?: InputMaybe<Scalars['String']>;
   notes?: InputMaybe<Scalars['String']>;
@@ -289,7 +293,7 @@ export type MutationEditInstructorArgs = {
   programmingExperience?: InputMaybe<Scalars['Boolean']>;
   state?: InputMaybe<StateInstructor>;
   summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
-  training?: InputMaybe<TrainingInstructor>;
+  training?: InputMaybe<TrainingInstructorInput>;
   urlCV?: InputMaybe<Scalars['String']>;
   vehicle?: InputMaybe<TypeVehicleInstructor>;
 };
@@ -313,11 +317,10 @@ export type MutationEditStudentArgs = {
 };
 
 
-export type MutationEditStudentContactsArgs = {
+export type MutationEditStudentContactArgs = {
   email?: InputMaybe<Scalars['String']>;
   idStudent: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
-  notes?: InputMaybe<Scalars['String']>;
   originEmail: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
   send_info?: InputMaybe<Scalars['Boolean']>;
@@ -472,21 +475,21 @@ export enum StateInstructor {
 
 export type Student = {
   __typename?: 'Student';
-  allergies: Scalars['Boolean'];
-  birthDate: Scalars['String'];
-  collectionPermit: Scalars['String'];
-  contacts: Array<StudentContact>;
+  allergies?: Maybe<Scalars['Boolean']>;
+  birthDate?: Maybe<Scalars['String']>;
+  collectionPermit?: Maybe<Scalars['String']>;
+  contacts?: Maybe<Array<StudentContact>>;
   course: Scalars['String'];
   descriptionAllergy?: Maybe<Scalars['String']>;
-  goesAlone: Scalars['Boolean'];
+  goesAlone?: Maybe<Scalars['Boolean']>;
   groups: Array<Group>;
   id: Scalars['ID'];
-  imageAuthorisation: Scalars['Boolean'];
+  imageAuthorisation?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
-  oldStudent: Scalars['Boolean'];
-  registrationDate: Scalars['String'];
-  signedMandate: Scalars['Boolean'];
+  oldStudent?: Maybe<Scalars['Boolean']>;
+  registrationDate?: Maybe<Scalars['String']>;
+  signedMandate?: Maybe<Scalars['Boolean']>;
   state: StudentState;
 };
 
@@ -494,7 +497,6 @@ export type StudentContact = {
   __typename?: 'StudentContact';
   email: Scalars['String'];
   name: Scalars['String'];
-  notes?: Maybe<Scalars['String']>;
   phone: Scalars['String'];
   send_info: Scalars['Boolean'];
 };
@@ -502,7 +504,6 @@ export type StudentContact = {
 export type StudentContactInput = {
   email: Scalars['String'];
   name: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
   phone: Scalars['String'];
   send_info: Scalars['Boolean'];
 };
@@ -543,10 +544,16 @@ export enum SummerAvailabilityInstructor {
   Yes = 'YES'
 }
 
-export enum TrainingInstructor {
-  CareerInEducation = 'CAREER_IN_EDUCATION',
-  TechnicalCareer = 'TECHNICAL_CAREER'
-}
+export type TrainingInstructor = {
+  __typename?: 'trainingInstructor';
+  careerInEducation?: Maybe<Scalars['Boolean']>;
+  technicalCareer?: Maybe<Scalars['Boolean']>;
+};
+
+export type TrainingInstructorInput = {
+  careerInEducation?: InputMaybe<Scalars['Boolean']>;
+  technicalCareer?: InputMaybe<Scalars['Boolean']>;
+};
 
 export type CreateCenterMutationVariables = Exact<{
   name: Scalars['String'];
@@ -554,7 +561,7 @@ export type CreateCenterMutationVariables = Exact<{
   city: Scalars['String'];
   type: Array<CenterActivityType> | CenterActivityType;
   nature: CenterNature;
-  languages: Array<Scalars['String']> | Scalars['String'];
+  languages: Array<Languages> | Languages;
   phone?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   contacts: Array<CenterContactInput> | CenterContactInput;
@@ -572,7 +579,7 @@ export type GetCentersFQueryVariables = Exact<{
 }>;
 
 
-export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<string>, city: string, nature: CenterNature, type: Array<CenterActivityType> }> } };
+export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<Languages>, city: string, nature: CenterNature, type: Array<CenterActivityType> }> } };
 
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
@@ -603,14 +610,14 @@ export type CreateInstructorMutationVariables = Exact<{
   personalEmail: Scalars['String'];
   phone: Scalars['String'];
   state: StateInstructor;
-  training: TrainingInstructor;
+  training: TrainingInstructorInput;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars['Boolean'];
   knowledge: Scalars['String'];
   urlCv: Scalars['String'];
   materialsExperience: Array<Scalars['String']> | Scalars['String'];
   platformEducationExperience: Array<Scalars['String']> | Scalars['String'];
-  languages: Array<Scalars['String']> | Scalars['String'];
+  languages: Array<Languages> | Languages;
   availability: Array<AvailabilityInput> | AvailabilityInput;
   summerAvailability: SummerAvailabilityInstructor;
   vehicle: TypeVehicleInstructor;
@@ -631,7 +638,7 @@ export type GetInstructorsQueryVariables = Exact<{
 }>;
 
 
-export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, state: StateInstructor, vehicle: TypeVehicleInstructor, languages: Array<string>, summerAvailability: SummerAvailabilityInstructor, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
+export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, state: StateInstructor, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
 
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -680,7 +687,7 @@ export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename
 
 
 export const CreateCenterDocument = gql`
-    mutation CreateCenter($name: String!, $address: String!, $city: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [String!]!, $phone: String, $email: String, $contacts: [CenterContactInput!]!) {
+    mutation CreateCenter($name: String!, $address: String!, $city: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [Languages!]!, $phone: String, $email: String, $contacts: [CenterContactInput!]!) {
   createCenter(
     name: $name
     address: $address
@@ -898,7 +905,7 @@ export type GetGroupsQueryHookResult = ReturnType<typeof useGetGroupsQuery>;
 export type GetGroupsLazyQueryHookResult = ReturnType<typeof useGetGroupsLazyQuery>;
 export type GetGroupsQueryResult = Apollo.QueryResult<GetGroupsQuery, GetGroupsQueryVariables>;
 export const CreateInstructorDocument = gql`
-    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $state: StateInstructor!, $training: trainingInstructor!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [String!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: String!, $areas: [String!]!, $groups: [String!]!) {
+    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $state: StateInstructor!, $training: trainingInstructorInput!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [Languages!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: String!, $areas: [String!]!, $groups: [String!]!) {
   createInstructor(
     name: $name
     corporateEmail: $corporateEmail

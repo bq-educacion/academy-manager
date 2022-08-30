@@ -91,7 +91,7 @@ const InstructorsPage: NextPage = () => {
     } else {
       setTimeout(() => {
         setLoadingAnimation(false);
-      }, 1000);
+      }, 500);
     }
   }, [loading]);
 

@@ -4,14 +4,14 @@ mutation CreateInstructor(
   $personalEmail: String!
   $phone: String!
   $state: StateInstructor!
-  $training: trainingInstructor!
+  $training: trainingInstructorInput!
   $previousExperience: previousExperienceInstructor!
   $programmingExperience: Boolean!
   $knowledge: String!
   $urlCv: String!
   $materialsExperience: [String!]!
   $platformEducationExperience: [String!]!
-  $languages: [String!]!
+  $languages: [Languages!]!
   $availability: [AvailabilityInput!]!
   $summerAvailability: summerAvailabilityInstructor!
   $vehicle: TypeVehicleInstructor!
