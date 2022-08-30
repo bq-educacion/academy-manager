@@ -75,30 +75,20 @@ const ContentBody = styled.div`
   flex-direction: row;
   align-items: flex-start;
   overflow: scroll;
-  overflow-x: hidden;
+  overflow-x: scroll;
   overflow-y: overlay;
   ::-webkit-scrollbar:vertical {
     display: block;
-  }
-  ::-webkit-scrollbar {
     width: 10px;
   }
   ::-webkit-scrollbar-thumb {
-    padding: 5px;
+    padding-top: 30px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 9999px;
     border: 3px solid transparent;
     background-clip: padding-box;
   }
-  ::-webkit-scrollbar-button {
-    height: 20px;
+  ::-webkit-scrollbar-track {
+    margin-top: 40px;
   }
-  /*
-   ::-webkit-scrollbar-track { 
-    height: 10px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border: 6px solid transparent;
-    background-clip: padding-box; 
-    border-radius: 10px;
-  } */
 `;
