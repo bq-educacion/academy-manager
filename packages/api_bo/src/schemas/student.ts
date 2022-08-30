@@ -27,7 +27,6 @@ export const typeDefs = gql`
     email: String!
     phone: String!
     send_info: Boolean!
-    notes: String
   }
 
   input StudentContactInput {
@@ -35,25 +34,24 @@ export const typeDefs = gql`
     email: String!
     phone: String!
     send_info: Boolean!
-    notes: String
   }
 
   type Student {
     id: ID!
     name: String!
-    birthDate: String!
+    birthDate: String
     course: String!
     state: StudentState!
-    registrationDate: String!
-    allergies: Boolean!
+    registrationDate: String
+    allergies: Boolean
     descriptionAllergy: String
-    oldStudent: Boolean!
-    signedMandate: Boolean!
-    imageAuthorisation: Boolean!
-    collectionPermit: String!
-    goesAlone: Boolean!
+    oldStudent: Boolean
+    signedMandate: Boolean
+    imageAuthorisation: Boolean
+    collectionPermit: String
+    goesAlone: Boolean
     notes: String
-    contacts: [StudentContact!]!
+    contacts: [StudentContact!]
     groups: [Group!]!
   }
 
@@ -73,17 +71,17 @@ export const typeDefs = gql`
     createStudent(
       idGroups: [String!]!
       name: String!
-      birthDate: String!
+      birthDate: String
       course: String!
-      registrationDate: String!
-      allergies: Boolean!
+      registrationDate: String
+      allergies: Boolean
       descriptionAllergy: String
-      oldStudent: Boolean!
-      signedMandate: Boolean!
-      imageAuthorisation: Boolean!
-      collectionPermit: String!
-      goesAlone: Boolean!
-      contacts: [StudentContactInput!]!
+      oldStudent: Boolean
+      signedMandate: Boolean
+      imageAuthorisation: Boolean
+      collectionPermit: String
+      goesAlone: Boolean
+      contacts: [StudentContactInput!]
       notes: String
     ): Student!
 
@@ -93,7 +91,6 @@ export const typeDefs = gql`
       email: String!
       phone: String!
       send_info: Boolean!
-      notes: String
     ): StudentContact!
     
     editStudent(
@@ -112,14 +109,13 @@ export const typeDefs = gql`
       contacts: [StudentContactInput!]
       notes: String): Student!
 
-    editStudentContacts(
+    editStudentContact(
       idStudent: String!
       originEmail: String!
       name: String
       email: String
       phone: String
       send_info: Boolean
-      notes: String
     ): StudentContact!
   }
 `;

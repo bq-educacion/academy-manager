@@ -16,15 +16,20 @@ export const typeDefs = gql`
     EXTRACURRICULARS_ONLY
   }
 
-  enum trainingInstructor {
-    CAREER_IN_EDUCATION
-    TECHNICAL_CAREER
-  }
-
   enum previousExperienceInstructor {
     YES
     NO
     NO_BUT_INTERESTED
+  }
+
+  type trainingInstructor {
+    careerInEducation: Boolean
+    technicalCareer: Boolean
+  }
+
+  input trainingInstructorInput {
+    careerInEducation: Boolean
+    technicalCareer: Boolean
   }
 
   type Availability {
@@ -61,20 +66,20 @@ export const typeDefs = gql`
   type Instructor {
     id: ID!
     name: String!
-    corporateEmail: String!
-    personalEmail: String!
-    phone: String!
+    corporateEmail: String
+    personalEmail: String
+    phone: String
     state: StateInstructor!
     training: trainingInstructor!
     previousExperience: previousExperienceInstructor!
     programmingExperience: Boolean!
-    knowledge: String!
-    urlCV: String!
-    materialsExperience: [String!]!
-    platformEducationExperience: [String!]!
-    languages: [String!]!
+    knowledge: String
+    urlCV: String
+    materialsExperience: [String!]
+    platformEducationExperience: [String!]
+    languages: [Languages!]
     availability: [Availability!]!
-    summerAvailability: summerAvailabilityInstructor!
+    summerAvailability: summerAvailabilityInstructor
     vehicle: TypeVehicleInstructor!
     geographicalAvailability: String!
     areas: [String!]!
@@ -97,20 +102,20 @@ export const typeDefs = gql`
   extend type Mutation {
     createInstructor(
       name: String!
-      corporateEmail: String!
-      personalEmail: String!
-      phone: String!
+      corporateEmail: String
+      personalEmail: String
+      phone: String
       state: StateInstructor!
-      training: trainingInstructor!
+      training: trainingInstructorInput!
       previousExperience: previousExperienceInstructor!
       programmingExperience: Boolean!
-      knowledge: String!
-      urlCV: String!
-      materialsExperience: [String!]!
-      platformEducationExperience: [String!]!
-      languages: [String!]!
+      knowledge: String
+      urlCV: String
+      materialsExperience: [String!]
+      platformEducationExperience: [String!]
+      languages: [Languages!]
       availability: [AvailabilityInput!]!
-      summerAvailability: summerAvailabilityInstructor!
+      summerAvailability: summerAvailabilityInstructor
       vehicle: TypeVehicleInstructor!
       geographicalAvailability: String!
       areas: [String!]!
@@ -126,14 +131,14 @@ export const typeDefs = gql`
       phone:String
       state:StateInstructor
       notes:String
-      training:trainingInstructor
+      training:trainingInstructorInput
       previousExperience:previousExperienceInstructor
       programmingExperience:Boolean
       knowledge:String
       urlCV:String
       materialsExperience: [String!]
       platformEducationExperience: [String!]
-      languages: [String!]
+      languages: [Languages!]
       vehicle:TypeVehicleInstructor
       geographicalAvailability:String
       areas: [String!]
