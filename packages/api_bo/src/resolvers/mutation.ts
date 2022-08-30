@@ -8,11 +8,11 @@ import {
   MutationCreateInstructorArgs,
   MutationCreateStudentArgs,
   MutationEditCenterArgs,
-  MutationEditCenterContactsArgs,
+  MutationEditCenterContactArgs,
   MutationEditGroupArgs,
   MutationEditInstructorArgs,
   MutationEditStudentArgs,
-  MutationEditStudentContactsArgs,
+  MutationEditStudentContactArgs,
   StudentContact,
   StudentState,
   Timetable,
@@ -28,6 +28,8 @@ import {
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { validDate } from "../lib/validDate.ts";
+import { checkNotNull } from "../lib/checkNotNull.ts";
+import { validHour } from "../lib/validHour.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -36,30 +38,33 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
-      const emails = args.contacts.map((contact) => contact.email);
-      const uniqueEmails = [...new Set(emails)];
-      if (emails.length !== uniqueEmails.length) {
-        throw new Error("400, Email of center contact must be unique");
+      checkNotNull(args);
+      if (args.email) {
+        const email = await centerCollection(ctx.db).findOne({
+          email: args.email,
+        });
+        if (email) {
+          throw new Error("400, Email must be unique");
+        }
       }
 
       const createdAt = new Date().toLocaleDateString("en-GB");
 
-      const idCenter = await centerCollection(ctx.db).insertOne({
+      let center = {
         ...args,
-        phone: args.phone || "",
-        email: args.email || "",
-        notes: args.notes || "",
-        contacts: args.contacts.map((c) => ({ ...c })),
         createdAt,
+      };
+
+      if (args.contacts) {
+        center = { ...center, contacts: args.contacts?.map((c) => ({ ...c })) };
+      }
+      const idCenter = await centerCollection(ctx.db).insertOne({
+        ...center,
       });
 
       return {
         _id: idCenter,
-        phone: args.phone || "",
-        email: args.email || "",
-        notes: args.notes || "",
-        createdAt,
-        ...args,
+        ...center,
       };
     } catch (error) {
       throw new Error("500, " + error);
@@ -72,12 +77,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterContact> => {
     try {
-      const contact = await centerCollection(ctx.db).findOne({
-        _id: new ObjectId(args.idCenter),
-        contacts: { $elemMatch: { email: args.email } },
-      });
-      if (contact) throw new Error("404, Contact already exists");
-
+      checkNotNull(args);
       const newCenterContact = await centerCollection(ctx.db).findAndModify(
         { _id: new ObjectId(args.idCenter) },
         {
@@ -88,9 +88,9 @@ export const Mutation = {
       if (!newCenterContact) {
         throw new Error("404, Center not found");
       }
-      return newCenterContact.contacts.filter(
-        (contact) => contact.email === args.email,
-      )[0];
+      return {
+        ...args,
+      };
     } catch (error) {
       throw new Error("500, " + error);
     }
@@ -102,15 +102,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<CenterModel> => {
     try {
-      if (args.contacts) {
-        const uniqueEmails = [
-          ...new Set(args.contacts.map((contact) => contact.email)),
-        ];
-        if (args.contacts.length !== uniqueEmails.length) {
-          throw new Error("400, Emails of center contacts must be unique");
-        }
-      }
-
+      checkNotNull(args);
       // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
       const newCenter = await centerCollection(ctx.db).findAndModify(
         { _id: new ObjectId(args.id) },
@@ -128,12 +120,13 @@ export const Mutation = {
     }
   },
 
-  editCenterContacts: async (
+  editCenterContact: async (
     _parent: unknown,
-    args: MutationEditCenterContactsArgs,
+    args: MutationEditCenterContactArgs,
     ctx: Context,
   ): Promise<CenterContact> => {
     try {
+      checkNotNull(args);
       const contactsCenter = await centerCollection(ctx.db)
         .find(
           {
@@ -185,6 +178,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<GroupModel> => {
     try {
+      checkNotNull(args);
       const group = await groupCollection(ctx.db).findOne({
         center: new ObjectId(args.idCenter),
         name: { $regex: args.name, $options: "i" },
@@ -226,28 +220,23 @@ export const Mutation = {
       }
 
       const timetable = setIdDays(args.timetable) as Timetable[];
-
-      const idGroup = await groupCollection(ctx.db).insertOne({
+      validHour(timetable);
+      const newGroup = {
         ...args,
         id_group,
         timetable,
         center,
-        notes: args.notes || "",
         instructors: instructors || [],
         createdAt,
         students: [],
+      };
+      const idGroup = await groupCollection(ctx.db).insertOne({
+        ...newGroup,
       });
 
       return {
         _id: idGroup,
-        ...args,
-        timetable,
-        id_group,
-        center,
-        students: [],
-        instructors: instructors || [],
-        notes: args.notes || "",
-        createdAt,
+        ...newGroup,
       };
     } catch (error) {
       throw new Error("500, " + error);
@@ -260,6 +249,7 @@ export const Mutation = {
     ctx: Context,
   ): Promise<GroupModel> => {
     try {
+      checkNotNull(args);
       let updateGroup = { ...args } as Partial<GroupModel>;
 
       if (args.instructors) {
@@ -289,6 +279,7 @@ export const Mutation = {
 
       if (args.timetable) {
         const timetable = setIdDays(args.timetable) as Timetable[];
+        validHour(timetable);
         updateGroup = { ...updateGroup, timetable };
       }
 
@@ -314,10 +305,22 @@ export const Mutation = {
     ctx: Context,
   ): Promise<StudentModel> => {
     try {
-      const birthDate = validDate(args.birthDate);
-      const registrationDate = validDate(args.registrationDate);
-
+      checkNotNull(args);
       const state = StudentState.Active;
+      let newStudent = {
+        ...args,
+        state,
+      };
+
+      if (args.birthDate) {
+        const birthDate = validDate(args.birthDate);
+        newStudent = { ...newStudent, birthDate };
+      }
+
+      if (args.registrationDate) {
+        const registrationDate = validDate(args.registrationDate);
+        newStudent = { ...newStudent, registrationDate };
+      }
 
       const groups = args.idGroups?.map((group) => new ObjectId(group));
       const existsGroups = await groupCollection(ctx.db).find({
@@ -327,24 +330,15 @@ export const Mutation = {
         throw new Error("404, Groups not found");
       }
 
-      const emails = args.contacts.map((contact) => contact.email);
-      const uniqueEmails = [...new Set(emails)];
-      if (emails.length !== uniqueEmails.length) {
-        throw new Error("Email of student contact must be unique");
+      if (args.contacts) {
+        newStudent = {
+          ...newStudent,
+          contacts: args.contacts?.map((c) => ({ ...c })),
+        };
       }
-      const contacts = args.contacts.map((contact) => ({
-        ...contact,
-        notes: contact.notes || "",
-      }));
 
       const idStudent = await studentCollection(ctx.db).insertOne({
-        ...args,
-        birthDate,
-        contacts,
-        state,
-        registrationDate,
-        descriptionAllergy: args.descriptionAllergy || "",
-        notes: args.notes || "",
+        ...newStudent,
       });
 
       await groupCollection(ctx.db).updateMany(
@@ -354,13 +348,7 @@ export const Mutation = {
 
       return {
         _id: idStudent,
-        state,
-        descriptionAllergy: args.descriptionAllergy || "",
-        notes: args.notes || "",
-        ...args,
-        contacts,
-        registrationDate,
-        birthDate,
+        ...newStudent,
       };
     } catch (error) {
       throw new Error("500, " + error);
@@ -373,18 +361,13 @@ export const Mutation = {
     ctx: Context,
   ): Promise<StudentContact> => {
     try {
-      const contact = await studentCollection(ctx.db).findOne({
-        _id: new ObjectId(args.idStudent),
-        contacts: { $elemMatch: { email: args.email } },
-      });
-      if (contact) throw new Error("404, Contact already exists");
-
+      checkNotNull(args);
       const newStudentContact = await studentCollection(ctx.db).findAndModify(
         { _id: new ObjectId(args.idStudent) },
         {
           update: {
             $push: {
-              contacts: { $each: [{ ...args, notes: args.notes || "" }] },
+              contacts: { $each: [{ ...args }] },
             },
           },
           new: true,
@@ -393,9 +376,7 @@ export const Mutation = {
       if (!newStudentContact) {
         throw new Error("404, Student not found");
       }
-      return newStudentContact.contacts.filter(
-        (contact) => contact.email === args.email,
-      )[0];
+      return { ...args };
     } catch (error) {
       throw new Error("500, " + error);
     }
@@ -407,21 +388,8 @@ export const Mutation = {
     ctx: Context,
   ): Promise<StudentModel> => {
     try {
+      checkNotNull(args);
       let updateStudent = { ...args } as Partial<StudentModel>;
-
-      if (args.contacts) {
-        const uniqueEmails = [
-          ...new Set(args.contacts.map((contact) => contact.email)),
-        ];
-        if (args.contacts.length !== uniqueEmails.length) {
-          throw new Error("400, Emails of student contacts must be unique");
-        }
-        const contacts = args.contacts.map((contact) => ({
-          ...contact,
-          notes: contact.notes || "",
-        }));
-        updateStudent = { ...updateStudent, contacts };
-      }
 
       if (args.groups) {
         const groups = args.groups.map((group) => new ObjectId(group));
@@ -491,12 +459,13 @@ export const Mutation = {
     }
   },
 
-  editStudentContacts: async (
+  editStudentContact: async (
     _parent: unknown,
-    args: MutationEditStudentContactsArgs,
+    args: MutationEditStudentContactArgs,
     ctx: Context,
   ): Promise<StudentContact> => {
     try {
+      checkNotNull(args);
       const contactsStudents = await studentCollection(ctx.db)
         .find(
           {
@@ -522,7 +491,6 @@ export const Mutation = {
             send_info: args.send_info === undefined
               ? contact.send_info
               : args.send_info,
-            notes: args.notes || contact.notes,
           };
           return contactUpdate;
         }
@@ -548,13 +516,15 @@ export const Mutation = {
     ctx: Context,
   ): Promise<InstructorModel> => {
     try {
-      const existsInstructor = await instructorCollection(ctx.db).findOne({
-        $or: [
-          { corporateEmail: args.corporateEmail },
-          { personalEmail: args.personalEmail },
-        ],
-      });
-      if (existsInstructor) throw new Error("404, Instructor already exists");
+      checkNotNull(args);
+      if (args.corporateEmail) {
+        const existsInstructor = await instructorCollection(ctx.db).findOne({
+          corporateEmail: args.corporateEmail,
+        });
+        if (existsInstructor) {
+          throw new Error("400, Corporate email must be unique");
+        }
+      }
 
       const groups = args.groups?.map((group) => new ObjectId(group));
       const existsGroups = await groupCollection(ctx.db)
@@ -569,10 +539,12 @@ export const Mutation = {
 
       const availability = setIdDays(args.availability) as Availability[];
 
-      const idInstructor = await instructorCollection(ctx.db).insertOne({
+      const newInstructor = {
         ...args,
         availability,
-        notes: args.notes || "",
+      };
+      const idInstructor = await instructorCollection(ctx.db).insertOne({
+        ...newInstructor,
       });
 
       await groupCollection(ctx.db).updateMany(
@@ -582,9 +554,7 @@ export const Mutation = {
 
       return {
         _id: idInstructor,
-        ...args,
-        notes: args.notes || "",
-        availability,
+        ...newInstructor,
       };
     } catch (error) {
       throw new Error("500, " + error);
@@ -596,18 +566,8 @@ export const Mutation = {
     ctx: Context,
   ): Promise<InstructorModel> => {
     try {
+      checkNotNull(args);
       let updateInstructor = { ...args } as Partial<InstructorModel>;
-
-      if (args.personalEmail) {
-        const existsPersonalEmail = await instructorCollection(ctx.db).findOne({
-          personalEmail: args.personalEmail,
-        });
-        if (existsPersonalEmail) {
-          throw new Error(
-            "400, Instructor already exists, personal email must be unique",
-          );
-        }
-      }
 
       if (args.corporateEmail) {
         const existsCorporateEmail = await instructorCollection(ctx.db).findOne(
@@ -617,7 +577,7 @@ export const Mutation = {
         );
         if (existsCorporateEmail) {
           throw new Error(
-            "400, Instructor already exists, corporate email must be unique",
+            "400, Corporate email must be unique",
           );
         }
       }

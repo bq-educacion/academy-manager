@@ -51,10 +51,10 @@ export const typeDefs = gql`
     email: String
     type: [CenterActivityType!]!
     nature: CenterNature!
-    languages: [String!]!
+    languages: [Languages!]!
     notes: String
     createdAt: String!
-    contacts: [CenterContact!]!
+    contacts: [CenterContact!]
     groups: [Group!]!
   }
 
@@ -78,8 +78,8 @@ export const typeDefs = gql`
       email: String
       type: [CenterActivityType!]!
       nature: CenterNature!
-      languages: [String!]!
-      contacts: [CenterContactInput!]!
+      languages: [Languages!]!
+      contacts: [CenterContactInput!]
       notes: String
     ): Center!
 
@@ -99,12 +99,12 @@ export const typeDefs = gql`
       email: String
       type: [CenterActivityType!]
       nature: CenterNature
-      languages: [String!]
+      languages: [Languages!]
       contacts: [CenterContactInput!]
       notes: String
     ): Center!
 
-    editCenterContacts(
+    editCenterContact(
       idCenter: String!
       originEmail: String!
       name: String

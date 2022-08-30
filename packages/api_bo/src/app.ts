@@ -14,6 +14,7 @@ import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
 import { typeDefs as group } from "./schemas/group.ts";
 import { typeDefs as scalars } from "./schemas/scalars.ts";
+import { typeDefs as enums } from "./schemas/enums.ts";
 import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
@@ -73,7 +74,7 @@ try {
   const dec = new TextDecoder();
   const schema = makeExecutableSchema({
     resolvers,
-    typeDefs: [center, student, instructor, group, scalars],
+    typeDefs: [center, student, instructor, group, scalars, enums],
   });
 
   const app = opine();
