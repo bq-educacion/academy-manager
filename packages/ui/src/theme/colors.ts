@@ -65,6 +65,7 @@ const colors = {
   blue80: "#44b8af",
   blue60: "#69c6bf",
   blue40: "#a1dbd7",
+  blue40Transparent1: adjustColorOpacity("#a1dbd7", 0.1),
 
   blue1: "#3db8b0",
   blue2: "#f5fbfb",

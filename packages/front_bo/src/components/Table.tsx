@@ -1,6 +1,6 @@
 import { colors, Icon, styles } from "@academy-manager/ui";
 import styled from "@emotion/styled";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   OrderFilterCenter,
   OrderFilterGroup,
@@ -49,6 +49,8 @@ const Table = <T extends Data>({
   order,
   onSetOrder,
 }: TableProps<T>) => {
+  const [hover, setHover] = useState<string>("");
+
   return (
     <TableGrid columns={columns.length}>
       {columns.map((column) => (
@@ -73,10 +75,22 @@ const Table = <T extends Data>({
           />
         </HeaderCell>
       ))}
-      {data.map((item) => (
+      {data.map((item, index) => (
         <React.Fragment key={item.id}>
           {columns.map((column) => (
-            <Cell key={`${item.id}-${column.key}`}>{column.content(item)}</Cell>
+            <Cell
+              HoverLine={hover}
+              onMouseEnter={() => {
+                setHover(`H${index}`);
+              }}
+              onMouseLeave={() => {
+                setHover("");
+              }}
+              className={`H${index}`}
+              key={`${item.id}-${column.key}`}
+            >
+              {column.content(item)}
+            </Cell>
           ))}
         </React.Fragment>
       ))}
@@ -115,7 +129,7 @@ const HeaderCell = styled.div`
   }
 `;
 
-const Cell = styled.div`
+const Cell = styled.div<{ HoverLine: string }>`
   display: flex;
   height: 39px;
   align-items: center;
@@ -125,11 +139,23 @@ const Cell = styled.div`
   padding: 0 2em;
   overflow: hidden;
   white-space: nowrap;
+  cursor: pointer;
   & > div {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+  order: revert;
+
+  ${(props) => {
+    if (props.HoverLine !== "") {
+      return `
+        &.${props.HoverLine} {
+          background-color: ${colors.colors.blue40Transparent1};
+        }
+      `;
+    }
+  }}
 `;
 
 export default Table;
