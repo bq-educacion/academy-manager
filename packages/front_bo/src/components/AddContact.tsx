@@ -50,6 +50,7 @@ const AddContact: FC<{
             {t(`components.create-center.3.subtitle.phone`)}
           </styles.BoldP4>
           <InputSuper
+            telPattern
             placeholder={t("components.create-center.3.subtitle.phone")}
             input={contact.phone}
             setInput={(phone) => setContact({ ...contact, phone })}

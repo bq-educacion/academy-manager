@@ -35,7 +35,6 @@ const CreateGroup: FC<{
   const [timeTableOnChange, setTimeTableOnChange] = useState<TimetableInput[]>(
     []
   );
-  const [timeTable, setTimeTable] = useState<TimetableInput[]>([]);
   const [instructors, setInstructor] = useState<string[]>([]);
   const [center, setCenter] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -57,14 +56,14 @@ const CreateGroup: FC<{
       step === 3 &&
         modality &&
         type &&
-        timeTable &&
+        timeTableOnChange &&
         createGroupMutation({
           variables: {
             idCenter: center,
             name,
             modality,
             type,
-            timetable: timeTable,
+            timetable: timeTableOnChange,
             instructors,
           },
         });
@@ -196,16 +195,8 @@ const CreateGroup: FC<{
             <Button
               create
               onClick={() => {
-                setTimeTable(timeTableOnChange);
-
                 setTimeout(() => {
-                  if (
-                    name != "" &&
-                    center != "" &&
-                    modality &&
-                    type &&
-                    timeTable
-                  ) {
+                  if (name != "" && center != "" && modality && type) {
                     setFinished(true);
                     changeTitle("");
                     refetch();

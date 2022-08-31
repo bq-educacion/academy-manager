@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { colors } from "../theme";
 
 const InputSuper: FC<{
@@ -9,18 +9,53 @@ const InputSuper: FC<{
   height?: string;
   disabled?: boolean;
   error?: boolean;
-}> = ({ placeholder, setInput, input, disabled, height, error }) => {
+  type?: string;
+  telPattern?: boolean;
+  timePattern?: boolean;
+  datePattern?: boolean;
+  setValid?: (valid: boolean) => void;
+}> = ({
+  placeholder,
+  setInput,
+  input,
+  disabled,
+  height,
+  error,
+  type,
+  telPattern,
+  setValid,
+  timePattern,
+  datePattern,
+}) => {
+  const [InputType, setInputType] = useState<string>(type ? type : "text");
   return (
-    <>
-      <InputStyled
-        disabled={disabled}
-        placeholder={placeholder ? placeholder : ""}
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        height={height}
-        error={error}
-      />
-    </>
+    <InputStyled
+      disabled={disabled}
+      placeholder={placeholder ? placeholder : ""}
+      value={input}
+      onChange={(e) => {
+        setValid && setValid(e.target.validity.valid);
+        if (telPattern) {
+          setInput(e.target.value.replace(/[^0-9+]/g, ""));
+        }
+        if (timePattern) {
+          setInput(e.target.value.replace(/[^0-9:]/g, ""));
+        }
+        if (datePattern) {
+          setInput(e.target.value.replace(/[^0-9/]/g, ""));
+        } else {
+          setInput(e.target.value);
+        }
+      }}
+      height={height}
+      error={error}
+      onClick={() => {
+        if (datePattern) {
+          setInputType("date");
+        }
+      }}
+      type={!disabled ? InputType : ""}
+    />
   );
 };
 
@@ -46,7 +81,7 @@ const InputStyled = styled.input<{
     error &&
     `
   border: solid 1px ${colors.colors.red1}; 
-  background-color: ${colors.colors.pink1} !important; 
+  background-color: ${colors.colors.pink1}; 
   pointer-events: none;
   `}
   &::placeholder {

@@ -64,6 +64,8 @@ const CreateCenter: FC<{
     },
   });
 
+  const [validEmail, setValidEmail] = useState<boolean>(false);
+
   if (error) {
     setError(error);
   }
@@ -186,6 +188,7 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.phone`)}
               </styles.BoldP4>
               <InputSuper
+                telPattern
                 placeholder={t(
                   "components.create-center.2.subtitle.phone-placeholder"
                 )}
@@ -198,6 +201,8 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.email`)}
               </styles.BoldP4>
               <InputSuper
+                setValid={setValidEmail}
+                type="email"
                 placeholder={t(
                   "components.create-center.2.subtitle.email-placeholder"
                 )}
@@ -214,7 +219,14 @@ const CreateCenter: FC<{
             />
             <Button
               main
-              onClick={() => setStep(3)}
+              onClick={() => {
+                if (validEmail) {
+                  setValidEmail(false);
+                  setStep(3);
+                } else {
+                  alert("Email declined");
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDiv>

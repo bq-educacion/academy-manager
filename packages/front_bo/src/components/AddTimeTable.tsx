@@ -81,6 +81,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!monday}
           input={monday ? monday.start : ""}
           setInput={(elem) => {
@@ -99,6 +100,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!monday}
           input={monday ? monday.end : ""}
           setInput={(elem) => {
@@ -132,6 +134,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!tuesday}
           input={tuesday ? tuesday.start : ""}
           setInput={(elem) => {
@@ -150,6 +153,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!tuesday}
           input={tuesday ? tuesday.end : ""}
           setInput={(elem) => {
@@ -185,6 +189,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!wednesday}
           input={wednesday ? wednesday.start : ""}
           setInput={(elem) => {
@@ -203,6 +208,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!wednesday}
           input={wednesday ? wednesday.end : ""}
           setInput={(elem) => {
@@ -238,6 +244,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!thursday}
           input={thursday ? thursday.start : ""}
           setInput={(elem) => {
@@ -256,6 +263,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!thursday}
           input={thursday ? thursday.end : ""}
           setInput={(elem) => {
@@ -289,6 +297,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!friday}
           input={friday ? friday.start : ""}
           setInput={(elem) => {
@@ -307,6 +316,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!friday}
           input={friday ? friday.end : ""}
           setInput={(elem) => {
@@ -342,6 +352,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!saturday}
           input={saturday ? saturday.start : ""}
           setInput={(elem) => {
@@ -360,6 +371,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!saturday}
           input={saturday ? saturday.end : ""}
           setInput={(elem) => {
@@ -393,6 +405,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!sunday}
           input={sunday ? sunday.start : ""}
           setInput={(elem) => {
@@ -411,6 +424,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
           disabled={!sunday}
           input={sunday ? sunday.end : ""}
           setInput={(elem) => {

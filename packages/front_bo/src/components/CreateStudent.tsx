@@ -185,6 +185,7 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.inscription-date`)}
                 </styles.BoldP4>
                 <InputSuper
+                  datePattern
                   input={inscriptionDay}
                   setInput={setInscriptionDay}
                   placeholder={t(
@@ -199,6 +200,7 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.birth-date`)}
                 </styles.BoldP4>
                 <InputSuper
+                  datePattern
                   input={birthDate}
                   setInput={setbirthDate}
                   placeholder={t(
@@ -311,6 +313,7 @@ const CreateStudent: FC<{
                 {t(`components.create-student.2.subtitle.email`)}
               </styles.BoldP4>
               <InputSuper
+                type="email"
                 input={contactEmail}
                 setInput={setContactEmail}
                 placeholder={t(
@@ -323,6 +326,7 @@ const CreateStudent: FC<{
                 {t(`components.create-student.2.subtitle.phone`)}
               </styles.BoldP4>
               <InputSuper
+                telPattern
                 input={contactPhone}
                 setInput={setContactPhone}
                 placeholder={t(`components.create-student.2.subtitle.phone`)}

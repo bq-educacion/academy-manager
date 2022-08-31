@@ -178,6 +178,7 @@ const CreateInstructor: FC<{
               {t("components.create-instructor.1.email-pro")}
             </styles.BoldP4>
             <InputSuper
+              type="email"
               input={emailPro}
               setInput={setEmailPro}
               placeholder={t(
@@ -190,6 +191,7 @@ const CreateInstructor: FC<{
               {t("components.create-instructor.1.email-personal")}
             </styles.BoldP4>
             <InputSuper
+              type="email"
               input={emailPersonal}
               setInput={setEmailPersonal}
               placeholder={t(
@@ -203,6 +205,7 @@ const CreateInstructor: FC<{
                 {t("components.create-instructor.1.phone")}
               </styles.BoldP4>
               <InputSuper
+                telPattern
                 input={phone}
                 setInput={setPhone}
                 placeholder={t("components.create-instructor.1.phone")}
