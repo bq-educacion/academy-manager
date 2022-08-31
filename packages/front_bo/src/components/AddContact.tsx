@@ -8,41 +8,29 @@ import {
   useTranslate,
 } from "@academy-manager/ui";
 import styled from "@emotion/styled";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { CenterContact } from "../generated/graphql";
 
 const AddContact: FC<{
   setContact: (contacts: CenterContact) => void;
-  numberOfContacts: number;
-  setNumberOfContacts: (numberOfContacts: number) => void;
-  finish: boolean;
-}> = ({ setContact, numberOfContacts, finish, setNumberOfContacts }) => {
+  setContacts: (contacts: CenterContact[]) => void;
+  contact: CenterContact;
+  contacts: CenterContact[];
+}> = ({ setContact, setContacts, contacts, contact }) => {
   const t = useTranslate();
 
-  const [name, setName] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-
-  useEffect(() => {
-    if (finish) {
-      setContact({
-        name,
-        phone,
-        email,
-      });
-    }
-  }, [finish]);
-
   return (
-    <ContactDiv quantity={numberOfContacts}>
+    <ContactDiv quantity={contacts.length}>
       <FillIn>
         <Header>
           <styles.BoldP4>
             {t(`components.create-center.3.subtitle.name`)}
           </styles.BoldP4>
-          {numberOfContacts > 1 && (
+          {contacts.length > 1 && (
             <Eliminate
-              onClick={() => setNumberOfContacts(numberOfContacts - 1)}
+              onClick={() => {
+                setContacts(contacts.filter((c) => c !== contact));
+              }}
             >
               <Icon name="eliminate" />
             </Eliminate>
@@ -52,8 +40,8 @@ const AddContact: FC<{
           placeholder={t(
             "components.create-center.3.subtitle.name-placeholder"
           )}
-          input={name}
-          setInput={setName}
+          input={contact.name}
+          setInput={(name) => setContact({ ...contact, name })}
         />
       </FillIn>
       <FillInSectioned>
@@ -63,8 +51,8 @@ const AddContact: FC<{
           </styles.BoldP4>
           <InputSuper
             placeholder={t("components.create-center.3.subtitle.phone")}
-            input={phone}
-            setInput={setPhone}
+            input={contact.phone}
+            setInput={(phone) => setContact({ ...contact, phone })}
           />
         </FillIn>
         <FillIn width="258px">
@@ -75,8 +63,8 @@ const AddContact: FC<{
             placeholder={t(
               "components.create-center.2.subtitle.email-placeholder"
             )}
-            input={email}
-            setInput={setEmail}
+            input={contact.email}
+            setInput={(email) => setContact({ ...contact, email })}
           />
         </FillIn>
       </FillInSectioned>

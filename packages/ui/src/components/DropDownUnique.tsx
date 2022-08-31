@@ -15,13 +15,17 @@ const DropDownUnique: FC<{
   options: Option[];
   selected?: string;
   setSelected: (selected: string) => void;
-}> = ({ width, options, setSelected, selected }) => {
+  disabled?: boolean;
+}> = ({ width, options, setSelected, selected, disabled }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
   return (
     <Popover
+      isOpenEx={clicked}
+      setIsOpenEx={setClicked}
       title={
         <InputBox
+          disabled={disabled ? true : false}
           onClick={() => {
             setClicked(!clicked);
           }}
@@ -47,7 +51,10 @@ const DropDownUnique: FC<{
                 <OptionBox
                   key={option.key}
                   clicked={clicked}
-                  onClick={() => setSelected(option.key)}
+                  onClick={() => {
+                    setSelected(option.key);
+                    setClicked(false);
+                  }}
                 >
                   {clicked && <Check name="tick" />}
                   <styles.P4>{option.label}</styles.P4>
@@ -90,7 +97,11 @@ const NoData = styled.div`
   align-items: center;
 `;
 
-const InputBox = styled.div<{ clicked: boolean; width: string }>`
+const InputBox = styled.div<{
+  clicked: boolean;
+  width: string;
+  disabled: boolean;
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -102,6 +113,9 @@ const InputBox = styled.div<{ clicked: boolean; width: string }>`
   color: ${colors.colors.grayBlue2};
   cursor: pointer;
   overflow-y: hidden;
+  ${(props) =>
+    props.disabled &&
+    `background-color: ${colors.colors.grayBlue}; pointer-events: none; color: ${colors.colors.gray2}`};
   & > svg {
     transform-origin: center;
     transition: transform 0.2s ease-in-out;

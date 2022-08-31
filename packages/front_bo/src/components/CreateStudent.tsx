@@ -342,7 +342,7 @@ const CreateStudent: FC<{
             <Button
               secondary
               onClick={() => setStep(1)}
-              text={t("general.actions.cancel")}
+              text={t("general.actions.back")}
             />
             <Button
               create
@@ -407,6 +407,7 @@ const NavDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
   width: 100%;
 `;
 
@@ -439,11 +440,11 @@ const ScrollDiv = styled.div`
   margin: 0;
   width: 100%;
   max-height: 499px;
-  overflow-x: visible;
+  margin-top: -30px;
   overflow-y: scroll;
-  margin-bottom: 40px;
+  padding-bottom: 30px;
   & > p {
-    margin-bottom: 30px;
+    margin: 30px 0;
   }
 `;
 

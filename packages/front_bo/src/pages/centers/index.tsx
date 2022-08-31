@@ -18,6 +18,7 @@ import {
 } from "../../generated/graphql";
 import CreateCenter from "../../components/CreateCenter";
 import { ApolloError } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -86,6 +87,8 @@ const CentersPage: NextPage = () => {
   //     }, 500);
   //   }
   // }, [loading]);
+
+  const route = useRouter();
 
   return (
     <>
@@ -165,6 +168,7 @@ const CentersPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Center> & { id: string }>
+            onClickRow={(id) => route.push(`/centers/${id}`)}
             data={tableData}
             order={order}
             onSetOrder={(order) =>

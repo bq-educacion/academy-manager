@@ -22,6 +22,8 @@ const DropDown: FC<{
   const [clicked, setClicked] = useState<boolean>(false);
   return (
     <Popover
+      isOpenEx={clicked}
+      setIsOpenEx={setClicked}
       title={
         <InputBox
           disabled={disabled ? true : false}
@@ -113,7 +115,9 @@ const InputBox = styled.div<{
   color: ${colors.colors.grayBlue2};
   cursor: pointer;
   overflow: scroll;
-  ${(props) => props.disabled && `background-color: ${colors.colors.gray2}`};
+  ${(props) =>
+    props.disabled &&
+    `background-color: ${colors.colors.grayBlue}; pointer-events: none; color: ${colors.colors.gray2}`};
   & > svg {
     transform-origin: center;
     transition: transform 0.2s ease-in-out;

@@ -41,6 +41,7 @@ type TableProps<T> = {
       direction: number;
     }>
   >;
+  onClickRow?: (id: string) => void;
 };
 
 const Table = <T extends Data>({
@@ -48,6 +49,7 @@ const Table = <T extends Data>({
   columns,
   order,
   onSetOrder,
+  onClickRow,
 }: TableProps<T>) => {
   const [hover, setHover] = useState<string>("");
 
@@ -85,6 +87,11 @@ const Table = <T extends Data>({
               }}
               onMouseLeave={() => {
                 setHover("");
+              }}
+              onClick={() => {
+                if (onClickRow) {
+                  onClickRow(item.id);
+                }
               }}
               className={`H${index}`}
               key={`${item.id}-${column.key}`}

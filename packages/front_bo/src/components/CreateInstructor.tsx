@@ -157,7 +157,7 @@ const CreateInstructor: FC<{
 
   return (
     <Form>
-      {step !== 2 && step !== 4 && step !== 5 && (
+      {step !== 2 && step !== 4 && step !== 5 && step !== 3 && (
         <styles.P4>{t(`components.create-instructor.${step}.title`)}</styles.P4>
       )}
 
@@ -441,6 +441,9 @@ const CreateInstructor: FC<{
       {step === 3 && (
         <>
           <ScrollDiv>
+            <styles.P4>
+              {t(`components.create-instructor.${step}.title`)}
+            </styles.P4>
             <>
               {week.map((elem) => {
                 return (
@@ -784,6 +787,7 @@ const NavDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
   width: 100%;
 `;
 
@@ -793,7 +797,7 @@ const NavDivScroll = styled.div`
   justify-content: space-between;
   width: 100%;
   border-top: 1px solid ${colors.colors.gray60};
-  padding: 20px 45px 39px 45px;
+  padding: 30px 45px 40px 45px;
   margin: -30px -45px;
   background-color: ${colors.colors.white};
 `;
@@ -812,10 +816,10 @@ const ScrollDiv = styled.div`
   margin: 0;
   width: 100%;
   max-height: 499px;
-  overflow-x: visible;
+  margin-top: -30px;
   overflow-y: scroll;
-  margin-bottom: 40px;
+  padding-bottom: 30px;
   & > p {
-    margin-bottom: 30px;
+    margin: 30px 0;
   }
 `;

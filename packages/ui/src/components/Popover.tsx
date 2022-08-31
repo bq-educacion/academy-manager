@@ -7,14 +7,22 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 export type PopoverProps = {
   title: ReactNode;
   content: ReactNode;
+  setIsOpenEx?: (open: boolean) => void;
+  isOpenEx?: boolean;
 };
 
-const Popover: FC<PopoverProps> = ({ title, content }) => {
+const Popover: FC<PopoverProps> = ({
+  title,
+  content,
+  setIsOpenEx,
+  isOpenEx,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const ref = useDetectClickOutside({
     onTriggered: () => {
       setIsOpen(false);
+      setIsOpenEx && setIsOpenEx(false);
     },
   });
 
@@ -23,11 +31,13 @@ const Popover: FC<PopoverProps> = ({ title, content }) => {
       <PopoverTitle
         onClick={() => {
           setIsOpen(!isOpen);
+          setIsOpenEx && setIsOpenEx(!isOpenEx);
         }}
       >
         {title}
       </PopoverTitle>
-      <PopoverContent open={isOpen}>{content}</PopoverContent>
+      {!isOpenEx && <PopoverContent open={isOpen}>{content}</PopoverContent>}
+      {isOpenEx && <PopoverContent open={isOpenEx}>{content}</PopoverContent>}
     </PopoverWrapper>
   );
 };

@@ -256,6 +256,7 @@ const NavDiv = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  margin-top: 10px;
 `;
 
 const EndButton = styled.div`
