@@ -20,7 +20,7 @@ export const ContentStart: FC<{
       <styles.RainbowDivider />
       <ContentSubHeader>{childrenHeader}</ContentSubHeader>
       {childrenSubHeader && <>{childrenSubHeader}</>}
-      <ContentBody>{children}</ContentBody>
+      <ContentBody className="scrollbar">{children}</ContentBody>
     </ContentLayout>
   );
 };
@@ -75,17 +75,9 @@ const ContentBody = styled.div`
   flex-direction: row;
   align-items: flex-start;
   overflow: scroll;
-  overflow-x: hidden;
+  overflow-x: scroll;
   overflow-y: overlay;
-  &::-webkit-scrollbar:vertical {
-    display: block;
-    width: 10px;
-    padding: 5px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 9999px;
-    border: 3px solid transparent;
-    background-clip: padding-box;
-    border-top: 45px solid transparent;
-    background-clip: padding-box;
+  ::-webkit-scrollbar-track {
+    margin-top: 40px;
   }
 `;

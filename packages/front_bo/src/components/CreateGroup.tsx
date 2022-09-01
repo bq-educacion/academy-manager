@@ -35,7 +35,6 @@ const CreateGroup: FC<{
   const [timeTableOnChange, setTimeTableOnChange] = useState<TimetableInput[]>(
     []
   );
-  const [timeTable, setTimeTable] = useState<TimetableInput[]>([]);
   const [instructors, setInstructor] = useState<string[]>([]);
   const [center, setCenter] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -57,14 +56,14 @@ const CreateGroup: FC<{
       step === 3 &&
         modality &&
         type &&
-        timeTable &&
+        timeTableOnChange &&
         createGroupMutation({
           variables: {
             idCenter: center,
             name,
             modality,
             type,
-            timetable: timeTable,
+            timetable: timeTableOnChange,
             instructors,
           },
         });
@@ -75,6 +74,10 @@ const CreateGroup: FC<{
 
   if (error) {
     setError(error);
+  }
+
+  if (step === 1) {
+    changeTitle(t("pages.groups.modal-create.title"));
   }
 
   return (
@@ -192,23 +195,14 @@ const CreateGroup: FC<{
             <Button
               create
               onClick={() => {
-                setTimeTable(timeTableOnChange);
-
-                setTimeout(() => {
-                  if (
-                    name != "" &&
-                    center != "" &&
-                    modality &&
-                    type &&
-                    timeTable
-                  ) {
-                    setFinished(true);
-                    changeTitle("");
-                    setStep(3);
-                  } else {
-                    alert("Please fill all the fields");
-                  }
-                }, 100);
+                if (name != "" && center != "" && modality && type) {
+                  setFinished(true);
+                  changeTitle("");
+                  refetch();
+                  setStep(3);
+                } else {
+                  alert("Please fill all the fields");
+                }
               }}
               text={t("general.actions.create")}
             />
@@ -220,7 +214,6 @@ const CreateGroup: FC<{
           <Button
             main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.groups.modal-create.title"));
               close(false);
             }}
@@ -252,6 +245,7 @@ const NavDiv = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  margin-top: 10px;
 `;
 
 const EndButton = styled.div`

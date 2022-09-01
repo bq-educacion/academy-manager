@@ -49,7 +49,7 @@ const GroupsPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error, refetch } = useGetGroupsQuery({
+  const { data, error, refetch, loading } = useGetGroupsQuery({
     variables: {
       searchText,
       orderFilter: order.key,
@@ -79,9 +79,20 @@ const GroupsPage: NextPage = () => {
   if (error || componentError) {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
+  // const [loadingAnimation, setLoadingAnimation] = useState<boolean>(false);
+  // useEffect(() => {
+  //   if (loading) {
+  //     setLoadingAnimation(true);
+  //   } else {
+  //     setTimeout(() => {
+  //       setLoadingAnimation(false);
+  //     }, 500);
+  //   }
+  // }, [loading]);
 
   return (
     <>
+      {/* {loadingAnimation && <LoadingOvercast />} */}
       {modalOpen && (
         <Modal
           setModal={setModalOpen}
@@ -179,6 +190,9 @@ const GroupsPage: NextPage = () => {
                 content: (item) => (
                   <div>
                     {item.instructors?.map((elem) => elem.name).join(", ")}
+                    {(item.instructors === undefined ||
+                      item.instructors?.length === 0) &&
+                      "-"}
                   </div>
                 ),
               },
@@ -194,6 +208,9 @@ const GroupsPage: NextPage = () => {
                         )
                       )
                       .join(" - ")}
+                    {(item.timetable === undefined ||
+                      item.timetable?.length === 0) &&
+                      "-"}
                   </div>
                 ),
               },
@@ -202,7 +219,12 @@ const GroupsPage: NextPage = () => {
                 key: OrderFilterGroup.Start,
                 content: (item) => (
                   <div>
-                    {item.timetable?.map((elem) => elem.start).join(", ")}
+                    {item.timetable?.every((elem) => elem.start !== "") &&
+                      item.timetable?.map((elem) => elem.start).join(", ")}
+                    {(item.timetable?.every((elem) => elem.start == "") ||
+                      item.timetable === undefined ||
+                      item.timetable?.length === 0) &&
+                      "-"}
                   </div>
                 ),
               },
@@ -211,7 +233,12 @@ const GroupsPage: NextPage = () => {
                 key: OrderFilterGroup.End,
                 content: (item) => (
                   <div>
-                    {item.timetable?.map((elem) => elem.end).join(", ")}
+                    {item.timetable?.every((elem) => elem.end !== "") &&
+                      item.timetable?.map((elem) => elem.end).join(", ")}
+                    {(item.timetable?.every((elem) => elem.start == "") ||
+                      item.timetable === undefined ||
+                      item.timetable?.length === 0) &&
+                      "-"}
                   </div>
                 ),
               },
@@ -226,7 +253,7 @@ const GroupsPage: NextPage = () => {
               </styles.P4> */}
             </ErrorContainer>
           )}
-          {tableData.length === 0 && searchText === "" && (
+          {!loading && tableData.length === 0 && searchText === "" && (
             <ErrorContainer>
               <styles.P4>{t("pages.centers.data-error")}</styles.P4>
               <styles.P4>

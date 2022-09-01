@@ -19,6 +19,7 @@
       }
     },
     "table": {
+      "no-instructor": "Sin asignar",
       "name": "Nombre",
       "languages": "Idiomas",
       "city": "Población",
@@ -145,7 +146,7 @@
         }
       },
       "3": {
-        "title": "El alumno ha sido creado satisfactoriamente."
+        "title": "El grupo ha sido creado satisfactoriamente."
       }
     },
     "create-student": {
@@ -184,7 +185,7 @@
         }
       },
       "3": {
-        "title": "El grupo ha sido creado satisfactoriamente."
+        "title": "El alumno ha sido creado satisfactoriamente."
       }
     },
     "create-instructor": {

@@ -13,11 +13,11 @@ import {
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
 import { FC, useState } from "react";
-import { centerLanguages } from "../config";
 import {
   CenterActivityType,
   CenterContact,
   CenterNature,
+  Languages,
   useCreateCenterMutation,
 } from "../generated/graphql";
 import AddContact from "./AddContact";
@@ -31,20 +31,24 @@ const CreateCenter: FC<{
   const t = useTranslate();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [finish, setFinish] = useState<boolean>(false);
 
   const [typeSelection, setTypeSelection] = useState<CenterActivityType[]>([]);
   const [natureSelection, setNatureSelection] = useState<
     CenterNature | undefined
   >(undefined);
-  const [languagesSelection, setLanguagesSelection] = useState<string[]>([]);
+  const [languagesSelection, setLanguagesSelection] = useState<Languages[]>([]);
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [city, setcity] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [numberOfContacts, setNumberOfContacts] = useState<number>(1);
-  const [contacts, setContacts] = useState<CenterContact[]>([]);
+  const [contacts, setContacts] = useState<CenterContact[]>([
+    {
+      name: "",
+      phone: "",
+      email: "",
+    },
+  ]);
 
   const [createCenterMutation, { error }] = useCreateCenterMutation({
     variables: {
@@ -60,10 +64,14 @@ const CreateCenter: FC<{
     },
   });
 
-  //TODO: add contacts to query when available
+  const [validEmail, setValidEmail] = useState<boolean>(false);
 
   if (error) {
     setError(error);
+  }
+
+  if (step === 1) {
+    changeTitle(t("pages.centers.modal-create.center.title"));
   }
 
   return (
@@ -111,12 +119,14 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.languages`)}
             </styles.BoldP4>
             <DropDown
-              options={centerLanguages.map((lang) => ({
-                key: lang,
-                label: t(`pages.centers.languages.${lang.toLowerCase()}`),
+              options={Object.values(Languages).map((language) => ({
+                key: language,
+                label: t(`pages.centers.languages.${language.toLowerCase()}`),
               }))}
               selected={languagesSelection}
-              setSelected={setLanguagesSelection}
+              setSelected={
+                setLanguagesSelection as (selected: string[]) => void
+              }
               width="390px"
             />
           </FillIn>
@@ -178,6 +188,7 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.phone`)}
               </styles.BoldP4>
               <InputSuper
+                telPattern
                 placeholder={t(
                   "components.create-center.2.subtitle.phone-placeholder"
                 )}
@@ -190,6 +201,7 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.email`)}
               </styles.BoldP4>
               <InputSuper
+                setValid={setValidEmail}
                 type="email"
                 placeholder={t(
                   "components.create-center.2.subtitle.email-placeholder"
@@ -207,7 +219,14 @@ const CreateCenter: FC<{
             />
             <Button
               main
-              onClick={() => setStep(3)}
+              onClick={() => {
+                if (validEmail) {
+                  setValidEmail(false);
+                  setStep(3);
+                } else {
+                  alert("Email declined");
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDiv>
@@ -219,27 +238,24 @@ const CreateCenter: FC<{
             <TitleStep3>
               {t(`components.create-center.${step}.title`)}
             </TitleStep3>
-            {Array(numberOfContacts)
-              .fill(0)
-              .map((elem, index) => {
-                return (
-                  <AddContact
-                    key={index}
-                    setNumberOfContacts={setNumberOfContacts}
-                    numberOfContacts={numberOfContacts}
-                    setContact={(contact) => {
-                      if (contact.name !== "") {
-                        setContacts([...contacts, contact]);
-                      }
-                    }}
-                    finish={finish}
-                  />
-                );
-              })}
+            {contacts.map((contact, index) => {
+              return (
+                <AddContact
+                  key={index}
+                  contact={contact}
+                  contacts={contacts}
+                  setContacts={setContacts}
+                  setContact={(NewContact) => {
+                    const newContacts = [...contacts];
+                    newContacts[index] = NewContact;
+                    setContacts(newContacts);
+                  }}
+                />
+              );
+            })}
             <AddContactButton
               onClick={() => {
-                setFinish(false);
-                setNumberOfContacts(numberOfContacts + 1);
+                setContacts([...contacts, { name: "", phone: "", email: "" }]);
               }}
             >
               <Icon name="add" />
@@ -249,39 +265,61 @@ const CreateCenter: FC<{
               </styles.BoldP4>
             </AddContactButton>
           </ContactsDiv>
-          <NavDivStep3>
-            <Button
-              secondary
-              onClick={() => setStep(2)}
-              text={t("general.actions.back")}
-            />
-            <Button
-              create
-              onClick={() => {
-                setTimeout(() => {
-                  setFinish(true);
-                }, 10);
-                setTimeout(() => {
+          {contacts.length > 1 && (
+            <NavDivStep3>
+              <Button
+                secondary
+                onClick={() => setStep(2)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
                   if (name !== "" && address !== "" && city !== "") {
                     createCenterMutation().then(() => {
                       changeTitle("");
+                      refetch();
                       setStep(4);
                     });
                   } else {
                     alert("Please fill all the fields");
                   }
-                }, 20);
-              }}
-              text={t("components.create-center.3.create")}
-            />
-          </NavDivStep3>
+                }}
+                text={t("components.create-center.3.create")}
+              />
+            </NavDivStep3>
+          )}
+          {contacts.length === 1 && (
+            <NavDiv>
+              <Button
+                secondary
+                onClick={() => setStep(2)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
+                  if (name !== "" && address !== "" && city !== "") {
+                    createCenterMutation().then(() => {
+                      changeTitle("");
+                      refetch();
+                      setStep(4);
+                    });
+                  } else {
+                    alert("Please fill all the fields");
+                  }
+                }}
+                text={t("components.create-center.3.create")}
+              />
+            </NavDiv>
+          )}
         </>
       )}
       {step === 4 && (
         <FillIn>
           <EndButton
+            main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.centers.modal-create.center.title"));
               close(false);
             }}
@@ -312,6 +350,7 @@ const NavDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
   width: 100%;
 `;
 
@@ -321,7 +360,7 @@ const ContactsDiv = styled.div`
   max-height: 499px;
   margin-top: -30px;
   overflow-y: scroll;
-  margin-bottom: 40px;
+  padding-bottom: 20px;
 `;
 
 const TitleStep3 = styled(styles.P4)`
@@ -335,7 +374,7 @@ const NavDivStep3 = styled.div`
   width: 100%;
   border-top: 1px solid ${colors.colors.gray60};
   padding: 20px 45px 39px 45px;
-  margin: -30px -45px;
+  margin: 0 -45px -30px -45px;
   background-color: ${colors.colors.white};
 `;
 

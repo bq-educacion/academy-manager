@@ -1,6 +1,5 @@
 import {
   CheckBox,
-  colors,
   InputSuper,
   styles,
   useTranslate,
@@ -82,6 +81,8 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!monday}
           input={monday ? monday.start : ""}
           setInput={(elem) => {
             if (monday) {
@@ -95,11 +96,12 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!monday}
           input={monday ? monday.end : ""}
           setInput={(elem) => {
             if (monday) {
@@ -111,7 +113,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -133,6 +134,8 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!tuesday}
           input={tuesday ? tuesday.start : ""}
           setInput={(elem) => {
             if (tuesday) {
@@ -146,11 +149,12 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!tuesday}
           input={tuesday ? tuesday.end : ""}
           setInput={(elem) => {
             if (tuesday) {
@@ -162,7 +166,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -186,6 +189,8 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!wednesday}
           input={wednesday ? wednesday.start : ""}
           setInput={(elem) => {
             if (wednesday) {
@@ -199,11 +204,12 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!wednesday}
           input={wednesday ? wednesday.end : ""}
           setInput={(elem) => {
             if (wednesday) {
@@ -215,7 +221,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -239,6 +244,8 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!thursday}
           input={thursday ? thursday.start : ""}
           setInput={(elem) => {
             if (thursday) {
@@ -252,11 +259,12 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!thursday}
           input={thursday ? thursday.end : ""}
           setInput={(elem) => {
             if (thursday) {
@@ -268,7 +276,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -290,6 +297,8 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!friday}
           input={friday ? friday.start : ""}
           setInput={(elem) => {
             if (friday) {
@@ -303,11 +312,12 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!friday}
           input={friday ? friday.end : ""}
           setInput={(elem) => {
             if (friday) {
@@ -319,7 +329,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -343,6 +352,8 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!saturday}
           input={saturday ? saturday.start : ""}
           setInput={(elem) => {
             if (saturday) {
@@ -356,11 +367,12 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!saturday}
           input={saturday ? saturday.end : ""}
           setInput={(elem) => {
             if (saturday) {
@@ -372,7 +384,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <DayDiv>
@@ -394,6 +405,8 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!sunday}
           input={sunday ? sunday.start : ""}
           setInput={(elem) => {
             if (sunday) {
@@ -407,11 +420,12 @@ const AddTimeTable: FC<{
           placeholder={t(
             "components.create-group.2.subtitle.placeholder-start"
           )}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
       <InputDiv>
         <InputSuper
+          timePattern
+          disabled={!sunday}
           input={sunday ? sunday.end : ""}
           setInput={(elem) => {
             if (sunday) {
@@ -423,7 +437,6 @@ const AddTimeTable: FC<{
             }
           }}
           placeholder={t("components.create-group.2.subtitle.placeholder-end")}
-          backgroundColor={colors.colors.grayBlue}
         />
       </InputDiv>
     </GridEnclouser>
@@ -437,7 +450,7 @@ const GridEnclouser = styled.div`
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 const DayDiv = styled.div`
   display: flex;

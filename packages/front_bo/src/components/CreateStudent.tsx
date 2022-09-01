@@ -96,6 +96,10 @@ const CreateStudent: FC<{
     setError(error);
   }
 
+  if (step === 1) {
+    changeTitle(t("pages.students.modal-create.title"));
+  }
+
   return (
     <Form>
       {step !== 1 && (
@@ -181,6 +185,7 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.inscription-date`)}
                 </styles.BoldP4>
                 <InputSuper
+                  datePattern
                   input={inscriptionDay}
                   setInput={setInscriptionDay}
                   placeholder={t(
@@ -195,6 +200,7 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.birth-date`)}
                 </styles.BoldP4>
                 <InputSuper
+                  datePattern
                   input={birthDate}
                   setInput={setbirthDate}
                   placeholder={t(
@@ -307,6 +313,7 @@ const CreateStudent: FC<{
                 {t(`components.create-student.2.subtitle.email`)}
               </styles.BoldP4>
               <InputSuper
+                type="email"
                 input={contactEmail}
                 setInput={setContactEmail}
                 placeholder={t(
@@ -319,6 +326,7 @@ const CreateStudent: FC<{
                 {t(`components.create-student.2.subtitle.phone`)}
               </styles.BoldP4>
               <InputSuper
+                telPattern
                 input={contactPhone}
                 setInput={setContactPhone}
                 placeholder={t(`components.create-student.2.subtitle.phone`)}
@@ -338,7 +346,7 @@ const CreateStudent: FC<{
             <Button
               secondary
               onClick={() => setStep(1)}
-              text={t("general.actions.cancel")}
+              text={t("general.actions.back")}
             />
             <Button
               create
@@ -355,6 +363,7 @@ const CreateStudent: FC<{
                   contactPhone !== ""
                 ) {
                   createStudentMutation().then(() => {
+                    refetch();
                     changeTitle("");
                     setStep(3);
                   });
@@ -370,8 +379,8 @@ const CreateStudent: FC<{
       {step === 3 && (
         <FillIn>
           <EndButton
+            main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.students.modal-create.title"));
               close(false);
             }}
@@ -402,6 +411,7 @@ const NavDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
   width: 100%;
 `;
 
@@ -434,11 +444,11 @@ const ScrollDiv = styled.div`
   margin: 0;
   width: 100%;
   max-height: 499px;
-  overflow-x: visible;
+  margin-top: -30px;
   overflow-y: scroll;
-  margin-bottom: 40px;
+  padding-bottom: 30px;
   & > p {
-    margin-bottom: 30px;
+    margin: 30px 0;
   }
 `;
 

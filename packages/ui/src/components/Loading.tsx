@@ -20,7 +20,7 @@ const Blur = styled.div`
   position: fixed;
   width: 100vw;
   height: 100vh;
-  z-index: 1;
+  z-index: 99998;
   backdrop-filter: blur(3px);
   background-color: ${colors.colors.whiteTransparent};
   display: flex;
@@ -49,7 +49,7 @@ const LoadingAnimation = styled.div`
   height: 100px;
   margin-left: auto;
   margin-right: auto;
-  z-index: 2;
+  z-index: 99999;
   .dot {
     display: block;
     width: 7px;

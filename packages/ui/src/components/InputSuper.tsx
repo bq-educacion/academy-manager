@@ -1,33 +1,60 @@
 import styled from "@emotion/styled";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { colors } from "../theme";
 
 const InputSuper: FC<{
   placeholder?: string;
   setInput: (text: string) => void;
   input: string;
-  backgroundColor?: string;
-  type?: string;
   height?: string;
   disabled?: boolean;
+  error?: boolean;
+  type?: string;
+  telPattern?: boolean;
+  timePattern?: boolean;
+  datePattern?: boolean;
+  setValid?: (valid: boolean) => void;
 }> = ({
   placeholder,
   setInput,
   input,
-  type,
-  backgroundColor,
   disabled,
   height,
+  error,
+  type,
+  telPattern,
+  setValid,
+  timePattern,
+  datePattern,
 }) => {
+  const [InputType, setInputType] = useState<string>(type ? type : "text");
   return (
     <InputStyled
       disabled={disabled}
       placeholder={placeholder ? placeholder : ""}
-      type={type ? type : "text"}
       value={input}
-      onChange={(e) => setInput(e.target.value)}
-      background={backgroundColor}
+      onChange={(e) => {
+        setValid && setValid(e.target.validity.valid);
+        if (telPattern) {
+          setInput(e.target.value.replace(/[^0-9+]/g, ""));
+        }
+        if (timePattern) {
+          setInput(e.target.value.replace(/[^0-9:]/g, ""));
+        }
+        if (datePattern) {
+          setInput(e.target.value.replace(/[^0-9/]/g, ""));
+        } else {
+          setInput(e.target.value);
+        }
+      }}
       height={height}
+      error={error}
+      onClick={() => {
+        if (datePattern) {
+          setInputType("date");
+        }
+      }}
+      type={!disabled ? InputType : ""}
     />
   );
 };
@@ -37,20 +64,33 @@ export default InputSuper;
 const InputStyled = styled.input<{
   height?: string;
   disabled?: boolean;
-  background?: string;
+  error?: boolean;
 }>`
   padding: 0 0 0 20px;
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray};
   height: ${(props) => (props.height ? props.height : "40px")};
-  ${({ background, disabled }) =>
-    disabled
-      ? `background-color: ${colors.colors.gray2}`
-      : background && `background-color: ${background};`}
+  &::placeholder {
+    font-style: italic;
+    line-height: 1;
+  }
+  ${({ disabled }) =>
+    disabled &&
+    `background-color: ${colors.colors.grayBlue}; pointer-events: none;`}
+  ${({ error }) =>
+    error &&
+    `
+  border: solid 1px ${colors.colors.red1}; 
+  background-color: ${colors.colors.pink1}; 
+  pointer-events: none;
+  `}
   &::placeholder {
     height: ${(props) => props.height && "position: absolute;top: 15px;"};
-    font-style: italic;
     line-height: 1.07;
     color: ${colors.colors.gray2};
+    ${(props) => props.error && `color: ${colors.colors.red1}`}
+  }
+  &:hover {
+    border: solid 1px ${colors.colors.blackBackground};
   }
 `;

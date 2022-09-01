@@ -54,6 +54,8 @@ const colors = {
   red60: "#ff1842",
   red40: "#ff5776",
 
+  red1: "#ff0a37",
+
   green100: "#688a2f",
   green80: "#82ad3a",
   green60: "#9bbd61",
@@ -63,6 +65,7 @@ const colors = {
   blue80: "#44b8af",
   blue60: "#69c6bf",
   blue40: "#a1dbd7",
+  blue40Transparent1: adjustColorOpacity("#a1dbd7", 0.1),
 
   blue1: "#3db8b0",
   blue2: "#f5fbfb",
@@ -71,6 +74,8 @@ const colors = {
   brown80: "#b29279",
   brown60: "#c1a894",
   brown40: "#d8c8bc",
+
+  pink1: "#ffccd5",
 };
 const gradient = {
   rainbow:

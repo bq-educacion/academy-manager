@@ -16,15 +16,16 @@ import {
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
 import { FC, useEffect, useState } from "react";
-import { centerLanguages, Platforms, schedule, Tools, zones } from "../config";
+import { Platforms, schedule, Tools, zones } from "../config";
 import {
   AvailabilityInput,
   Days,
+  Languages,
   OrderFilterGroup,
   PreviousExperienceInstructor,
   StateInstructor,
   SummerAvailabilityInstructor,
-  TrainingInstructor,
+  TrainingInstructorInput,
   TypeVehicleInstructor,
   useCreateInstructorMutation,
   useGetGroupsQuery,
@@ -46,14 +47,14 @@ const CreateInstructor: FC<{
   const [emailPersonal, setEmailPersonal] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [state, setState] = useState<StateInstructor>();
-  const [education, setEducation] = useState<TrainingInstructor>();
+  const [education, setEducation] = useState<TrainingInstructorInput>();
   const [experience, setExperience] = useState<PreviousExperienceInstructor>();
   const [programming, setProgramming] = useState<boolean>();
   const [knowledge, setKnowledge] = useState<string>("");
   const [cvUrl, setCvUrl] = useState<string>("");
   const [tools, setTools] = useState<string[]>([]);
   const [platforms, setPlatforms] = useState<string[]>([]);
-  const [languages, setLanguages] = useState<string[]>([]);
+  const [languages, setLanguages] = useState<Languages[]>([]);
   const [availability, setavailability] = useState<AvailabilityInput[]>([]);
   const [monday, setMonday] = useState<string[]>([]);
   const [tuesday, setTuesday] = useState<string[]>([]);
@@ -150,9 +151,13 @@ const CreateInstructor: FC<{
     setavailability(Localavailability);
   }, [monday, tuesday, wednesday, thursday, friday, saturday, sunday]);
 
+  if (step === 1) {
+    changeTitle(t("pages.instructors.modal-create.title"));
+  }
+
   return (
     <Form>
-      {step !== 2 && step !== 4 && step !== 5 && (
+      {step !== 2 && step !== 4 && step !== 5 && step !== 3 && (
         <styles.P4>{t(`components.create-instructor.${step}.title`)}</styles.P4>
       )}
 
@@ -173,6 +178,7 @@ const CreateInstructor: FC<{
               {t("components.create-instructor.1.email-pro")}
             </styles.BoldP4>
             <InputSuper
+              type="email"
               input={emailPro}
               setInput={setEmailPro}
               placeholder={t(
@@ -185,6 +191,7 @@ const CreateInstructor: FC<{
               {t("components.create-instructor.1.email-personal")}
             </styles.BoldP4>
             <InputSuper
+              type="email"
               input={emailPersonal}
               setInput={setEmailPersonal}
               placeholder={t(
@@ -198,6 +205,7 @@ const CreateInstructor: FC<{
                 {t("components.create-instructor.1.phone")}
               </styles.BoldP4>
               <InputSuper
+                telPattern
                 input={phone}
                 setInput={setPhone}
                 placeholder={t("components.create-instructor.1.phone")}
@@ -250,13 +258,13 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <CheckBox
-                  option={education === TrainingInstructor.CareerInEducation}
+                  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                  option={education?.careerInEducation ? true : false}
                   setOption={() => {
-                    {
-                      education !== TrainingInstructor.CareerInEducation
-                        ? setEducation(TrainingInstructor.CareerInEducation)
-                        : setEducation(undefined);
-                    }
+                    setEducation({
+                      ...education,
+                      careerInEducation: !education?.careerInEducation,
+                    });
                   }}
                 />
                 <styles.P4>
@@ -265,13 +273,12 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <CheckBox
-                  option={education === TrainingInstructor.TechnicalCareer}
+                  option={education?.technicalCareer ? true : false}
                   setOption={() => {
-                    {
-                      education !== TrainingInstructor.TechnicalCareer
-                        ? setEducation(TrainingInstructor.TechnicalCareer)
-                        : setEducation(undefined);
-                    }
+                    setEducation({
+                      ...education,
+                      technicalCareer: !education?.technicalCareer,
+                    });
                   }}
                 />
                 <styles.P4>
@@ -410,15 +417,13 @@ const CreateInstructor: FC<{
             </FillIn>
             <FillIn>
               <OptionsBox
-                options={centerLanguages.map((elem) => {
-                  return {
-                    key: elem,
-                    label: t(`pages.centers.languages.${elem.toLowerCase()}`),
-                  };
-                })}
+                options={Object.values(Languages).map((language) => ({
+                  key: language,
+                  label: t(`pages.centers.languages.${language.toLowerCase()}`),
+                }))}
                 title={t("components.create-instructor.2.languages")}
                 results={languages}
-                setResults={setLanguages}
+                setResults={setLanguages as (languages: string[]) => void}
               />
             </FillIn>
           </ScrollDiv>
@@ -439,6 +444,9 @@ const CreateInstructor: FC<{
       {step === 3 && (
         <>
           <ScrollDiv>
+            <styles.P4>
+              {t(`components.create-instructor.${step}.title`)}
+            </styles.P4>
             <>
               {week.map((elem) => {
                 return (
@@ -731,6 +739,7 @@ const CreateInstructor: FC<{
                     },
                   }).then(() => {
                     changeTitle("");
+                    refetch();
                     setStep(6);
                   });
                 } else {
@@ -745,8 +754,8 @@ const CreateInstructor: FC<{
       {step === 6 && (
         <FillIn>
           <EndButton
+            main
             onClick={() => {
-              refetch();
               changeTitle(t("pages.instructors.modal-create.title"));
               close(false);
             }}
@@ -781,6 +790,7 @@ const NavDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
   width: 100%;
 `;
 
@@ -790,7 +800,7 @@ const NavDivScroll = styled.div`
   justify-content: space-between;
   width: 100%;
   border-top: 1px solid ${colors.colors.gray60};
-  padding: 20px 45px 39px 45px;
+  padding: 30px 45px 40px 45px;
   margin: -30px -45px;
   background-color: ${colors.colors.white};
 `;
@@ -809,10 +819,10 @@ const ScrollDiv = styled.div`
   margin: 0;
   width: 100%;
   max-height: 499px;
-  overflow-x: visible;
+  margin-top: -30px;
   overflow-y: scroll;
-  margin-bottom: 40px;
+  padding-bottom: 30px;
   & > p {
-    margin-bottom: 30px;
+    margin: 30px 0;
   }
 `;

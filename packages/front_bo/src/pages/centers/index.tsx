@@ -18,6 +18,7 @@ import {
 } from "../../generated/graphql";
 import CreateCenter from "../../components/CreateCenter";
 import { ApolloError } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
@@ -41,7 +42,7 @@ const CentersPage: NextPage = () => {
     total: number;
   }>({ page: 1, pageSize: 0, total: 0 });
 
-  const { data, error, refetch } = useGetCentersFQuery({
+  const { data, error, refetch, loading } = useGetCentersFQuery({
     variables: {
       searchText,
       orderFilter: order.key,
@@ -76,9 +77,22 @@ const CentersPage: NextPage = () => {
   if (error || componentError) {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
+  // const [loadingAnimation, setLoadingAnimation] = useState<boolean>(false);
+  // useEffect(() => {
+  //   if (loading) {
+  //     setLoadingAnimation(true);
+  //   } else {
+  //     setTimeout(() => {
+  //       setLoadingAnimation(false);
+  //     }, 500);
+  //   }
+  // }, [loading]);
+
+  const route = useRouter();
 
   return (
     <>
+      {/* {loadingAnimation && <LoadingOvercast />} */}
       {modalOpen && (
         <Modal
           setModal={setModalOpen}
@@ -154,6 +168,7 @@ const CentersPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Center> & { id: string }>
+            onClickRow={(id) => route.push(`/centers/${id}`)}
             data={tableData}
             order={order}
             onSetOrder={(order) =>
@@ -216,7 +231,7 @@ const CentersPage: NextPage = () => {
               </styles.P4> */}
             </ErrorContainer>
           )}
-          {tableData.length === 0 && searchText === "" && (
+          {!loading && tableData.length === 0 && searchText === "" && (
             <ErrorContainer>
               <styles.P4>{t("pages.centers.data-error")}</styles.P4>
               <styles.P4>
