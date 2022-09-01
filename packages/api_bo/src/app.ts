@@ -1,14 +1,10 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { GraphQLHTTP } from "gql";
 import { Database, MongoClient } from "mongo";
-import {
-  Center,
-  Group,
-  Instructor,
-  Query,
-  Student,
-} from "./resolvers/query.ts";
-import { Mutation } from "./resolvers/mutation.ts";
+import { centers } from "./resolvers/centers.ts";
+import { groups } from "./resolvers/groups.ts";
+import { instructors } from "./resolvers/instructors.ts";
+import { students } from "./resolvers/students.ts";
 import { typeDefs as center } from "./schemas/center.ts";
 import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
@@ -57,15 +53,6 @@ if (!DB_NAME) {
   throw new Error("DB_NAME is not set");
 }
 
-const resolvers = {
-  Query,
-  Center,
-  Group,
-  Student,
-  Instructor,
-  Mutation,
-};
-
 const client = new MongoClient();
 try {
   await client.connect(MONGO_URL);
@@ -73,7 +60,7 @@ try {
 
   const dec = new TextDecoder();
   const schema = makeExecutableSchema({
-    resolvers,
+    resolvers: [centers, groups, instructors, students],
     typeDefs: [center, student, instructor, group, scalars, enums],
   });
 
