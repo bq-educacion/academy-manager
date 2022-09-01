@@ -168,7 +168,6 @@ export type Mutation = {
   createGroup: Group;
   createInstructor: Instructor;
   createStudent: Student;
-  dropCollections: Scalars["String"];
   editCenter: Center;
   editCenterContact: CenterContact;
   editGroup: Group;
@@ -992,7 +991,6 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateStudentArgs, "course" | "idGroups" | "name">
   >;
-  dropCollections?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   editCenter?: Resolver<
     ResolversTypes["Center"],
     ParentType,

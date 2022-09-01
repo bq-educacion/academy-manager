@@ -34,14 +34,6 @@ import { validHour } from "../lib/validHour.ts";
 import { addCourse, removeCourse } from "../lib/courses.ts";
 
 export const Mutation = {
-  dropCollections: async (
-    _parent: unknown,
-    _args: unknown,
-    ctx: Context,
-  ) => {
-    await studentCollection(ctx.db).drop();
-    return "OK";
-  },
   createCenter: async (
     _parent: unknown,
     args: MutationCreateCenterArgs,
@@ -354,7 +346,7 @@ export const Mutation = {
         };
       }
 
-      addCourse(existsGroups, groupCollection(ctx.db), args.course);
+      await addCourse(existsGroups, groupCollection(ctx.db), args.course);
 
       const idStudent = await studentCollection(ctx.db).insertOne({
         ...newStudent,
@@ -461,15 +453,13 @@ export const Mutation = {
         existsGroups.filter((group) => {
           if (group._id) groupsToAdd.includes(group._id);
         });
-        console.log("ADD: " + existsGroups);
-        addCourse(existsGroups, groupCollection(ctx.db), course);
+        await addCourse(existsGroups, groupCollection(ctx.db), course);
 
         //Remove course to old groups if there are no more students with that course
         studentGroups.filter((group) => {
           if (group._id) groupsToRemove.includes(group._id);
         });
-        console.log("REMOVE: " + studentGroups);
-        removeCourse(
+        await removeCourse(
           studentGroups,
           groupCollection(ctx.db),
           studentCollection(ctx.db),
@@ -500,8 +490,8 @@ export const Mutation = {
           })
           .toArray();
 
-        addCourse(groups, groupCollection(ctx.db), args.course);
-        removeCourse(
+        await addCourse(groups, groupCollection(ctx.db), args.course);
+        await removeCourse(
           groups,
           groupCollection(ctx.db),
           studentCollection(ctx.db),

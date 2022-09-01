@@ -91,7 +91,6 @@ export const typeDefs = gql`
     getGroup(id: String!): Group!
   }
   extend type Mutation {
-    dropCollections: String!
     createGroup(
       idCenter: String!
       name: String!
