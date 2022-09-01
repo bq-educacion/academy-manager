@@ -82,6 +82,17 @@ export enum CenterNature {
   Public = "PUBLIC",
 }
 
+export type Course = {
+  __typename?: "Course";
+  EPO: Array<Scalars["String"]>;
+  ESO: Array<Scalars["String"]>;
+};
+
+export enum CourseType {
+  Epo = "EPO",
+  Eso = "ESO",
+}
+
 export enum Days {
   Friday = "FRIDAY",
   Monday = "MONDAY",
@@ -95,6 +106,7 @@ export enum Days {
 export type Group = {
   __typename?: "Group";
   center: Center;
+  course: Course;
   createdAt: Scalars["String"];
   id: Scalars["ID"];
   id_group: Scalars["Number"];
@@ -335,6 +347,7 @@ export enum OrderFilterCenter {
 
 export enum OrderFilterGroup {
   Center = "center",
+  Course = "course",
   End = "end",
   IdDay = "id_day",
   IdGroup = "id_group",
@@ -401,6 +414,7 @@ export type PaginatedStudents = {
 
 export type Query = {
   __typename?: "Query";
+  checkCorporateEmail: Scalars["String"];
   getCenter: Center;
   getCenters: PaginatedCenters;
   getGroup: Group;
@@ -409,6 +423,10 @@ export type Query = {
   getInstructors: PaginatedInstructors;
   getStudent: Student;
   getStudents: PaginatedStudents;
+};
+
+export type QueryCheckCorporateEmailArgs = {
+  email: Scalars["String"];
 };
 
 export type QueryGetCenterArgs = {
@@ -664,6 +682,8 @@ export type ResolversTypes = ResolversObject<{
   CenterContact: ResolverTypeWrapper<CenterContact>;
   CenterContactInput: CenterContactInput;
   CenterNature: CenterNature;
+  Course: ResolverTypeWrapper<Course>;
+  CourseType: CourseType;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
   GroupModality: GroupModality;
@@ -706,6 +726,7 @@ export type ResolversParentTypes = ResolversObject<{
   Center: Center;
   CenterContact: CenterContact;
   CenterContactInput: CenterContactInput;
+  Course: Course;
   Group: Group;
   ID: Scalars["ID"];
   Instructor: Instructor;
@@ -782,12 +803,23 @@ export type CenterContactResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type CourseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Course"] =
+    ResolversParentTypes["Course"],
+> = ResolversObject<{
+  EPO?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  ESO?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type GroupResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Group"] =
     ResolversParentTypes["Group"],
 > = ResolversObject<{
   center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
+  course?: Resolver<ResolversTypes["Course"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   id_group?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
@@ -1059,6 +1091,12 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes["Query"] =
     ResolversParentTypes["Query"],
 > = ResolversObject<{
+  checkCorporateEmail?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryCheckCorporateEmailArgs, "email">
+  >;
   getCenter?: Resolver<
     ResolversTypes["Center"],
     ParentType,
@@ -1219,6 +1257,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Availability?: AvailabilityResolvers<ContextType>;
   Center?: CenterResolvers<ContextType>;
   CenterContact?: CenterContactResolvers<ContextType>;
+  Course?: CourseResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
   Instructor?: InstructorResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

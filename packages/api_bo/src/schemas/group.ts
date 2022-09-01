@@ -6,6 +6,11 @@ export const typeDefs = gql`
     EXTERNAL
   }
 
+  enum CourseType{
+    EPO
+    ESO
+  }
+
   enum GroupModality {
     ON_SITE
     SEMI_PRESENTIAL
@@ -25,11 +30,17 @@ export const typeDefs = gql`
   enum OrderFilterGroup {
     id_group
     center
+    course
     instructors
     id_day
     start
     end
     modality
+  }
+
+  type Course{
+    EPO:[String!]!
+    ESO:[String!]!
   }
 
   type Timetable {
@@ -57,6 +68,7 @@ export const typeDefs = gql`
     id: ID!
     id_group: Number!
     name: String!
+    course: Course!
     modality: GroupModality!
     type: GroupType!
     createdAt: String!
