@@ -49,7 +49,8 @@ const InputSuper: FC<{
         }
         if (datePattern) {
           setInput(e.target.value.replace(/[^0-9/]/g, ""));
-        } else {
+        }
+        if (!telPattern && !timePattern && !datePattern) {
           setInput(e.target.value);
         }
       }}

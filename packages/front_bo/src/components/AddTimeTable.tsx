@@ -81,6 +81,7 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
+          type="time"
           timePattern
           disabled={!monday}
           input={monday ? monday.start : ""}
@@ -100,6 +101,7 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
+          type="time"
           timePattern
           disabled={!monday}
           input={monday ? monday.end : ""}
