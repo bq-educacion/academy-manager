@@ -252,6 +252,8 @@
     }
   },
   "general": {
+    "decline-email": "Formato de email incorrecto",
+    "empty": "Por favor, rellene este campo",
     "no-data": "No hay datos",
     "times": {
       "8:00 a 8:59": "8:00 a 8:59",

@@ -17,7 +17,8 @@ const DropDownUnique: FC<{
   setSelected: (selected: string) => void;
   disabled?: boolean;
   error?: boolean;
-}> = ({ width, options, setSelected, selected, disabled, error }) => {
+  setError?: (error: boolean) => void;
+}> = ({ width, options, setSelected, selected, disabled, error, setError }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
   const [LocalError, setLocalError] = useState<boolean>(error ? true : false);
@@ -35,6 +36,7 @@ const DropDownUnique: FC<{
           onClick={() => {
             setClicked(!clicked);
             setLocalError(false);
+            setError && setError(false);
           }}
           clicked={clicked}
           width={width}

@@ -2,6 +2,14 @@ import styled from "@emotion/styled";
 import fonts from "./fonts";
 import colors from "./colors";
 
+export const P0 = styled.p`
+  ${fonts.size.small};
+`;
+
+export const P0Error = styled(P0)`
+  color: ${colors.colors.red2};
+`;
+
 export const P1 = styled.p`
   ${fonts.size.huge};
 `;
@@ -56,6 +64,7 @@ export const RainbowDivider = styled.div`
 `;
 
 export default {
+  P0,
   P1,
   P2,
   P3,
@@ -66,4 +75,5 @@ export default {
   BoldP1,
   BoldP2,
   BoldP4,
+  P0Error,
 };

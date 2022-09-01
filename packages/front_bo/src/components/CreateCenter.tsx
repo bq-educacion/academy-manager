@@ -50,19 +50,7 @@ const CreateCenter: FC<{
     },
   ]);
 
-  const [createCenterMutation, { error }] = useCreateCenterMutation({
-    variables: {
-      name,
-      address,
-      city,
-      type: typeSelection,
-      nature: natureSelection as CenterNature,
-      languages: languagesSelection,
-      phone,
-      email,
-      contacts,
-    },
-  });
+  const [createCenterMutation, { error }] = useCreateCenterMutation();
 
   const [validEmail, setValidEmail] = useState<boolean>(false);
 
@@ -73,6 +61,15 @@ const CreateCenter: FC<{
   if (step === 1) {
     changeTitle(t("pages.centers.modal-create.center.title"));
   }
+
+  const [errorType, setErrorType] = useState<boolean>(false);
+  const [errorNature, setErrorNature] = useState<boolean>(false);
+  const [errorLanguages, setErrorLanguages] = useState<boolean>(false);
+
+  const [errorName, setErrorName] = useState<boolean>(false);
+  const [errorAddress, setErrorAddress] = useState<boolean>(false);
+  const [errorCity, setErrorCity] = useState<boolean>(false);
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
 
   return (
     <Form>
@@ -86,6 +83,8 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.type`)}
             </styles.BoldP4>
             <DropDown
+              setError={setErrorType}
+              error={errorType}
               options={Object.values(CenterActivityType).map((type) => ({
                 key: type,
                 label: t(`pages.centers.type.${type.toLowerCase()}`),
@@ -96,6 +95,7 @@ const CreateCenter: FC<{
               }
               width="390px"
             />
+            {errorType && <styles.P0Error>{t(`general.empty`)}</styles.P0Error>}
           </FillIn>
 
           <FillIn>
@@ -103,6 +103,8 @@ const CreateCenter: FC<{
               {t(`components.create-center.1.subtitle.nature`)}
             </styles.BoldP4>
             <DropDownUnique
+              setError={setErrorNature}
+              error={errorNature}
               options={Object.values(CenterNature).map((nature) => ({
                 key: nature,
                 label: t(`pages.centers.nature.${nature.toLowerCase()}`),
@@ -113,12 +115,17 @@ const CreateCenter: FC<{
                 setNatureSelection(selected as CenterNature)
               }
             />
+            {errorNature && (
+              <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+            )}
           </FillIn>
           <FillIn>
             <styles.BoldP4>
               {t(`components.create-center.1.subtitle.languages`)}
             </styles.BoldP4>
             <DropDown
+              setError={setErrorLanguages}
+              error={errorLanguages}
               options={Object.values(Languages).map((language) => ({
                 key: language,
                 label: t(`pages.centers.languages.${language.toLowerCase()}`),
@@ -129,6 +136,9 @@ const CreateCenter: FC<{
               }
               width="390px"
             />
+            {errorLanguages && (
+              <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+            )}
           </FillIn>
           <NavDiv>
             <Button
@@ -138,7 +148,27 @@ const CreateCenter: FC<{
             />
             <Button
               main
-              onClick={() => setStep(2)}
+              onClick={() => {
+                if (typeSelection.length === 0) {
+                  setErrorType(true);
+                }
+                if (natureSelection === undefined) {
+                  setErrorNature(true);
+                }
+                if (languagesSelection.length === 0) {
+                  setErrorLanguages(true);
+                }
+                if (
+                  typeSelection.length > 0 &&
+                  natureSelection !== undefined &&
+                  languagesSelection.length > 0
+                ) {
+                  setErrorType(false);
+                  setErrorNature(false);
+                  setErrorLanguages(false);
+                  setStep(2);
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDiv>
@@ -151,12 +181,15 @@ const CreateCenter: FC<{
               {t(`components.create-center.2.subtitle.name`)}
             </styles.BoldP4>
             <InputSuper
+              error={errorName}
+              setError={setErrorName}
               placeholder={t(
                 "components.create-center.2.subtitle.name-placeholder"
               )}
               input={name}
               setInput={setName}
             />
+            {errorName && <styles.P0Error>{t(`general.empty`)}</styles.P0Error>}
           </FillIn>
           <FillInSectioned>
             <FillIn width="252px">
@@ -164,22 +197,32 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.address`)}
               </styles.BoldP4>
               <InputSuper
+                error={errorAddress}
+                setError={setErrorAddress}
                 placeholder={t(
                   "components.create-center.2.subtitle.address-placeholder"
                 )}
                 input={address}
                 setInput={setAddress}
               />
+              {errorAddress && (
+                <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn width="129px">
               <styles.BoldP4>
                 {t(`components.create-center.2.subtitle.city`)}
               </styles.BoldP4>
               <InputSuper
+                error={errorCity}
+                setError={setErrorCity}
                 placeholder={t("components.create-center.2.subtitle.city")}
                 input={city}
                 setInput={setcity}
               />
+              {errorCity && (
+                <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+              )}
             </FillIn>
           </FillInSectioned>
           <FillInSectioned>
@@ -201,6 +244,8 @@ const CreateCenter: FC<{
                 {t(`components.create-center.2.subtitle.email`)}
               </styles.BoldP4>
               <InputSuper
+                error={errorEmail}
+                setError={setErrorEmail}
                 setValid={setValidEmail}
                 type="email"
                 placeholder={t(
@@ -209,6 +254,9 @@ const CreateCenter: FC<{
                 input={email}
                 setInput={setEmail}
               />
+              {errorEmail && (
+                <styles.P0Error>{t(`general.decline-email`)}</styles.P0Error>
+              )}
             </FillIn>
           </FillInSectioned>
           <NavDiv>
@@ -220,11 +268,28 @@ const CreateCenter: FC<{
             <Button
               main
               onClick={() => {
-                if (validEmail) {
-                  setValidEmail(false);
-                  setStep(3);
-                } else {
-                  alert("Email declined");
+                if (name.length === 0) {
+                  setErrorName(true);
+                }
+                if (address.length === 0) {
+                  setErrorAddress(true);
+                }
+                if (city.length === 0) {
+                  setErrorCity(true);
+                }
+                if (email.length > 0 && !validEmail) {
+                  setErrorEmail(true);
+                }
+                if (name.length > 0 && address.length > 0 && city.length > 0) {
+                  if (email.length === 0) {
+                    setStep(3);
+                  }
+                  if (email.length > 0 && validEmail) {
+                    setStep(3);
+                  }
+                  if (email.length > 0 && !validEmail) {
+                    setErrorEmail(true);
+                  }
                 }
               }}
               text={t("general.actions.next")}
@@ -275,14 +340,52 @@ const CreateCenter: FC<{
               <Button
                 create
                 onClick={() => {
-                  if (name !== "" && address !== "" && city !== "") {
-                    createCenterMutation().then(() => {
+                  if (
+                    name !== "" &&
+                    address !== "" &&
+                    city !== "" &&
+                    email !== ""
+                  ) {
+                    createCenterMutation({
+                      variables: {
+                        name,
+                        address,
+                        city,
+                        type: typeSelection,
+                        nature: natureSelection as CenterNature,
+                        languages: languagesSelection,
+                        phone,
+                        email,
+                        contacts,
+                      },
+                    }).then(() => {
                       changeTitle("");
                       refetch();
                       setStep(4);
                     });
-                  } else {
-                    alert("Please fill all the fields");
+                  }
+                  if (
+                    name !== "" &&
+                    address !== "" &&
+                    city !== "" &&
+                    email === ""
+                  ) {
+                    createCenterMutation({
+                      variables: {
+                        name,
+                        address,
+                        city,
+                        type: typeSelection,
+                        nature: natureSelection as CenterNature,
+                        languages: languagesSelection,
+                        phone,
+                        contacts,
+                      },
+                    }).then(() => {
+                      changeTitle("");
+                      refetch();
+                      setStep(4);
+                    });
                   }
                 }}
                 text={t("components.create-center.3.create")}
@@ -299,14 +402,52 @@ const CreateCenter: FC<{
               <Button
                 create
                 onClick={() => {
-                  if (name !== "" && address !== "" && city !== "") {
-                    createCenterMutation().then(() => {
+                  if (
+                    name !== "" &&
+                    address !== "" &&
+                    city !== "" &&
+                    email !== ""
+                  ) {
+                    createCenterMutation({
+                      variables: {
+                        name,
+                        address,
+                        city,
+                        type: typeSelection,
+                        nature: natureSelection as CenterNature,
+                        languages: languagesSelection,
+                        phone,
+                        email,
+                        contacts,
+                      },
+                    }).then(() => {
                       changeTitle("");
                       refetch();
                       setStep(4);
                     });
-                  } else {
-                    alert("Please fill all the fields");
+                  }
+                  if (
+                    name !== "" &&
+                    address !== "" &&
+                    city !== "" &&
+                    email === ""
+                  ) {
+                    createCenterMutation({
+                      variables: {
+                        name,
+                        address,
+                        city,
+                        type: typeSelection,
+                        nature: natureSelection as CenterNature,
+                        languages: languagesSelection,
+                        phone,
+                        contacts,
+                      },
+                    }).then(() => {
+                      changeTitle("");
+                      refetch();
+                      setStep(4);
+                    });
                   }
                 }}
                 text={t("components.create-center.3.create")}
