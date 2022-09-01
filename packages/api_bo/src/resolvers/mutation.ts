@@ -1,6 +1,7 @@
 import {
   Availability,
   CenterContact,
+  Course,
   MutationAddCenterContactArgs,
   MutationAddStudentContactArgs,
   MutationCreateCenterArgs,
@@ -30,6 +31,7 @@ import { setIdDays } from "../lib/setIdDays.ts";
 import { validDate } from "../lib/validDate.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { validHour } from "../lib/validHour.ts";
+import { addCourse, removeCourse } from "../lib/courses.ts";
 
 export const Mutation = {
   createCenter: async (
@@ -221,11 +223,18 @@ export const Mutation = {
 
       const timetable = setIdDays(args.timetable) as Timetable[];
       validHour(timetable);
+
+      const course: Course = {
+        EPO: [],
+        ESO: [],
+      };
+
       const newGroup = {
         ...args,
         id_group,
         timetable,
         center,
+        course,
         instructors: instructors || [],
         createdAt,
         students: [],
@@ -337,6 +346,8 @@ export const Mutation = {
         };
       }
 
+      await addCourse(existsGroups, groupCollection(ctx.db), args.course);
+
       const idStudent = await studentCollection(ctx.db).insertOne({
         ...newStudent,
       });
@@ -424,6 +435,7 @@ export const Mutation = {
             { $pull: { students: new ObjectId(args.id) } },
           );
         }
+
         //add student to new groups
         if (groupsToAdd.length > 0) {
           await groupCollection(ctx.db).updateMany(
@@ -431,6 +443,28 @@ export const Mutation = {
             { $push: { students: { $each: [new ObjectId(args.id)] } } },
           );
         }
+
+        const course = (await studentCollection(ctx.db).findById(args.id))
+          ?.course;
+        if (!course) {
+          throw new Error("404, Student not found");
+        }
+        //Add course to new groups
+        existsGroups.filter((group) => {
+          if (group._id) groupsToAdd.includes(group._id);
+        });
+        await addCourse(existsGroups, groupCollection(ctx.db), course);
+
+        //Remove course to old groups if there are no more students with that course
+        studentGroups.filter((group) => {
+          if (group._id) groupsToRemove.includes(group._id);
+        });
+        await removeCourse(
+          studentGroups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+          course,
+        );
       }
 
       if (args.birthDate) {
@@ -441,6 +475,28 @@ export const Mutation = {
       if (args.registrationDate) {
         const registrationDate = validDate(args.registrationDate);
         updateStudent = { ...updateStudent, registrationDate };
+      }
+
+      if (args.course) {
+        const oldCourse = (await studentCollection(ctx.db).findById(args.id))
+          ?.course;
+        if (!oldCourse) {
+          throw new Error("404, Student not found");
+        }
+
+        const groups = await groupCollection(ctx.db)
+          .find({
+            students: new ObjectId(args.id),
+          })
+          .toArray();
+
+        await addCourse(groups, groupCollection(ctx.db), args.course);
+        await removeCourse(
+          groups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+          oldCourse,
+        );
       }
 
       const newStudent = await studentCollection(ctx.db).findAndModify(

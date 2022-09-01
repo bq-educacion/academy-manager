@@ -11,6 +11,7 @@ import {
   PaginatedGroups,
   PaginatedInstructors,
   PaginatedStudents,
+  QueryCheckCorporateEmailArgs,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
   QueryGetGroupArgs,
@@ -125,6 +126,8 @@ export const Query = {
         {
           createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
         },
+        { "course.ESO": { $regex: `.*${args.searchText}.*`, $options: "i" } },
+        { "course.EPO": { $regex: `.*${args.searchText}.*`, $options: "i" } },
         {
           "timetable.day": {
             $regex: `.*${args.searchText}.*`,
@@ -169,6 +172,7 @@ export const Query = {
     const OrderFilter = {
       id_group: "id_group",
       modality: "modality",
+      course: "course",
       instructors: "instructorsName.name",
       center: "centersName.name",
       id_day: "timetable.id_day",
@@ -301,6 +305,24 @@ export const Query = {
         throw new Error("404, Student not found");
       }
       return student;
+    } catch (error) {
+      throw new Error("500, " + error);
+    }
+  },
+
+  checkCorporateEmail: async (
+    _parent: unknown,
+    args: QueryCheckCorporateEmailArgs,
+    ctx: Context,
+  ): Promise<string> => {
+    try {
+      const instructor = await instructorCollection(ctx.db).findOne({
+        corporateEmail: args.email,
+      });
+      if (instructor) {
+        throw new Error("400, Corporate email must be unique");
+      }
+      return args.email;
     } catch (error) {
       throw new Error("500, " + error);
     }
