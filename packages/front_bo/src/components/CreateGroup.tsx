@@ -195,16 +195,14 @@ const CreateGroup: FC<{
             <Button
               create
               onClick={() => {
-                setTimeout(() => {
-                  if (name != "" && center != "" && modality && type) {
-                    setFinished(true);
-                    changeTitle("");
-                    refetch();
-                    setStep(3);
-                  } else {
-                    alert("Please fill all the fields");
-                  }
-                }, 100);
+                if (name != "" && center != "" && modality && type) {
+                  setFinished(true);
+                  changeTitle("");
+                  refetch();
+                  setStep(3);
+                } else {
+                  alert("Please fill all the fields");
+                }
               }}
               text={t("general.actions.create")}
             />

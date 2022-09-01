@@ -71,6 +71,17 @@ export enum CenterNature {
   Public = 'PUBLIC'
 }
 
+export type Course = {
+  __typename?: 'Course';
+  EPO: Array<Scalars['String']>;
+  ESO: Array<Scalars['String']>;
+};
+
+export enum CourseType {
+  Epo = 'EPO',
+  Eso = 'ESO'
+}
+
 export enum Days {
   Friday = 'FRIDAY',
   Monday = 'MONDAY',
@@ -84,6 +95,7 @@ export enum Days {
 export type Group = {
   __typename?: 'Group';
   center: Center;
+  course: Course;
   createdAt: Scalars['String'];
   id: Scalars['ID'];
   id_group: Scalars['Number'];
@@ -336,6 +348,7 @@ export enum OrderFilterCenter {
 
 export enum OrderFilterGroup {
   Center = 'center',
+  Course = 'course',
   End = 'end',
   IdDay = 'id_day',
   IdGroup = 'id_group',
@@ -402,6 +415,7 @@ export type PaginatedStudents = {
 
 export type Query = {
   __typename?: 'Query';
+  checkCorporateEmail: Scalars['String'];
   getCenter: Center;
   getCenters: PaginatedCenters;
   getGroup: Group;
@@ -410,6 +424,11 @@ export type Query = {
   getInstructors: PaginatedInstructors;
   getStudent: Student;
   getStudents: PaginatedStudents;
+};
+
+
+export type QueryCheckCorporateEmailArgs = {
+  email: Scalars['String'];
 };
 
 
