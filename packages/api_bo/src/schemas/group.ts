@@ -6,6 +6,11 @@ export const typeDefs = gql`
     EXTERNAL
   }
 
+  enum CourseType{
+    EPO
+    ESO
+  }
+
   enum GroupModality {
     ON_SITE
     SEMI_PRESENTIAL

@@ -31,6 +31,7 @@ import { setIdDays } from "../lib/setIdDays.ts";
 import { validDate } from "../lib/validDate.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { validHour } from "../lib/validHour.ts";
+import { addCourse, removeCourse } from "../lib/courses.ts";
 
 export const Mutation = {
   dropCollections: async (
@@ -38,7 +39,6 @@ export const Mutation = {
     _args: unknown,
     ctx: Context,
   ) => {
-    await groupCollection(ctx.db).drop();
     await studentCollection(ctx.db).drop();
     return "OK";
   },
@@ -354,34 +354,7 @@ export const Mutation = {
         };
       }
 
-      const groupsNewCoursesEPO: ObjectId[] = [];
-      const groupsNewCoursesESO: ObjectId[] = [];
-      existsGroups.forEach((group) => {
-        if (
-          (/.*EPO$/).test(args.course) &&
-          !group.course.EPO.includes(args.course)
-        ) {
-          if (group._id) groupsNewCoursesEPO.push(group._id);
-        } else if (
-          (/.*ESO$/).test(args.course) &&
-          !group.course.ESO.includes(args.course)
-        ) {
-          if (group._id) groupsNewCoursesESO.push(group._id);
-        }
-      });
-
-      // if(groupsNewCoursesEPO.length > 0){
-      //   await groupCollection(ctx.db).updateMany(
-      //     { _id: { $in: groupsNewCoursesEPO } },
-      //     {$push:{"course.EPO":args.course}},
-      //   );
-      // }
-      // if (groupsNewCoursesESO.length > 0) {
-      //   await groupCollection(ctx.db).updateMany(
-      //     { _id: { $in: groupsNewCoursesESO } },
-      //     { $push:{"course.ESO":args.course} },
-      //   );
-      // }
+      addCourse(existsGroups, groupCollection(ctx.db), args.course);
 
       const idStudent = await studentCollection(ctx.db).insertOne({
         ...newStudent,
@@ -470,6 +443,7 @@ export const Mutation = {
             { $pull: { students: new ObjectId(args.id) } },
           );
         }
+
         //add student to new groups
         if (groupsToAdd.length > 0) {
           await groupCollection(ctx.db).updateMany(
@@ -477,6 +451,30 @@ export const Mutation = {
             { $push: { students: { $each: [new ObjectId(args.id)] } } },
           );
         }
+
+        const course = (await studentCollection(ctx.db).findById(args.id))
+          ?.course;
+        if (!course) {
+          throw new Error("404, Student not found");
+        }
+        //Add course to new groups
+        existsGroups.filter((group) => {
+          if (group._id) groupsToAdd.includes(group._id);
+        });
+        console.log("ADD: " + existsGroups);
+        addCourse(existsGroups, groupCollection(ctx.db), course);
+
+        //Remove course to old groups if there are no more students with that course
+        studentGroups.filter((group) => {
+          if (group._id) groupsToRemove.includes(group._id);
+        });
+        console.log("REMOVE: " + studentGroups);
+        removeCourse(
+          studentGroups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+          course,
+        );
       }
 
       if (args.birthDate) {
@@ -490,83 +488,25 @@ export const Mutation = {
       }
 
       if (args.course) {
-        const newCourse = args.course;
-        const oldStudent = await studentCollection(ctx.db).findById(args.id);
-        if (!oldStudent) {
+        const oldCourse = (await studentCollection(ctx.db).findById(args.id))
+          ?.course;
+        if (!oldCourse) {
           throw new Error("404, Student not found");
         }
-        const oldCourse = oldStudent.course;
+
         const groups = await groupCollection(ctx.db)
           .find({
             students: new ObjectId(args.id),
           })
           .toArray();
 
-        const groupsNewCoursesEPO: ObjectId[] = [];
-        const groupsNewCoursesESO: ObjectId[] = [];
-        groups.forEach((group) => {
-          if (
-            (/.*EPO$/).test(newCourse) && !group.course.EPO.includes(newCourse)
-          ) {
-            if (group._id) groupsNewCoursesEPO.push(group._id);
-          } else if (
-            (/.*ESO$/).test(newCourse) && !group.course.ESO.includes(newCourse)
-          ) {
-            if (group._id) groupsNewCoursesESO.push(group._id);
-          }
-        });
-
-        const groupsOldCoursesEPO: GroupModel[] = [];
-        const groupsOldCoursesESO: GroupModel[] = [];
-        groups.forEach((group) => {
-          if (
-            (/.*EPO$/).test(oldCourse) && group.course.EPO.includes(oldCourse)
-          ) {
-            groupsOldCoursesEPO.push(group);
-          } else if (
-            (/.*ESO$/).test(oldCourse) && !group.course.ESO.includes(oldCourse)
-          ) {
-            groupsOldCoursesESO.push(group);
-          }
-        });
-        // const groupsDeleteOldCourseEPO = groupsOldCoursesEPO.map(
-        //   (group) => {
-        //     if(group?.course.EPO.length === 1) {
-        //       return group._id;
-        //     }
-        //   }
-        // );
-        // const groupsDeleteOldCourseESO = groupsOldCoursesESO.map(
-        //   (group) => {
-        //     if(group?.course.ESO.length === 1) {
-        //       return group._id;
-        //     }
-        //   }
-        // );
-        // if(groupsNewCoursesEPO.length > 0){
-        //   await groupCollection(ctx.db).updateMany(
-        //     { _id: { $in: groupsNewCoursesEPO } },
-        //     { $push:{"course.EPO":newCourse }},
-        //   );
-        // }
-        // if(groupsNewCoursesESO.length > 0){
-        //   await groupCollection(ctx.db).updateMany(
-        //     { _id: { $in: groupsNewCoursesESO } },
-        //     { $push:{"course.ESO":newCourse }},
-        //   );
-        // }
-        // if(groupsDeleteOldCourseEPO.length > 0){
-        //   await groupCollection(ctx.db).updateMany(
-        //     { _id: { $in: groupsDeleteOldCourseEPO } },
-        //     { $pull: { course: { EPO: oldCourse } }},
-        //   );
-        // }
-        // if(groupsDeleteOldCourseESO.length > 0){
-        //   await groupCollection(ctx.db).updateMany(
-        //     { _id: { $in: groupsDeleteOldCourseESO } },
-        //     { $pull: { course: { ESO: oldCourse } } },
-        //   );
-        // }
+        addCourse(groups, groupCollection(ctx.db), args.course);
+        removeCourse(
+          groups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+          oldCourse,
+        );
       }
 
       const newStudent = await studentCollection(ctx.db).findAndModify(

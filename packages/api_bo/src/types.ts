@@ -88,6 +88,11 @@ export type Course = {
   ESO: Array<Scalars["String"]>;
 };
 
+export enum CourseType {
+  Epo = "EPO",
+  Eso = "ESO",
+}
+
 export enum Days {
   Friday = "FRIDAY",
   Monday = "MONDAY",
@@ -679,6 +684,7 @@ export type ResolversTypes = ResolversObject<{
   CenterContactInput: CenterContactInput;
   CenterNature: CenterNature;
   Course: ResolverTypeWrapper<Course>;
+  CourseType: CourseType;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
   GroupModality: GroupModality;
