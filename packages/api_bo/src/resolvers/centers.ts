@@ -2,6 +2,7 @@ import { Context } from "../app.ts";
 import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import {
+  MutationDeleteCenterArgs,
   PaginatedCenters,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
@@ -17,6 +18,7 @@ import {
 } from "../types.ts";
 import { ObjectId } from "objectId";
 import { checkNotNull } from "../lib/checkNotNull.ts";
+import { studentCollection } from "../models/StudentModel.ts";
 
 export const centers = {
   Center: {
@@ -260,6 +262,43 @@ export const centers = {
         );
 
         return contactUpdate;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    deleteCenter: async (
+      _parent: unknown,
+      args: MutationDeleteCenterArgs,
+      ctx: Context,
+    ): Promise<CenterModel> => {
+      try {
+        checkNotNull(args);
+        const center = await centerCollection(ctx.db).findById(args.id);
+        if (!center) {
+          throw new Error("404, Center not found");
+        }
+
+        const idStudents: ObjectId[] =
+          (await groupCollection(ctx.db).distinct("students", {
+            center: new ObjectId(args.id),
+          })).flat();
+
+        if (idStudents.length > 0) {
+          await studentCollection(ctx.db).deleteMany({
+            _id: { $in: idStudents },
+          });
+        }
+
+        await groupCollection(ctx.db).deleteMany({
+          center: new ObjectId(args.id),
+        });
+
+        await centerCollection(ctx.db).deleteOne({
+          _id: new ObjectId(args.id),
+        });
+
+        return center;
       } catch (error) {
         throw new Error("500, " + error);
       }
