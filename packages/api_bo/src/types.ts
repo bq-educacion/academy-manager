@@ -53,6 +53,7 @@ export type Center = {
   nature: CenterNature;
   notes?: Maybe<Scalars["String"]>;
   phone?: Maybe<Scalars["String"]>;
+  state: Scalars["Boolean"];
   type: Array<CenterActivityType>;
 };
 
@@ -78,6 +79,7 @@ export type CenterContactInput = {
 
 export enum CenterNature {
   Concertado = "CONCERTADO",
+  Null = "NULL",
   Private = "PRIVATE",
   Public = "PUBLIC",
 }
@@ -114,6 +116,7 @@ export type Group = {
   modality: GroupModality;
   name: Scalars["String"];
   notes?: Maybe<Scalars["String"]>;
+  state: Scalars["Boolean"];
   students: Array<Student>;
   timetable: Array<Timetable>;
   type: GroupType;
@@ -175,6 +178,7 @@ export type Mutation = {
   editInstructor: Instructor;
   editStudent: Student;
   editStudentContact: StudentContact;
+  stateCenter: Center;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -342,6 +346,11 @@ export type MutationEditStudentContactArgs = {
   send_info?: InputMaybe<Scalars["Boolean"]>;
 };
 
+export type MutationStateCenterArgs = {
+  id: Scalars["String"];
+  state: Scalars["Boolean"];
+};
+
 export enum OrderFilterCenter {
   City = "city",
   Languages = "languages",
@@ -495,6 +504,7 @@ export type Student = {
   contacts?: Maybe<Array<StudentContact>>;
   course: Scalars["String"];
   descriptionAllergy?: Maybe<Scalars["String"]>;
+  globalState: Scalars["Boolean"];
   goesAlone?: Maybe<Scalars["Boolean"]>;
   groups: Array<Group>;
   id: Scalars["ID"];
@@ -789,6 +799,7 @@ export type CenterResolvers<
   nature?: Resolver<ResolversTypes["CenterNature"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  state?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   type?: Resolver<
     Array<ResolversTypes["CenterActivityType"]>,
     ParentType,
@@ -836,6 +847,7 @@ export type GroupResolvers<
   modality?: Resolver<ResolversTypes["GroupModality"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  state?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   students?: Resolver<
     Array<ResolversTypes["Student"]>,
     ParentType,
@@ -1038,6 +1050,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationEditStudentContactArgs, "idStudent" | "originEmail">
   >;
+  stateCenter?: Resolver<
+    ResolversTypes["Center"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationStateCenterArgs, "id" | "state">
+  >;
 }>;
 
 export interface NumberScalarConfig
@@ -1189,6 +1207,7 @@ export type StudentResolvers<
     ParentType,
     ContextType
   >;
+  globalState?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   goesAlone?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,

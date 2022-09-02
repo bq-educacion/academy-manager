@@ -68,6 +68,7 @@ export const typeDefs = gql`
     id: ID!
     id_group: Number!
     name: String!
+    state:Boolean!
     course: Course!
     modality: GroupModality!
     type: GroupType!

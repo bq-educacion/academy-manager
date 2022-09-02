@@ -3,6 +3,7 @@ import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import {
   MutationDeleteCenterArgs,
+  MutationStateCenterArgs,
   PaginatedCenters,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
@@ -145,6 +146,7 @@ export const centers = {
         let center = {
           ...args,
           createdAt,
+          state: true,
         };
 
         if (args.contacts) {
@@ -299,6 +301,58 @@ export const centers = {
         });
 
         return center;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    stateCenter: async (
+      _parent: unknown,
+      args: MutationStateCenterArgs,
+      ctx: Context,
+    ): Promise<CenterModel> => {
+      try {
+        checkNotNull(args);
+        const newCenter = await centerCollection(ctx.db).findAndModify(
+          { _id: new ObjectId(args.id) },
+          {
+            update: { $set: { state: args.state } },
+            new: true,
+          },
+        );
+        if (!newCenter) {
+          throw new Error("404, Center not found");
+        }
+
+        const groups = await groupCollection(ctx.db).find({
+          center: new ObjectId(args.id),
+        }).toArray();
+        const idGroups = groups.map((group) => group._id);
+        await groupCollection(ctx.db).updateMany(
+          { _id: { $in: idGroups } },
+          { $set: { state: args.state } },
+        );
+
+        if (!args.state) {
+          const deleteCenterGroups = groups.map((group) => {
+            if (group.instructors.length === 0) {
+              if (group._id) return new ObjectId(group._id);
+            }
+          });
+
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: deleteCenterGroups } },
+            { $set: { center: null } },
+          );
+        }
+
+        const idStudents: ObjectId[] = groups.map((group) => group.students)
+          .flat();
+        await studentCollection(ctx.db).updateMany(
+          { _id: { $in: idStudents } },
+          { $set: { globalState: args.state } },
+        );
+        return newCenter;
       } catch (error) {
         throw new Error("500, " + error);
       }

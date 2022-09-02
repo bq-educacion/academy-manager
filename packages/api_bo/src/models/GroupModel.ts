@@ -10,7 +10,7 @@ export type GroupModel =
   >
   & {
     _id?: ObjectId;
-    center: ObjectId;
+    center: ObjectId | null;
     students: ObjectId[];
     instructors: ObjectId[];
   };

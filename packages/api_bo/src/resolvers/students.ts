@@ -145,10 +145,10 @@ export const students = {
     ): Promise<StudentModel> => {
       try {
         checkNotNull(args);
-        const state = StudentState.Active;
         let newStudent = {
           ...args,
-          state,
+          state: StudentState.Active,
+          globalState: true,
         };
 
         if (args.birthDate) {

@@ -7,6 +7,7 @@ import {
   InstructorModel,
 } from "../models/InstructorModel.ts";
 import {
+  CenterNature,
   PaginatedGroups,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
@@ -35,7 +36,23 @@ export const groups = {
       _: unknown,
       ctx: Context,
     ): Promise<CenterModel | undefined> => {
-      return await centerCollection(ctx.db).findOne({ _id: parent.center });
+      if (parent.center !== null) {
+        return await centerCollection(ctx.db).findOne({ _id: parent.center });
+      } else {
+        return {
+          _id: null,
+          name: "",
+          address: "",
+          city: "",
+          state: false,
+          type: [],
+          nature: CenterNature.Null,
+          languages: [],
+          notes: "",
+          createdAt: "",
+          contacts: [],
+        };
+      }
     },
     students: async (
       parent: GroupModel,
@@ -229,6 +246,7 @@ export const groups = {
           ...args,
           id_group,
           timetable,
+          state: centerExists.state,
           center,
           course,
           instructors: instructors || [],
