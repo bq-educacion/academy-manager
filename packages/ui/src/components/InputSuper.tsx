@@ -29,7 +29,7 @@ const InputSuper: FC<{
   datePattern,
   setError,
 }) => {
-  const [InputType, setInputType] = useState<string>(type ? type : "text");
+  const [InputType] = useState<string>(type ? type : "text");
   const [LocalError, setLocalError] = useState<boolean>(error ? true : false);
   useEffect(() => {
     setLocalError(error ? true : false);
@@ -59,9 +59,6 @@ const InputSuper: FC<{
       onClick={() => {
         setLocalError(false);
         setError && setError(false);
-        if (datePattern) {
-          setInputType("date");
-        }
       }}
       type={!disabled ? InputType : ""}
     />

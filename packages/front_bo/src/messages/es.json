@@ -252,6 +252,7 @@
     }
   },
   "general": {
+    "decline-date": "Fecha incorrecta",
     "decline-email": "Formato de email incorrecto",
     "empty": "Este campo no puede quedar vacío",
     "no-data": "No hay datos",

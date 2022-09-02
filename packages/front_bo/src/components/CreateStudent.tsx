@@ -100,6 +100,13 @@ const CreateStudent: FC<{
     changeTitle(t("pages.students.modal-create.title"));
   }
 
+  const [centerError, setCenterError] = useState<boolean>(false);
+  const [courseError, setCourseError] = useState<boolean>(false);
+  const [nameError, setNameError] = useState<boolean>(false);
+  const [inscriptionDayError, setInscriptionDayError] =
+    useState<boolean>(false);
+  const [birthDateError, setBirthDateError] = useState<boolean>(false);
+
   return (
     <Form>
       {step !== 1 && (
@@ -116,6 +123,8 @@ const CreateStudent: FC<{
                 {t(`components.create-group.1.subtitle.center`)}
               </styles.BoldP4>
               <DropDownUnique
+                error={centerError}
+                setError={setCenterError}
                 options={
                   CentersData?.getCenters.data.map((elem) => {
                     return {
@@ -128,6 +137,9 @@ const CreateStudent: FC<{
                 setSelected={setCenter}
                 selected={center}
               />
+              {centerError && (
+                <styles.P0Error>{t("general.empty")}</styles.P0Error>
+              )}
             </FillIn>
             <FillInSectioned>
               <FillIn>
@@ -155,6 +167,8 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.course`)}
                 </styles.BoldP4>
                 <DropDownUnique
+                  error={courseError}
+                  setError={setCourseError}
                   options={courses.map((elem) => {
                     return {
                       key: elem.key,
@@ -165,6 +179,9 @@ const CreateStudent: FC<{
                   setSelected={setCourse}
                   selected={course}
                 />
+                {courseError && (
+                  <styles.P0Error>{t("general.empty")}</styles.P0Error>
+                )}
               </FillIn>
             </FillInSectioned>
             <FillInSectioned>
@@ -173,18 +190,25 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.name`)}
                 </styles.BoldP4>
                 <InputSuper
+                  error={nameError}
+                  setError={setNameError}
                   input={name}
                   setInput={setName}
                   placeholder={t(
                     `components.create-student.1.subtitle.name-placeholder`
                   )}
                 />
+                {nameError && (
+                  <styles.P0Error>{t("general.empty")}</styles.P0Error>
+                )}
               </FillIn>
               <FillIn width="130px">
                 <styles.BoldP4>
                   {t(`components.create-student.1.subtitle.inscription-date`)}
                 </styles.BoldP4>
                 <InputSuper
+                  error={inscriptionDayError}
+                  setError={setInscriptionDayError}
                   datePattern
                   input={inscriptionDay}
                   setInput={setInscriptionDay}
@@ -192,6 +216,9 @@ const CreateStudent: FC<{
                     `components.create-student.1.subtitle.inscription-date-placeholder`
                   )}
                 />
+                {inscriptionDayError && (
+                  <styles.P0Error>{t("general.decline-date")}</styles.P0Error>
+                )}
               </FillIn>
             </FillInSectioned>
             <FillInSectioned>
@@ -200,6 +227,8 @@ const CreateStudent: FC<{
                   {t(`components.create-student.1.subtitle.birth-date`)}
                 </styles.BoldP4>
                 <InputSuper
+                  error={birthDateError}
+                  setError={setBirthDateError}
                   datePattern
                   input={birthDate}
                   setInput={setbirthDate}
@@ -207,6 +236,9 @@ const CreateStudent: FC<{
                     `components.create-student.1.subtitle.birth-date-placeholder`
                   )}
                 />
+                {birthDateError && (
+                  <styles.P0Error>{t("general.decline-date")}</styles.P0Error>
+                )}
               </FillIn>
               <FillIn width="250px" />
             </FillInSectioned>
@@ -287,7 +319,53 @@ const CreateStudent: FC<{
             />
             <Button
               main
-              onClick={() => setStep(2)}
+              onClick={() => {
+                if (inscriptionDay !== "") {
+                  if (
+                    !inscriptionDay.match(
+                      /(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/
+                    )
+                  ) {
+                    setInscriptionDayError(true);
+                  }
+                }
+                if (birthDate !== "") {
+                  if (
+                    !birthDate.match(
+                      /(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/
+                    )
+                  ) {
+                    setBirthDateError(true);
+                  }
+                }
+                {
+                  center === "" && setCenterError(true);
+                }
+                {
+                  course === "" && setCourseError(true);
+                }
+                {
+                  name === "" && setNameError(true);
+                }
+
+                if (
+                  center !== "" &&
+                  course !== "" &&
+                  name !== "" &&
+                  (inscriptionDay === "" ||
+                    (inscriptionDay !== "" &&
+                      inscriptionDay.match(
+                        /(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/
+                      ))) &&
+                  (birthDate === "" ||
+                    (birthDate !== "" &&
+                      birthDate.match(
+                        /(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/
+                      )))
+                ) {
+                  setStep(2);
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDivStep1>

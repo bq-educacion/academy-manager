@@ -66,6 +66,8 @@ const CreateGroup: FC<{
             timetable: timeTableOnChange,
             instructors,
           },
+        }).then(() => {
+          refetch();
         });
     }
   }, [finished]);
@@ -238,7 +240,6 @@ const CreateGroup: FC<{
                 if (name != "" && center != "" && modality && type) {
                   setFinished(true);
                   changeTitle("");
-                  refetch();
                   setStep(3);
                 }
               }}
