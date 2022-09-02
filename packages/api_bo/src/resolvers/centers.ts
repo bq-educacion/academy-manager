@@ -279,9 +279,10 @@ export const centers = {
           throw new Error("404, Center not found");
         }
 
-        const idStudents: ObjectId[] = (await groupCollection(ctx.db).find({
-          center: new ObjectId(args.id),
-        }).toArray()).flatMap((group) => group.students);
+        const idStudents: ObjectId[] =
+          (await groupCollection(ctx.db).distinct("students", {
+            center: new ObjectId(args.id),
+          })).flat();
 
         if (idStudents.length > 0) {
           await studentCollection(ctx.db).deleteMany({
