@@ -278,24 +278,21 @@ export const centers = {
         if (!center) {
           throw new Error("404, Center not found");
         }
-        const groups = await groupCollection(ctx.db).find({
+
+        const idStudents: ObjectId[] = (await groupCollection(ctx.db).find({
           center: new ObjectId(args.id),
-        }).toArray();
-        const idStudents: ObjectId[] = [];
-        groups.forEach((group) =>
-          group.students.forEach((student) => idStudents.push(student))
-        );
+        }).toArray()).flatMap((group) => group.students);
 
         if (idStudents.length > 0) {
           await studentCollection(ctx.db).deleteMany({
             _id: { $in: idStudents },
           });
         }
-        if (groups.length > 0) {
-          await groupCollection(ctx.db).deleteMany({
-            center: new ObjectId(args.id),
-          });
-        }
+
+        await groupCollection(ctx.db).deleteMany({
+          center: new ObjectId(args.id),
+        });
+
         await centerCollection(ctx.db).deleteOne({
           _id: new ObjectId(args.id),
         });
