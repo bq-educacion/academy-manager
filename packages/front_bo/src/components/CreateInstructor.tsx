@@ -707,12 +707,12 @@ const CreateInstructor: FC<{
                   experience !== undefined &&
                   programming !== undefined &&
                   cvUrl !== "" &&
-                  availability !== [] &&
+                  // availability !== [] &&
                   vehicle !== undefined &&
-                  LocalZones !== [] &&
-                  especifyZones !== [] &&
+                  // LocalZones !== [] &&
+                  // especifyZones !== [] &&
                   center !== "" &&
-                  groups !== [] &&
+                  // groups !== [] &&
                   summer !== undefined
                 ) {
                   createInstructorMutation({

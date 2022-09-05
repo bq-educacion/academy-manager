@@ -55,6 +55,7 @@ const colors = {
   red40: "#ff5776",
 
   red1: "#ff0a37",
+  red2: "#ff002f",
 
   green100: "#688a2f",
   green80: "#82ad3a",
