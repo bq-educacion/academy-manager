@@ -86,6 +86,7 @@ const InputStyled = styled.input<{
   ${({ error }) =>
     error &&
     `
+  color: ${colors.colors.red2};
   border: solid 1px ${colors.colors.red1}; 
   background-color: ${colors.colors.pink1}; 
   `}
