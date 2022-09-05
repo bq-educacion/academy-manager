@@ -38,7 +38,7 @@ const AddCenter: FC<{
     if (StraightGroupsData) {
       setGroupsData(
         StraightGroupsData.getGroups.data.filter(
-          (elem) => elem.center.id === center
+          (elem) => elem.center?.id === center
         ) as Group[]
       );
     }
