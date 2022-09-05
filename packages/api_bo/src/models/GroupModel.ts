@@ -9,7 +9,7 @@ export type GroupModel =
     "id" | "center" | "students" | "instructors"
   >
   & {
-    _id?: ObjectId;
+    _id: ObjectId;
     center: ObjectId | null;
     students: ObjectId[];
     instructors: ObjectId[];

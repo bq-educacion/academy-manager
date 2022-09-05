@@ -50,7 +50,7 @@ export const typeDefs = gql`
     city: String!
     phone: String
     email: String
-    state: Boolean!
+    active: Boolean!
     type: [CenterActivityType!]!
     nature: CenterNature!
     languages: [Languages!]!
@@ -115,6 +115,6 @@ export const typeDefs = gql`
     ): CenterContact!
 
     deleteCenter(id: String!): Center!
-    stateCenter(id:String!, state:Boolean!): Center!
+    setStatusCenter(id:String!, active:Boolean!): Center!
   }
 `;
