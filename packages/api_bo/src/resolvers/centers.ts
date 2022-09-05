@@ -20,6 +20,7 @@ import {
 import { ObjectId } from "objectId";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { studentCollection } from "../models/StudentModel.ts";
+import { instructorCollection } from "../models/InstructorModel.ts";
 
 export const centers = {
   Center: {
@@ -285,11 +286,10 @@ export const centers = {
             center: new ObjectId(args.id),
           })).flat();
 
-        if (idStudents.length > 0) {
-          await studentCollection(ctx.db).deleteMany({
-            _id: { $in: idStudents },
-          });
-        }
+        const idInstructors: ObjectId[] =
+          (await groupCollection(ctx.db).distinct("instructors", {
+            center: new ObjectId(args.id),
+          })).flat();
 
         await groupCollection(ctx.db).deleteMany({
           center: new ObjectId(args.id),
@@ -298,6 +298,44 @@ export const centers = {
         await centerCollection(ctx.db).deleteOne({
           _id: new ObjectId(args.id),
         });
+
+        if (idStudents.length > 0) {
+          const inactiveStudents = await Promise.all(
+            idStudents.map(async (id) => {
+              const groups = await groupCollection(ctx.db).countDocuments({
+                students: id,
+              });
+              if (groups === 0) {
+                return id;
+              }
+            }),
+          ) as ObjectId[];
+          if (inactiveStudents.length > 0) {
+            await studentCollection(ctx.db).updateMany(
+              { _id: { $in: inactiveStudents } },
+              { $set: { activeGroup: false } },
+            );
+          }
+        }
+
+        if (idInstructors.length > 0) {
+          const inactiveInstructors = await Promise.all(
+            idInstructors.map(async (id) => {
+              const groups = await groupCollection(ctx.db).countDocuments({
+                instructors: id,
+              });
+              if (groups === 0) {
+                return id;
+              }
+            }),
+          ) as ObjectId[];
+          if (inactiveInstructors.length > 0) {
+            await instructorCollection(ctx.db).updateMany(
+              { _id: { $in: inactiveInstructors } },
+              { $set: { activeGroup: false } },
+            );
+          }
+        }
 
         return center;
       } catch (error) {
