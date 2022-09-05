@@ -180,6 +180,7 @@ const CreateInstructor: FC<{
               setInput={setName}
               placeholder={t("components.create-instructor.1.name-placeholder")}
             />
+            {nameError && <styles.P0Error>{t("general.empty")}</styles.P0Error>}
           </FillIn>
           <FillInSectioned>
             <FillIn width="254px">
@@ -266,6 +267,9 @@ const CreateInstructor: FC<{
                 }
                 if (emailPro.length > 0 && !ValidProEmail) {
                   setErrorProEmail(true);
+                }
+                if (name.length === 0) {
+                  setNameError(true);
                 }
               }}
               text={t("general.actions.next")}
