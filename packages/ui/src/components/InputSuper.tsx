@@ -28,7 +28,7 @@ const InputSuper: FC<{
   datePattern,
 }) => {
   const [InputType, setInputType] = useState<string>(type ? type : "text");
-  const [LocalError, setLocalError] = useState<boolean>(error ? true : false);
+  const [localError, setLocalError] = useState<boolean>(error ? true : false);
   useEffect(() => {
     setLocalError(error ? true : false);
   }, [error]);
@@ -52,7 +52,7 @@ const InputSuper: FC<{
         }
       }}
       height={height}
-      error={LocalError}
+      error={localError}
       onClick={() => {
         setLocalError(false);
         if (datePattern) {
