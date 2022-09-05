@@ -95,6 +95,7 @@ const InputStyled = styled.input<{
     ${(props) => props.error && `color: ${colors.colors.red1}`}
   }
   &:hover {
-    border: solid 1px ${colors.colors.blackBackground};
+    ${({ error }) =>
+      !error && `border: solid 1px ${colors.colors.blackBackground};`}
   }
 `;
