@@ -46,6 +46,17 @@ const InputSuper: FC<{
         }
         if (timePattern) {
           setInput(e.target.value.replace(/[^0-9:]/g, ""));
+          if (setValid) {
+            if (
+              !e.target.value
+                .replace(/[^0-9:]/g, "")
+                .match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
+            ) {
+              setValid(true);
+            } else {
+              setValid(false);
+            }
+          }
         }
         if (datePattern) {
           setInput(e.target.value.replace(/[^0-9/]/g, ""));
