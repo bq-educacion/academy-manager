@@ -35,7 +35,11 @@ export const groups = {
       _: unknown,
       ctx: Context,
     ): Promise<CenterModel | undefined> => {
-      return await centerCollection(ctx.db).findOne({ _id: parent.center });
+      if (parent.center !== null) {
+        return await centerCollection(ctx.db).findOne({ _id: parent.center });
+      } else {
+        return null;
+      }
     },
     students: async (
       parent: GroupModel,
@@ -229,6 +233,7 @@ export const groups = {
           ...args,
           id_group,
           timetable,
+          activeCenter: centerExists.active,
           center,
           course,
           instructors: instructors || [],
