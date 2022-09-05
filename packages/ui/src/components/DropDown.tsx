@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslate } from "../hooks";
 import { colors, styles } from "../theme";
 import CheckBox from "./CheckBox";
@@ -16,20 +16,29 @@ const DropDown: FC<{
   options: Option[];
   selected: string[];
   disabled?: boolean;
+  error?: boolean;
+  setError?: (error: boolean) => void;
   setSelected: (selected: string[]) => void;
-}> = ({ width, options, setSelected, selected, disabled }) => {
+}> = ({ width, options, setSelected, selected, disabled, error, setError }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
+  const [localError, setLocalError] = useState<boolean>(error ? true : false);
+  useEffect(() => {
+    setLocalError(error ? true : false);
+  }, [error]);
   return (
     <Popover
       isOpenEx={clicked}
       setIsOpenEx={setClicked}
       title={
         <InputBox
+          error={localError}
           disabled={disabled ? true : false}
           onClick={() => {
             setClicked(!clicked);
             setSelected(selected);
+            setLocalError(false);
+            setError && setError(false);
           }}
           clicked={clicked}
           width={width}
@@ -103,6 +112,7 @@ const InputBox = styled.div<{
   clicked: boolean;
   width: string;
   disabled: boolean;
+  error: boolean;
 }>`
   display: flex;
   align-items: center;
@@ -118,6 +128,9 @@ const InputBox = styled.div<{
   ${(props) =>
     props.disabled &&
     `background-color: ${colors.colors.grayBlue}; pointer-events: none; color: ${colors.colors.gray2}`};
+  ${(props) =>
+    props.error &&
+    `border: solid 1px ${colors.colors.red1}; background-color: ${colors.colors.pink1}; color: ${colors.colors.red2}`};
   & > svg {
     transform-origin: center;
     transition: transform 0.2s ease-in-out;
@@ -127,7 +140,7 @@ const InputBox = styled.div<{
   }
 
   &:hover {
-    border: solid 1px ${colors.colors.black};
+    ${(props) => !props.error && `border: solid 1px ${colors.colors.black};`}
   }
   & > p {
     margin: 0 20px;

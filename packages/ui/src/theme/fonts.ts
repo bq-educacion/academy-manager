@@ -7,6 +7,10 @@ const family = {
 };
 
 const size = {
+  small: css`
+    font-size: 12px;
+    line-height: 20px;
+  `,
   normal: css`
     font-size: 14px;
     line-height: 20px;

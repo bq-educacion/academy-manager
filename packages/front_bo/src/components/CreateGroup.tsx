@@ -66,6 +66,8 @@ const CreateGroup: FC<{
             timetable: timeTableOnChange,
             instructors,
           },
+        }).then(() => {
+          refetch();
         });
     }
   }, [finished]);
@@ -80,6 +82,11 @@ const CreateGroup: FC<{
     changeTitle(t("pages.groups.modal-create.title"));
   }
 
+  const [centerError, setCenterError] = useState<boolean>(false);
+  const [nameError, setNameError] = useState<boolean>(false);
+  const [modalityError, setModalityError] = useState<boolean>(false);
+  const [typeError, setTypeError] = useState<boolean>(false);
+
   return (
     <Form>
       <styles.P4>{t(`components.create-group.${step}.title`)}</styles.P4>
@@ -90,6 +97,8 @@ const CreateGroup: FC<{
               {t(`components.create-group.1.subtitle.center`)}
             </styles.BoldP4>
             <DropDownUnique
+              error={centerError}
+              setError={setCenterError}
               options={
                 (CentersData &&
                   CentersData.getCenters.data.map((center) => ({
@@ -102,18 +111,24 @@ const CreateGroup: FC<{
               setSelected={setCenter}
               selected={center}
             />
+            {centerError && (
+              <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+            )}
           </FillIn>
           <FillIn>
             <styles.BoldP4>
               {t(`components.create-group.1.subtitle.name`)}
             </styles.BoldP4>
             <InputSuper
+              error={nameError}
+              setError={setNameError}
               placeholder={t(
                 `components.create-group.1.subtitle.name-placeholder`
               )}
               input={name}
               setInput={setName}
             />
+            {nameError && <styles.P0Error>{t(`general.empty`)}</styles.P0Error>}
           </FillIn>
           <FillInSectioned>
             <FillIn>
@@ -121,6 +136,8 @@ const CreateGroup: FC<{
                 {t(`components.create-group.1.subtitle.modality`)}
               </styles.BoldP4>
               <DropDownUnique
+                error={modalityError}
+                setError={setModalityError}
                 options={Object.values(GroupModality).map((modality) => ({
                   key: modality,
                   label: t(
@@ -133,12 +150,17 @@ const CreateGroup: FC<{
                 }
                 selected={modality}
               />
+              {modalityError && (
+                <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <styles.BoldP4>
                 {t(`components.create-group.1.subtitle.type`)}
               </styles.BoldP4>
               <DropDownUnique
+                error={typeError}
+                setError={setTypeError}
                 options={Object.values(GroupType).map((type) => ({
                   key: type,
                   label: t(
@@ -149,6 +171,9 @@ const CreateGroup: FC<{
                 setSelected={(type) => setType(type as GroupType)}
                 selected={type}
               />
+              {typeError && (
+                <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+              )}
             </FillIn>
           </FillInSectioned>
           <FillIn>
@@ -177,7 +202,24 @@ const CreateGroup: FC<{
             />
             <Button
               main
-              onClick={() => setStep(2)}
+              onClick={() => {
+                if (center && name && modality && type) {
+                  setStep(2);
+                } else {
+                  if (!center) {
+                    setCenterError(true);
+                  }
+                  if (!name) {
+                    setNameError(true);
+                  }
+                  if (!modality) {
+                    setModalityError(true);
+                  }
+                  if (!type) {
+                    setTypeError(true);
+                  }
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDiv>
@@ -198,10 +240,7 @@ const CreateGroup: FC<{
                 if (name != "" && center != "" && modality && type) {
                   setFinished(true);
                   changeTitle("");
-                  refetch();
                   setStep(3);
-                } else {
-                  alert("Please fill all the fields");
                 }
               }}
               text={t("general.actions.create")}
