@@ -29,8 +29,8 @@ const InputSuper: FC<{
   datePattern,
   setError,
 }) => {
-  const [InputType] = useState<string>(type ? type : "text");
-  const [LocalError, setLocalError] = useState<boolean>(error ? true : false);
+  const InputType = type ? type : "text";
+  const [localError, setLocalError] = useState<boolean>(error ? true : false);
   useEffect(() => {
     setLocalError(error ? true : false);
   }, [error]);
@@ -55,7 +55,7 @@ const InputSuper: FC<{
         }
       }}
       height={height}
-      error={LocalError}
+      error={localError}
       onClick={() => {
         setLocalError(false);
         setError && setError(false);
@@ -97,6 +97,7 @@ const InputStyled = styled.input<{
     ${(props) => props.error && `color: ${colors.colors.red1}`}
   }
   &:hover {
-    border: solid 1px ${colors.colors.blackBackground};
+    ${({ error }) =>
+      !error && `border: solid 1px ${colors.colors.blackBackground};`}
   }
 `;

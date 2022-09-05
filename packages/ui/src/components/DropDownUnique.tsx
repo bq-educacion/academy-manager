@@ -21,7 +21,7 @@ const DropDownUnique: FC<{
 }> = ({ width, options, setSelected, selected, disabled, error, setError }) => {
   const t = useTranslate();
   const [clicked, setClicked] = useState<boolean>(false);
-  const [LocalError, setLocalError] = useState<boolean>(error ? true : false);
+  const [localError, setLocalError] = useState<boolean>(error ? true : false);
   useEffect(() => {
     setLocalError(error ? true : false);
   }, [error]);
@@ -31,7 +31,7 @@ const DropDownUnique: FC<{
       setIsOpenEx={setClicked}
       title={
         <InputBox
-          error={LocalError}
+          error={localError}
           disabled={disabled ? true : false}
           onClick={() => {
             setClicked(!clicked);

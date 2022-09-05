@@ -111,5 +111,7 @@ export const typeDefs = gql`
       phone: String
       email: String
     ): CenterContact!
+
+    deleteCenter(id: String!): Center!
   }
 `;

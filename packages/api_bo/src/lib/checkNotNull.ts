@@ -5,6 +5,7 @@ import {
   MutationCreateGroupArgs,
   MutationCreateInstructorArgs,
   MutationCreateStudentArgs,
+  MutationDeleteCenterArgs,
   MutationEditCenterArgs,
   MutationEditCenterContactArgs,
   MutationEditGroupArgs,
@@ -26,7 +27,8 @@ export function checkNotNull(
     | MutationEditStudentArgs
     | MutationEditStudentContactArgs
     | MutationAddCenterContactArgs
-    | MutationAddStudentContactArgs,
+    | MutationAddStudentContactArgs
+    | MutationDeleteCenterArgs,
 ): void {
   if (Object.values(args).some((item) => item === null)) {
     throw new Error("Fields cannot be null");
