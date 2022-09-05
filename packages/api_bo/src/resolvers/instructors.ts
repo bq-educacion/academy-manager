@@ -196,6 +196,12 @@ export const instructors = {
     ): Promise<InstructorModel> => {
       try {
         checkNotNull(args);
+        if (
+          args.training.careerInEducation === null ||
+          args.training.technicalCareer === null
+        ) {
+          throw new Error("400, Fields cannot be null");
+        }
         if (args.corporateEmail) {
           const existsInstructor = await instructorCollection(ctx.db).findOne({
             corporateEmail: args.corporateEmail,

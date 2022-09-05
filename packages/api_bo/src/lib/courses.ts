@@ -59,7 +59,7 @@ export const removeCourse = async (
           _id: { $in: group.students },
           course: course,
         });
-        if (size === 1) {
+        if (size <= 1) {
           if (group._id) deleteOldCourse.push(group._id);
         }
       },

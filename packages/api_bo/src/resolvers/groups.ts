@@ -7,6 +7,7 @@ import {
   InstructorModel,
 } from "../models/InstructorModel.ts";
 import {
+  MutationDeleteGroupArgs,
   PaginatedGroups,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
@@ -304,6 +305,27 @@ export const groups = {
           throw new Error("404, Group not found");
         }
         return newGroup;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+    deleteGroup: async (
+      _parent: unknown,
+      args: MutationDeleteGroupArgs,
+      ctx: Context,
+    ): Promise<GroupModel> => {
+      try {
+        const deletedGroup = await groupCollection(ctx.db).findAndModify(
+          { _id: new ObjectId(args.id) },
+          {
+            remove: true,
+          },
+        );
+        //TODO(@pruizj): No se borran ni alumnos ni monitores confirmar con ux
+        if (!deletedGroup) {
+          throw new Error("404, Group not found");
+        }
+        return deletedGroup;
       } catch (error) {
         throw new Error("500, " + error);
       }

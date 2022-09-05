@@ -79,7 +79,6 @@ export type CenterContactInput = {
 
 export enum CenterNature {
   Concertado = "CONCERTADO",
-  Null = "NULL",
   Private = "PRIVATE",
   Public = "PUBLIC",
 }
@@ -177,6 +176,7 @@ export type Mutation = {
   createInstructor: Instructor;
   createStudent: Student;
   deleteCenter: Center;
+  deleteGroup: Group;
   editCenter: Center;
   editCenterContact: CenterContact;
   editGroup: Group;
@@ -265,6 +265,10 @@ export type MutationCreateStudentArgs = {
 };
 
 export type MutationDeleteCenterArgs = {
+  id: Scalars["String"];
+};
+
+export type MutationDeleteGroupArgs = {
   id: Scalars["String"];
 };
 
@@ -1017,6 +1021,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCenterArgs, "id">
+  >;
+  deleteGroup?: Resolver<
+    ResolversTypes["Group"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteGroupArgs, "id">
   >;
   editCenter?: Resolver<
     ResolversTypes["Center"],
