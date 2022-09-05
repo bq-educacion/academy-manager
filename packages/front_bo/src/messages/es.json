@@ -252,6 +252,9 @@
     }
   },
   "general": {
+    "decline-date": "Fecha incorrecta",
+    "decline-email": "Formato de email incorrecto",
+    "empty": "Este campo no puede quedar vacío",
     "no-data": "No hay datos",
     "times": {
       "8:00 a 8:59": "8:00 a 8:59",

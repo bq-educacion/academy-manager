@@ -9,6 +9,7 @@ const InputSuper: FC<{
   height?: string;
   disabled?: boolean;
   error?: boolean;
+  setError?: (error: boolean) => void;
   type?: string;
   telPattern?: boolean;
   timePattern?: boolean;
@@ -26,8 +27,9 @@ const InputSuper: FC<{
   setValid,
   timePattern,
   datePattern,
+  setError,
 }) => {
-  const [InputType, setInputType] = useState<string>(type ? type : "text");
+  const InputType = type ? type : "text";
   const [localError, setLocalError] = useState<boolean>(error ? true : false);
   useEffect(() => {
     setLocalError(error ? true : false);
@@ -47,7 +49,8 @@ const InputSuper: FC<{
         }
         if (datePattern) {
           setInput(e.target.value.replace(/[^0-9/]/g, ""));
-        } else {
+        }
+        if (!telPattern && !timePattern && !datePattern) {
           setInput(e.target.value);
         }
       }}
@@ -55,9 +58,7 @@ const InputSuper: FC<{
       error={localError}
       onClick={() => {
         setLocalError(false);
-        if (datePattern) {
-          setInputType("date");
-        }
+        setError && setError(false);
       }}
       type={!disabled ? InputType : ""}
     />
