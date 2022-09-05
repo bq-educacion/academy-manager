@@ -12,6 +12,7 @@ export const typeDefs = gql`
     PRIVATE
     PUBLIC
     CONCERTADO
+    NULL
   }
 
   enum OrderFilterCenter {
@@ -49,6 +50,7 @@ export const typeDefs = gql`
     city: String!
     phone: String
     email: String
+    active: Boolean!
     type: [CenterActivityType!]!
     nature: CenterNature!
     languages: [Languages!]!
@@ -113,5 +115,6 @@ export const typeDefs = gql`
     ): CenterContact!
 
     deleteCenter(id: String!): Center!
+    setActiveCenter(id:String!, active:Boolean!): Center!
   }
 `;

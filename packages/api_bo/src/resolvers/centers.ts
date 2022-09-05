@@ -3,6 +3,7 @@ import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import {
   MutationDeleteCenterArgs,
+  MutationSetActiveCenterArgs,
   PaginatedCenters,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
@@ -23,14 +24,14 @@ import { studentCollection } from "../models/StudentModel.ts";
 export const centers = {
   Center: {
     id: (parent: CenterModel): string => {
-      return String(parent._id!);
+      return String(parent?._id!);
     },
     groups: async (
       parent: CenterModel,
       _: unknown,
       ctx: Context,
     ): Promise<GroupModel[]> => {
-      return await groupCollection(ctx.db).find({ center: parent._id })
+      return await groupCollection(ctx.db).find({ center: parent?._id })
         .toArray();
     },
   },
@@ -145,6 +146,7 @@ export const centers = {
         let center = {
           ...args,
           createdAt,
+          active: true,
         };
 
         if (args.contacts) {
@@ -155,7 +157,7 @@ export const centers = {
         }
         const idCenter = await centerCollection(ctx.db).insertOne({
           ...center,
-        });
+        }) as ObjectId;
 
         return {
           _id: idCenter,
@@ -242,7 +244,7 @@ export const centers = {
           phone: "",
         };
 
-        const updateContacts = contactsCenter[0].contacts?.map((contact) => {
+        const updateContacts = contactsCenter[0]?.contacts?.map((contact) => {
           if (contact.email === args.originEmail) {
             contactUpdate = {
               name: args.name || contact.name,
@@ -273,7 +275,6 @@ export const centers = {
       ctx: Context,
     ): Promise<CenterModel> => {
       try {
-        checkNotNull(args);
         const center = await centerCollection(ctx.db).findById(args.id);
         if (!center) {
           throw new Error("404, Center not found");
@@ -299,6 +300,58 @@ export const centers = {
         });
 
         return center;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    setActiveCenter: async (
+      _parent: unknown,
+      args: MutationSetActiveCenterArgs,
+      ctx: Context,
+    ): Promise<CenterModel> => {
+      checkNotNull(args);
+      try {
+        const newCenter = await centerCollection(ctx.db).findAndModify(
+          { _id: new ObjectId(args.id) },
+          {
+            update: { $set: { active: args.active } },
+            new: true,
+          },
+        );
+        if (!newCenter) {
+          throw new Error("404, Center not found");
+        }
+
+        const groups = await groupCollection(ctx.db).find({
+          center: new ObjectId(args.id),
+        }).toArray();
+        const idGroups = groups.map((group) => group._id);
+        await groupCollection(ctx.db).updateMany(
+          { _id: { $in: idGroups } },
+          { $set: { activeCenter: args.active } },
+        );
+
+        if (!args.active) {
+          const deleteCenterGroups = groups.map((group) => {
+            if (group.instructors.length === 0) {
+              if (group._id) return new ObjectId(group._id);
+            }
+          }) as ObjectId[];
+
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: deleteCenterGroups } },
+            { $set: { center: null } },
+          );
+        }
+
+        const idStudents: ObjectId[] = groups.map((group) => group.students)
+          .flat();
+        await studentCollection(ctx.db).updateMany(
+          { _id: { $in: idStudents } },
+          { $set: { activeCenter: args.active } },
+        );
+        return newCenter;
       } catch (error) {
         throw new Error("500, " + error);
       }

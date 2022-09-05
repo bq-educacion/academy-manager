@@ -1,6 +1,6 @@
 import { gql } from "graphql-tag";
 export const typeDefs = gql`
-  enum StateInstructor {
+  enum InstructorStatus {
     ACTIVE
     INACTIVE
   }
@@ -69,7 +69,7 @@ export const typeDefs = gql`
     corporateEmail: String
     personalEmail: String
     phone: String
-    state: StateInstructor!
+    status: InstructorStatus!
     training: trainingInstructor!
     previousExperience: previousExperienceInstructor!
     programmingExperience: Boolean!
@@ -107,7 +107,7 @@ export const typeDefs = gql`
       corporateEmail: String
       personalEmail: String
       phone: String
-      state: StateInstructor!
+      status: InstructorStatus!
       training: trainingInstructorInput!
       previousExperience: previousExperienceInstructor!
       programmingExperience: Boolean!
@@ -131,7 +131,7 @@ export const typeDefs = gql`
       personalEmail: String
       corporateEmail:String
       phone:String
-      state:StateInstructor
+      status:InstructorStatus
       notes:String
       training:trainingInstructorInput
       previousExperience:previousExperienceInstructor
