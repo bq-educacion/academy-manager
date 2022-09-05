@@ -160,6 +160,13 @@ const CreateInstructor: FC<{
   const [errorEmail, setErrorEmail] = useState<boolean>(false);
   const [ValidProEmail, setValidProEmail] = useState<boolean>(false);
   const [errorProEmail, setErrorProEmail] = useState<boolean>(false);
+  const [errorPhone, setErrorPhone] = useState<boolean>(false);
+  const [errorState, setErrorState] = useState<boolean>(false);
+
+  const [errorEducation, setErrorEducation] = useState<boolean>(false);
+  const [errorExperience, setErrorExperience] = useState<boolean>(false);
+  const [errorProgramming, setErrorProgramming] = useState<boolean>(false);
+  const [errorCV, setErrorCV] = useState<boolean>(false);
 
   return (
     <Form>
@@ -174,6 +181,7 @@ const CreateInstructor: FC<{
               {t("components.create-instructor.1.name")}
             </styles.BoldP4>
             <InputSuper
+              namePattern
               error={nameError}
               setError={setNameError}
               input={name}
@@ -188,6 +196,8 @@ const CreateInstructor: FC<{
                 {t("components.create-instructor.1.state")}
               </styles.BoldP4>
               <DropDownUnique
+                error={errorState}
+                setError={setErrorState}
                 options={Object.values(InstructorStatus).map((elem) => {
                   return {
                     key: elem,
@@ -202,38 +212,48 @@ const CreateInstructor: FC<{
                 selected={state}
                 width="254px"
               />
+              {errorState && (
+                <styles.P0Error>{t("general.empty")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn width="120px">
               <styles.BoldP4>
                 {t("components.create-instructor.1.phone")}
               </styles.BoldP4>
               <InputSuper
+                error={errorPhone}
+                setError={setErrorPhone}
                 telPattern
                 input={phone}
                 setInput={setPhone}
                 placeholder={t("components.create-instructor.1.phone")}
               />
+              {errorPhone && (
+                <styles.P0Error>{t("general.decline-phone")}</styles.P0Error>
+              )}
             </FillIn>
           </FillInSectioned>
-          <FillIn>
-            <styles.BoldP4>
-              {t("components.create-instructor.1.email-personal")}
-            </styles.BoldP4>
-            <InputSuper
-              type="email"
-              error={errorEmail}
-              setError={setErrorEmail}
-              setValid={setvalidEmail}
-              input={emailPersonal}
-              setInput={setEmailPersonal}
-              placeholder={t(
-                "components.create-instructor.1.email-personal-placeholder"
+          {state === InstructorStatus.Active && (
+            <FillIn>
+              <styles.BoldP4>
+                {t("components.create-instructor.1.email-personal")}
+              </styles.BoldP4>
+              <InputSuper
+                type="email"
+                error={errorEmail}
+                setError={setErrorEmail}
+                setValid={setvalidEmail}
+                input={emailPersonal}
+                setInput={setEmailPersonal}
+                placeholder={t(
+                  "components.create-instructor.1.email-personal-placeholder"
+                )}
+              />
+              {errorEmail && (
+                <styles.P0Error>{t(`general.decline-email`)}</styles.P0Error>
               )}
-            />
-            {errorEmail && (
-              <styles.P0Error>{t(`general.decline-email`)}</styles.P0Error>
-            )}
-          </FillIn>
+            </FillIn>
+          )}
           <FillIn>
             <styles.BoldP4>
               {t("components.create-instructor.1.email-pro")}
@@ -271,6 +291,30 @@ const CreateInstructor: FC<{
                 if (name.length === 0) {
                   setNameError(true);
                 }
+                if (phone.length > 0 && !phone.includes("+")) {
+                  {
+                    phone.length !== 9 && setErrorPhone(true);
+                  }
+                }
+                if (phone.length > 0 && phone.includes("+")) {
+                  {
+                    phone.length !== 12 && setErrorPhone(true);
+                  }
+                }
+                if (state === undefined) {
+                  setErrorState(true);
+                }
+                if (name.length > 0 && state !== undefined) {
+                  if (
+                    (emailPersonal.length === 0 || validEmail) &&
+                    (emailPro.length === 0 || ValidProEmail) &&
+                    (phone.length === 0 ||
+                      phone.length === 9 ||
+                      phone.length === 12)
+                  ) {
+                    setStep(2);
+                  }
+                }
               }}
               text={t("general.actions.next")}
             />
@@ -289,7 +333,8 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <CheckBox
-                  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                  error={errorEducation}
+                  setError={setErrorEducation}
                   option={education?.careerInEducation ? true : false}
                   setOption={() => {
                     setEducation({
@@ -304,6 +349,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <CheckBox
+                  error={errorEducation}
+                  setError={setErrorEducation}
                   option={education?.technicalCareer ? true : false}
                   setOption={() => {
                     setEducation({
@@ -316,6 +363,9 @@ const CreateInstructor: FC<{
                   {t(`components.create-instructor.2.education-2`)}
                 </styles.P4>
               </CheckOption>
+              {errorEducation && (
+                <styles.P0Error>{t("general.decline-checkbox")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <styles.BoldP4>
@@ -323,6 +373,8 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <RadioButton
+                  error={errorExperience}
+                  setError={setErrorExperience}
                   option={experience === PreviousExperienceInstructor.Yes}
                   setOption={() => {
                     {
@@ -336,6 +388,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <RadioButton
+                  error={errorExperience}
+                  setError={setErrorExperience}
                   option={experience === PreviousExperienceInstructor.No}
                   setOption={() => {
                     {
@@ -349,6 +403,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <RadioButton
+                  error={errorExperience}
+                  setError={setErrorExperience}
                   option={
                     experience === PreviousExperienceInstructor.NoButInterested
                   }
@@ -367,6 +423,9 @@ const CreateInstructor: FC<{
                   {t(`components.create-instructor.2.experience-noBut`)}
                 </styles.P4>
               </CheckOption>
+              {errorExperience && (
+                <styles.P0Error>{t("general.decline-radio")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <styles.BoldP4>
@@ -374,6 +433,8 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <RadioButton
+                  error={errorProgramming}
+                  setError={setErrorProgramming}
                   option={programming ? true : false}
                   setOption={() => {
                     {
@@ -387,6 +448,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <RadioButton
+                  error={errorProgramming}
+                  setError={setErrorProgramming}
                   option={
                     programming === undefined
                       ? false
@@ -404,12 +467,16 @@ const CreateInstructor: FC<{
                 />
                 <styles.P4>{t(`components.create-instructor.2.no`)}</styles.P4>
               </CheckOption>
+              {errorProgramming && (
+                <styles.P0Error>{t("general.decline-radio")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <styles.BoldP4>
                 {t("components.create-instructor.2.knowledge")}
               </styles.BoldP4>
               <InputSuper
+                textArea
                 height="60px"
                 placeholder={t(
                   "components.create-instructor.2.knowledge-placeholder"
@@ -423,12 +490,17 @@ const CreateInstructor: FC<{
                 {t("components.create-instructor.2.cv-link")}
               </styles.BoldP4>
               <InputSuper
+                error={errorCV}
+                setError={setErrorCV}
                 placeholder={t(
                   "components.create-instructor.2.cv-link-placeholder"
                 )}
                 input={cvUrl}
                 setInput={setCvUrl}
               />
+              {errorCV && (
+                <styles.P0Error>{t("general.decline-link")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <OptionsBox
@@ -466,7 +538,45 @@ const CreateInstructor: FC<{
             />
             <Button
               main
-              onClick={() => setStep(3)}
+              onClick={() => {
+                if (
+                  education === undefined ||
+                  (education.careerInEducation === false &&
+                    education.technicalCareer === false)
+                ) {
+                  setErrorEducation(true);
+                }
+                if (experience === undefined) {
+                  setErrorExperience(true);
+                }
+                if (programming === undefined) {
+                  setErrorProgramming(true);
+                }
+                if (cvUrl.length > 0) {
+                  const urlRegex =
+                    /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+                  if (!urlRegex.test(cvUrl)) {
+                    setErrorCV(true);
+                  }
+                }
+                if (
+                  education !== undefined &&
+                  experience !== undefined &&
+                  programming !== undefined
+                ) {
+                  if (cvUrl.length > 0) {
+                    const urlRegex =
+                      /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+                    if (!urlRegex.test(cvUrl)) {
+                      setErrorCV(true);
+                    } else {
+                      setStep(3);
+                    }
+                  } else {
+                    setStep(3);
+                  }
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDivScroll>

@@ -14,6 +14,8 @@ const InputSuper: FC<{
   telPattern?: boolean;
   timePattern?: boolean;
   datePattern?: boolean;
+  namePattern?: boolean;
+  textArea?: boolean;
   setValid?: (valid: boolean) => void;
 }> = ({
   placeholder,
@@ -27,58 +29,117 @@ const InputSuper: FC<{
   setValid,
   timePattern,
   datePattern,
+  namePattern,
   setError,
+  textArea,
 }) => {
   const InputType = type ? type : "text";
   const [localError, setLocalError] = useState<boolean>(error ? true : false);
   useEffect(() => {
     setLocalError(error ? true : false);
   }, [error]);
-  return (
-    <InputStyled
-      disabled={disabled}
-      placeholder={placeholder ? placeholder : ""}
-      value={input}
-      onChange={(e) => {
-        setValid && setValid(e.target.validity.valid);
-        if (telPattern) {
-          setInput(e.target.value.replace(/[^0-9+]/g, ""));
-        }
-        if (timePattern) {
-          setInput(e.target.value.replace(/[^0-9:]/g, ""));
-          if (setValid) {
-            if (
-              !e.target.value
-                .replace(/[^0-9:]/g, "")
-                .match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
-            ) {
-              setValid(true);
-            } else {
-              setValid(false);
+  if (!textArea) {
+    return (
+      <InputStyled
+        disabled={disabled}
+        placeholder={placeholder ? placeholder : ""}
+        value={input}
+        onChange={(e) => {
+          setValid && setValid(e.target.validity.valid);
+          if (telPattern) {
+            setInput(e.target.value.replace(/[^0-9+]/g, ""));
+          }
+          if (namePattern) {
+            setInput(e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s']/g, ""));
+          }
+          if (timePattern) {
+            setInput(e.target.value.replace(/[^0-9:]/g, ""));
+            if (setValid) {
+              if (
+                !e.target.value
+                  .replace(/[^0-9:]/g, "")
+                  .match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
+              ) {
+                setValid(true);
+              } else {
+                setValid(false);
+              }
             }
           }
-        }
-        if (datePattern) {
-          setInput(e.target.value.replace(/[^0-9/]/g, ""));
-        }
-        if (!telPattern && !timePattern && !datePattern) {
+          if (datePattern) {
+            setInput(e.target.value.replace(/[^0-9/]/g, ""));
+          }
+          if (!telPattern && !timePattern && !datePattern && !namePattern) {
+            setInput(e.target.value);
+          }
+        }}
+        height={height}
+        error={localError}
+        onClick={() => {
+          setLocalError(false);
+          setError && setError(false);
+        }}
+        type={!disabled ? InputType : ""}
+      />
+    );
+  } else {
+    return (
+      <AreaStyled
+        disabled={disabled}
+        placeholder={placeholder ? placeholder : ""}
+        value={input}
+        onChange={(e) => {
           setInput(e.target.value);
-        }
-      }}
-      height={height}
-      error={localError}
-      onClick={() => {
-        setLocalError(false);
-        setError && setError(false);
-      }}
-      type={!disabled ? InputType : ""}
-    />
-  );
+        }}
+        height={height}
+        error={localError}
+        onClick={() => {
+          setLocalError(false);
+          setError && setError(false);
+        }}
+      />
+    );
+  }
 };
 
 export default InputSuper;
 
 const InputStyled = styled.input<{
+  height?: string;
+  disabled?: boolean;
+  error?: boolean;
+}>`
+  padding: 0 0 0 20px;
+  border-radius: 3px;
+  border: solid 1px ${colors.colors.gray};
+  height: ${(props) => (props.height ? props.height : "40px")};
+  &::placeholder {
+    font-style: italic;
+    line-height: 1;
+  }
+  ${({ disabled }) =>
+    disabled &&
+    `background-color: ${colors.colors.grayBlue}; pointer-events: none;`}
+  ${({ error }) =>
+    error &&
+    `
+  color: ${colors.colors.red2};
+  border: solid 1px ${colors.colors.red1}; 
+  background-color: ${colors.colors.pink1}; 
+  `}
+  &::placeholder {
+    height: ${(props) => props.height && "position: absolute;top: 15px;"};
+    line-height: 1.07;
+    color: ${colors.colors.gray2};
+    ${(props) => props.error && `color: ${colors.colors.red1}`}
+  }
+  &:hover {
+    ${({ error }) =>
+      !error && `border: solid 1px ${colors.colors.blackBackground};`}
+  }
+`;
+
+const AreaStyled = styled.textarea<{
   height?: string;
   disabled?: boolean;
   error?: boolean;

@@ -256,7 +256,11 @@
     }
   },
   "general": {
+    "decline-link": "El formato del enlace es incorrecto",
+    "decline-radio": "Debes indicar una opción",
+    "decline-checkbox": "Debes indicar al menos una opción",
     "decline-date": "Fecha incorrecta",
+    "decline-phone": "La longitud no es correcta",
     "decline-email": "La dirección de correo electrónico incluida es errónea",
     "empty": "Este campo no puede quedar vacío",
     "no-data": "No hay datos",
