@@ -3,7 +3,7 @@ import { centerCollection, CenterModel } from "../models/CenterModel.ts";
 import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import {
   MutationDeleteCenterArgs,
-  MutationSetStatusCenterArgs,
+  MutationSetActiveCenterArgs,
   PaginatedCenters,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
@@ -305,9 +305,9 @@ export const centers = {
       }
     },
 
-    setStatusCenter: async (
+    setActiveCenter: async (
       _parent: unknown,
-      args: MutationSetStatusCenterArgs,
+      args: MutationSetActiveCenterArgs,
       ctx: Context,
     ): Promise<CenterModel> => {
       checkNotNull(args);

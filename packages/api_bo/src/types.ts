@@ -183,7 +183,7 @@ export type Mutation = {
   editInstructor: Instructor;
   editStudent: Student;
   editStudentContact: StudentContact;
-  setStatusCenter: Center;
+  setActiveCenter: Center;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -351,7 +351,7 @@ export type MutationEditStudentContactArgs = {
   send_info?: InputMaybe<Scalars["Boolean"]>;
 };
 
-export type MutationSetStatusCenterArgs = {
+export type MutationSetActiveCenterArgs = {
   active: Scalars["Boolean"];
   id: Scalars["String"];
 };
@@ -1054,11 +1054,11 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationEditStudentContactArgs, "idStudent" | "originEmail">
   >;
-  setStatusCenter?: Resolver<
+  setActiveCenter?: Resolver<
     ResolversTypes["Center"],
     ParentType,
     ContextType,
-    RequireFields<MutationSetStatusCenterArgs, "active" | "id">
+    RequireFields<MutationSetActiveCenterArgs, "active" | "id">
   >;
 }>;
 
