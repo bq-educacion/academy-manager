@@ -134,6 +134,7 @@ export enum GroupType {
 
 export type Instructor = {
   __typename?: "Instructor";
+  activeGroup: Scalars["Boolean"];
   areas: Array<Scalars["String"]>;
   availability: Array<Availability>;
   corporateEmail?: Maybe<Scalars["String"]>;
@@ -502,7 +503,7 @@ export type QueryGetStudentsArgs = {
 
 export type Student = {
   __typename?: "Student";
-  activeCenter: Scalars["Boolean"];
+  activeGroup: Scalars["Boolean"];
   allergies?: Maybe<Scalars["Boolean"]>;
   birthDate?: Maybe<Scalars["String"]>;
   collectionPermit?: Maybe<Scalars["String"]>;
@@ -871,6 +872,7 @@ export type InstructorResolvers<
   ParentType extends ResolversParentTypes["Instructor"] =
     ResolversParentTypes["Instructor"],
 > = ResolversObject<{
+  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   areas?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
   availability?: Resolver<
     Array<ResolversTypes["Availability"]>,
@@ -1195,7 +1197,7 @@ export type StudentResolvers<
   ParentType extends ResolversParentTypes["Student"] =
     ResolversParentTypes["Student"],
 > = ResolversObject<{
-  activeCenter?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   allergies?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,

@@ -149,7 +149,7 @@ export const students = {
         let newStudent = {
           ...args,
           status: StudentStatus.Active,
-          activeCenter: true,
+          activeGroup: false,
         };
 
         if (args.birthDate) {
@@ -168,6 +168,16 @@ export const students = {
         }).toArray();
         if (existsGroups.length !== groups.length) {
           throw new Error("404, Groups not found");
+        }
+
+        if (existsGroups.length > 0) {
+          const activeGroups = existsGroups.map((group) => group.activeCenter);
+          activeGroups.forEach((status) => {
+            if (!status) {
+              throw new Error("400, Group not active");
+            }
+          });
+          newStudent = { ...newStudent, activeGroup: true };
         }
 
         if (args.contacts) {
@@ -296,6 +306,18 @@ export const students = {
             studentCollection(ctx.db),
             course,
           );
+
+          if (existsGroups.length > 0) {
+            const activeGroups = existsGroups.map((group) =>
+              group.activeCenter
+            );
+            activeGroups.forEach((status) => {
+              if (!status) {
+                throw new Error("400, Group not active");
+              }
+            });
+            updateStudent = { ...updateStudent, activeGroup: true };
+          }
         }
 
         if (args.birthDate) {

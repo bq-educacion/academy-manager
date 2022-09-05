@@ -321,10 +321,36 @@ export const groups = {
             remove: true,
           },
         );
-        //TODO(@pruizj): No se borran ni alumnos ni monitores confirmar con ux
         if (!deletedGroup) {
           throw new Error("404, Group not found");
         }
+
+        const idStudents = await Promise.all(
+          deletedGroup.students.map(async (student) => {
+            const groups = await groupCollection(ctx.db).countDocuments({
+              students: student,
+            });
+            if (groups === 0) return new ObjectId(student);
+          }),
+        ) as ObjectId[];
+        await studentCollection(ctx.db).updateMany(
+          { _id: { $in: idStudents } },
+          { $set: { activeGroup: false } },
+        );
+
+        const idInstructors = await Promise.all(
+          deletedGroup.instructors.map(async (instructor) => {
+            const groups = await groupCollection(ctx.db).countDocuments({
+              instructors: instructor,
+            });
+            if (groups === 0) return new ObjectId(instructor);
+          }),
+        ) as ObjectId[];
+        await instructorCollection(ctx.db).updateMany(
+          { _id: { $in: idInstructors } },
+          { $set: { activeGroup: false } },
+        );
+
         return deletedGroup;
       } catch (error) {
         throw new Error("500, " + error);
