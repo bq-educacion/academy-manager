@@ -20,7 +20,7 @@ query GetStudents(
         id
       }
       course
-      state
+      status
     }
     page
     totalPages

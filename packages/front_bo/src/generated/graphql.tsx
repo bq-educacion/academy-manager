@@ -30,6 +30,7 @@ export type AvailabilityInput = {
 
 export type Center = {
   __typename?: 'Center';
+  active: Scalars['Boolean'];
   address: Scalars['String'];
   city: Scalars['String'];
   contacts?: Maybe<Array<CenterContact>>;
@@ -67,6 +68,7 @@ export type CenterContactInput = {
 
 export enum CenterNature {
   Concertado = 'CONCERTADO',
+  Null = 'NULL',
   Private = 'PRIVATE',
   Public = 'PUBLIC'
 }
@@ -94,7 +96,8 @@ export enum Days {
 
 export type Group = {
   __typename?: 'Group';
-  center: Center;
+  activeCenter: Scalars['Boolean'];
+  center?: Maybe<Center>;
   course: Course;
   createdAt: Scalars['String'];
   id: Scalars['ID'];
@@ -137,12 +140,17 @@ export type Instructor = {
   platformEducationExperience?: Maybe<Array<Scalars['String']>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars['Boolean'];
-  state: StateInstructor;
+  status: InstructorStatus;
   summerAvailability?: Maybe<SummerAvailabilityInstructor>;
   training: TrainingInstructor;
   urlCV?: Maybe<Scalars['String']>;
   vehicle: TypeVehicleInstructor;
 };
+
+export enum InstructorStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE'
+}
 
 export enum Languages {
   English = 'English',
@@ -164,6 +172,7 @@ export type Mutation = {
   editInstructor: Instructor;
   editStudent: Student;
   editStudentContact: StudentContact;
+  setActiveCenter: Center;
 };
 
 
@@ -225,7 +234,7 @@ export type MutationCreateInstructorArgs = {
   platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars['Boolean'];
-  state: StateInstructor;
+  status: InstructorStatus;
   summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
   training: TrainingInstructorInput;
   urlCV?: InputMaybe<Scalars['String']>;
@@ -309,7 +318,7 @@ export type MutationEditInstructorArgs = {
   platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
   previousExperience?: InputMaybe<PreviousExperienceInstructor>;
   programmingExperience?: InputMaybe<Scalars['Boolean']>;
-  state?: InputMaybe<StateInstructor>;
+  status?: InputMaybe<InstructorStatus>;
   summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
   training?: InputMaybe<TrainingInstructorInput>;
   urlCV?: InputMaybe<Scalars['String']>;
@@ -342,6 +351,12 @@ export type MutationEditStudentContactArgs = {
   originEmail: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
   send_info?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationSetActiveCenterArgs = {
+  active: Scalars['Boolean'];
+  id: Scalars['String'];
 };
 
 export enum OrderFilterCenter {
@@ -493,13 +508,9 @@ export type QueryGetStudentsArgs = {
   searchText?: InputMaybe<Scalars['String']>;
 };
 
-export enum StateInstructor {
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE'
-}
-
 export type Student = {
   __typename?: 'Student';
+  activeCenter: Scalars['Boolean'];
   allergies?: Maybe<Scalars['Boolean']>;
   birthDate?: Maybe<Scalars['String']>;
   collectionPermit?: Maybe<Scalars['String']>;
@@ -515,7 +526,7 @@ export type Student = {
   oldStudent?: Maybe<Scalars['Boolean']>;
   registrationDate?: Maybe<Scalars['String']>;
   signedMandate?: Maybe<Scalars['Boolean']>;
-  state: StudentState;
+  status: StudentStatus;
 };
 
 export type StudentContact = {
@@ -533,7 +544,7 @@ export type StudentContactInput = {
   send_info: Scalars['Boolean'];
 };
 
-export enum StudentState {
+export enum StudentStatus {
   Active = 'ACTIVE',
   Withdrawn = 'WITHDRAWN'
 }
@@ -627,14 +638,14 @@ export type GetGroupsQueryVariables = Exact<{
 }>;
 
 
-export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center: { __typename?: 'Center', name: string }, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
+export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center?: { __typename?: 'Center', name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
 
 export type CreateInstructorMutationVariables = Exact<{
   name: Scalars['String'];
   corporateEmail: Scalars['String'];
   personalEmail: Scalars['String'];
   phone: Scalars['String'];
-  state: StateInstructor;
+  status: InstructorStatus;
   training: TrainingInstructorInput;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars['Boolean'];
@@ -663,7 +674,7 @@ export type GetInstructorsQueryVariables = Exact<{
 }>;
 
 
-export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, state: StateInstructor, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
+export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, status: InstructorStatus, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
 
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -673,7 +684,7 @@ export type SimpleCentersNameQuery = { __typename?: 'Query', getCenters: { __typ
 export type SimpleGroupsNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SimpleGroupsNameQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center: { __typename?: 'Center', id: string } }> } };
+export type SimpleGroupsNameQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center?: { __typename?: 'Center', id: string } | null }> } };
 
 export type SimpleInstructorsNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -708,7 +719,7 @@ export type GetStudentsQueryVariables = Exact<{
 }>;
 
 
-export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, course: string, state: StudentState, groups: Array<{ __typename?: 'Group', name: string, id: string }> }> } };
+export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, course: string, status: StudentStatus, groups: Array<{ __typename?: 'Group', name: string, id: string }> }> } };
 
 
 export const CreateCenterDocument = gql`
@@ -930,13 +941,13 @@ export type GetGroupsQueryHookResult = ReturnType<typeof useGetGroupsQuery>;
 export type GetGroupsLazyQueryHookResult = ReturnType<typeof useGetGroupsLazyQuery>;
 export type GetGroupsQueryResult = Apollo.QueryResult<GetGroupsQuery, GetGroupsQueryVariables>;
 export const CreateInstructorDocument = gql`
-    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $state: StateInstructor!, $training: trainingInstructorInput!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [Languages!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: String!, $areas: [String!]!, $groups: [String!]!) {
+    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $status: InstructorStatus!, $training: trainingInstructorInput!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [Languages!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: String!, $areas: [String!]!, $groups: [String!]!) {
   createInstructor(
     name: $name
     corporateEmail: $corporateEmail
     personalEmail: $personalEmail
     phone: $phone
-    state: $state
+    status: $status
     training: $training
     previousExperience: $previousExperience
     programmingExperience: $programmingExperience
@@ -976,7 +987,7 @@ export type CreateInstructorMutationFn = Apollo.MutationFunction<CreateInstructo
  *      corporateEmail: // value for 'corporateEmail'
  *      personalEmail: // value for 'personalEmail'
  *      phone: // value for 'phone'
- *      state: // value for 'state'
+ *      status: // value for 'status'
  *      training: // value for 'training'
  *      previousExperience: // value for 'previousExperience'
  *      programmingExperience: // value for 'programmingExperience'
@@ -1018,7 +1029,7 @@ export const GetInstructorsDocument = gql`
       id
       name
       geographicalAvailability
-      state
+      status
       availability {
         day
       }
@@ -1259,7 +1270,7 @@ export const GetStudentsDocument = gql`
         id
       }
       course
-      state
+      status
     }
     page
     totalPages

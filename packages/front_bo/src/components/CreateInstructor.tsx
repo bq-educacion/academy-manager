@@ -20,10 +20,10 @@ import { Platforms, schedule, Tools, zones } from "../config";
 import {
   AvailabilityInput,
   Days,
+  InstructorStatus,
   Languages,
   OrderFilterGroup,
   PreviousExperienceInstructor,
-  StateInstructor,
   SummerAvailabilityInstructor,
   TrainingInstructorInput,
   TypeVehicleInstructor,
@@ -46,7 +46,7 @@ const CreateInstructor: FC<{
   const [emailPro, setEmailPro] = useState<string>("");
   const [emailPersonal, setEmailPersonal] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [state, setState] = useState<StateInstructor>();
+  const [state, setState] = useState<InstructorStatus>();
   const [education, setEducation] = useState<TrainingInstructorInput>();
   const [experience, setExperience] = useState<PreviousExperienceInstructor>();
   const [programming, setProgramming] = useState<boolean>();
@@ -216,7 +216,7 @@ const CreateInstructor: FC<{
                 {t("components.create-instructor.1.state")}
               </styles.BoldP4>
               <DropDownUnique
-                options={Object.values(StateInstructor).map((elem) => {
+                options={Object.values(InstructorStatus).map((elem) => {
                   return {
                     key: elem,
                     label: t(
@@ -225,7 +225,7 @@ const CreateInstructor: FC<{
                   };
                 })}
                 setSelected={(elem) => {
-                  setState(elem as StateInstructor);
+                  setState(elem as InstructorStatus);
                 }}
                 selected={state}
                 width="254px"
@@ -721,7 +721,7 @@ const CreateInstructor: FC<{
                       corporateEmail: emailPro,
                       personalEmail: emailPersonal,
                       phone,
-                      state: state,
+                      status: state,
                       training: education,
                       previousExperience: experience,
                       programmingExperience: programming,

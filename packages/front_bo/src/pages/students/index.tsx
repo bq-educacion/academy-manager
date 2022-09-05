@@ -202,7 +202,7 @@ const StudentsPage: NextPage = () => {
                 key: OrderFilterStudent.State,
                 content: (item) => (
                   <div>
-                    {t(`components.table.state.${item.state?.toLowerCase()}`)}
+                    {t(`components.table.state.${item.status?.toLowerCase()}`)}
                   </div>
                 ),
               },
