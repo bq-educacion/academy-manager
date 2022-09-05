@@ -86,6 +86,7 @@ const CreateGroup: FC<{
   const [nameError, setNameError] = useState<boolean>(false);
   const [modalityError, setModalityError] = useState<boolean>(false);
   const [typeError, setTypeError] = useState<boolean>(false);
+  const [timeTableError, setTimeTableError] = useState<boolean>(false);
 
   return (
     <Form>
@@ -227,7 +228,10 @@ const CreateGroup: FC<{
       )}
       {step === 2 && (
         <>
-          <AddTimeTable setTimeTable={setTimeTableOnChange} />
+          <AddTimeTable
+            checkErrors={setTimeTableError}
+            setTimeTable={setTimeTableOnChange}
+          />
           <NavDiv>
             <Button
               secondary
@@ -237,7 +241,7 @@ const CreateGroup: FC<{
             <Button
               create
               onClick={() => {
-                if (name != "" && center != "" && modality && type) {
+                if (!timeTableError) {
                   setFinished(true);
                   changeTitle("");
                   setStep(3);

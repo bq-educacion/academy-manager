@@ -3,9 +3,11 @@ import { ObjectId } from "objectId";
 import { Collection, Database } from "mongo";
 import { FindById } from "./types.ts";
 
-export type CenterModel = Omit<Center, "id" | "groups"> & {
-  _id?: ObjectId;
-};
+export type CenterModel =
+  | Omit<Center, "id" | "groups"> & {
+    _id: ObjectId;
+  }
+  | null;
 
 export const centerCollection = (
   db: Database,

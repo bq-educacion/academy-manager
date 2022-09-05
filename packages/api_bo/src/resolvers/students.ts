@@ -15,7 +15,7 @@ import {
   MutationEditStudentArgs,
   MutationEditStudentContactArgs,
   StudentContact,
-  StudentState,
+  StudentStatus,
 } from "../types.ts";
 import { ObjectId } from "objectId";
 import { validDate } from "../lib/validDate.ts";
@@ -145,10 +145,11 @@ export const students = {
     ): Promise<StudentModel> => {
       try {
         checkNotNull(args);
-        const state = StudentState.Active;
+
         let newStudent = {
           ...args,
-          state,
+          status: StudentStatus.Active,
+          activeCenter: true,
         };
 
         if (args.birthDate) {
