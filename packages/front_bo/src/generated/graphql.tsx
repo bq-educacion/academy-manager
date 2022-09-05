@@ -157,6 +157,7 @@ export type Mutation = {
   createGroup: Group;
   createInstructor: Instructor;
   createStudent: Student;
+  deleteCenter: Center;
   editCenter: Center;
   editCenterContact: CenterContact;
   editGroup: Group;
@@ -247,6 +248,11 @@ export type MutationCreateStudentArgs = {
   oldStudent?: InputMaybe<Scalars['Boolean']>;
   registrationDate?: InputMaybe<Scalars['String']>;
   signedMandate?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationDeleteCenterArgs = {
+  id: Scalars['String'];
 };
 
 
