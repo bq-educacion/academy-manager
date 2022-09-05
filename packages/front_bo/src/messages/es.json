@@ -257,7 +257,7 @@
   },
   "general": {
     "decline-date": "Fecha incorrecta",
-    "decline-email": "Formato de email incorrecto",
+    "decline-email": "La dirección de correo electrónico incluida es errónea",
     "empty": "Este campo no puede quedar vacío",
     "no-data": "No hay datos",
     "times": {

@@ -155,6 +155,12 @@ const CreateInstructor: FC<{
     changeTitle(t("pages.instructors.modal-create.title"));
   }
 
+  const [nameError, setNameError] = useState<boolean>(false);
+  const [validEmail, setvalidEmail] = useState<boolean>(false);
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
+  const [ValidProEmail, setValidProEmail] = useState<boolean>(false);
+  const [errorProEmail, setErrorProEmail] = useState<boolean>(false);
+
   return (
     <Form>
       {step !== 2 && step !== 4 && step !== 5 && step !== 3 && (
@@ -168,49 +174,14 @@ const CreateInstructor: FC<{
               {t("components.create-instructor.1.name")}
             </styles.BoldP4>
             <InputSuper
+              error={nameError}
+              setError={setNameError}
               input={name}
               setInput={setName}
               placeholder={t("components.create-instructor.1.name-placeholder")}
             />
           </FillIn>
-          <FillIn>
-            <styles.BoldP4>
-              {t("components.create-instructor.1.email-pro")}
-            </styles.BoldP4>
-            <InputSuper
-              type="email"
-              input={emailPro}
-              setInput={setEmailPro}
-              placeholder={t(
-                "components.create-instructor.1.email-pro-placeholder"
-              )}
-            />
-          </FillIn>
-          <FillIn>
-            <styles.BoldP4>
-              {t("components.create-instructor.1.email-personal")}
-            </styles.BoldP4>
-            <InputSuper
-              type="email"
-              input={emailPersonal}
-              setInput={setEmailPersonal}
-              placeholder={t(
-                "components.create-instructor.1.email-personal-placeholder"
-              )}
-            />
-          </FillIn>
           <FillInSectioned>
-            <FillIn width="120px">
-              <styles.BoldP4>
-                {t("components.create-instructor.1.phone")}
-              </styles.BoldP4>
-              <InputSuper
-                telPattern
-                input={phone}
-                setInput={setPhone}
-                placeholder={t("components.create-instructor.1.phone")}
-              />
-            </FillIn>
             <FillIn width="254px">
               <styles.BoldP4>
                 {t("components.create-instructor.1.state")}
@@ -231,7 +202,56 @@ const CreateInstructor: FC<{
                 width="254px"
               />
             </FillIn>
+            <FillIn width="120px">
+              <styles.BoldP4>
+                {t("components.create-instructor.1.phone")}
+              </styles.BoldP4>
+              <InputSuper
+                telPattern
+                input={phone}
+                setInput={setPhone}
+                placeholder={t("components.create-instructor.1.phone")}
+              />
+            </FillIn>
           </FillInSectioned>
+          <FillIn>
+            <styles.BoldP4>
+              {t("components.create-instructor.1.email-personal")}
+            </styles.BoldP4>
+            <InputSuper
+              type="email"
+              error={errorEmail}
+              setError={setErrorEmail}
+              setValid={setvalidEmail}
+              input={emailPersonal}
+              setInput={setEmailPersonal}
+              placeholder={t(
+                "components.create-instructor.1.email-personal-placeholder"
+              )}
+            />
+            {errorEmail && (
+              <styles.P0Error>{t(`general.decline-email`)}</styles.P0Error>
+            )}
+          </FillIn>
+          <FillIn>
+            <styles.BoldP4>
+              {t("components.create-instructor.1.email-pro")}
+            </styles.BoldP4>
+            <InputSuper
+              error={errorProEmail}
+              setError={setErrorProEmail}
+              setValid={setValidProEmail}
+              type="email"
+              input={emailPro}
+              setInput={setEmailPro}
+              placeholder={t(
+                "components.create-instructor.1.email-pro-placeholder"
+              )}
+            />
+            {errorProEmail && (
+              <styles.P0Error>{t(`general.decline-email`)}</styles.P0Error>
+            )}
+          </FillIn>
           <NavDiv>
             <Button
               secondary
@@ -240,7 +260,14 @@ const CreateInstructor: FC<{
             />
             <Button
               main
-              onClick={() => setStep(2)}
+              onClick={() => {
+                if (emailPersonal.length > 0 && !validEmail) {
+                  setErrorEmail(true);
+                }
+                if (emailPro.length > 0 && !ValidProEmail) {
+                  setErrorProEmail(true);
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDiv>
@@ -707,12 +734,12 @@ const CreateInstructor: FC<{
                   experience !== undefined &&
                   programming !== undefined &&
                   cvUrl !== "" &&
-                  availability !== [] &&
+                  // availability !== [] &&
                   vehicle !== undefined &&
-                  LocalZones !== [] &&
-                  especifyZones !== [] &&
+                  // LocalZones !== [] &&
+                  // especifyZones !== [] &&
                   center !== "" &&
-                  groups !== [] &&
+                  // groups !== [] &&
                   summer !== undefined
                 ) {
                   createInstructorMutation({
