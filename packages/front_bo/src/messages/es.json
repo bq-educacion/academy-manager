@@ -151,7 +151,7 @@
     },
     "create-student": {
       "1": {
-        "title": "Paso 1 de 2 - Información del alumno",
+        "title": "Paso 1 de 3 - Información del alumno",
         "subtitle": {
           "center": "Centro",
           "group": "Grupo",
@@ -174,7 +174,7 @@
         }
       },
       "2": {
-        "title": "Paso 2 de 2 - Información de contacto",
+        "title": "Paso 2 de 3 - Información de contacto",
         "subtitle": {
           "name": "Nombre y apellidos",
           "name-placeholder": "Nombre y apellidos del contacto",
@@ -185,6 +185,10 @@
         }
       },
       "3": {
+        "title": "Paso 3 de 3 - Asignar centros y grupos",
+        "add-center": "Agregar centro"
+      },
+      "4": {
         "title": "El alumno ha sido creado satisfactoriamente."
       }
     },

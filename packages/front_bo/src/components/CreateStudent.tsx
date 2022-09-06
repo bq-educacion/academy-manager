@@ -5,20 +5,19 @@ import {
   DropDownUnique,
   FillIn,
   FillInSectioned,
+  Icon,
   InputSuper,
   styles,
   useTranslate,
 } from "@academy-manager/ui";
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
+import { AddCenter, AddContactStudent } from ".";
 import { courses } from "../config";
 import {
-  Group,
   StudentContactInput,
   useCreateStudentMutation,
-  useSimpleCentersNameQuery,
-  useSimpleGroupsNameQuery,
 } from "../generated/graphql";
 
 const CreateStudent: FC<{
@@ -28,11 +27,11 @@ const CreateStudent: FC<{
   setError: (error: ApolloError) => void;
 }> = ({ close, changeTitle, refetch, setError }) => {
   const t = useTranslate();
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
   //Hooks to save stuff
-  const [center, setCenter] = useState<string>("");
-  const [group, setGroup] = useState<string>("");
+  const [centers, setCenters] = useState<string[]>([""]);
+  const [groups, setGroups] = useState<string[]>([]);
   const [course, setCourse] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [inscriptionDay, setInscriptionDay] = useState<string>("");
@@ -44,33 +43,20 @@ const CreateStudent: FC<{
   const [imageAuthorisation, setImageAuthorisation] = useState<boolean>(false);
   const [goesAlone, setGoesAlone] = useState<boolean>(false);
   const [collectionPermit, setCollectionPermit] = useState<string>("");
-  const [contactName, setContactName] = useState<string>("");
-  const [contactPhone, setContactPhone] = useState<string>("");
-  const [contactEmail, setContactEmail] = useState<string>("");
-  const [sendInfoToContact, setSendInfoToContact] = useState<boolean>(false);
+  const [contacts, setContacts] = useState<StudentContactInput[]>([
+    {
+      name: "",
+      phone: "",
+      email: "",
+      send_info: false,
+    },
+  ]);
 
   //Mutations
-  const { data: CentersData } = useSimpleCentersNameQuery({
-    fetchPolicy: "network-only",
-  });
-  const { data: StraightGroupsData } = useSimpleGroupsNameQuery({
-    variables: {},
-  });
-  const [GroupsData, setGroupsData] = useState<Partial<Group[]>>([]);
-  useEffect(() => {
-    if (StraightGroupsData) {
-      setGroupsData(
-        StraightGroupsData.getGroups.data.filter(
-          (elem) => elem.center.id === center
-        ) as Group[]
-      );
-    }
-  }, [StraightGroupsData, center]);
-
   const [createStudentMutation, { error }] = useCreateStudentMutation({
     variables: {
       registrationDate: inscriptionDay,
-      idGroups: [group],
+      idGroups: groups,
       name,
       birthDate,
       course: course,
@@ -80,14 +66,7 @@ const CreateStudent: FC<{
       imageAuthorisation,
       collectionPermit,
       goesAlone,
-      contacts: [
-        {
-          name: contactName,
-          phone: contactPhone,
-          email: contactEmail,
-          send_info: sendInfoToContact,
-        } as StudentContactInput,
-      ],
+      contacts,
       descriptionAllergy: descriptionAllergy,
     },
   });
@@ -100,25 +79,25 @@ const CreateStudent: FC<{
     changeTitle(t("pages.students.modal-create.title"));
   }
 
-  const [centerError, setCenterError] = useState<boolean>(false);
   const [courseError, setCourseError] = useState<boolean>(false);
   const [nameError, setNameError] = useState<boolean>(false);
   const [inscriptionDayError, setInscriptionDayError] =
     useState<boolean>(false);
   const [birthDateError, setBirthDateError] = useState<boolean>(false);
 
+  if (step === 1) {
+    changeTitle(t("pages.students.modal-create.title"));
+  }
+
   return (
     <Form>
-      {step !== 1 && (
-        <styles.P4>{t(`components.create-student.${step}.title`)}</styles.P4>
-      )}
       {step === 1 && (
         <>
           <ScrollDiv>
             <styles.P4>
               {t(`components.create-student.${step}.title`)}
             </styles.P4>
-            <FillIn>
+            {/* <FillIn>
               <styles.BoldP4>
                 {t(`components.create-group.1.subtitle.center`)}
               </styles.BoldP4>
@@ -140,29 +119,44 @@ const CreateStudent: FC<{
               {centerError && (
                 <styles.P0Error>{t("general.empty")}</styles.P0Error>
               )}
-            </FillIn>
+            </FillIn> */}
             <FillInSectioned>
-              <FillIn>
+              <FillIn width="250px">
+                <styles.BoldP4>
+                  {t(`components.create-student.1.subtitle.name`)}
+                </styles.BoldP4>
+                <InputSuper
+                  error={nameError}
+                  setError={setNameError}
+                  input={name}
+                  setInput={setName}
+                  placeholder={t(
+                    `components.create-student.1.subtitle.name-placeholder`
+                  )}
+                />
+                {nameError && (
+                  <styles.P0Error>{t("general.empty")}</styles.P0Error>
+                )}
+              </FillIn>
+              {/* <FillIn>
                 <styles.BoldP4>
                   {t(`components.create-student.1.subtitle.group`)}
                 </styles.BoldP4>
                 <DropDownUnique
-                  options={
-                    (GroupsData.every !== undefined &&
-                      (GroupsData as Group[]).map((elem) => {
-                        return {
-                          key: elem.id,
-                          label: elem.name,
-                        };
-                      })) ||
-                    []
-                  }
+                  options={(GroupsData.every !== undefined &&
+                    (GroupsData as Group[]).map((elem) => {
+                      return {
+                        key: elem.id,
+                        label: elem.name,
+                      };
+                    })) ||
+                    []}
                   width="278px"
                   setSelected={setGroup}
                   selected={group}
                 />
-              </FillIn>
-              <FillIn>
+              </FillIn> */}
+              <FillIn width="98px">
                 <styles.BoldP4>
                   {t(`components.create-student.1.subtitle.course`)}
                 </styles.BoldP4>
@@ -185,43 +179,6 @@ const CreateStudent: FC<{
               </FillIn>
             </FillInSectioned>
             <FillInSectioned>
-              <FillIn width="250px">
-                <styles.BoldP4>
-                  {t(`components.create-student.1.subtitle.name`)}
-                </styles.BoldP4>
-                <InputSuper
-                  error={nameError}
-                  setError={setNameError}
-                  input={name}
-                  setInput={setName}
-                  placeholder={t(
-                    `components.create-student.1.subtitle.name-placeholder`
-                  )}
-                />
-                {nameError && (
-                  <styles.P0Error>{t("general.empty")}</styles.P0Error>
-                )}
-              </FillIn>
-              <FillIn width="130px">
-                <styles.BoldP4>
-                  {t(`components.create-student.1.subtitle.inscription-date`)}
-                </styles.BoldP4>
-                <InputSuper
-                  error={inscriptionDayError}
-                  setError={setInscriptionDayError}
-                  datePattern
-                  input={inscriptionDay}
-                  setInput={setInscriptionDay}
-                  placeholder={t(
-                    `components.create-student.1.subtitle.inscription-date-placeholder`
-                  )}
-                />
-                {inscriptionDayError && (
-                  <styles.P0Error>{t("general.decline-date")}</styles.P0Error>
-                )}
-              </FillIn>
-            </FillInSectioned>
-            <FillInSectioned>
               <FillIn width="135px">
                 <styles.BoldP4>
                   {t(`components.create-student.1.subtitle.birth-date`)}
@@ -240,7 +197,24 @@ const CreateStudent: FC<{
                   <styles.P0Error>{t("general.decline-date")}</styles.P0Error>
                 )}
               </FillIn>
-              <FillIn width="250px" />
+              <FillIn width="135px">
+                <styles.BoldP4>
+                  {t(`components.create-student.1.subtitle.inscription-date`)}
+                </styles.BoldP4>
+                <InputSuper
+                  error={inscriptionDayError}
+                  setError={setInscriptionDayError}
+                  datePattern
+                  input={inscriptionDay}
+                  setInput={setInscriptionDay}
+                  placeholder={t(
+                    `components.create-student.1.subtitle.inscription-date-placeholder`
+                  )}
+                />
+                {inscriptionDayError && (
+                  <styles.P0Error>{t("general.decline-date")}</styles.P0Error>
+                )}
+              </FillIn>
             </FillInSectioned>
             <CheckOption>
               <CheckBox option={allergies} setOption={setAllergies} />
@@ -339,9 +313,6 @@ const CreateStudent: FC<{
                   }
                 }
                 {
-                  center === "" && setCenterError(true);
-                }
-                {
                   course === "" && setCourseError(true);
                 }
                 {
@@ -349,7 +320,6 @@ const CreateStudent: FC<{
                 }
 
                 if (
-                  center !== "" &&
                   course !== "" &&
                   name !== "" &&
                   (inscriptionDay === "" ||
@@ -373,104 +343,227 @@ const CreateStudent: FC<{
       )}
       {step === 2 && (
         <>
-          <FillIn>
-            <styles.BoldP4>
-              {t(`components.create-student.2.subtitle.name`)}
-            </styles.BoldP4>
-            <InputSuper
-              input={contactName}
-              setInput={setContactName}
-              placeholder={t(
-                `components.create-student.2.subtitle.name-placeholder`
-              )}
-            />
-          </FillIn>
-          <FillInSectioned>
-            <FillIn width="260px">
-              <styles.BoldP4>
-                {t(`components.create-student.2.subtitle.email`)}
-              </styles.BoldP4>
-              <InputSuper
-                type="email"
-                input={contactEmail}
-                setInput={setContactEmail}
-                placeholder={t(
-                  `components.create-student.2.subtitle.email-placeholder`
-                )}
-              />
-            </FillIn>
-            <FillIn width="115px">
-              <styles.BoldP4>
-                {t(`components.create-student.2.subtitle.phone`)}
-              </styles.BoldP4>
-              <InputSuper
-                telPattern
-                input={contactPhone}
-                setInput={setContactPhone}
-                placeholder={t(`components.create-student.2.subtitle.phone`)}
-              />
-            </FillIn>
-          </FillInSectioned>
-          <CheckOption>
-            <CheckBox
-              option={sendInfoToContact}
-              setOption={setSendInfoToContact}
-            />
-            <styles.P4>
-              {t(`components.create-student.2.subtitle.send`)}
-            </styles.P4>
-          </CheckOption>
-          <NavDiv>
-            <Button
-              secondary
-              onClick={() => setStep(1)}
-              text={t("general.actions.back")}
-            />
-            <Button
-              create
+          <ContactsDiv>
+            <TitleStep3>
+              {t(`components.create-student.${step}.title`)}
+            </TitleStep3>
+            {contacts.map((contact, index) => {
+              return (
+                <AddContactStudent
+                  key={index}
+                  contact={contact}
+                  contacts={contacts}
+                  setContacts={setContacts}
+                  setContact={(NewContact) => {
+                    const newContacts = [...contacts];
+                    newContacts[index] = NewContact;
+                    setContacts(newContacts);
+                  }}
+                />
+              );
+            })}
+            <AddContactButton
               onClick={() => {
-                if (
-                  name !== "" &&
-                  group !== "" &&
-                  birthDate !== "" &&
-                  course !== "" &&
-                  inscriptionDay !== "" &&
-                  collectionPermit !== "" &&
-                  contactName !== "" &&
-                  contactEmail !== "" &&
-                  contactPhone !== ""
-                ) {
-                  createStudentMutation().then(() => {
-                    refetch();
-                    changeTitle("");
-                    setStep(3);
-                  });
-                } else {
-                  alert("Please fill in all fields");
-                }
+                setContacts([
+                  ...contacts,
+                  {
+                    name: "",
+                    phone: "",
+                    email: "",
+                    send_info: false,
+                  },
+                ]);
               }}
-              text={t("general.actions.create")}
-            />
-          </NavDiv>
+            >
+              <Icon name="add" />
+              <Icon name="user" />
+              <styles.BoldP4>
+                {t("components.create-center.3.add-contact")}
+              </styles.BoldP4>
+            </AddContactButton>
+          </ContactsDiv>
+          {contacts.length > 1 && (
+            <NavDivStep3>
+              <Button
+                secondary
+                onClick={() => setStep(1)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                main
+                // onClick={() => {
+                //   if (
+                //     name !== "" &&
+                //     group !== "" &&
+                //     birthDate !== "" &&
+                //     course !== "" &&
+                //     inscriptionDay !== "" &&
+                //     collectionPermit !== "" &&
+                //     contactName !== "" &&
+                //     contactEmail !== "" &&
+                //     contactPhone !== ""
+                //   ) {
+                //     createStudentMutation().then(() => {
+                //       refetch();
+                //       changeTitle("");
+                //       setStep(3);
+                //     });
+                //   } else {
+                //     alert("Please fill in all fields");
+                //   }
+                // }}
+                onClick={() => {
+                  setStep(3);
+                }}
+                text={t("general.actions.next")}
+              />
+            </NavDivStep3>
+          )}
+          {contacts.length === 1 && (
+            <NavDiv>
+              <Button
+                secondary
+                onClick={() => setStep(1)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                main
+                // onClick={() => {
+                //   if (
+                //     name !== "" &&
+                //     group !== "" &&
+                //     birthDate !== "" &&
+                //     course !== "" &&
+                //     inscriptionDay !== "" &&
+                //     collectionPermit !== "" &&
+                //     contactName !== "" &&
+                //     contactEmail !== "" &&
+                //     contactPhone !== ""
+                //   ) {
+                //     createStudentMutation().then(() => {
+                //       refetch();
+                //       changeTitle("");
+                //       setStep(3);
+                //     });
+                //   } else {
+                //     alert("Please fill in all fields");
+                //   }
+                // }}
+                onClick={() => {
+                  setStep(3);
+                }}
+                text={t("general.actions.next")}
+              />
+            </NavDiv>
+          )}
         </>
       )}
       {step === 3 && (
-        <FillIn>
-          <EndButton
-            main
-            onClick={() => {
-              changeTitle(t("pages.students.modal-create.title"));
-              close(false);
-            }}
-            text={t("general.actions.consent")}
-          />
-        </FillIn>
+        <>
+          <ContactsDiv>
+            <TitleStep3>
+              {t(`components.create-student.${step}.title`)}
+            </TitleStep3>
+            {centers.map((center, index) => {
+              return (
+                <AddCenter
+                  key={index}
+                  center={center}
+                  centers={centers}
+                  setCenters={setCenters}
+                  groups={groups}
+                  setGroups={setGroups}
+                  setCenter={(NewCenter) => {
+                    const newCenters = [...centers];
+                    newCenters[index] = NewCenter;
+                    setCenters(newCenters);
+                  }}
+                />
+              );
+            })}
+            <AddContactButton
+              onClick={() => {
+                setCenters([...centers, ""]);
+              }}
+            >
+              <Icon name="add" />
+              <Icon name="user" />
+              <styles.BoldP4>
+                {t("components.create-student.3.add-center")}
+              </styles.BoldP4>
+            </AddContactButton>
+          </ContactsDiv>
+          {centers.length > 1 && (
+            <NavDivStep3>
+              <Button
+                secondary
+                onClick={() => setStep(2)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
+                  if (name !== "" && course !== "") {
+                    createStudentMutation().then(() => {
+                      refetch();
+                      changeTitle("");
+                      setStep(4);
+                    });
+                  }
+                }}
+                text={t("components.create-center.3.create")}
+              />
+            </NavDivStep3>
+          )}
+          {centers.length === 1 && (
+            <NavDiv>
+              <Button
+                secondary
+                onClick={() => setStep(2)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
+                  if (name !== "" && course !== "") {
+                    createStudentMutation().then(() => {
+                      refetch();
+                      changeTitle("");
+                      setStep(4);
+                    });
+                  }
+                }}
+                text={t("components.create-center.3.create")}
+              />
+            </NavDiv>
+          )}
+        </>
+      )}
+      {step === 4 && (
+        <>
+          <styles.P4>{t(`components.create-student.${step}.title`)}</styles.P4>
+
+          <FillIn>
+            <EndButton
+              main
+              onClick={() => {
+                changeTitle(t("pages.students.modal-create.title"));
+                close(false);
+              }}
+              text={t("general.actions.consent")}
+            />
+          </FillIn>
+        </>
       )}
     </Form>
   );
 };
 
 export default CreateStudent;
+
+const TitleStep3 = styled(styles.P4)`
+  margin: 30px 0;
+`;
 
 const Form = styled.div`
   display: flex;
@@ -530,6 +623,39 @@ const ScrollDiv = styled.div`
   }
 `;
 
+const AddContactButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: ${colors.colors.white};
+  color: ${colors.colors.blue80};
+  & > p {
+    margin-left: 5px;
+  }
+`;
+
 const DisabledText = styled(styles.BoldP4)`
   color: ${colors.colors.gray2};
+`;
+
+const ContactsDiv = styled.div`
+  margin: 0;
+  width: 100%;
+  max-height: 499px;
+  margin-top: -30px;
+  overflow-y: scroll;
+  padding-bottom: 20px;
+`;
+
+const NavDivStep3 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  border-top: 1px solid ${colors.colors.gray60};
+  padding: 20px 45px 39px 45px;
+  margin: 0 -45px -30px -45px;
+  background-color: ${colors.colors.white};
 `;

@@ -10,7 +10,8 @@ import { Days, TimetableInput } from "../generated/graphql";
 
 const AddTimeTable: FC<{
   setTimeTable: (data: TimetableInput[]) => void;
-}> = ({ setTimeTable }) => {
+  checkErrors: (result: boolean) => void;
+}> = ({ setTimeTable, checkErrors }) => {
   const t = useTranslate();
   const [monday, setMonday] = useState<TimetableInput>();
   const [tuesday, setTuesday] = useState<TimetableInput>();
@@ -45,6 +46,57 @@ const AddTimeTable: FC<{
     }
     setTimeTable(days);
   }, [monday, tuesday, wednesday, thursday, friday, saturday, sunday]);
+
+  const [errorMondayStart, setErrorMondayStart] = useState<boolean>(false);
+  const [errorMondayEnd, setErrorMondayEnd] = useState<boolean>(false);
+  const [errorTuesdayStart, setErrorTuesdayStart] = useState<boolean>(false);
+  const [errorTuesdayEnd, setErrorTuesdayEnd] = useState<boolean>(false);
+  const [errorWednesdayStart, setErrorWednesdayStart] =
+    useState<boolean>(false);
+  const [errorWednesdayEnd, setErrorWednesdayEnd] = useState<boolean>(false);
+  const [errorThursdayStart, setErrorThursdayStart] = useState<boolean>(false);
+  const [errorThursdayEnd, setErrorThursdayEnd] = useState<boolean>(false);
+  const [errorFridayStart, setErrorFridayStart] = useState<boolean>(false);
+  const [errorFridayEnd, setErrorFridayEnd] = useState<boolean>(false);
+  const [errorSaturdayStart, setErrorSaturdayStart] = useState<boolean>(false);
+  const [errorSaturdayEnd, setErrorSaturdayEnd] = useState<boolean>(false);
+  const [errorSundayStart, setErrorSundayStart] = useState<boolean>(false);
+  const [errorSundayEnd, setErrorSundayEnd] = useState<boolean>(false);
+
+  useEffect(() => {
+    checkErrors(
+      errorMondayStart ||
+        errorMondayEnd ||
+        errorTuesdayStart ||
+        errorTuesdayEnd ||
+        errorWednesdayStart ||
+        errorWednesdayEnd ||
+        errorThursdayStart ||
+        errorThursdayEnd ||
+        errorFridayStart ||
+        errorFridayEnd ||
+        errorSaturdayStart ||
+        errorSaturdayEnd ||
+        errorSundayStart ||
+        errorSundayEnd
+    );
+  }, [
+    errorMondayStart,
+    errorMondayEnd,
+    errorTuesdayStart,
+    errorTuesdayEnd,
+    errorWednesdayStart,
+    errorWednesdayEnd,
+    errorThursdayStart,
+    errorThursdayEnd,
+    errorFridayStart,
+    errorFridayEnd,
+    errorSaturdayStart,
+    errorSaturdayEnd,
+    errorSundayStart,
+    errorSundayEnd,
+  ]);
+
   return (
     <GridEnclouser>
       <div>
@@ -81,7 +133,9 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorMondayStart}
+          setError={setErrorMondayStart}
+          setValid={setErrorMondayStart}
           timePattern
           disabled={!monday}
           input={monday ? monday.start : ""}
@@ -101,7 +155,9 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorMondayEnd}
+          setError={setErrorMondayEnd}
+          setValid={setErrorMondayEnd}
           timePattern
           disabled={!monday}
           input={monday ? monday.end : ""}
@@ -136,7 +192,9 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorTuesdayStart}
+          setError={setErrorTuesdayStart}
+          setValid={setErrorTuesdayStart}
           timePattern
           disabled={!tuesday}
           input={tuesday ? tuesday.start : ""}
@@ -156,7 +214,9 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorTuesdayEnd}
+          setError={setErrorTuesdayEnd}
+          setValid={setErrorTuesdayEnd}
           timePattern
           disabled={!tuesday}
           input={tuesday ? tuesday.end : ""}
@@ -193,7 +253,9 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorWednesdayStart}
+          setError={setErrorWednesdayStart}
+          setValid={setErrorWednesdayStart}
           timePattern
           disabled={!wednesday}
           input={wednesday ? wednesday.start : ""}
@@ -213,7 +275,9 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorWednesdayEnd}
+          setError={setErrorWednesdayEnd}
+          setValid={setErrorWednesdayEnd}
           timePattern
           disabled={!wednesday}
           input={wednesday ? wednesday.end : ""}
@@ -250,7 +314,9 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorThursdayStart}
+          setError={setErrorThursdayStart}
+          setValid={setErrorThursdayStart}
           timePattern
           disabled={!thursday}
           input={thursday ? thursday.start : ""}
@@ -270,7 +336,9 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorThursdayEnd}
+          setError={setErrorThursdayEnd}
+          setValid={setErrorThursdayEnd}
           timePattern
           disabled={!thursday}
           input={thursday ? thursday.end : ""}
@@ -305,7 +373,9 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorFridayStart}
+          setError={setErrorFridayStart}
+          setValid={setErrorFridayStart}
           timePattern
           disabled={!friday}
           input={friday ? friday.start : ""}
@@ -325,7 +395,9 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorFridayEnd}
+          setError={setErrorFridayEnd}
+          setValid={setErrorFridayEnd}
           timePattern
           disabled={!friday}
           input={friday ? friday.end : ""}
@@ -362,7 +434,9 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorSaturdayStart}
+          setError={setErrorSaturdayStart}
+          setValid={setErrorSaturdayStart}
           timePattern
           disabled={!saturday}
           input={saturday ? saturday.start : ""}
@@ -382,7 +456,9 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorSaturdayEnd}
+          setError={setErrorSaturdayEnd}
+          setValid={setErrorSaturdayEnd}
           timePattern
           disabled={!saturday}
           input={saturday ? saturday.end : ""}
@@ -417,7 +493,9 @@ const AddTimeTable: FC<{
       </DayDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorSundayStart}
+          setError={setErrorSundayStart}
+          setValid={setErrorSundayStart}
           timePattern
           disabled={!sunday}
           input={sunday ? sunday.start : ""}
@@ -437,7 +515,9 @@ const AddTimeTable: FC<{
       </InputDiv>
       <InputDiv>
         <InputSuper
-          type="time"
+          error={errorSundayEnd}
+          setError={setErrorSundayEnd}
+          setValid={setErrorSundayEnd}
           timePattern
           disabled={!sunday}
           input={sunday ? sunday.end : ""}
