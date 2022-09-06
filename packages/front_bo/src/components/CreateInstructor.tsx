@@ -6,6 +6,7 @@ import {
   DropDownUnique,
   FillIn,
   FillInSectioned,
+  Icon,
   InputSuper,
   OptionsBox,
   OptionsBoxOrdered,
@@ -15,22 +16,20 @@ import {
 } from "@academy-manager/ui";
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Platforms, schedule, Tools, zones } from "../config";
 import {
   AvailabilityInput,
   Days,
   InstructorStatus,
   Languages,
-  OrderFilterGroup,
   PreviousExperienceInstructor,
   SummerAvailabilityInstructor,
   TrainingInstructorInput,
   TypeVehicleInstructor,
   useCreateInstructorMutation,
-  useGetGroupsQuery,
-  useSimpleCentersNameQuery,
 } from "../generated/graphql";
+import AddCenter from "./AddCenter";
 
 const CreateInstructor: FC<{
   changeTitle: (title: string) => void;
@@ -80,25 +79,13 @@ const CreateInstructor: FC<{
   const [LocalZones, setLocalZones] = useState<string[]>([]);
   const [orderName, setOrderName] = useState<boolean>(false);
   const [especifyZones, setEspecifyZones] = useState<string[]>([]);
-  const [center, setCenter] = useState<string>("");
+  const [centers, setCenters] = useState<string[]>([""]);
   const [groups, setGroups] = useState<string[]>([]);
   const [summer, setSummer] = useState<SummerAvailabilityInstructor>();
+  const [errorCenters, setErrorCenters] = useState<boolean>(false);
+  const [errorGroups, setErrorGroups] = useState<boolean>(false);
 
   //Mutations
-  const { data: CentersData } = useSimpleCentersNameQuery({
-    variables: {},
-    fetchPolicy: "network-only",
-  });
-  const { data: GroupsData } = useGetGroupsQuery({
-    variables: {
-      searchText: center,
-      orderFilter: OrderFilterGroup.IdGroup,
-      order: 1,
-      page: 1,
-      pageSize: 20,
-    },
-  });
-
   const [createInstructorMutation, { error }] = useCreateInstructorMutation();
 
   if (error) {
@@ -168,8 +155,10 @@ const CreateInstructor: FC<{
   const [errorProgramming, setErrorProgramming] = useState<boolean>(false);
   const [errorCV, setErrorCV] = useState<boolean>(false);
 
+  const FormRef = useRef<HTMLDivElement>(null);
+
   return (
-    <Form>
+    <Form ref={FormRef}>
       {step !== 2 && step !== 4 && step !== 5 && step !== 3 && (
         <styles.P4>{t(`components.create-instructor.${step}.title`)}</styles.P4>
       )}
@@ -323,7 +312,11 @@ const CreateInstructor: FC<{
       )}
       {step === 2 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
@@ -501,6 +494,11 @@ const CreateInstructor: FC<{
               {errorCV && (
                 <styles.P0Error>{t("general.decline-link")}</styles.P0Error>
               )}
+              {cvUrl.length > 0 && (
+                <a target="_blank" href={cvUrl}>
+                  {t("components.create-instructor.2.linkCV")}
+                </a>
+              )}
             </FillIn>
             <FillIn>
               <OptionsBox
@@ -520,9 +518,12 @@ const CreateInstructor: FC<{
             </FillIn>
             <FillIn>
               <OptionsBox
+                notOther
                 options={Object.values(Languages).map((language) => ({
                   key: language,
-                  label: t(`pages.centers.languages.${language.toLowerCase()}`),
+                  label: t(
+                    `pages.centers.languages.${language.toLowerCase()}-label`
+                  ),
                 }))}
                 title={t("components.create-instructor.2.languages")}
                 results={languages}
@@ -584,7 +585,11 @@ const CreateInstructor: FC<{
       )}
       {step === 3 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
@@ -682,7 +687,11 @@ const CreateInstructor: FC<{
       )}
       {step === 4 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
@@ -764,7 +773,21 @@ const CreateInstructor: FC<{
                   setOrderName={setOrderName}
                   results={especifyZones}
                   setResults={setEspecifyZones}
-                  title={t("components.create-instructor.4.subtitle.zones-1")}
+                  title={
+                    <ZonesTitle>
+                      <styles.BoldP4>
+                        {t("components.create-instructor.4.subtitle.zones-1")}
+                      </styles.BoldP4>
+                      {/* TODO: Onclick call back */}
+                      <AddZone>
+                        <Icon name="add" />
+                        <Icon name="map" />
+                        <styles.BoldP4>
+                          {t("components.create-instructor.4.subtitle.zones-2")}
+                        </styles.BoldP4>
+                      </AddZone>
+                    </ZonesTitle>
+                  }
                 />
               </FillIn>
             )}
@@ -785,111 +808,153 @@ const CreateInstructor: FC<{
       )}
       {step === 5 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-instructor.5.subtitle.center")}
-              </styles.BoldP4>
-              <DropDownUnique
-                options={
-                  CentersData?.getCenters.data.map((elem) => {
-                    return {
-                      key: elem.name,
-                      label: elem.name,
-                    };
-                  }) || []
-                }
-                width="385px"
-                setSelected={setCenter}
-                selected={center}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-instructor.5.subtitle.group")}
-              </styles.BoldP4>
-              <DropDown
-                disabled={center === ""}
-                options={
-                  center === undefined
-                    ? []
-                    : GroupsData?.getGroups.data.map((elem) => {
-                        return {
-                          key: elem.id,
-                          label: elem.name,
-                        };
-                      }) || []
-                }
-                width="385px"
-                selected={groups}
-                setSelected={setGroups}
-              />
-            </FillIn>
-          </ScrollDiv>
-          <NavDivScroll>
-            <Button
-              secondary
-              onClick={() => setStep(4)}
-              text={t("general.actions.back")}
-            />
-            <Button
-              create
+            {centers.map((center, index) => {
+              return (
+                <AddCenter
+                  errorCenter={errorCenters}
+                  errorGroups={errorGroups}
+                  setErrorCenter={setErrorCenters}
+                  setErrorGroups={setErrorGroups}
+                  key={index}
+                  center={center}
+                  centers={centers}
+                  setCenters={setCenters}
+                  groups={groups}
+                  setGroups={setGroups}
+                  setCenter={(NewCenter) => {
+                    const newCenters = [...centers];
+                    newCenters[index] = NewCenter;
+                    setCenters(newCenters);
+                  }}
+                />
+              );
+            })}
+            <AddContactButton
               onClick={() => {
-                if (
-                  name !== "" &&
-                  emailPro !== "" &&
-                  emailPersonal !== "" &&
-                  phone !== "" &&
-                  state !== undefined &&
-                  education !== undefined &&
-                  experience !== undefined &&
-                  programming !== undefined &&
-                  cvUrl !== "" &&
-                  // availability !== [] &&
-                  vehicle !== undefined &&
-                  // LocalZones !== [] &&
-                  // especifyZones !== [] &&
-                  center !== "" &&
-                  // groups !== [] &&
-                  summer !== undefined
-                ) {
-                  createInstructorMutation({
-                    variables: {
-                      name,
-                      corporateEmail: emailPro,
-                      personalEmail: emailPersonal,
-                      phone,
-                      status: state,
-                      training: education,
-                      previousExperience: experience,
-                      programmingExperience: programming,
-                      knowledge,
-                      urlCv: cvUrl,
-                      materialsExperience: tools,
-                      platformEducationExperience: platforms,
-                      languages,
-                      availability,
-                      summerAvailability: summer,
-                      vehicle,
-                      geographicalAvailability: LocalZones.join(", "),
-                      areas: especifyZones,
-                      groups,
-                    },
-                  }).then(() => {
-                    changeTitle("");
-                    refetch();
-                    setStep(6);
-                  });
-                } else {
-                  alert("Please fill in all fields");
-                }
+                setCenters([...centers, ""]);
               }}
-              text={t("general.actions.create")}
-            />
-          </NavDivScroll>
+            >
+              <Icon name="add" />
+              <Icon name="user" />
+              <styles.BoldP4>
+                {t("components.create-student.3.add-center")}
+              </styles.BoldP4>
+            </AddContactButton>
+          </ScrollDiv>
+          {centers.length > 1 && (
+            <NavDivScroll>
+              <Button
+                secondary
+                onClick={() => setStep(4)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
+                  if (centers.length === 1 && centers[0] === "") {
+                    setErrorCenters(true);
+                  }
+                  if (groups.length === 0) {
+                    setErrorGroups(true);
+                  }
+                  if (groups.length > 0) {
+                    createInstructorMutation({
+                      variables: {
+                        name,
+                        corporateEmail: emailPro,
+                        personalEmail: emailPersonal,
+                        phone: phone,
+                        status: state || InstructorStatus.Inactive,
+                        training: education || {},
+                        previousExperience:
+                          experience || PreviousExperienceInstructor.No,
+                        programmingExperience: programming || false,
+                        knowledge,
+                        urlCv: cvUrl,
+                        materialsExperience: tools,
+                        platformEducationExperience: platforms,
+                        languages,
+                        availability,
+                        summerAvailability:
+                          summer || SummerAvailabilityInstructor.No,
+                        vehicle:
+                          vehicle || TypeVehicleInstructor.PublicTransport,
+                        geographicalAvailability: LocalZones.join(", "),
+                        areas: especifyZones,
+                        groups: groups,
+                      },
+                    }).then(() => {
+                      changeTitle("");
+                      refetch();
+                      setStep(6);
+                    });
+                  }
+                }}
+                text={t("general.actions.create")}
+              />
+            </NavDivScroll>
+          )}
+          {centers.length === 1 && (
+            <NavDiv>
+              <Button
+                secondary
+                onClick={() => setStep(4)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
+                  if (centers.length === 1 && centers[0] === "") {
+                    setErrorCenters(true);
+                  }
+                  if (groups.length === 0) {
+                    setErrorGroups(true);
+                  }
+                  if (groups.length > 0) {
+                    createInstructorMutation({
+                      variables: {
+                        name,
+                        corporateEmail: emailPro,
+                        personalEmail: emailPersonal,
+                        phone: phone,
+                        status: state || InstructorStatus.Inactive,
+                        training: education || {},
+                        previousExperience:
+                          experience || PreviousExperienceInstructor.No,
+                        programmingExperience: programming || false,
+                        knowledge,
+                        urlCv: cvUrl,
+                        materialsExperience: tools,
+                        platformEducationExperience: platforms,
+                        languages,
+                        availability,
+                        summerAvailability:
+                          summer || SummerAvailabilityInstructor.No,
+                        vehicle:
+                          vehicle || TypeVehicleInstructor.PublicTransport,
+                        geographicalAvailability: LocalZones.join(", "),
+                        areas: especifyZones,
+                        groups: groups,
+                      },
+                    }).then(() => {
+                      changeTitle("");
+                      refetch();
+                      setStep(6);
+                    });
+                  }
+                }}
+                text={t("general.actions.create")}
+              />
+            </NavDiv>
+          )}
         </>
       )}
       {step === 6 && (
@@ -912,6 +977,19 @@ export default CreateInstructor;
 
 const EndButton = styled(Button)`
   align-self: flex-start;
+`;
+
+const ZonesTitle = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const AddZone = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: ${colors.colors.blue80};
 `;
 
 const Form = styled.div`
@@ -965,5 +1043,18 @@ const ScrollDiv = styled.div`
   padding-bottom: 30px;
   & > p {
     margin: 30px 0;
+  }
+`;
+
+const AddContactButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: ${colors.colors.white};
+  color: ${colors.colors.blue80};
+  & > p {
+    margin-left: 5px;
   }
 `;

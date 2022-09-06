@@ -207,6 +207,7 @@
         "state-inactive": "Inactivo"
       },
       "2": {
+        "linkCV": "Ver en Drive",
         "title": "Paso 2 de 5 - Formación y experiencia",
         "education": "Formación",
         "education-1": "Carrera o formación profesional de educación",
@@ -240,7 +241,8 @@
           "vehicle-own": "Vehículo propio",
           "vehicle-public": "Transporte público",
           "zones": "Disponibilidad geográfica",
-          "zones-1": "Zonas"
+          "zones-1": "Zonas",
+          "zones-2": "Añadir zona"
         }
       },
       "5": {
@@ -337,7 +339,9 @@
     "centers": {
       "languages": {
         "english": "Ing",
-        "spanish": "Esp"
+        "spanish": "Esp",
+        "english-label": "Inglés",
+        "spanish-label": "Español"
       },
       "nature": {
         "private": "Privado",
