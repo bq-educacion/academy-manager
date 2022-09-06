@@ -118,5 +118,7 @@ export const typeDefs = gql`
       phone: String
       send_info: Boolean
     ): StudentContact!
+
+    deleteStudent(id: String!): Student!
   }
 `;

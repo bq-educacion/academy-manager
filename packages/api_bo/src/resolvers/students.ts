@@ -3,6 +3,7 @@ import { groupCollection, GroupModel } from "../models/GroupModel.ts";
 import { studentCollection, StudentModel } from "../models/StudentModel.ts";
 
 import {
+  MutationDeleteStudentArgs,
   PaginatedStudents,
   QueryGetStudentArgs,
   QueryGetStudentsArgs,
@@ -171,7 +172,10 @@ export const students = {
           throw new Error("404, Groups not found");
         }
 
-        checkActiveGroups(existsGroups, newStudent);
+        newStudent = {
+          ...newStudent,
+          activeGroup: checkActiveGroups(existsGroups),
+        };
 
         if (args.contacts) {
           newStudent = {
@@ -300,7 +304,10 @@ export const students = {
             course,
           );
 
-          checkActiveGroups(existsGroups, updateStudent);
+          updateStudent = {
+            ...updateStudent,
+            activeGroup: checkActiveGroups(existsGroups),
+          };
         }
 
         if (args.birthDate) {
@@ -397,6 +404,44 @@ export const students = {
         );
 
         return contactUpdate as StudentContact;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    deleteStudent: async (
+      _parent: unknown,
+      args: MutationDeleteStudentArgs,
+      ctx: Context,
+    ): Promise<StudentModel> => {
+      try {
+        const student = await studentCollection(ctx.db).findById(args.id);
+        if (!student) {
+          throw new Error("404, Student not found");
+        }
+        //delete student from groups and update groups course
+        const groups = await groupCollection(ctx.db)
+          .find({
+            students: new ObjectId(args.id),
+          })
+          .toArray();
+
+        await removeCourse(
+          groups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+          student.course,
+        );
+        await groupCollection(ctx.db).updateMany(
+          { students: new ObjectId(args.id) },
+          { $pull: { students: new ObjectId(args.id) } },
+        );
+
+        await studentCollection(ctx.db).deleteOne({
+          _id: new ObjectId(args.id),
+        });
+
+        return student;
       } catch (error) {
         throw new Error("500, " + error);
       }
