@@ -21,6 +21,7 @@ import { ObjectId } from "objectId";
 import { validDate } from "../lib/validDate.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { addCourse, removeCourse } from "../lib/courses.ts";
+import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
 
 export const students = {
   Student: {
@@ -170,15 +171,7 @@ export const students = {
           throw new Error("404, Groups not found");
         }
 
-        if (existsGroups.length > 0) {
-          const inactiveGroups = existsGroups.find((group) =>
-            !group.activeCenter
-          );
-          if (inactiveGroups) {
-            throw new Error("400, Groups not active");
-          }
-          newStudent = { ...newStudent, activeGroup: true };
-        }
+        checkActiveGroups(existsGroups, newStudent);
 
         if (args.contacts) {
           newStudent = {
@@ -307,15 +300,7 @@ export const students = {
             course,
           );
 
-          if (existsGroups.length > 0) {
-            const inactiveGroups = existsGroups.find((group) =>
-              !group.activeCenter
-            );
-            if (inactiveGroups) {
-              throw new Error("400, Groups not active");
-            }
-            updateStudent = { ...updateStudent, activeGroup: true };
-          }
+          checkActiveGroups(existsGroups, updateStudent);
         }
 
         if (args.birthDate) {

@@ -20,6 +20,7 @@ import {
 import { ObjectId } from "objectId";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
+import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
 
 export const instructors = {
   Instructor: {
@@ -203,7 +204,7 @@ export const instructors = {
           throw new Error("400, Fields cannot be null");
         }
 
-        let newInstructor = {
+        const newInstructor = {
           ...args,
           activeGroup: false,
           availability: setIdDays(args.availability) as Availability[],
@@ -229,15 +230,7 @@ export const instructors = {
           throw new Error("404, Groups not found");
         }
 
-        if (existsGroups.length > 0) {
-          const inactiveGroups = existsGroups.find((group) =>
-            !group.activeCenter
-          );
-          if (inactiveGroups) {
-            throw new Error("400, Groups not active");
-          }
-          newInstructor = { ...newInstructor, activeGroup: true };
-        }
+        checkActiveGroups(existsGroups, newInstructor);
 
         const idInstructor = await instructorCollection(ctx.db).insertOne({
           ...newInstructor,
@@ -296,15 +289,7 @@ export const instructors = {
             throw new Error("404, Groups not found");
           }
 
-          if (existsGroups.length > 0) {
-            const inactiveGroups = existsGroups.find((group) =>
-              !group.activeCenter
-            );
-            if (inactiveGroups) {
-              throw new Error("400, Groups not active");
-            }
-            updateInstructor = { ...updateInstructor, activeGroup: true };
-          }
+          checkActiveGroups(existsGroups, updateInstructor);
 
           const instructorGroupsIds = await groupCollection(ctx.db)
             .distinct("_id", {
