@@ -171,12 +171,12 @@ export const students = {
         }
 
         if (existsGroups.length > 0) {
-          const activeGroups = existsGroups.map((group) => group.activeCenter);
-          activeGroups.forEach((status) => {
-            if (!status) {
-              throw new Error("400, Group not active");
-            }
-          });
+          const inactiveGroups = existsGroups.find((group) =>
+            !group.activeCenter
+          );
+          if (inactiveGroups) {
+            throw new Error("400, Groups not active");
+          }
           newStudent = { ...newStudent, activeGroup: true };
         }
 
@@ -308,14 +308,12 @@ export const students = {
           );
 
           if (existsGroups.length > 0) {
-            const activeGroups = existsGroups.map((group) =>
-              group.activeCenter
+            const inactiveGroups = existsGroups.find((group) =>
+              !group.activeCenter
             );
-            activeGroups.forEach((status) => {
-              if (!status) {
-                throw new Error("400, Group not active");
-              }
-            });
+            if (inactiveGroups) {
+              throw new Error("400, Groups not active");
+            }
             updateStudent = { ...updateStudent, activeGroup: true };
           }
         }

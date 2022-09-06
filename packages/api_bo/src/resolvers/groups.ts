@@ -25,6 +25,7 @@ import { ObjectId } from "objectId";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { validHour } from "../lib/validHour.ts";
+import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 
 export const groups = {
   Group: {
@@ -325,30 +326,20 @@ export const groups = {
           throw new Error("404, Group not found");
         }
 
-        const idStudents = await Promise.all(
-          deletedGroup.students.map(async (student) => {
-            const groups = await groupCollection(ctx.db).countDocuments({
-              students: student,
-            });
-            if (groups === 0) return new ObjectId(student);
-          }),
-        ) as ObjectId[];
-        await studentCollection(ctx.db).updateMany(
-          { _id: { $in: idStudents } },
-          { $set: { activeGroup: false } },
+        // if students are not in other groups, activeGroup = false
+        setActiveToFalse(
+          deletedGroup.students,
+          groupCollection(ctx.db),
+          "students",
+          studentCollection(ctx.db),
         );
 
-        const idInstructors = await Promise.all(
-          deletedGroup.instructors.map(async (instructor) => {
-            const groups = await groupCollection(ctx.db).countDocuments({
-              instructors: instructor,
-            });
-            if (groups === 0) return new ObjectId(instructor);
-          }),
-        ) as ObjectId[];
-        await instructorCollection(ctx.db).updateMany(
-          { _id: { $in: idInstructors } },
-          { $set: { activeGroup: false } },
+        // if instructors are not in other groups, activeGroup = false
+        setActiveToFalse(
+          deletedGroup.instructors,
+          groupCollection(ctx.db),
+          "instructors",
+          instructorCollection(ctx.db),
         );
 
         return deletedGroup;

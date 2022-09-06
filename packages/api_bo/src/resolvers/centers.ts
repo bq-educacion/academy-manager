@@ -21,6 +21,7 @@ import { ObjectId } from "objectId";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { studentCollection } from "../models/StudentModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
+import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 
 export const centers = {
   Center: {
@@ -299,43 +300,21 @@ export const centers = {
           _id: new ObjectId(args.id),
         });
 
-        if (idStudents.length > 0) {
-          const inactiveStudents = await Promise.all(
-            idStudents.map(async (id) => {
-              const groups = await groupCollection(ctx.db).countDocuments({
-                students: id,
-              });
-              if (groups === 0) {
-                return id;
-              }
-            }),
-          ) as ObjectId[];
-          if (inactiveStudents.length > 0) {
-            await studentCollection(ctx.db).updateMany(
-              { _id: { $in: inactiveStudents } },
-              { $set: { activeGroup: false } },
-            );
-          }
-        }
+        // if students are not in other groups, activeGroup = false
+        setActiveToFalse(
+          idStudents,
+          groupCollection(ctx.db),
+          "students",
+          studentCollection(ctx.db),
+        );
 
-        if (idInstructors.length > 0) {
-          const inactiveInstructors = await Promise.all(
-            idInstructors.map(async (id) => {
-              const groups = await groupCollection(ctx.db).countDocuments({
-                instructors: id,
-              });
-              if (groups === 0) {
-                return id;
-              }
-            }),
-          ) as ObjectId[];
-          if (inactiveInstructors.length > 0) {
-            await instructorCollection(ctx.db).updateMany(
-              { _id: { $in: inactiveInstructors } },
-              { $set: { activeGroup: false } },
-            );
-          }
-        }
+        // if instructors are not in other groups, activeGroup = false
+        setActiveToFalse(
+          idInstructors,
+          groupCollection(ctx.db),
+          "instructors",
+          instructorCollection(ctx.db),
+        );
 
         return center;
       } catch (error) {
@@ -370,6 +349,7 @@ export const centers = {
           { $set: { activeCenter: args.active } },
         );
 
+        // if there are no instructors in the group, center = null
         if (!args.active) {
           const deleteCenterGroups = groups.map((group) => {
             if (group.instructors.length === 0) {
@@ -386,24 +366,13 @@ export const centers = {
         const idStudents: ObjectId[] = groups.map((group) => group.students)
           .flat();
         if (!args.active) {
-          if (idStudents.length > 0) {
-            const inactiveStudents = await Promise.all(
-              idStudents.map(async (id) => {
-                const groups = await groupCollection(ctx.db).countDocuments({
-                  $and: [{ students: id }, { activeCenter: true }],
-                });
-                if (groups === 0) {
-                  return id;
-                }
-              }),
-            ) as ObjectId[];
-            if (inactiveStudents.length > 0) {
-              await studentCollection(ctx.db).updateMany(
-                { _id: { $in: inactiveStudents } },
-                { $set: { activeGroup: false } },
-              );
-            }
-          }
+          // if students are not in other groups, activeGroup = false
+          setActiveToFalse(
+            idStudents,
+            groupCollection(ctx.db),
+            "students",
+            studentCollection(ctx.db),
+          );
         } else {
           if (idStudents.length > 0) {
             await studentCollection(ctx.db).updateMany(
@@ -417,24 +386,13 @@ export const centers = {
           group.instructors
         ).flat();
         if (!args.active) {
-          if (idInstructors.length > 0) {
-            const inactiveInstructors = await Promise.all(
-              idInstructors.map(async (id) => {
-                const groups = await groupCollection(ctx.db).countDocuments({
-                  $and: [{ instructors: id }, { activeCenter: true }],
-                });
-                if (groups === 0) {
-                  return id;
-                }
-              }),
-            ) as ObjectId[];
-            if (inactiveInstructors.length > 0) {
-              await instructorCollection(ctx.db).updateMany(
-                { _id: { $in: inactiveInstructors } },
-                { $set: { activeGroup: false } },
-              );
-            }
-          }
+          // if instructors are not in other groups, activeGroup = false
+          setActiveToFalse(
+            idInstructors,
+            groupCollection(ctx.db),
+            "instructors",
+            instructorCollection(ctx.db),
+          );
         } else {
           if (idInstructors.length > 0) {
             await instructorCollection(ctx.db).updateMany(
