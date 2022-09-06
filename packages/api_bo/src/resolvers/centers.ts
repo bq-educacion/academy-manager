@@ -385,10 +385,65 @@ export const centers = {
 
         const idStudents: ObjectId[] = groups.map((group) => group.students)
           .flat();
-        await studentCollection(ctx.db).updateMany(
-          { _id: { $in: idStudents } },
-          { $set: { activeCenter: args.active } },
-        );
+        if (!args.active) {
+          if (idStudents.length > 0) {
+            const inactiveStudents = await Promise.all(
+              idStudents.map(async (id) => {
+                const groups = await groupCollection(ctx.db).countDocuments({
+                  $and: [{ students: id }, { activeCenter: true }],
+                });
+                if (groups === 0) {
+                  return id;
+                }
+              }),
+            ) as ObjectId[];
+            if (inactiveStudents.length > 0) {
+              await studentCollection(ctx.db).updateMany(
+                { _id: { $in: inactiveStudents } },
+                { $set: { activeGroup: false } },
+              );
+            }
+          }
+        } else {
+          if (idStudents.length > 0) {
+            await studentCollection(ctx.db).updateMany(
+              { _id: { $in: idStudents } },
+              { $set: { activeGroup: true } },
+            );
+          }
+        }
+
+        const idInstructors: ObjectId[] = groups.map((group) =>
+          group.instructors
+        ).flat();
+        if (!args.active) {
+          if (idInstructors.length > 0) {
+            const inactiveInstructors = await Promise.all(
+              idInstructors.map(async (id) => {
+                const groups = await groupCollection(ctx.db).countDocuments({
+                  $and: [{ instructors: id }, { activeCenter: true }],
+                });
+                if (groups === 0) {
+                  return id;
+                }
+              }),
+            ) as ObjectId[];
+            if (inactiveInstructors.length > 0) {
+              await instructorCollection(ctx.db).updateMany(
+                { _id: { $in: inactiveInstructors } },
+                { $set: { activeGroup: false } },
+              );
+            }
+          }
+        } else {
+          if (idInstructors.length > 0) {
+            await instructorCollection(ctx.db).updateMany(
+              { _id: { $in: idInstructors } },
+              { $set: { activeGroup: true } },
+            );
+          }
+        }
+
         return newCenter;
       } catch (error) {
         throw new Error("500, " + error);
