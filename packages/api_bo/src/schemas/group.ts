@@ -112,5 +112,7 @@ export const typeDefs = gql`
       center: String, 
       instructors: [String!]
     ): Group!
+
+    deleteGroup(id: String!): Group!
   }
 `;

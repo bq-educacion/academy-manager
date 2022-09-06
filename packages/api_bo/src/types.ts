@@ -79,7 +79,6 @@ export type CenterContactInput = {
 
 export enum CenterNature {
   Concertado = "CONCERTADO",
-  Null = "NULL",
   Private = "PRIVATE",
   Public = "PUBLIC",
 }
@@ -135,6 +134,7 @@ export enum GroupType {
 
 export type Instructor = {
   __typename?: "Instructor";
+  activeGroup: Scalars["Boolean"];
   areas: Array<Scalars["String"]>;
   availability: Array<Availability>;
   corporateEmail?: Maybe<Scalars["String"]>;
@@ -177,6 +177,7 @@ export type Mutation = {
   createInstructor: Instructor;
   createStudent: Student;
   deleteCenter: Center;
+  deleteGroup: Group;
   editCenter: Center;
   editCenterContact: CenterContact;
   editGroup: Group;
@@ -265,6 +266,10 @@ export type MutationCreateStudentArgs = {
 };
 
 export type MutationDeleteCenterArgs = {
+  id: Scalars["String"];
+};
+
+export type MutationDeleteGroupArgs = {
   id: Scalars["String"];
 };
 
@@ -498,7 +503,7 @@ export type QueryGetStudentsArgs = {
 
 export type Student = {
   __typename?: "Student";
-  activeCenter: Scalars["Boolean"];
+  activeGroup: Scalars["Boolean"];
   allergies?: Maybe<Scalars["Boolean"]>;
   birthDate?: Maybe<Scalars["String"]>;
   collectionPermit?: Maybe<Scalars["String"]>;
@@ -867,6 +872,7 @@ export type InstructorResolvers<
   ParentType extends ResolversParentTypes["Instructor"] =
     ResolversParentTypes["Instructor"],
 > = ResolversObject<{
+  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   areas?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
   availability?: Resolver<
     Array<ResolversTypes["Availability"]>,
@@ -1017,6 +1023,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCenterArgs, "id">
+  >;
+  deleteGroup?: Resolver<
+    ResolversTypes["Group"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteGroupArgs, "id">
   >;
   editCenter?: Resolver<
     ResolversTypes["Center"],
@@ -1185,7 +1197,7 @@ export type StudentResolvers<
   ParentType extends ResolversParentTypes["Student"] =
     ResolversParentTypes["Student"],
 > = ResolversObject<{
-  activeCenter?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   allergies?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,

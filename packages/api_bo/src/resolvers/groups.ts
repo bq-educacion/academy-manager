@@ -7,6 +7,7 @@ import {
   InstructorModel,
 } from "../models/InstructorModel.ts";
 import {
+  MutationDeleteGroupArgs,
   PaginatedGroups,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
@@ -24,6 +25,7 @@ import { ObjectId } from "objectId";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { validHour } from "../lib/validHour.ts";
+import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 
 export const groups = {
   Group: {
@@ -304,6 +306,43 @@ export const groups = {
           throw new Error("404, Group not found");
         }
         return newGroup;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+    deleteGroup: async (
+      _parent: unknown,
+      args: MutationDeleteGroupArgs,
+      ctx: Context,
+    ): Promise<GroupModel> => {
+      try {
+        const deletedGroup = await groupCollection(ctx.db).findAndModify(
+          { _id: new ObjectId(args.id) },
+          {
+            remove: true,
+          },
+        );
+        if (!deletedGroup) {
+          throw new Error("404, Group not found");
+        }
+
+        // if students are not in other groups, activeGroup = false
+        setActiveToFalse(
+          deletedGroup.students,
+          groupCollection(ctx.db),
+          "students",
+          studentCollection(ctx.db),
+        );
+
+        // if instructors are not in other groups, activeGroup = false
+        setActiveToFalse(
+          deletedGroup.instructors,
+          groupCollection(ctx.db),
+          "instructors",
+          instructorCollection(ctx.db),
+        );
+
+        return deletedGroup;
       } catch (error) {
         throw new Error("500, " + error);
       }

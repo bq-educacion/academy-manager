@@ -21,6 +21,7 @@ import { ObjectId } from "objectId";
 import { validDate } from "../lib/validDate.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { addCourse, removeCourse } from "../lib/courses.ts";
+import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
 
 export const students = {
   Student: {
@@ -149,7 +150,7 @@ export const students = {
         let newStudent = {
           ...args,
           status: StudentStatus.Active,
-          activeCenter: true,
+          activeGroup: false,
         };
 
         if (args.birthDate) {
@@ -169,6 +170,8 @@ export const students = {
         if (existsGroups.length !== groups.length) {
           throw new Error("404, Groups not found");
         }
+
+        checkActiveGroups(existsGroups, newStudent);
 
         if (args.contacts) {
           newStudent = {
@@ -296,6 +299,8 @@ export const students = {
             studentCollection(ctx.db),
             course,
           );
+
+          checkActiveGroups(existsGroups, updateStudent);
         }
 
         if (args.birthDate) {
