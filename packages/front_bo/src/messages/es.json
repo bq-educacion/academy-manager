@@ -141,7 +141,7 @@
           "friday": "Viernes",
           "saturday": "Sábado",
           "sunday": "Domingo",
-          "placeholder-start": "8:30",
+          "placeholder-start": "08:30",
           "placeholder-end": "14:30"
         }
       },
