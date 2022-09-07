@@ -113,13 +113,25 @@ export const centers = {
       _parent: unknown,
       args: QueryGetCenterArgs,
       ctx: Context,
-    ): Promise<CenterModel> => {
+    ): Promise<
+      { center: CenterModel; totalGroups: number; totalStudents: number }
+    > => {
       try {
         const center = await centerCollection(ctx.db).findById(args.id);
         if (!center) {
           throw new Error("404, Center not found");
         }
-        return center;
+
+        const totalGroups = await groupCollection(ctx.db).countDocuments({
+          center: new ObjectId(args.id),
+        });
+
+        const students = (await groupCollection(ctx.db).distinct("students", {
+          center: new ObjectId(args.id),
+        })).flat() as ObjectId[];
+        const totalStudents = [...new Set(students)].length;
+
+        return { center, totalGroups, totalStudents };
       } catch (error) {
         throw new Error("500, " + error);
       }

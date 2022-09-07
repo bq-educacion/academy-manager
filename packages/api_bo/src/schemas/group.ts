@@ -64,6 +64,11 @@ export const typeDefs = gql`
     end: String!
   }
 
+  type GroupInfo{
+    group: Group!
+    totalStudents: Number!
+  }
+
   type Group {
     id: ID!
     id_group: Number!
@@ -89,7 +94,7 @@ export const typeDefs = gql`
       pageSize: Int
     ): PaginatedGroups!
 
-    getGroup(id: String!): Group!
+    getGroup(id: String!): GroupInfo!
   }
   extend type Mutation {
     createGroup(
