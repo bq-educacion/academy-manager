@@ -42,7 +42,7 @@ export const typeDefs = gql`
     birthDate: String
     course: String!
     status: StudentStatus!
-    activeCenter: Boolean!
+    activeGroup: Boolean!
     registrationDate: String
     allergies: Boolean
     descriptionAllergy: String
@@ -118,5 +118,7 @@ export const typeDefs = gql`
       phone: String
       send_info: Boolean
     ): StudentContact!
+
+    deleteStudent(id: String!): Student!
   }
 `;

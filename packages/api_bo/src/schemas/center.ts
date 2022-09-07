@@ -12,7 +12,6 @@ export const typeDefs = gql`
     PRIVATE
     PUBLIC
     CONCERTADO
-    NULL
   }
 
   enum OrderFilterCenter {

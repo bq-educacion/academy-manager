@@ -20,6 +20,8 @@ import {
 import { ObjectId } from "objectId";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { studentCollection } from "../models/StudentModel.ts";
+import { instructorCollection } from "../models/InstructorModel.ts";
+import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 
 export const centers = {
   Center: {
@@ -285,11 +287,10 @@ export const centers = {
             center: new ObjectId(args.id),
           })).flat();
 
-        if (idStudents.length > 0) {
-          await studentCollection(ctx.db).deleteMany({
-            _id: { $in: idStudents },
-          });
-        }
+        const idInstructors: ObjectId[] =
+          (await groupCollection(ctx.db).distinct("instructors", {
+            center: new ObjectId(args.id),
+          })).flat();
 
         await groupCollection(ctx.db).deleteMany({
           center: new ObjectId(args.id),
@@ -298,6 +299,22 @@ export const centers = {
         await centerCollection(ctx.db).deleteOne({
           _id: new ObjectId(args.id),
         });
+
+        // if students are not in other groups, activeGroup = false
+        setActiveToFalse(
+          idStudents,
+          groupCollection(ctx.db),
+          "students",
+          studentCollection(ctx.db),
+        );
+
+        // if instructors are not in other groups, activeGroup = false
+        setActiveToFalse(
+          idInstructors,
+          groupCollection(ctx.db),
+          "instructors",
+          instructorCollection(ctx.db),
+        );
 
         return center;
       } catch (error) {
@@ -332,6 +349,7 @@ export const centers = {
           { $set: { activeCenter: args.active } },
         );
 
+        // if there are no instructors in the group, center = null
         if (!args.active) {
           const deleteCenterGroups = groups.map((group) => {
             if (group.instructors.length === 0) {
@@ -347,10 +365,43 @@ export const centers = {
 
         const idStudents: ObjectId[] = groups.map((group) => group.students)
           .flat();
-        await studentCollection(ctx.db).updateMany(
-          { _id: { $in: idStudents } },
-          { $set: { activeCenter: args.active } },
-        );
+        if (!args.active) {
+          // if students are not in other groups, activeGroup = false
+          setActiveToFalse(
+            idStudents,
+            groupCollection(ctx.db),
+            "students",
+            studentCollection(ctx.db),
+          );
+        } else {
+          if (idStudents.length > 0) {
+            await studentCollection(ctx.db).updateMany(
+              { _id: { $in: idStudents } },
+              { $set: { activeGroup: true } },
+            );
+          }
+        }
+
+        const idInstructors: ObjectId[] = groups.map((group) =>
+          group.instructors
+        ).flat();
+        if (!args.active) {
+          // if instructors are not in other groups, activeGroup = false
+          setActiveToFalse(
+            idInstructors,
+            groupCollection(ctx.db),
+            "instructors",
+            instructorCollection(ctx.db),
+          );
+        } else {
+          if (idInstructors.length > 0) {
+            await instructorCollection(ctx.db).updateMany(
+              { _id: { $in: idInstructors } },
+              { $set: { activeGroup: true } },
+            );
+          }
+        }
+
         return newCenter;
       } catch (error) {
         throw new Error("500, " + error);

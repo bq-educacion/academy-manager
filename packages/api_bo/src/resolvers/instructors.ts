@@ -20,6 +20,7 @@ import {
 import { ObjectId } from "objectId";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
+import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
 
 export const instructors = {
   Instructor: {
@@ -196,6 +197,19 @@ export const instructors = {
     ): Promise<InstructorModel> => {
       try {
         checkNotNull(args);
+        if (
+          args.training.careerInEducation === null ||
+          args.training.technicalCareer === null
+        ) {
+          throw new Error("400, Fields cannot be null");
+        }
+
+        let newInstructor = {
+          ...args,
+          activeGroup: false,
+          availability: setIdDays(args.availability) as Availability[],
+        };
+
         if (args.corporateEmail) {
           const existsInstructor = await instructorCollection(ctx.db).findOne({
             corporateEmail: args.corporateEmail,
@@ -216,12 +230,11 @@ export const instructors = {
           throw new Error("404, Groups not found");
         }
 
-        const availability = setIdDays(args.availability) as Availability[];
-
-        const newInstructor = {
-          ...args,
-          availability,
+        newInstructor = {
+          ...newInstructor,
+          activeGroup: checkActiveGroups(existsGroups),
         };
+
         const idInstructor = await instructorCollection(ctx.db).insertOne({
           ...newInstructor,
         });
@@ -279,14 +292,16 @@ export const instructors = {
             throw new Error("404, Groups not found");
           }
 
-          const instructorGroups = await groupCollection(ctx.db)
-            .find({
-              instructors: new ObjectId(args.id),
-            }).toArray();
+          updateInstructor = {
+            ...updateInstructor,
+            activeGroup: checkActiveGroups(existsGroups),
+          };
 
-          const instructorGroupsIds = instructorGroups.map((group) =>
-            group._id
-          );
+          const instructorGroupsIds = await groupCollection(ctx.db)
+            .distinct("_id", {
+              instructors: new ObjectId(args.id),
+            }) as ObjectId[];
+
           const groupsToRemove = instructorGroupsIds.filter(
             (group) => {
               if (group) return !groups.includes(group);
