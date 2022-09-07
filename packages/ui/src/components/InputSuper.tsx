@@ -17,6 +17,7 @@ const InputSuper: FC<{
   namePattern?: boolean;
   textArea?: boolean;
   setValid?: (valid: boolean) => void;
+  onEnter?: () => void;
 }> = ({
   placeholder,
   setInput,
@@ -32,6 +33,7 @@ const InputSuper: FC<{
   namePattern,
   setError,
   textArea,
+  onEnter,
 }) => {
   const InputType = type ? type : "text";
   const [localError, setLocalError] = useState<boolean>(error ? true : false);
@@ -41,6 +43,11 @@ const InputSuper: FC<{
   if (!textArea) {
     return (
       <InputStyled
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onEnter && onEnter();
+          }
+        }}
         disabled={disabled}
         placeholder={placeholder ? placeholder : ""}
         value={input}
