@@ -5,6 +5,7 @@ import {
   InstructorModel,
 } from "../models/InstructorModel.ts";
 import {
+  MutationDeleteInstructorArgs,
   PaginatedInstructors,
   QueryCheckCorporateEmailArgs,
   QueryGetInstructorArgs,
@@ -21,6 +22,8 @@ import { ObjectId } from "objectId";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
+import { studentCollection } from "../models/StudentModel.ts";
+import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 
 export const instructors = {
   Instructor: {
@@ -338,6 +341,48 @@ export const instructors = {
           throw new Error("404, Instructor not found");
         }
         return newInstructor;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    deleteInstructor: async (
+      _parent: unknown,
+      args: MutationDeleteInstructorArgs,
+      ctx: Context,
+    ): Promise<InstructorModel> => {
+      try {
+        const instructor = await instructorCollection(ctx.db).findAndModify(
+          { _id: new ObjectId(args.id) },
+          {
+            remove: true,
+          },
+        );
+        if (!instructor) {
+          throw new Error("404, Instructor not found");
+        }
+        //delete instructor from groups
+        await groupCollection(ctx.db).updateMany(
+          { instructors: new ObjectId(args.id) },
+          { $pull: { instructors: new ObjectId(args.id) } },
+        );
+        //if there are no instructors in the group, set active to false
+        await groupCollection(ctx.db).updateMany(
+          { instructors: { $size: 0 } },
+          { $set: { activeCenter: false } },
+        );
+        //if students are not in other groups, set activeGroup to false
+        const idStudents = (await groupCollection(ctx.db).distinct("students", {
+          activeCenter: false,
+        })).flat() as ObjectId[];
+        setActiveToFalse(
+          idStudents,
+          groupCollection(ctx.db),
+          "students",
+          studentCollection(ctx.db),
+        );
+
+        return instructor;
       } catch (error) {
         throw new Error("500, " + error);
       }

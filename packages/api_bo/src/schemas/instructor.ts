@@ -149,6 +149,8 @@ export const typeDefs = gql`
       summerAvailability: summerAvailabilityInstructor
       groups: [String!]
     ): Instructor!
+
+    deleteInstructor(id: String!): Instructor!
   }
 
 `;
