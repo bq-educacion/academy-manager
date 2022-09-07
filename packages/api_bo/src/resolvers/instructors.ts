@@ -363,7 +363,7 @@ export const instructors = {
             },
           );
           if (!instructor) {
-            throw new Error("400, Instructor is already inactive");
+            throw new Error("404, Instructor not found");
           }
 
           //if groups have all inactive instructors, set group active to false
@@ -394,6 +394,32 @@ export const instructors = {
             "students",
             studentCollection(ctx.db),
           );
+        } else if (args.status === InstructorStatus.Active) {
+          const instructor = await instructorCollection(ctx.db).findAndModify(
+            { _id: new ObjectId(args.id) },
+            {
+              update: { $set: { status: args.status } },
+              new: true,
+            },
+          );
+          if (!instructor) {
+            throw new Error("404, Instructor not found");
+          }
+
+          //set active to true in groups of instructor
+          await groupCollection(ctx.db).updateMany({
+            _instructors: new ObjectId(args.id),
+          }, { $set: { activeGroup: true } });
+
+          //set active to true in students of this groups
+          const idStudents =
+            (await groupCollection(ctx.db).distinct("students", {
+              _instructors: new ObjectId(args.id),
+            })).flat() as ObjectId[];
+          const uniqueStudents = [...new Set(idStudents)];
+          await studentCollection(ctx.db).updateMany({
+            _id: { $in: uniqueStudents },
+          }, { $set: { activeStudent: true } });
         }
 
         return instructor;
