@@ -4,6 +4,7 @@ import { studentCollection, StudentModel } from "../models/StudentModel.ts";
 
 import {
   MutationDeleteStudentArgs,
+  MutationSetStatusStudentArgs,
   PaginatedStudents,
   QueryGetStudentArgs,
   QueryGetStudentsArgs,
@@ -440,6 +441,94 @@ export const students = {
         await studentCollection(ctx.db).deleteOne({
           _id: new ObjectId(args.id),
         });
+
+        return student;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    setStatusStudent: async (
+      _parent: unknown,
+      args: MutationSetStatusStudentArgs,
+      ctx: Context,
+    ): Promise<StudentModel> => {
+      try {
+        checkNotNull(args);
+        let student = {} as StudentModel;
+
+        //if status is withdrawn, we will only keep the center, group, course, registration date, name and surname.
+        if (args.status === StudentStatus.Withdrawn) {
+          student = await studentCollection(ctx.db).findAndModify(
+            { _id: new ObjectId(args.id) },
+            {
+              update: {
+                $set: {
+                  status: args.status,
+                  birthDate: null,
+                  allergies: null,
+                  descriptionAllergy: null,
+                  oldStudent: null,
+                  signedMandate: null,
+                  imageAuthorisation: null,
+                  collectionPermit: null,
+                  goesAlone: null,
+                  notes: null,
+                  contacts: [],
+                },
+              },
+              new: true,
+            },
+          ) as StudentModel;
+          if (!student) {
+            throw new Error("404, Student not found");
+          }
+
+          // if all students of the group are withdrawn, we will set group course to emty
+          const groups = await groupCollection(ctx.db).find({
+            students: new ObjectId(args.id),
+          }).toArray();
+          const updateGroups = await Promise.all(groups.map(async (group) => {
+            const withdrawnStudent = await studentCollection(ctx.db)
+              .countDocuments({
+                _id: { $in: group.students },
+                status: StudentStatus.Withdrawn,
+              });
+            if (withdrawnStudent === group.students.length) {
+              return group._id;
+            }
+          })) as ObjectId[];
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: updateGroups } },
+            { $set: { "course.EPO": [], "course.ESO": [] } },
+          );
+        } else if (args.status === StudentStatus.Active) {
+          student = await studentCollection(ctx.db).findAndModify(
+            { _id: new ObjectId(args.id) },
+            {
+              update: { $set: { status: args.status } },
+              new: true,
+            },
+          ) as StudentModel;
+          if (!student) {
+            throw new Error("404, Student not found");
+          }
+
+          // if group course is empty, we will add the student course to the group course because the student is active
+          const groups = await groupCollection(ctx.db).find({
+            students: new ObjectId(args.id),
+          }).toArray();
+          const addCourseToGroups = groups.map((group) => {
+            if (group.students.length > 0) {
+              if (
+                group.course.EPO.length === 0 && group.course.ESO.length === 0
+              ) {
+                return group;
+              }
+            }
+          }) as GroupModel[];
+          addCourse(addCourseToGroups, groupCollection(ctx.db), student.course);
+        }
 
         return student;
       } catch (error) {

@@ -114,6 +114,7 @@ export const typeDefs = gql`
     ): CenterContact!
 
     deleteCenter(id: String!): Center!
+    
     setActiveCenter(id:String!, active:Boolean!): Center!
   }
 `;

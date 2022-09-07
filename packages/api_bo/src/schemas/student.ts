@@ -120,5 +120,7 @@ export const typeDefs = gql`
     ): StudentContact!
 
     deleteStudent(id: String!): Student!
+    
+    setStatusStudent(id: String!, status: StudentStatus!): Student!
   }
 `;
