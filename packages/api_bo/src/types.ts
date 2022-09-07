@@ -186,6 +186,7 @@ export type Mutation = {
   editStudent: Student;
   editStudentContact: StudentContact;
   setActiveCenter: Center;
+  setStatusInstructor: Instructor;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -364,6 +365,11 @@ export type MutationEditStudentContactArgs = {
 export type MutationSetActiveCenterArgs = {
   active: Scalars["Boolean"];
   id: Scalars["String"];
+};
+
+export type MutationSetStatusInstructorArgs = {
+  id: Scalars["String"];
+  status: InstructorStatus;
 };
 
 export enum OrderFilterCenter {
@@ -1082,6 +1088,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSetActiveCenterArgs, "active" | "id">
+  >;
+  setStatusInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSetStatusInstructorArgs, "id" | "status">
   >;
 }>;
 
