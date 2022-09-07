@@ -178,6 +178,7 @@ export type Mutation = {
   createStudent: Student;
   deleteCenter: Center;
   deleteGroup: Group;
+  deleteStudent: Student;
   editCenter: Center;
   editCenterContact: CenterContact;
   editGroup: Group;
@@ -270,6 +271,10 @@ export type MutationDeleteCenterArgs = {
 };
 
 export type MutationDeleteGroupArgs = {
+  id: Scalars["String"];
+};
+
+export type MutationDeleteStudentArgs = {
   id: Scalars["String"];
 };
 
@@ -1029,6 +1034,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationDeleteGroupArgs, "id">
+  >;
+  deleteStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteStudentArgs, "id">
   >;
   editCenter?: Resolver<
     ResolversTypes["Center"],

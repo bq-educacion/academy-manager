@@ -204,7 +204,7 @@ export const instructors = {
           throw new Error("400, Fields cannot be null");
         }
 
-        const newInstructor = {
+        let newInstructor = {
           ...args,
           activeGroup: false,
           availability: setIdDays(args.availability) as Availability[],
@@ -230,7 +230,10 @@ export const instructors = {
           throw new Error("404, Groups not found");
         }
 
-        checkActiveGroups(existsGroups, newInstructor);
+        newInstructor = {
+          ...newInstructor,
+          activeGroup: checkActiveGroups(existsGroups),
+        };
 
         const idInstructor = await instructorCollection(ctx.db).insertOne({
           ...newInstructor,
@@ -289,7 +292,10 @@ export const instructors = {
             throw new Error("404, Groups not found");
           }
 
-          checkActiveGroups(existsGroups, updateInstructor);
+          updateInstructor = {
+            ...updateInstructor,
+            activeGroup: checkActiveGroups(existsGroups),
+          };
 
           const instructorGroupsIds = await groupCollection(ctx.db)
             .distinct("_id", {
