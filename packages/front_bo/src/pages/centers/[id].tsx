@@ -162,6 +162,31 @@ const EditCenter: NextPage = () => {
   const [openAlertBad, setOpenAlertBad] = useState<boolean>(false);
   const [openAlertGood, setOpenAlertGood] = useState<boolean>(false);
 
+  //update hooks with data
+  useEffect(() => {
+    if (data) {
+      setCenterState(data.getCenter.active);
+      setType(data.getCenter.type);
+      setNature(data.getCenter.nature);
+      setLanguagesSelection(data.getCenter.languages);
+      setName(data.getCenter.name);
+      setAddress(data.getCenter.address);
+      setCity(data.getCenter.city);
+      {
+        data.getCenter.phone && setPhone(data.getCenter.phone);
+      }
+      {
+        data.getCenter.email && setEmail(data.getCenter.email);
+      }
+      {
+        data.getCenter.contacts && setContacts(data.getCenter.contacts);
+      }
+      {
+        data.getCenter.notes && setNotes(data.getCenter.notes);
+      }
+    }
+  }, [data]);
+
   useEffect(() => {
     if (openAlertBad) {
       const timer = setTimeout(() => {
@@ -255,234 +280,254 @@ const EditCenter: NextPage = () => {
           </SubHeaderDiv>
         }
       >
-        <BodyDiv>
-          <GateFolder>
-            <GateFolderButton onClick={() => setShowFolder(!showFolder)}>
-              <GateFolderArrow name="direction" open={showFolder} />
-            </GateFolderButton>
-            <GateFolderTitle>
-              <styles.BoldP4>{t("pages.edit-center.info")}</styles.BoldP4>
-              <CenterStateDiv>
-                <styles.P4>{t("pages.edit-center.state")}</styles.P4>
-                <Switch option={centerState} setOption={setCenterState} />
-              </CenterStateDiv>
-            </GateFolderTitle>
-          </GateFolder>
-          {showFolder && (
-            <>
-              <BodySubHeader>
-                <styles.P4>
-                  {t("pages.edit-center.date")}
-                  {data?.getCenter.createdAt}
-                </styles.P4>
-                <a>
+        {data && (
+          <BodyDiv>
+            <GateFolder>
+              <GateFolderButton onClick={() => setShowFolder(!showFolder)}>
+                <GateFolderArrow name="direction" open={showFolder} />
+              </GateFolderButton>
+              <GateFolderTitle>
+                <styles.BoldP4>{t("pages.edit-center.info")}</styles.BoldP4>
+                <CenterStateDiv>
+                  <styles.P4>{t("pages.edit-center.state")}</styles.P4>
+                  <Switch option={centerState} setOption={setCenterState} />
+                </CenterStateDiv>
+              </GateFolderTitle>
+            </GateFolder>
+            {showFolder && (
+              <>
+                <BodySubHeader>
                   <styles.P4>
-                    {t("pages.edit-center.students")}
-                    {/*TODO: numero de estuiantes del back*/}
+                    {t("pages.edit-center.date")}
+                    {data?.getCenter.createdAt}
                   </styles.P4>
-                </a>
-                <a>
-                  <styles.P4>
-                    {t("pages.edit-center.groups")}
-                    {/*TODO: numero de grupos del back*/}
-                  </styles.P4>
-                </a>
-              </BodySubHeader>
-              <BodyContent>
-                <FillIn>
-                  <styles.BoldP4>{t("pages.edit-center.type")}</styles.BoldP4>
-                  <DropDown
-                    options={Object.values(CenterActivityType).map((type) => ({
-                      key: type,
-                      label: t(`pages.centers.type.${type.toLowerCase()}`),
-                    }))}
-                    selected={type}
-                    setSelected={(selected) => {
-                      setType(selected as CenterActivityType[]);
-                    }}
-                    width="11.250vw"
-                  />
-                </FillIn>
-                <FillIn>
-                  <styles.BoldP4>{t("pages.edit-center.nature")}</styles.BoldP4>
-                  <DropDownUnique
-                    options={Object.values(CenterNature).map((nature) => ({
-                      key: nature,
-                      label: t(`pages.centers.nature.${nature.toLowerCase()}`),
-                    }))}
-                    width="7.813vw"
-                    selected={nature}
-                    setSelected={(selected) =>
-                      setNature(selected as CenterNature)
-                    }
-                  />
-                </FillIn>
-                <FillIn>
-                  <styles.BoldP4>
-                    {t(`components.create-center.1.subtitle.languages`)}
-                  </styles.BoldP4>
-                  <DropDown
-                    options={Object.values(Languages).map((language) => ({
-                      key: language,
-                      label: t(
-                        `pages.centers.languages.${language.toLowerCase()}-label`
-                      ),
-                    }))}
-                    selected={languagesSelection}
-                    setSelected={
-                      setLanguagesSelection as (selected: string[]) => void
-                    }
-                    width="10.156vw"
-                  />
-                </FillIn>
-                <FillIn>
-                  <styles.BoldP4>{t("pages.edit-center.name")}</styles.BoldP4>
-                  <InputSuper
-                    error={nameError}
-                    setError={setNameError}
-                    width="36.719vw"
-                    placeholder={t(
-                      "components.create-center.2.subtitle.name-placeholder"
-                    )}
-                    input={name}
-                    setInput={setName}
-                  />
-                  {nameError && (
-                    <styles.P0Error>{t("general.empty")}</styles.P0Error>
-                  )}
-                </FillIn>
-              </BodyContent>
-              <BodyContent>
-                <FillIn>
-                  <styles.BoldP4>
-                    {t(`components.create-center.2.subtitle.address`)}
-                  </styles.BoldP4>
-                  <InputSuper
-                    error={addressError}
-                    setError={setAddressError}
-                    width="20vw"
-                    placeholder={t(
-                      "components.create-center.2.subtitle.address-placeholder"
-                    )}
-                    input={address}
-                    setInput={setAddress}
-                  />
-                  {addressError && (
-                    <styles.P0Error>{t("general.empty")}</styles.P0Error>
-                  )}
-                </FillIn>
-                <FillIn>
-                  <styles.BoldP4>
-                    {t(`components.create-center.2.subtitle.city`)}
-                  </styles.BoldP4>
-                  <InputSuper
-                    error={cityError || cityError2}
-                    setError={(error) => {
-                      setCityError(error);
-                      setCityError2(error);
-                    }}
-                    width="17.18vw"
-                    placeholder={t("components.create-center.2.subtitle.city")}
-                    input={city}
-                    setInput={setCity}
-                  />
-                  {cityError && (
-                    <styles.P0Error>{t("general.empty")}</styles.P0Error>
-                  )}
-                  {cityError2 && (
-                    <styles.P0Error>{t("general.only-letters")}</styles.P0Error>
-                  )}
-                </FillIn>
-                <FillIn>
-                  <styles.BoldP4>{t(`pages.edit-center.phone`)}</styles.BoldP4>
-                  <InputSuper
-                    width="7.81vw"
-                    telPattern
-                    placeholder={t("pages.edit-center.phone")}
-                    input={phone}
-                    setInput={setPhone}
-                    error={phoneError}
-                    setError={setPhoneError}
-                  />
-                  {phoneError && (
-                    <styles.P0Error>
-                      {t("general.decline-phone")}
-                    </styles.P0Error>
-                  )}
-                </FillIn>
-                <FillIn>
-                  <styles.BoldP4>{t(`pages.edit-center.email`)}</styles.BoldP4>
-                  <InputSuper
-                    width="16.44vw"
-                    type="email"
-                    placeholder={t("pages.edit-center.email")}
-                    input={email}
-                    setInput={setEmail}
-                    error={emailError}
-                    setError={setEmailError}
-                    setValid={setValidEmail}
-                  />
-                  {emailError && (
-                    <styles.P0Error>
-                      {t("general.decline-email")}
-                    </styles.P0Error>
-                  )}
-                </FillIn>
-              </BodyContent>
-              {contacts.map((contact) => (
+                  <a>
+                    <styles.P4>
+                      {t("pages.edit-center.students")}
+                      {/*TODO: numero de estuiantes del back*/}
+                    </styles.P4>
+                  </a>
+                  <a>
+                    <styles.P4>
+                      {t("pages.edit-center.groups")}
+                      {/*TODO: numero de grupos del back*/}
+                    </styles.P4>
+                  </a>
+                </BodySubHeader>
                 <BodyContent>
-                  <AddContactFilterCenter
-                    contacts={contacts}
-                    setContacts={setContacts}
-                    index={contacts.indexOf(contact)}
-                    contact={contact}
-                    key={contact.phone}
-                  />
-                  <Bin
+                  <FillIn>
+                    <styles.BoldP4>{t("pages.edit-center.type")}</styles.BoldP4>
+                    <DropDown
+                      options={Object.values(CenterActivityType).map(
+                        (type) => ({
+                          key: type,
+                          label: t(`pages.centers.type.${type.toLowerCase()}`),
+                        })
+                      )}
+                      selected={type}
+                      setSelected={(selected) => {
+                        setType(selected as CenterActivityType[]);
+                      }}
+                      width="11.250vw"
+                    />
+                  </FillIn>
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t("pages.edit-center.nature")}
+                    </styles.BoldP4>
+                    <DropDownUnique
+                      options={Object.values(CenterNature).map((nature) => ({
+                        key: nature,
+                        label: t(
+                          `pages.centers.nature.${nature.toLowerCase()}`
+                        ),
+                      }))}
+                      width="7.813vw"
+                      selected={nature}
+                      setSelected={(selected) =>
+                        setNature(selected as CenterNature)
+                      }
+                    />
+                  </FillIn>
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t(`components.create-center.1.subtitle.languages`)}
+                    </styles.BoldP4>
+                    <DropDown
+                      options={Object.values(Languages).map((language) => ({
+                        key: language,
+                        label: t(
+                          `pages.centers.languages.${language.toLowerCase()}-label`
+                        ),
+                      }))}
+                      selected={languagesSelection}
+                      setSelected={
+                        setLanguagesSelection as (selected: string[]) => void
+                      }
+                      width="10.156vw"
+                    />
+                  </FillIn>
+                  <FillIn>
+                    <styles.BoldP4>{t("pages.edit-center.name")}</styles.BoldP4>
+                    <InputSuper
+                      error={nameError}
+                      setError={setNameError}
+                      width="36.719vw"
+                      placeholder={t(
+                        "components.create-center.2.subtitle.name-placeholder"
+                      )}
+                      input={name}
+                      setInput={setName}
+                    />
+                    {nameError && (
+                      <styles.P0Error>{t("general.empty")}</styles.P0Error>
+                    )}
+                  </FillIn>
+                </BodyContent>
+                <BodyContent>
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t(`components.create-center.2.subtitle.address`)}
+                    </styles.BoldP4>
+                    <InputSuper
+                      error={addressError}
+                      setError={setAddressError}
+                      width="20vw"
+                      placeholder={t(
+                        "components.create-center.2.subtitle.address-placeholder"
+                      )}
+                      input={address}
+                      setInput={setAddress}
+                    />
+                    {addressError && (
+                      <styles.P0Error>{t("general.empty")}</styles.P0Error>
+                    )}
+                  </FillIn>
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t(`components.create-center.2.subtitle.city`)}
+                    </styles.BoldP4>
+                    <InputSuper
+                      error={cityError || cityError2}
+                      setError={(error) => {
+                        setCityError(error);
+                        setCityError2(error);
+                      }}
+                      width="17.18vw"
+                      placeholder={t(
+                        "components.create-center.2.subtitle.city"
+                      )}
+                      input={city}
+                      setInput={setCity}
+                    />
+                    {cityError && (
+                      <styles.P0Error>{t("general.empty")}</styles.P0Error>
+                    )}
+                    {cityError2 && (
+                      <styles.P0Error>
+                        {t("general.only-letters")}
+                      </styles.P0Error>
+                    )}
+                  </FillIn>
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t(`pages.edit-center.phone`)}
+                    </styles.BoldP4>
+                    <InputSuper
+                      width="7.81vw"
+                      telPattern
+                      placeholder={t("pages.edit-center.phone")}
+                      input={phone}
+                      setInput={setPhone}
+                      error={phoneError}
+                      setError={setPhoneError}
+                    />
+                    {phoneError && (
+                      <styles.P0Error>
+                        {t("general.decline-phone")}
+                      </styles.P0Error>
+                    )}
+                  </FillIn>
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t(`pages.edit-center.email`)}
+                    </styles.BoldP4>
+                    <InputSuper
+                      width="16.44vw"
+                      type="email"
+                      placeholder={t("pages.edit-center.email")}
+                      input={email}
+                      setInput={setEmail}
+                      error={emailError}
+                      setError={setEmailError}
+                      setValid={setValidEmail}
+                    />
+                    {emailError && (
+                      <styles.P0Error>
+                        {t("general.decline-email")}
+                      </styles.P0Error>
+                    )}
+                  </FillIn>
+                </BodyContent>
+                {contacts.map((contact) => (
+                  <BodyContent>
+                    <AddContactFilterCenter
+                      contacts={contacts}
+                      setContacts={setContacts}
+                      index={contacts.indexOf(contact)}
+                      contact={contact}
+                      key={contact.phone}
+                    />
+                    <Bin
+                      onClick={() => {
+                        setContacts(
+                          contacts.filter((elem) => elem !== contact)
+                        );
+                      }}
+                    >
+                      <Icon name="eliminate" />
+                    </Bin>
+                  </BodyContent>
+                ))}
+                <BodyContent>
+                  <AddContactButton
                     onClick={() => {
-                      setContacts(contacts.filter((elem) => elem !== contact));
+                      setContacts([
+                        ...contacts,
+                        {
+                          name: "",
+                          phone: "",
+                          email: "",
+                        },
+                      ]);
                     }}
                   >
-                    <Icon name="eliminate" />
-                  </Bin>
+                    <Icon name="add" />
+                    <Icon name="user" />
+                    <styles.BoldP4>
+                      {t("components.create-center.3.add-contact")}
+                    </styles.BoldP4>
+                  </AddContactButton>
                 </BodyContent>
-              ))}
-              <BodyContent>
-                <AddContactButton
-                  onClick={() => {
-                    setContacts([
-                      ...contacts,
-                      {
-                        name: "",
-                        phone: "",
-                        email: "",
-                      },
-                    ]);
-                  }}
-                >
-                  <Icon name="add" />
-                  <Icon name="user" />
-                  <styles.BoldP4>
-                    {t("components.create-center.3.add-contact")}
-                  </styles.BoldP4>
-                </AddContactButton>
-              </BodyContent>
-              <BodyContent>
-                <FillIn>
-                  <styles.BoldP4>{t(`pages.edit-center.notes`)}</styles.BoldP4>
-                  <InputSuper
-                    width="69.5vw"
-                    height="8.33vw"
-                    placeholder={t("pages.edit-center.notes-placeholder")}
-                    input={notes}
-                    setInput={setNotes}
-                    textArea
-                  />
-                </FillIn>
-              </BodyContent>
-            </>
-          )}
-        </BodyDiv>
+                <BodyContent>
+                  <FillIn>
+                    <styles.BoldP4>
+                      {t(`pages.edit-center.notes`)}
+                    </styles.BoldP4>
+                    <InputSuper
+                      width="69.5vw"
+                      height="8.33vw"
+                      placeholder={t("pages.edit-center.notes-placeholder")}
+                      input={notes}
+                      setInput={setNotes}
+                      textArea
+                    />
+                  </FillIn>
+                </BodyContent>
+              </>
+            )}
+          </BodyDiv>
+        )}
       </Layout>
     </>
   );
