@@ -235,7 +235,7 @@ export const groups = {
           ...args,
           id_group,
           timetable,
-          activeCenter: centerExists.active,
+          active: centerExists.active,
           center,
           course,
           instructors: instructors || [],
@@ -326,7 +326,7 @@ export const groups = {
           throw new Error("404, Group not found");
         }
 
-        // if students are not in other groups, activeGroup = false
+        // if students are not in other groups, active = false
         setActiveToFalse(
           deletedGroup.students,
           groupCollection(ctx.db),
@@ -334,7 +334,7 @@ export const groups = {
           studentCollection(ctx.db),
         );
 
-        // if instructors are not in other groups, activeGroup = false
+        // if instructors are not in other groups, active = false
         setActiveToFalse(
           deletedGroup.instructors,
           groupCollection(ctx.db),

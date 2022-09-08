@@ -19,7 +19,7 @@ export const setActiveToFalse = async (
     const inactiveIds = await Promise.all(
       ids.map(async (id) => {
         const groups = await DBmodel.countDocuments({
-          $and: [{ [typeFilter[type]]: id }, { activeCenter: true }],
+          $and: [{ [typeFilter[type]]: id }, { active: true }],
         });
         if (groups === 0) {
           return new ObjectId(id);
@@ -29,7 +29,7 @@ export const setActiveToFalse = async (
     if (inactiveIds.length > 0) {
       await updateDBModel.updateMany(
         { _id: { $in: inactiveIds } },
-        { $set: { activeGroup: false } },
+        { $set: { active: false } },
       );
     }
   }

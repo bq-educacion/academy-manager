@@ -151,7 +151,7 @@ export const students = {
         let newStudent = {
           ...args,
           status: StudentStatus.Active,
-          activeGroup: false,
+          active: false,
         };
 
         if (args.birthDate) {
@@ -174,7 +174,7 @@ export const students = {
 
         newStudent = {
           ...newStudent,
-          activeGroup: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups),
         };
 
         if (args.contacts) {
@@ -306,7 +306,7 @@ export const students = {
 
           updateStudent = {
             ...updateStudent,
-            activeGroup: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups),
           };
         }
 

@@ -3,7 +3,7 @@ import { gql } from "graphql-tag";
 export const typeDefs = gql`
   enum StudentStatus {
     ACTIVE
-    WITHDRAWN
+    DROP
   }
 
   enum OrderFilterStudent {
@@ -42,7 +42,7 @@ export const typeDefs = gql`
     birthDate: String
     course: String!
     status: StudentStatus!
-    activeGroup: Boolean!
+    active: Boolean!
     registrationDate: String
     allergies: Boolean
     descriptionAllergy: String

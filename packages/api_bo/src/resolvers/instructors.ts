@@ -210,7 +210,7 @@ export const instructors = {
 
         let newInstructor = {
           ...args,
-          activeGroup: false,
+          active: false,
           availability: setIdDays(args.availability) as Availability[],
         };
 
@@ -236,7 +236,7 @@ export const instructors = {
 
         newInstructor = {
           ...newInstructor,
-          activeGroup: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups),
         };
 
         const idInstructor = await instructorCollection(ctx.db).insertOne({
@@ -298,7 +298,7 @@ export const instructors = {
 
           updateInstructor = {
             ...updateInstructor,
-            activeGroup: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups),
           };
 
           const instructorGroupsIds = await groupCollection(ctx.db)
@@ -372,15 +372,15 @@ export const instructors = {
         //if there are no instructors in the group, set active to false
         await groupCollection(ctx.db).updateMany(
           { instructors: { $size: 0 } },
-          { $set: { activeCenter: false } },
+          { $set: { active: false } },
         );
 
-        //if students are not in other groups, set activeGroup to false
-        let idStudents = (await groupCollection(ctx.db).distinct("students", {
-          activeCenter: false,
+        //if students are not in other groups, set active to false
+        const idStudents = (await groupCollection(ctx.db).distinct("students", {
+          active: false,
         })).flat() as ObjectId[];
-        idStudents = [...new Set(idStudents)];
-        setActiveToFalse(
+
+        await setActiveToFalse(
           idStudents,
           groupCollection(ctx.db),
           "students",
@@ -388,9 +388,12 @@ export const instructors = {
         );
 
         //update courses
-        const groups = await groupCollection(ctx.db).find({
-          students: idStudents,
-        }).toArray();
+        let groups: GroupModel[] = [];
+        await Promise.all(idStudents.map(async (id) => {
+          const group = await groupCollection(ctx.db).find({ students: id })
+            .toArray();
+          groups = [...groups, ...group];
+        }));
         updateCourses(
           groups,
           groupCollection(ctx.db),
