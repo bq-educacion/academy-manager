@@ -128,7 +128,9 @@ const CreateCenter: FC<{
               error={errorLanguages}
               options={Object.values(Languages).map((language) => ({
                 key: language,
-                label: t(`pages.centers.languages.${language.toLowerCase()}`),
+                label: t(
+                  `pages.centers.languages.${language.toLowerCase()}-label`
+                ),
               }))}
               selected={languagesSelection}
               setSelected={

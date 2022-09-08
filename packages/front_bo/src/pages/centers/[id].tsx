@@ -23,6 +23,7 @@ import {
   CenterContact,
   CenterNature,
   Languages,
+  useDeleteCenterMutation,
   useEditCenterMutation,
   useGetCenterQuery,
 } from "../../generated/graphql";
@@ -34,6 +35,12 @@ const EditCenter: NextPage = () => {
   const { data } = useGetCenterQuery({
     variables: {
       getCenterId: router.query.id as string,
+    },
+  });
+
+  const [deleteCenterMutation] = useDeleteCenterMutation({
+    variables: {
+      deleteCenterId: router.query.id as string,
     },
   });
 
@@ -227,7 +234,9 @@ const EditCenter: NextPage = () => {
             <Button
               text={t("pages.edit-center.delete")}
               onClick={() => {
-                /*TODO: Delete center */
+                deleteCenterMutation().then(() => {
+                  alert("Centro eliminado: " + data?.getCenter.name);
+                });
               }}
               deleteRed
             />

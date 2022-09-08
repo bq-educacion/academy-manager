@@ -45,7 +45,7 @@ const InputSuper: FC<{
   if (!textArea) {
     return (
       <InputStyled
-        width={width ? width : "100%"}
+        width={width ? width : "auto"}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             onEnter && onEnter();

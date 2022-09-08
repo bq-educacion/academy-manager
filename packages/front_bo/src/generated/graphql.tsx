@@ -629,6 +629,13 @@ export type GetCentersFQueryVariables = Exact<{
 
 export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<Languages>, city: string, nature: CenterNature, type: Array<CenterActivityType> }> } };
 
+export type DeleteCenterMutationVariables = Exact<{
+  deleteCenterId: Scalars['String'];
+}>;
+
+
+export type DeleteCenterMutation = { __typename?: 'Mutation', deleteCenter: { __typename?: 'Center', id: string } };
+
 export type EditCenterMutationVariables = Exact<{
   editCenterId: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
@@ -865,6 +872,39 @@ export function useGetCentersFLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCentersFQueryHookResult = ReturnType<typeof useGetCentersFQuery>;
 export type GetCentersFLazyQueryHookResult = ReturnType<typeof useGetCentersFLazyQuery>;
 export type GetCentersFQueryResult = Apollo.QueryResult<GetCentersFQuery, GetCentersFQueryVariables>;
+export const DeleteCenterDocument = gql`
+    mutation DeleteCenter($deleteCenterId: String!) {
+  deleteCenter(id: $deleteCenterId) {
+    id
+  }
+}
+    `;
+export type DeleteCenterMutationFn = Apollo.MutationFunction<DeleteCenterMutation, DeleteCenterMutationVariables>;
+
+/**
+ * __useDeleteCenterMutation__
+ *
+ * To run a mutation, you first call `useDeleteCenterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCenterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCenterMutation, { data, loading, error }] = useDeleteCenterMutation({
+ *   variables: {
+ *      deleteCenterId: // value for 'deleteCenterId'
+ *   },
+ * });
+ */
+export function useDeleteCenterMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCenterMutation, DeleteCenterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCenterMutation, DeleteCenterMutationVariables>(DeleteCenterDocument, options);
+      }
+export type DeleteCenterMutationHookResult = ReturnType<typeof useDeleteCenterMutation>;
+export type DeleteCenterMutationResult = Apollo.MutationResult<DeleteCenterMutation>;
+export type DeleteCenterMutationOptions = Apollo.BaseMutationOptions<DeleteCenterMutation, DeleteCenterMutationVariables>;
 export const EditCenterDocument = gql`
     mutation EditCenter($editCenterId: String!, $name: String, $address: String, $city: String, $phone: String, $email: String, $type: [CenterActivityType!], $nature: CenterNature, $languages: [Languages!], $contacts: [CenterContactInput!], $notes: String) {
   editCenter(
