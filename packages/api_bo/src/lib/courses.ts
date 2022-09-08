@@ -97,7 +97,7 @@ export const updateCourses = async (
       let students = await DBStudents.distinct("course", {
         _id: { $in: group.students },
         status: StudentStatus.Active,
-        activeGroup: true,
+        active: true,
       }) as string[];
       students = [...new Set(students)];
       students.forEach((course) => {

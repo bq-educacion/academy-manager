@@ -211,7 +211,7 @@ export const instructors = {
 
         let newInstructor = {
           ...args,
-          activeGroup: false,
+          active: false,
           availability: setIdDays(args.availability) as Availability[],
         };
 
@@ -237,7 +237,7 @@ export const instructors = {
 
         newInstructor = {
           ...newInstructor,
-          activeGroup: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups),
         };
 
         const idInstructor = await instructorCollection(ctx.db).insertOne({
@@ -299,7 +299,7 @@ export const instructors = {
 
           updateInstructor = {
             ...updateInstructor,
-            activeGroup: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups),
           };
 
           const instructorGroupsIds = await groupCollection(ctx.db)
@@ -383,9 +383,9 @@ export const instructors = {
           })) as ObjectId[];
           await groupCollection(ctx.db).updateMany({
             _id: { $in: updateGroups },
-          }, { $set: { activeGroup: false } });
+          }, { $set: { active: false } });
 
-          //if students are not in other groups, set activeGroup to false
+          //if students are not in other groups, set active to false
           let idStudents = (await groupCollection(ctx.db).distinct("students", {
             activeCenter: false,
           })).flat() as ObjectId[];
@@ -411,7 +411,7 @@ export const instructors = {
           //set active to true in groups of instructor
           await groupCollection(ctx.db).updateMany({
             _instructors: new ObjectId(args.id),
-          }, { $set: { activeGroup: true } });
+          }, { $set: { active: true } });
 
           //set active to true in students of this groups
           const idStudents =

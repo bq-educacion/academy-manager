@@ -12,6 +12,7 @@ import {
   MutationEditStudentArgs,
   MutationEditStudentContactArgs,
   MutationSetActiveCenterArgs,
+  MutationSetStatusInstructorArgs,
 } from "../types.ts";
 
 export function checkNotNull(
@@ -28,7 +29,8 @@ export function checkNotNull(
     | MutationEditStudentContactArgs
     | MutationAddCenterContactArgs
     | MutationAddStudentContactArgs
-    | MutationSetActiveCenterArgs,
+    | MutationSetActiveCenterArgs
+    | MutationSetStatusInstructorArgs,
 ): void {
   if (Object.values(args).some((item) => item === null)) {
     throw new Error("Fields cannot be null");

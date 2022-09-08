@@ -106,7 +106,7 @@ export enum Days {
 
 export type Group = {
   __typename?: "Group";
-  activeCenter: Scalars["Boolean"];
+  active: Scalars["Boolean"];
   center?: Maybe<Center>;
   course: Course;
   createdAt: Scalars["String"];
@@ -134,7 +134,7 @@ export enum GroupType {
 
 export type Instructor = {
   __typename?: "Instructor";
-  activeGroup: Scalars["Boolean"];
+  active: Scalars["Boolean"];
   areas: Array<Scalars["String"]>;
   availability: Array<Availability>;
   corporateEmail?: Maybe<Scalars["String"]>;
@@ -514,7 +514,7 @@ export type QueryGetStudentsArgs = {
 
 export type Student = {
   __typename?: "Student";
-  activeGroup: Scalars["Boolean"];
+  active: Scalars["Boolean"];
   allergies?: Maybe<Scalars["Boolean"]>;
   birthDate?: Maybe<Scalars["String"]>;
   collectionPermit?: Maybe<Scalars["String"]>;
@@ -550,7 +550,7 @@ export type StudentContactInput = {
 
 export enum StudentStatus {
   Active = "ACTIVE",
-  Withdrawn = "WITHDRAWN",
+  Drop = "DROP",
 }
 
 export type Timetable = {
@@ -850,7 +850,7 @@ export type GroupResolvers<
   ParentType extends ResolversParentTypes["Group"] =
     ResolversParentTypes["Group"],
 > = ResolversObject<{
-  activeCenter?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  active?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   center?: Resolver<Maybe<ResolversTypes["Center"]>, ParentType, ContextType>;
   course?: Resolver<ResolversTypes["Course"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -883,7 +883,7 @@ export type InstructorResolvers<
   ParentType extends ResolversParentTypes["Instructor"] =
     ResolversParentTypes["Instructor"],
 > = ResolversObject<{
-  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  active?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   areas?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
   availability?: Resolver<
     Array<ResolversTypes["Availability"]>,
@@ -1220,7 +1220,7 @@ export type StudentResolvers<
   ParentType extends ResolversParentTypes["Student"] =
     ResolversParentTypes["Student"],
 > = ResolversObject<{
-  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  active?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   allergies?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,

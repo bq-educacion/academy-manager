@@ -70,7 +70,7 @@ export const typeDefs = gql`
     personalEmail: String
     phone: String
     status: InstructorStatus!
-    activeGroup: Boolean!
+    active: Boolean!
     training: trainingInstructor!
     previousExperience: previousExperienceInstructor!
     programmingExperience: Boolean!
