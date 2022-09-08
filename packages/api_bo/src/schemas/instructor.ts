@@ -82,7 +82,7 @@ export const typeDefs = gql`
     availability: [Availability!]!
     summerAvailability: summerAvailabilityInstructor
     vehicle: TypeVehicleInstructor!
-    geographicalAvailability: String!
+    geographicalAvailability: [Region!]!
     areas: [String!]!
     notes: String
     groups: [Group!]!
@@ -120,7 +120,7 @@ export const typeDefs = gql`
       availability: [AvailabilityInput!]!
       summerAvailability: summerAvailabilityInstructor
       vehicle: TypeVehicleInstructor!
-      geographicalAvailability: String!
+      geographicalAvailability: [Region!]!
       areas: [String!]!
       notes: String
       groups: [String!]!
@@ -143,7 +143,7 @@ export const typeDefs = gql`
       platformEducationExperience: [String!]
       languages: [Languages!]
       vehicle:TypeVehicleInstructor
-      geographicalAvailability:String
+      geographicalAvailability:[Region!]!
       areas: [String!]
       availability: [AvailabilityInput!]
       summerAvailability: summerAvailabilityInstructor
