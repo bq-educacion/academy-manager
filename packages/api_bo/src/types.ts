@@ -550,7 +550,7 @@ export type StudentContactInput = {
 
 export enum StudentStatus {
   Active = "ACTIVE",
-  Withdrawn = "WITHDRAWN",
+  Drop = "DROP",
 }
 
 export type Timetable = {
