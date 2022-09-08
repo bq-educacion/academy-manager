@@ -25,6 +25,7 @@ import { checkNotNull } from "../lib/checkNotNull.ts";
 import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
 import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 import { studentCollection } from "../models/StudentModel.ts";
+import { updateCourses } from "../lib/courses.ts";
 
 export const instructors = {
   Instructor: {
@@ -351,9 +352,10 @@ export const instructors = {
       _parent: unknown,
       args: MutationSetStatusInstructorArgs,
       ctx: Context,
-    ): Promise<InstructorModel> => {
+    ): Promise<InstructorModel | undefined> => {
       try {
-        const instructor = {} as InstructorModel;
+        const instructor: InstructorModel | undefined = undefined;
+
         if (args.status === InstructorStatus.Inactive) {
           const instructor = await instructorCollection(ctx.db).findAndModify(
             { _id: new ObjectId(args.id) },
@@ -384,10 +386,10 @@ export const instructors = {
           }, { $set: { activeGroup: false } });
 
           //if students are not in other groups, set activeGroup to false
-          const idStudents =
-            (await groupCollection(ctx.db).distinct("students", {
-              activeCenter: false,
-            })).flat() as ObjectId[];
+          let idStudents = (await groupCollection(ctx.db).distinct("students", {
+            activeCenter: false,
+          })).flat() as ObjectId[];
+          idStudents = [...new Set(idStudents)];
           setActiveToFalse(
             idStudents,
             groupCollection(ctx.db),
@@ -421,6 +423,16 @@ export const instructors = {
             _id: { $in: uniqueStudents },
           }, { $set: { activeStudent: true } });
         }
+
+        //update courses
+        const groups = await groupCollection(ctx.db).find({
+          instructors: new ObjectId(args.id),
+        }).toArray();
+        updateCourses(
+          groups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+        );
 
         return instructor;
       } catch (error) {
