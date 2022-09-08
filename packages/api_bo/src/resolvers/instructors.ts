@@ -354,10 +354,10 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel | undefined> => {
       try {
-        const instructor: InstructorModel | undefined = undefined;
+        let instructor: InstructorModel | undefined = undefined;
 
         if (args.status === InstructorStatus.Inactive) {
-          const instructor = await instructorCollection(ctx.db).findAndModify(
+          instructor = await instructorCollection(ctx.db).findAndModify(
             { _id: new ObjectId(args.id) },
             {
               update: { $set: { status: args.status, corporateEmail: null } },
@@ -387,7 +387,7 @@ export const instructors = {
 
           //if students are not in other groups, set active to false
           let idStudents = (await groupCollection(ctx.db).distinct("students", {
-            activeCenter: false,
+            active: false,
           })).flat() as ObjectId[];
           idStudents = [...new Set(idStudents)];
           setActiveToFalse(
@@ -397,7 +397,7 @@ export const instructors = {
             studentCollection(ctx.db),
           );
         } else if (args.status === InstructorStatus.Active) {
-          const instructor = await instructorCollection(ctx.db).findAndModify(
+          instructor = await instructorCollection(ctx.db).findAndModify(
             { _id: new ObjectId(args.id) },
             {
               update: { $set: { status: args.status } },
@@ -410,18 +410,18 @@ export const instructors = {
 
           //set active to true in groups of instructor
           await groupCollection(ctx.db).updateMany({
-            _instructors: new ObjectId(args.id),
+            instructors: new ObjectId(args.id),
           }, { $set: { active: true } });
 
           //set active to true in students of this groups
           const idStudents =
             (await groupCollection(ctx.db).distinct("students", {
-              _instructors: new ObjectId(args.id),
+              instructors: new ObjectId(args.id),
             })).flat() as ObjectId[];
           const uniqueStudents = [...new Set(idStudents)];
           await studentCollection(ctx.db).updateMany({
             _id: { $in: uniqueStudents },
-          }, { $set: { activeStudent: true } });
+          }, { $set: { active: true } });
         }
 
         //update courses
