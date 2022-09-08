@@ -15,6 +15,8 @@ import {
   User,
   Eliminate,
   Map,
+  Direction,
+  CrossBad,
 } from "../assets/icons";
 import { colors } from "../theme";
 
@@ -60,6 +62,10 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <Eliminate {...rest} />;
     case "map":
       return <Map {...rest} />;
+    case "direction":
+      return <Direction {...rest} />;
+    case "cross-bad":
+      return <CrossBad {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

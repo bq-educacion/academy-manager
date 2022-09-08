@@ -7,6 +7,7 @@ const InputSuper: FC<{
   setInput: (text: string) => void;
   input: string;
   height?: string;
+  width?: string;
   disabled?: boolean;
   error?: boolean;
   setError?: (error: boolean) => void;
@@ -34,6 +35,7 @@ const InputSuper: FC<{
   setError,
   textArea,
   onEnter,
+  width,
 }) => {
   const InputType = type ? type : "text";
   const [localError, setLocalError] = useState<boolean>(error ? true : false);
@@ -43,6 +45,7 @@ const InputSuper: FC<{
   if (!textArea) {
     return (
       <InputStyled
+        width={width ? width : "100%"}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             onEnter && onEnter();
@@ -92,13 +95,14 @@ const InputSuper: FC<{
   } else {
     return (
       <AreaStyled
+        width={width}
+        height={height}
         disabled={disabled}
         placeholder={placeholder ? placeholder : ""}
         value={input}
         onChange={(e) => {
           setInput(e.target.value);
         }}
-        height={height}
         error={localError}
         onClick={() => {
           setLocalError(false);
@@ -113,11 +117,13 @@ export default InputSuper;
 
 const InputStyled = styled.input<{
   height?: string;
+  width: string;
   disabled?: boolean;
   error?: boolean;
 }>`
   padding: 0 0 0 20px;
   border-radius: 3px;
+  width: ${(props) => props.width};
   border: solid 1px ${colors.colors.gray};
   height: ${(props) => (props.height ? props.height : "40px")};
   &::placeholder {
@@ -150,11 +156,13 @@ const AreaStyled = styled.textarea<{
   height?: string;
   disabled?: boolean;
   error?: boolean;
+  width?: string;
 }>`
   padding: 0 0 0 20px;
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray};
   height: ${(props) => (props.height ? props.height : "40px")};
+  width: ${(props) => (props.width ? props.width : "100%")};
   &::placeholder {
     font-style: italic;
     line-height: 1;

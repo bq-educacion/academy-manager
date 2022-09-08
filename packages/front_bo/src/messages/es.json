@@ -258,6 +258,8 @@
     }
   },
   "general": {
+    "error": "Error",
+    "saved": "Guardado",
     "decline-link": "El formato del enlace es incorrecto",
     "decline-radio": "Debes indicar una opción",
     "decline-checkbox": "Debes indicar al menos una opción",
@@ -266,6 +268,7 @@
     "decline-email": "La dirección de correo electrónico incluida es errónea",
     "empty": "Este campo no puede quedar vacío",
     "no-data": "No hay datos",
+    "only-letters": "No se pueden introducir ni números, ni caracteres especiales",
     "times": {
       "8:00 a 8:59": "8:00 a 8:59",
       "9:00 a 9:59": "9:00 a 9:59",
@@ -329,6 +332,25 @@
     }
   },
   "pages": {
+    "edit-center": {
+      "delete": "Eliminar centro",
+      "save": "Guardar",
+      "info": "Información del centro",
+      "state": "Alta centro",
+      "date": "Fecha de creación: ",
+      "students": "Nº Alumnos: ",
+      "groups": "Nº Grupos: ",
+      "type": "Tipo",
+      "nature": "Naturaleza",
+      "name": "Nombre del centro",
+      "phone": "Teléfono",
+      "email": "Email",
+      "contact-name": "Persona de contacto",
+      "contact-phone": "Teléfono contacto",
+      "contact-email": "Email contacto",
+      "notes": "Notas",
+      "notes-placeholder": "Introduce aquí notas sobre el centro. No será público para nadie."
+    },
     "paginate": {
       "first": "Mostrando",
       "middle": "de"

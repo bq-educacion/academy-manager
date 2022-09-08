@@ -8,27 +8,70 @@ const Button: FC<{
   secondary?: boolean;
   create?: boolean;
   main?: boolean;
-}> = ({ text, onClick, main, secondary, create }) => {
+  deleteRed?: boolean;
+  disabled?: boolean;
+}> = ({ text, onClick, main, secondary, create, deleteRed, disabled }) => {
   return (
     <>
-      {main && (
+      {main && !disabled && (
         <MainButton onClick={onClick}>
           <styles.BoldP4>{text}</styles.BoldP4>
         </MainButton>
       )}
-      {secondary && (
+      {secondary && !disabled && (
         <SecondaryButton onClick={onClick}>
           <styles.BoldP4>{text}</styles.BoldP4>
         </SecondaryButton>
       )}
-      {create && (
+      {create && !disabled && (
         <CreateButton onClick={onClick}>
           <styles.BoldP4>{text}</styles.BoldP4>
         </CreateButton>
       )}
+      {deleteRed && !disabled && (
+        <DeleteButton onClick={onClick}>
+          <styles.BoldP4>{text}</styles.BoldP4>
+        </DeleteButton>
+      )}
+      {disabled && (
+        <DisabledButton onClick={onClick}>
+          <styles.BoldP4>{text}</styles.BoldP4>
+        </DisabledButton>
+      )}
     </>
   );
 };
+
+const DisabledButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: max-content;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 4px;
+  color: ${colors.colors.gray2};
+  background-color: ${colors.colors.gray20};
+  border: none;
+  pointer-events: none;
+`;
+
+const DeleteButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: max-content;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 4px;
+  color: ${colors.colors.white};
+  background-color: ${colors.colors.red80};
+  border: none;
+  &:hover {
+    background-color: ${colors.colors.red2};
+    cursor: pointer;
+  }
+`;
 
 const CreateButton = styled.button`
   display: flex;
