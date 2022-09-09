@@ -347,7 +347,7 @@ export type MutationEditInstructorArgs = {
   areas?: InputMaybe<Array<Scalars["String"]>>;
   availability?: InputMaybe<Array<AvailabilityInput>>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
-  geographicalAvailability: Array<Region>;
+  geographicalAvailability?: InputMaybe<Array<Region>>;
   groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
   knowledge?: InputMaybe<Scalars["String"]>;
@@ -1183,7 +1183,7 @@ export type MutationResolvers<
     ResolversTypes["Instructor"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditInstructorArgs, "geographicalAvailability" | "id">
+    RequireFields<MutationEditInstructorArgs, "id">
   >;
   editStudent?: Resolver<
     ResolversTypes["Student"],

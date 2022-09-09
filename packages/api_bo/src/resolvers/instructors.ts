@@ -207,7 +207,7 @@ export const instructors = {
           throw new Error("400, Fields cannot be null");
         }
 
-        checkAreas(
+        await checkAreas(
           args.areas,
           args.geographicalAvailability,
           areaCollection(ctx.db),
@@ -290,7 +290,7 @@ export const instructors = {
         }
 
         if (args.areas && args.geographicalAvailability) {
-          checkAreas(
+          await checkAreas(
             args.areas,
             args.geographicalAvailability,
             areaCollection(ctx.db),
@@ -300,12 +300,12 @@ export const instructors = {
             "geographicalAvailability",
             { _id: new ObjectId(args.id) },
           ) as Region[];
-          checkAreas(args.areas, region, areaCollection(ctx.db));
+          await checkAreas(args.areas, region, areaCollection(ctx.db));
         } else if (!args.areas && args.geographicalAvailability) {
           const areas = await instructorCollection(ctx.db).distinct("areas", {
             _id: new ObjectId(args.id),
           }) as string[];
-          checkAreas(
+          await checkAreas(
             areas,
             args.geographicalAvailability,
             areaCollection(ctx.db),

@@ -143,7 +143,7 @@ export const typeDefs = gql`
       platformEducationExperience: [String!]
       languages: [Languages!]
       vehicle:TypeVehicleInstructor
-      geographicalAvailability:[Region!]!
+      geographicalAvailability:[Region!]
       areas: [String!]
       availability: [AvailabilityInput!]
       summerAvailability: summerAvailabilityInstructor
