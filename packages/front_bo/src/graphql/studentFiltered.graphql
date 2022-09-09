@@ -20,7 +20,7 @@ query GetStudents(
         id
       }
       course
-      status
+      enrolled
     }
     page
     totalPages

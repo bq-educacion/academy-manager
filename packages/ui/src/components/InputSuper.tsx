@@ -95,7 +95,7 @@ const InputSuper: FC<{
   } else {
     return (
       <AreaStyled
-        width={width}
+        width={width ? width : "auto"}
         height={height}
         disabled={disabled}
         placeholder={placeholder ? placeholder : ""}
