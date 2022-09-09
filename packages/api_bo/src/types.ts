@@ -151,6 +151,7 @@ export type Instructor = {
   areas: Array<Scalars["String"]>;
   availability: Array<Availability>;
   corporateEmail?: Maybe<Scalars["String"]>;
+  enrolled: Scalars["Boolean"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Group>;
   id: Scalars["ID"];
@@ -164,17 +165,11 @@ export type Instructor = {
   platformEducationExperience?: Maybe<Array<Scalars["String"]>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars["Boolean"];
-  status: InstructorStatus;
   summerAvailability?: Maybe<SummerAvailabilityInstructor>;
   training: TrainingInstructor;
   urlCV?: Maybe<Scalars["String"]>;
   vehicle: TypeVehicleInstructor;
 };
-
-export enum InstructorStatus {
-  Active = "ACTIVE",
-  Inactive = "INACTIVE",
-}
 
 export enum Languages {
   English = "English",
@@ -245,6 +240,7 @@ export type MutationCreateInstructorArgs = {
   areas: Array<Scalars["String"]>;
   availability: Array<AvailabilityInput>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
+  enrolled: Scalars["Boolean"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Scalars["String"]>;
   knowledge?: InputMaybe<Scalars["String"]>;
@@ -257,7 +253,6 @@ export type MutationCreateInstructorArgs = {
   platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars["Boolean"];
-  status: InstructorStatus;
   summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
   training: TrainingInstructorInput;
   urlCV?: InputMaybe<Scalars["String"]>;
@@ -334,6 +329,7 @@ export type MutationEditInstructorArgs = {
   areas?: InputMaybe<Array<Scalars["String"]>>;
   availability?: InputMaybe<Array<AvailabilityInput>>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
+  enrolled?: InputMaybe<Scalars["Boolean"]>;
   geographicalAvailability?: InputMaybe<Scalars["String"]>;
   groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
@@ -347,7 +343,6 @@ export type MutationEditInstructorArgs = {
   platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
   previousExperience?: InputMaybe<PreviousExperienceInstructor>;
   programmingExperience?: InputMaybe<Scalars["Boolean"]>;
-  status?: InputMaybe<InstructorStatus>;
   summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
   training?: InputMaybe<TrainingInstructorInput>;
   urlCV?: InputMaybe<Scalars["String"]>;
@@ -386,8 +381,8 @@ export type MutationSetActiveCenterArgs = {
 };
 
 export type MutationSetStatusStudentArgs = {
+  enrolled: Scalars["Boolean"];
   id: Scalars["String"];
-  status: StudentStatus;
 };
 
 export enum OrderFilterCenter {
@@ -539,6 +534,7 @@ export type Student = {
   contacts?: Maybe<Array<StudentContact>>;
   course: Scalars["String"];
   descriptionAllergy?: Maybe<Scalars["String"]>;
+  enrolled: Scalars["Boolean"];
   goesAlone?: Maybe<Scalars["Boolean"]>;
   groups: Array<Group>;
   id: Scalars["ID"];
@@ -548,7 +544,6 @@ export type Student = {
   oldStudent?: Maybe<Scalars["Boolean"]>;
   registrationDate?: Maybe<Scalars["String"]>;
   signedMandate?: Maybe<Scalars["Boolean"]>;
-  status: StudentStatus;
 };
 
 export type StudentContact = {
@@ -565,11 +560,6 @@ export type StudentContactInput = {
   phone: Scalars["String"];
   send_info: Scalars["Boolean"];
 };
-
-export enum StudentStatus {
-  Active = "ACTIVE",
-  Drop = "DROP",
-}
 
 export type Timetable = {
   __typename?: "Timetable";
@@ -741,7 +731,6 @@ export type ResolversTypes = ResolversObject<{
   GroupType: GroupType;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Instructor: ResolverTypeWrapper<Instructor>;
-  InstructorStatus: InstructorStatus;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Languages: Languages;
   Mutation: ResolverTypeWrapper<{}>;
@@ -759,7 +748,6 @@ export type ResolversTypes = ResolversObject<{
   Student: ResolverTypeWrapper<Student>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
   StudentContactInput: StudentContactInput;
-  StudentStatus: StudentStatus;
   Timetable: ResolverTypeWrapper<Timetable>;
   TimetableInput: TimetableInput;
   TypeVehicleInstructor: TypeVehicleInstructor;
@@ -938,6 +926,7 @@ export type InstructorResolvers<
     ParentType,
     ContextType
   >;
+  enrolled?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   geographicalAvailability?: Resolver<
     ResolversTypes["String"],
     ParentType,
@@ -980,11 +969,6 @@ export type InstructorResolvers<
   >;
   programmingExperience?: Resolver<
     ResolversTypes["Boolean"],
-    ParentType,
-    ContextType
-  >;
-  status?: Resolver<
-    ResolversTypes["InstructorStatus"],
     ParentType,
     ContextType
   >;
@@ -1056,12 +1040,12 @@ export type MutationResolvers<
       MutationCreateInstructorArgs,
       | "areas"
       | "availability"
+      | "enrolled"
       | "geographicalAvailability"
       | "groups"
       | "name"
       | "previousExperience"
       | "programmingExperience"
-      | "status"
       | "training"
       | "vehicle"
     >
@@ -1142,7 +1126,7 @@ export type MutationResolvers<
     ResolversTypes["Student"],
     ParentType,
     ContextType,
-    RequireFields<MutationSetStatusStudentArgs, "id" | "status">
+    RequireFields<MutationSetStatusStudentArgs, "enrolled" | "id">
   >;
 }>;
 
@@ -1296,6 +1280,7 @@ export type StudentResolvers<
     ParentType,
     ContextType
   >;
+  enrolled?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   goesAlone?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,
@@ -1325,7 +1310,6 @@ export type StudentResolvers<
     ParentType,
     ContextType
   >;
-  status?: Resolver<ResolversTypes["StudentStatus"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
