@@ -11,7 +11,8 @@ export const checkActiveGroups = (
   } else {
     active = true;
   }
-  // if we are creating Instructors and there are no active groups we want to set active Instructor to false
+  // if we are creating Instructors and there are no active groups
+  // we want to set active Instructor to false so that we can set the field enrolled
   // but if we are checking active groups in other methods then we want to throw an error if there are no active groups
   if (type === "other") {
     if (!active) {
