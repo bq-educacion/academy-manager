@@ -199,6 +199,7 @@ export type Mutation = {
   editStudent: Student;
   editStudentContact: StudentContact;
   setActiveCenter: Center;
+  setStatusStudent: Student;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -379,6 +380,11 @@ export type MutationSetActiveCenterArgs = {
   id: Scalars["String"];
 };
 
+export type MutationSetStatusStudentArgs = {
+  id: Scalars["String"];
+  status: StudentStatus;
+};
+
 export enum OrderFilterCenter {
   City = "city",
   Languages = "languages",
@@ -557,7 +563,7 @@ export type StudentContactInput = {
 
 export enum StudentStatus {
   Active = "ACTIVE",
-  Withdrawn = "WITHDRAWN",
+  Drop = "DROP",
 }
 
 export type Timetable = {
@@ -1120,6 +1126,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSetActiveCenterArgs, "active" | "id">
+  >;
+  setStatusStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSetStatusStudentArgs, "id" | "status">
   >;
 }>;
 

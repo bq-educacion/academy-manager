@@ -3,7 +3,7 @@ import { gql } from "graphql-tag";
 export const typeDefs = gql`
   enum StudentStatus {
     ACTIVE
-    WITHDRAWN
+    DROP
   }
 
   enum OrderFilterStudent {
@@ -120,5 +120,7 @@ export const typeDefs = gql`
     ): StudentContact!
 
     deleteStudent(id: String!): Student!
+    
+    setStatusStudent(id: String!, status: StudentStatus!): Student!
   }
 `;
