@@ -258,6 +258,10 @@
     }
   },
   "general": {
+    "edit-not-saved": "¿Estás seguro?",
+    "edit-not-saved-text": "Tienes datos sin guardar. Si sales se perderá todo lo que hayas modificado.",
+    "edit-not-saved-yes": "Salir sin guardar",
+    "edit-not-saved-no": "Cancelar",
     "error": "Error",
     "saved": "Guardado",
     "decline-link": "El formato del enlace es incorrecto",
@@ -333,6 +337,14 @@
   },
   "pages": {
     "edit-center": {
+      "delete-modal": {
+        "title": "Eliminar Centro",
+        "text": "Eliminando este centro se borrará toda su información de la base de datos del back office. Estos datos no son recuperables una vez eliminados.",
+        "text1": "Los grupos serán eliminados de la base de datos, de la app no serán recuperables.",
+        "text2": "Los alumnos serán eliminados de la base de datos, de la app no serán recuperables.",
+        "button1": "Eliminar definitivamente",
+        "button2": "Cancelar"
+      },
       "delete": "Eliminar centro",
       "save": "Guardar",
       "info": "Información del centro",

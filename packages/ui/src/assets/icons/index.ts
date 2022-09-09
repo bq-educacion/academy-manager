@@ -14,6 +14,7 @@ import Eliminate from "./eliminate.svg";
 import Map from "./map.svg";
 import Direction from "./direction.svg";
 import CrossBad from "./bad-cross.svg";
+import Alert from "./alert.svg";
 
 export {
   ClosePannel,
@@ -32,4 +33,5 @@ export {
   Map,
   Direction,
   CrossBad,
+  Alert,
 };

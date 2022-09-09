@@ -16,7 +16,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import withApollo from "../../apollo/withApollo";
-import { AddContactFilterCenter, Layout } from "../../components";
+import { AddContactFilterCenter, Layout, Modal } from "../../components";
 import { sections } from "../../config";
 import {
   CenterActivityType,
@@ -105,6 +105,9 @@ const EditCenter: NextPage = () => {
   const [emailError, setEmailError] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState<boolean>(false);
 
+  const [openModalSave, setOpenModalSave] = useState<boolean>(false);
+  const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
+
   useLayoutEffect(() => {
     if (
       centerState !== data?.getCenter.active ||
@@ -121,6 +124,7 @@ const EditCenter: NextPage = () => {
     ) {
       setChanges(true);
       window.addEventListener("beforeunload", function (e) {
+        setOpenModalSave(true);
         e.preventDefault();
         e.returnValue = "";
       });
@@ -211,6 +215,78 @@ const EditCenter: NextPage = () => {
 
   return (
     <>
+      {openModalDelete && (
+        <Modal
+          setModal={setOpenModalDelete}
+          title=""
+          children={
+            <ModalDiv>
+              <styles.BoldP2>
+                {t("pages.edit-center.delete-modal.title")}
+              </styles.BoldP2>
+              <styles.P4>{t("pages.edit-center.delete-modal.text")}</styles.P4>
+              <DelteModalDiv>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-center.delete-modal.text1")}
+                </styles.P4>
+              </DelteModalDiv>
+              <DelteModalDiv2>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-center.delete-modal.text2")}
+                </styles.P4>
+              </DelteModalDiv2>
+              <ButtonsModalDiv>
+                <Button
+                  text={t("pages.edit-center.delete-modal.button1")}
+                  deleteRed
+                  onClick={() => {
+                    deleteCenterMutation().then(() => {
+                      router.push("/centers");
+                    });
+                  }}
+                />
+                <Button
+                  text={t("pages.edit-center.delete-modal.button2")}
+                  secondary
+                  onClick={() => {
+                    setOpenModalDelete(false);
+                  }}
+                />
+              </ButtonsModalDiv>
+            </ModalDiv>
+          }
+        />
+      )}
+      {openModalSave && (
+        <Modal
+          setModal={setOpenModalSave}
+          title=""
+          children={
+            <ModalDiv>
+              <styles.BoldP2>{t("general.edit-not-saved")}</styles.BoldP2>
+              <styles.P4>{t("general.edit-not-saved-text")}</styles.P4>
+              <ButtonsModalDiv>
+                <Button
+                  text={t("general.edit-not-saved-yes")}
+                  deleteRed
+                  onClick={() => {
+                    router.push("/centers");
+                  }}
+                />
+                <Button
+                  text={t("general.edit-not-saved-no")}
+                  secondary
+                  onClick={() => {
+                    setOpenModalSave(false);
+                  }}
+                />
+              </ButtonsModalDiv>
+            </ModalDiv>
+          }
+        />
+      )}
       {openAlertBad && (
         <Alert setOpen={setOpenAlertBad} bad title={t("general.error")} />
       )}
@@ -234,9 +310,7 @@ const EditCenter: NextPage = () => {
             <Button
               text={t("pages.edit-center.delete")}
               onClick={() => {
-                deleteCenterMutation().then(() => {
-                  alert("Centro eliminado: " + data?.getCenter.name);
-                });
+                setOpenModalDelete(true);
               }}
               deleteRed
             />
@@ -697,5 +771,52 @@ const LoadingAnimation = styled.div`
       animation-delay: -0.9s;
       background-color: ${colors.colors.purple80};
     }
+  }
+`;
+
+const ModalDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  & > p:nth-child(1) {
+    margin-top: -40px;
+    margin-bottom: 25px;
+  }
+  & > p:nth-child(2) {
+    margin-bottom: 30px;
+  }
+`;
+
+const ButtonsModalDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: max-content;
+  & > * {
+    margin-right: 10px;
+  }
+`;
+
+const DelteModalDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  & > svg {
+    margin-right: 5px;
+    overflow: visible;
+    color: ${colors.colors.yellow60};
+  }
+`;
+
+const DelteModalDiv2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+  & > svg {
+    margin-right: 5px;
+    overflow: visible;
+    color: ${colors.colors.yellow60};
   }
 `;

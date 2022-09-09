@@ -17,6 +17,7 @@ import {
   Map,
   Direction,
   CrossBad,
+  Alert,
 } from "../assets/icons";
 import { colors } from "../theme";
 
@@ -66,6 +67,8 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <Direction {...rest} />;
     case "cross-bad":
       return <CrossBad {...rest} />;
+    case "alert":
+      return <Alert {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

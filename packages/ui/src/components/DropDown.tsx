@@ -144,6 +144,9 @@ const InputBox = styled.div<{
   }
   & > p {
     margin: 0 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 
