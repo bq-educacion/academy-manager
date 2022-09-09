@@ -122,16 +122,20 @@ export const centers = {
           throw new Error("404, Center not found");
         }
 
-        const totalGroups = await groupCollection(ctx.db).countDocuments({
-          center: new ObjectId(args.id),
-        });
+        const [totalGroups, students] = await Promise.all([
+          groupCollection(ctx.db).countDocuments({
+            center: new ObjectId(args.id),
+          }),
+          groupCollection(ctx.db).distinct("students", {
+            center: new ObjectId(args.id),
+          }),
+        ]);
 
-        const students = (await groupCollection(ctx.db).distinct("students", {
-          center: new ObjectId(args.id),
-        })).flat() as ObjectId[];
-        const totalStudents = [...new Set(students)].length;
-
-        return { center, totalGroups, totalStudents };
+        return {
+          center,
+          totalGroups,
+          totalStudents: [...new Set(students.flat())].length,
+        };
       } catch (error) {
         throw new Error("500, " + error);
       }
