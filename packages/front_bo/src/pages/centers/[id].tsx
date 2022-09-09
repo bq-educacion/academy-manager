@@ -28,6 +28,8 @@ import {
   useGetCenterQuery,
 } from "../../generated/graphql";
 
+//TODO: Mutation alta centro
+
 const EditCenter: NextPage = () => {
   const router = useRouter();
   const t = useTranslate();
@@ -47,27 +49,33 @@ const EditCenter: NextPage = () => {
   const [changes, setChanges] = useState<boolean>(false);
 
   const [showFolder, setShowFolder] = useState<boolean>(
-    data?.getCenter.active || true
+    data?.getCenter.center.active || true
   );
   const [centerState, setCenterState] = useState<boolean>(
-    data?.getCenter.active || true
+    data?.getCenter.center.active || true
   );
   const [type, setType] = useState<CenterActivityType[]>(
-    data?.getCenter.type || []
+    data?.getCenter.center.type || []
   );
   const [nature, setNature] = useState<CenterNature | undefined>(
-    data?.getCenter.nature || undefined
+    data?.getCenter.center.nature || undefined
   );
   const [languagesSelection, setLanguagesSelection] = useState<Languages[]>(
-    data?.getCenter.languages || []
+    data?.getCenter.center.languages || []
   );
-  const [name, setName] = useState<string>(data?.getCenter.name || "");
-  const [address, setAddress] = useState<string>(data?.getCenter.address || "");
-  const [city, setCity] = useState<string>(data?.getCenter.city || "");
-  const [phone, setPhone] = useState<string>(data?.getCenter.phone || "");
-  const [email, setEmail] = useState<string>(data?.getCenter.email || "");
+  const [name, setName] = useState<string>(data?.getCenter.center.name || "");
+  const [address, setAddress] = useState<string>(
+    data?.getCenter.center.address || ""
+  );
+  const [city, setCity] = useState<string>(data?.getCenter.center.city || "");
+  const [phone, setPhone] = useState<string>(
+    data?.getCenter.center.phone || ""
+  );
+  const [email, setEmail] = useState<string>(
+    data?.getCenter.center.email || ""
+  );
   const [contacts, setContacts] = useState<CenterContact[]>(
-    data?.getCenter.contacts || [
+    data?.getCenter.center.contacts || [
       {
         name: "",
         phone: "",
@@ -75,7 +83,9 @@ const EditCenter: NextPage = () => {
       },
     ]
   );
-  const [notes, setNotes] = useState<string>(data?.getCenter.notes || "");
+  const [notes, setNotes] = useState<string>(
+    data?.getCenter.center.notes || ""
+  );
 
   const [editCenterMutation, { loading }] = useEditCenterMutation({
     variables: {
@@ -110,17 +120,17 @@ const EditCenter: NextPage = () => {
 
   useLayoutEffect(() => {
     if (
-      centerState !== data?.getCenter.active ||
-      type !== data?.getCenter.type ||
-      nature !== data?.getCenter.nature ||
-      languagesSelection !== data?.getCenter.languages ||
-      name !== data?.getCenter.name ||
-      address !== data?.getCenter.address ||
-      city !== data?.getCenter.city ||
-      phone !== data?.getCenter.phone ||
+      centerState !== data?.getCenter.center.active ||
+      type !== data?.getCenter.center.type ||
+      nature !== data?.getCenter.center.nature ||
+      languagesSelection !== data?.getCenter.center.languages ||
+      name !== data?.getCenter.center.name ||
+      address !== data?.getCenter.center.address ||
+      city !== data?.getCenter.center.city ||
+      phone !== data?.getCenter.center.phone ||
       email !== "" ||
       notes !== "" ||
-      contacts !== data?.getCenter.contacts
+      contacts !== data?.getCenter.center.contacts
     ) {
       setChanges(true);
       window.addEventListener("beforeunload", function (e) {
@@ -130,17 +140,17 @@ const EditCenter: NextPage = () => {
       });
     }
     if (
-      centerState === data?.getCenter.active &&
-      type === data?.getCenter.type &&
-      nature === data?.getCenter.nature &&
-      languagesSelection === data?.getCenter.languages &&
-      name === data?.getCenter.name &&
-      address === data?.getCenter.address &&
-      city === data?.getCenter.city &&
-      phone === data?.getCenter.phone &&
+      centerState === data?.getCenter.center.active &&
+      type === data?.getCenter.center.type &&
+      nature === data?.getCenter.center.nature &&
+      languagesSelection === data?.getCenter.center.languages &&
+      name === data?.getCenter.center.name &&
+      address === data?.getCenter.center.address &&
+      city === data?.getCenter.center.city &&
+      phone === data?.getCenter.center.phone &&
       email === "" &&
       notes === "" &&
-      contacts === data?.getCenter.contacts
+      contacts === data?.getCenter.center.contacts
     ) {
       setChanges(false);
     }
@@ -176,24 +186,25 @@ const EditCenter: NextPage = () => {
   //update hooks with data
   useEffect(() => {
     if (data) {
-      setCenterState(data.getCenter.active);
-      setType(data.getCenter.type);
-      setNature(data.getCenter.nature);
-      setLanguagesSelection(data.getCenter.languages);
-      setName(data.getCenter.name);
-      setAddress(data.getCenter.address);
-      setCity(data.getCenter.city);
+      setCenterState(data.getCenter.center.active);
+      setType(data.getCenter.center.type);
+      setNature(data.getCenter.center.nature);
+      setLanguagesSelection(data.getCenter.center.languages);
+      setName(data.getCenter.center.name);
+      setAddress(data.getCenter.center.address);
+      setCity(data.getCenter.center.city);
       {
-        data.getCenter.phone && setPhone(data.getCenter.phone);
+        data.getCenter.center.phone && setPhone(data.getCenter.center.phone);
       }
       {
-        data.getCenter.email && setEmail(data.getCenter.email);
+        data.getCenter.center.email && setEmail(data.getCenter.center.email);
       }
       {
-        data.getCenter.contacts && setContacts(data.getCenter.contacts);
+        data.getCenter.center.contacts &&
+          setContacts(data.getCenter.center.contacts);
       }
       {
-        data.getCenter.notes && setNotes(data.getCenter.notes);
+        data.getCenter.center.notes && setNotes(data.getCenter.center.notes);
       }
     }
   }, [data]);
@@ -298,7 +309,8 @@ const EditCenter: NextPage = () => {
         childrenHeader={
           <HeaderDiv>
             <styles.BoldP2>
-              {t("general.sections.links.centers")} / {data?.getCenter.name}
+              {t("general.sections.links.centers")} /{" "}
+              {data?.getCenter.center.name}
             </styles.BoldP2>
             {/* TODO: Año academico */}
           </HeaderDiv>
@@ -382,18 +394,18 @@ const EditCenter: NextPage = () => {
                 <BodySubHeader>
                   <styles.P4>
                     {t("pages.edit-center.date")}
-                    {data?.getCenter.createdAt}
+                    {data?.getCenter.center.createdAt}
                   </styles.P4>
                   <a>
                     <styles.P4>
                       {t("pages.edit-center.students")}
-                      {/*TODO: numero de estuiantes del back*/}
+                      {data?.getCenter.totalStudents}
                     </styles.P4>
                   </a>
                   <a>
                     <styles.P4>
                       {t("pages.edit-center.groups")}
-                      {/*TODO: numero de grupos del back*/}
+                      {data?.getCenter.totalGroups}
                     </styles.P4>
                   </a>
                 </BodySubHeader>

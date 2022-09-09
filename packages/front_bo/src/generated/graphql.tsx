@@ -66,6 +66,13 @@ export type CenterContactInput = {
   phone: Scalars['String'];
 };
 
+export type CenterInfo = {
+  __typename?: 'CenterInfo';
+  center: Center;
+  totalGroups: Scalars['Number'];
+  totalStudents: Scalars['Number'];
+};
+
 export enum CenterNature {
   Concertado = 'CONCERTADO',
   Private = 'PRIVATE',
@@ -108,6 +115,12 @@ export type Group = {
   students: Array<Student>;
   timetable: Array<Timetable>;
   type: GroupType;
+};
+
+export type GroupInfo = {
+  __typename?: 'GroupInfo';
+  group: Group;
+  totalStudents: Scalars['Number'];
 };
 
 export enum GroupModality {
@@ -175,6 +188,7 @@ export type Mutation = {
   editStudent: Student;
   editStudentContact: StudentContact;
   setActiveCenter: Center;
+  setStatusStudent: Student;
 };
 
 
@@ -371,6 +385,12 @@ export type MutationSetActiveCenterArgs = {
   id: Scalars['String'];
 };
 
+
+export type MutationSetStatusStudentArgs = {
+  id: Scalars['String'];
+  status: StudentStatus;
+};
+
 export enum OrderFilterCenter {
   City = 'city',
   Languages = 'languages',
@@ -449,9 +469,9 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: 'Query';
   checkCorporateEmail: Scalars['String'];
-  getCenter: Center;
+  getCenter: CenterInfo;
   getCenters: PaginatedCenters;
-  getGroup: Group;
+  getGroup: GroupInfo;
   getGroups: PaginatedGroups;
   getInstructor: Instructor;
   getInstructors: PaginatedInstructors;
@@ -558,7 +578,7 @@ export type StudentContactInput = {
 
 export enum StudentStatus {
   Active = 'ACTIVE',
-  Withdrawn = 'WITHDRAWN'
+  Drop = 'DROP'
 }
 
 export type Timetable = {
@@ -658,7 +678,7 @@ export type GetCenterQueryVariables = Exact<{
 }>;
 
 
-export type GetCenterQuery = { __typename?: 'Query', getCenter: { __typename?: 'Center', id: string, active: boolean, type: Array<CenterActivityType>, nature: CenterNature, languages: Array<Languages>, name: string, address: string, city: string, phone?: string | null, email?: string | null, notes?: string | null, createdAt: string, contacts?: Array<{ __typename?: 'CenterContact', name: string, email: string, phone: string }> | null } };
+export type GetCenterQuery = { __typename?: 'Query', getCenter: { __typename?: 'CenterInfo', totalStudents: any, totalGroups: any, center: { __typename?: 'Center', id: string, active: boolean, type: Array<CenterActivityType>, nature: CenterNature, languages: Array<Languages>, name: string, address: string, city: string, phone?: string | null, email?: string | null, notes?: string | null, createdAt: string, contacts?: Array<{ __typename?: 'CenterContact', name: string, email: string, phone: string }> | null } } };
 
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
@@ -963,23 +983,27 @@ export type EditCenterMutationOptions = Apollo.BaseMutationOptions<EditCenterMut
 export const GetCenterDocument = gql`
     query GetCenter($getCenterId: String!) {
   getCenter(id: $getCenterId) {
-    id
-    active
-    type
-    nature
-    languages
-    name
-    address
-    city
-    phone
-    email
-    contacts {
+    center {
+      id
+      active
+      type
+      nature
+      languages
       name
-      email
+      address
+      city
       phone
+      email
+      contacts {
+        name
+        email
+        phone
+      }
+      notes
+      createdAt
     }
-    notes
-    createdAt
+    totalStudents
+    totalGroups
   }
 }
     `;

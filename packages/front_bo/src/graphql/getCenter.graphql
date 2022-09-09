@@ -1,21 +1,25 @@
 query GetCenter($getCenterId: String!) {
   getCenter(id: $getCenterId) {
-    id
-    active
-    type
-    nature
-    languages
-    name
-    address
-    city
-    phone
-    email
-    contacts {
+    center {
+      id
+      active
+      type
+      nature
+      languages
       name
-      email
+      address
+      city
       phone
+      email
+      contacts {
+        name
+        email
+        phone
+      }
+      notes
+      createdAt
     }
-    notes
-    createdAt
+    totalStudents
+    totalGroups
   }
 }
