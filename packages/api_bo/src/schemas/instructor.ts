@@ -1,9 +1,5 @@
 import { gql } from "graphql-tag";
 export const typeDefs = gql`
-  enum InstructorStatus {
-    ACTIVE
-    INACTIVE
-  }
 
   enum TypeVehicleInstructor {
     OWN
@@ -69,8 +65,8 @@ export const typeDefs = gql`
     corporateEmail: String
     personalEmail: String
     phone: String
-    status: InstructorStatus!
-    activeGroup: Boolean!
+    enrolled: Boolean!
+    active: Boolean!
     training: trainingInstructor!
     previousExperience: previousExperienceInstructor!
     programmingExperience: Boolean!
@@ -108,7 +104,7 @@ export const typeDefs = gql`
       corporateEmail: String
       personalEmail: String
       phone: String
-      status: InstructorStatus!
+      enrolled: Boolean!
       training: trainingInstructorInput!
       previousExperience: previousExperienceInstructor!
       programmingExperience: Boolean!
@@ -132,7 +128,7 @@ export const typeDefs = gql`
       personalEmail: String
       corporateEmail:String
       phone:String
-      status:InstructorStatus
+      enrolled:Boolean
       notes:String
       training:trainingInstructorInput
       previousExperience:previousExperienceInstructor
@@ -149,6 +145,8 @@ export const typeDefs = gql`
       summerAvailability: summerAvailabilityInstructor
       groups: [String!]
     ): Instructor!
+
+    deleteInstructor(id: String!): Instructor!
   }
 
 `;

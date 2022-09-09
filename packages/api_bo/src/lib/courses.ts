@@ -1,7 +1,7 @@
 import { ObjectId } from "objectId";
 import { Collection, UpdateFilter } from "mongo";
 import { GroupModel } from "../models/GroupModel.ts";
-import { CourseType, StudentStatus } from "../types.ts";
+import { CourseType } from "../types.ts";
 import { StudentModel } from "../models/StudentModel.ts";
 
 export const addCourse = async (
@@ -96,8 +96,8 @@ export const updateCourses = async (
       const ESO: string[] = [];
       let students = await DBStudents.distinct("course", {
         _id: { $in: group.students },
-        status: StudentStatus.Active,
-        activeGroup: true,
+        enrolled: true,
+        active: true,
       }) as string[];
       students = [...new Set(students)];
       students.forEach((course) => {
