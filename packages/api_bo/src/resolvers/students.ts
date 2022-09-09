@@ -457,7 +457,7 @@ export const students = {
         checkNotNull(args);
         let student: StudentModel | undefined = undefined;
 
-        //if status is withdrawn, we will only keep the center, group, course, registration date, name and surname.
+        //if status is drop, we will only keep the center, group, course, registration date, name and surname.
         if (args.status === StudentStatus.Drop) {
           student = await studentCollection(ctx.db).findAndModify(
             { _id: new ObjectId(args.id) },
