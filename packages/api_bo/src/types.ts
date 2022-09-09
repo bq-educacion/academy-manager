@@ -502,7 +502,7 @@ export type QueryGetAreaArgs = {
 };
 
 export type QueryGetAreasArgs = {
-  region: Region;
+  region: Array<Region>;
 };
 
 export type QueryGetCenterArgs = {

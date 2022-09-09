@@ -22,7 +22,9 @@ export const areas = {
       ctx: Context,
     ): Promise<AreaModel[]> => {
       try {
-        return await areaCollection(ctx.db).find({ region: args.region })
+        return await areaCollection(ctx.db).find({
+          region: { $in: args.region },
+        })
           .toArray();
       } catch (error) {
         throw new Error("500, " + error);
