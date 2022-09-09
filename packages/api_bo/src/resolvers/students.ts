@@ -16,7 +16,6 @@ import {
   MutationEditStudentArgs,
   MutationEditStudentContactArgs,
   StudentContact,
-  StudentStatus,
 } from "../types.ts";
 import { ObjectId } from "objectId";
 import { validDate } from "../lib/validDate.ts";
@@ -150,7 +149,7 @@ export const students = {
 
         let newStudent = {
           ...args,
-          status: StudentStatus.Active,
+          enrolled: true,
           active: false,
         };
 

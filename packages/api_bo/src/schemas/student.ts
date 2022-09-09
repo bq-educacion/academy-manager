@@ -1,10 +1,6 @@
 import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
-  enum StudentStatus {
-    ACTIVE
-    DROP
-  }
 
   enum OrderFilterStudent {
     name
@@ -41,7 +37,7 @@ export const typeDefs = gql`
     name: String!
     birthDate: String
     course: String!
-    status: StudentStatus!
+    enrolled: Boolean!
     active: Boolean!
     registrationDate: String
     allergies: Boolean

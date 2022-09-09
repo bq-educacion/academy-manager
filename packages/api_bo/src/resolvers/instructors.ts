@@ -5,7 +5,6 @@ import {
   InstructorModel,
 } from "../models/InstructorModel.ts";
 import {
-  InstructorStatus,
   MutationSetStatusInstructorArgs,
   PaginatedInstructors,
   QueryCheckCorporateEmailArgs,
@@ -359,7 +358,7 @@ export const instructors = {
         let instructor = await instructorCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
           {
-            update: { $set: { status: args.status } },
+            update: { $set: { enrolled: args.enrolled } },
             new: true,
           },
         ) as InstructorModel;
@@ -389,7 +388,7 @@ export const instructors = {
             return group._id;
           });
 
-          if (args.status === InstructorStatus.Inactive) {
+          if (!args.enrolled) {
             instructor = await instructorCollection(ctx.db).findAndModify(
               { _id: new ObjectId(args.id) },
               {
@@ -403,7 +402,7 @@ export const instructors = {
               activeCenterGroups.map(async (group) => {
                 const instructors = await instructorCollection(ctx.db).find({
                   _id: { $in: group.instructors },
-                  status: InstructorStatus.Active,
+                  enrolled: true,
                 }).toArray();
                 if (instructors.length === 0) {
                   return group._id;
@@ -426,7 +425,7 @@ export const instructors = {
               "students",
               studentCollection(ctx.db),
             );
-          } else if (args.status === InstructorStatus.Active) {
+          } else if (args.enrolled) {
             //set active to true in groups of instructor
             await groupCollection(ctx.db).updateMany({
               _id: { $in: ids },
