@@ -77,6 +77,13 @@ export type CenterContactInput = {
   phone: Scalars["String"];
 };
 
+export type CenterInfo = {
+  __typename?: "CenterInfo";
+  center: Center;
+  totalGroups: Scalars["Number"];
+  totalStudents: Scalars["Number"];
+};
+
 export enum CenterNature {
   Concertado = "CONCERTADO",
   Private = "PRIVATE",
@@ -119,6 +126,12 @@ export type Group = {
   students: Array<Student>;
   timetable: Array<Timetable>;
   type: GroupType;
+};
+
+export type GroupInfo = {
+  __typename?: "GroupInfo";
+  group: Group;
+  totalStudents: Scalars["Number"];
 };
 
 export enum GroupModality {
@@ -173,6 +186,7 @@ export type Mutation = {
   createStudent: Student;
   deleteCenter: Center;
   deleteGroup: Group;
+  deleteInstructor: Instructor;
   deleteStudent: Student;
   editCenter: Center;
   editCenterContact: CenterContact;
@@ -182,6 +196,7 @@ export type Mutation = {
   editStudentContact: StudentContact;
   setActiveCenter: Center;
   setStatusInstructor: Instructor;
+  setStatusStudent: Student;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -267,6 +282,10 @@ export type MutationDeleteCenterArgs = {
 };
 
 export type MutationDeleteGroupArgs = {
+  id: Scalars["String"];
+};
+
+export type MutationDeleteInstructorArgs = {
   id: Scalars["String"];
 };
 
@@ -366,6 +385,11 @@ export type MutationSetStatusInstructorArgs = {
   id: Scalars["String"];
 };
 
+export type MutationSetStatusStudentArgs = {
+  enrolled: Scalars["Boolean"];
+  id: Scalars["String"];
+};
+
 export enum OrderFilterCenter {
   City = "city",
   Languages = "languages",
@@ -444,9 +468,9 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: "Query";
   checkCorporateEmail: Scalars["String"];
-  getCenter: Center;
+  getCenter: CenterInfo;
   getCenters: PaginatedCenters;
-  getGroup: Group;
+  getGroup: GroupInfo;
   getGroups: PaginatedGroups;
   getInstructor: Instructor;
   getInstructors: PaginatedInstructors;
@@ -701,11 +725,13 @@ export type ResolversTypes = ResolversObject<{
   CenterActivityType: CenterActivityType;
   CenterContact: ResolverTypeWrapper<CenterContact>;
   CenterContactInput: CenterContactInput;
+  CenterInfo: ResolverTypeWrapper<CenterInfo>;
   CenterNature: CenterNature;
   Course: ResolverTypeWrapper<Course>;
   CourseType: CourseType;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
+  GroupInfo: ResolverTypeWrapper<GroupInfo>;
   GroupModality: GroupModality;
   GroupType: GroupType;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
@@ -744,8 +770,10 @@ export type ResolversParentTypes = ResolversObject<{
   Center: Center;
   CenterContact: CenterContact;
   CenterContactInput: CenterContactInput;
+  CenterInfo: CenterInfo;
   Course: Course;
   Group: Group;
+  GroupInfo: GroupInfo;
   ID: Scalars["ID"];
   Instructor: Instructor;
   Int: Scalars["Int"];
@@ -822,6 +850,17 @@ export type CenterContactResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type CenterInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["CenterInfo"] =
+    ResolversParentTypes["CenterInfo"],
+> = ResolversObject<{
+  center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
+  totalGroups?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  totalStudents?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type CourseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Course"] =
@@ -862,6 +901,16 @@ export type GroupResolvers<
     ContextType
   >;
   type?: Resolver<ResolversTypes["GroupType"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GroupInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["GroupInfo"] =
+    ResolversParentTypes["GroupInfo"],
+> = ResolversObject<{
+  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
+  totalStudents?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1024,6 +1073,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationDeleteGroupArgs, "id">
   >;
+  deleteInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteInstructorArgs, "id">
+  >;
   deleteStudent?: Resolver<
     ResolversTypes["Student"],
     ParentType,
@@ -1077,6 +1132,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSetStatusInstructorArgs, "enrolled" | "id">
+  >;
+  setStatusStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSetStatusStudentArgs, "enrolled" | "id">
   >;
 }>;
 
@@ -1149,7 +1210,7 @@ export type QueryResolvers<
     RequireFields<QueryCheckCorporateEmailArgs, "email">
   >;
   getCenter?: Resolver<
-    ResolversTypes["Center"],
+    ResolversTypes["CenterInfo"],
     ParentType,
     ContextType,
     RequireFields<QueryGetCenterArgs, "id">
@@ -1161,7 +1222,7 @@ export type QueryResolvers<
     Partial<QueryGetCentersArgs>
   >;
   getGroup?: Resolver<
-    ResolversTypes["Group"],
+    ResolversTypes["GroupInfo"],
     ParentType,
     ContextType,
     RequireFields<QueryGetGroupArgs, "id">
@@ -1309,8 +1370,10 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Availability?: AvailabilityResolvers<ContextType>;
   Center?: CenterResolvers<ContextType>;
   CenterContact?: CenterContactResolvers<ContextType>;
+  CenterInfo?: CenterInfoResolvers<ContextType>;
   Course?: CourseResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
+  GroupInfo?: GroupInfoResolvers<ContextType>;
   Instructor?: InstructorResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Number?: GraphQLScalarType;

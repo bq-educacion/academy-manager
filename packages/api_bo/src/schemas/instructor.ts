@@ -145,6 +145,8 @@ export const typeDefs = gql`
       groups: [String!]
     ): Instructor!
 
+    deleteInstructor(id: String!): Instructor!
+
     setStatusInstructor(id: String!, enrolled: Boolean!): Instructor!
   }
 

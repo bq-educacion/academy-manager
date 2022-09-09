@@ -116,5 +116,7 @@ export const typeDefs = gql`
     ): StudentContact!
 
     deleteStudent(id: String!): Student!
+    
+    setStatusStudent(id: String!, enrolled: Boolean!): Student!
   }
 `;
