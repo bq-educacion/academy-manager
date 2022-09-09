@@ -7,6 +7,7 @@ import {
   QueryGetAreaArgs,
   QueryGetAreasArgs,
 } from "../types.ts";
+import { checkNotNull } from "../lib/checkNotNull.ts";
 
 export const areas = {
   Area: {
@@ -51,6 +52,7 @@ export const areas = {
       ctx: Context,
     ): Promise<AreaModel> => {
       try {
+        checkNotNull(args);
         const idArea = await areaCollection(ctx.db).insertOne({ ...args });
         return {
           _id: idArea,
