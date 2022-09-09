@@ -316,7 +316,7 @@ export const centers = {
           _id: new ObjectId(args.id),
         });
 
-        // if students are not in other groups, activeGroup = false
+        // if students are not in other groups, active = false
         setActiveToFalse(
           idStudents,
           groupCollection(ctx.db),
@@ -324,7 +324,7 @@ export const centers = {
           studentCollection(ctx.db),
         );
 
-        // if instructors are not in other groups, activeGroup = false
+        // if instructors are not in other groups, active = false
         setActiveToFalse(
           idInstructors,
           groupCollection(ctx.db),
@@ -362,7 +362,7 @@ export const centers = {
         const idGroups = groups.map((group) => group._id);
         await groupCollection(ctx.db).updateMany(
           { _id: { $in: idGroups } },
-          { $set: { activeCenter: args.active } },
+          { $set: { active: args.active } },
         );
 
         // if there are no instructors in the group, center = null
@@ -382,7 +382,7 @@ export const centers = {
         const idStudents: ObjectId[] = groups.map((group) => group.students)
           .flat();
         if (!args.active) {
-          // if students are not in other groups, activeGroup = false
+          // if students are not in other groups, active = false
           setActiveToFalse(
             idStudents,
             groupCollection(ctx.db),
@@ -393,7 +393,7 @@ export const centers = {
           if (idStudents.length > 0) {
             await studentCollection(ctx.db).updateMany(
               { _id: { $in: idStudents } },
-              { $set: { activeGroup: true } },
+              { $set: { active: true } },
             );
           }
         }
@@ -402,7 +402,7 @@ export const centers = {
           group.instructors
         ).flat();
         if (!args.active) {
-          // if instructors are not in other groups, activeGroup = false
+          // if instructors are not in other groups, actives = false
           setActiveToFalse(
             idInstructors,
             groupCollection(ctx.db),
@@ -413,7 +413,7 @@ export const centers = {
           if (idInstructors.length > 0) {
             await instructorCollection(ctx.db).updateMany(
               { _id: { $in: idInstructors } },
-              { $set: { activeGroup: true } },
+              { $set: { active: true } },
             );
           }
         }
