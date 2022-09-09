@@ -249,6 +249,12 @@ export const instructors = {
           { $push: { instructors: { $each: [idInstructor] } } },
         );
 
+        instructors.Mutation.setStatusInstructor(
+          _parent,
+          { id: idInstructor.toString(), enrolled: args.enrolled },
+          ctx,
+        );
+
         return {
           _id: idInstructor,
           ...newInstructor,
