@@ -13,6 +13,7 @@ import {
   MutationEditStudentArgs,
   MutationEditStudentContactArgs,
   MutationSetActiveCenterArgs,
+  MutationSetStatusStudentArgs,
 } from "../types.ts";
 
 export function checkNotNull(
@@ -30,6 +31,7 @@ export function checkNotNull(
     | MutationAddCenterContactArgs
     | MutationAddStudentContactArgs
     | MutationSetActiveCenterArgs
+    | MutationSetStatusStudentArgs
     | MutationCreateAreaArgs,
 ): void {
   if (Object.values(args).some((item) => item === null)) {

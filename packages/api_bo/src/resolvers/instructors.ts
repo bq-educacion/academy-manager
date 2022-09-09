@@ -207,6 +207,12 @@ export const instructors = {
           throw new Error("400, Fields cannot be null");
         }
 
+        checkAreas(
+          args.areas,
+          args.geographicalAvailability,
+          areaCollection(ctx.db),
+        );
+
         let newInstructor = {
           ...args,
           activeGroup: false,
@@ -232,12 +238,6 @@ export const instructors = {
         if (existsGroups.length !== groups.length) {
           throw new Error("404, Groups not found");
         }
-
-        checkAreas(
-          args.areas,
-          args.geographicalAvailability,
-          areaCollection(ctx.db),
-        );
 
         newInstructor = {
           ...newInstructor,

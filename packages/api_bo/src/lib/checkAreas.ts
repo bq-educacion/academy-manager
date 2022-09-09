@@ -7,10 +7,11 @@ export const checkAreas = async (
   regions: Region[],
   DBModel: Collection<AreaModel>,
 ): Promise<void> => {
-  const check = await DBModel.find(
-    { name: { $in: areas }, region: { $in: regions } },
-  ).toArray();
-  if (check.length !== areas.length) {
-    throw new Error("400, Area not found or not in the region");
+  const areasInDB = await DBModel.find({
+    name: { $in: areas },
+    region: { $in: regions },
+  }).toArray();
+  if (areasInDB.length !== areas.length) {
+    throw new Error("400, Invalid areas");
   }
 };
