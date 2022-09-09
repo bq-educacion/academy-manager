@@ -238,7 +238,7 @@ export const instructors = {
 
         newInstructor = {
           ...newInstructor,
-          active: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups, "createInstructor"),
         };
 
         const idInstructor = await instructorCollection(ctx.db).insertOne({
@@ -307,7 +307,7 @@ export const instructors = {
 
           updateInstructor = {
             ...updateInstructor,
-            active: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups, "other"),
           };
 
           const instructorGroupsIds = await groupCollection(ctx.db)
