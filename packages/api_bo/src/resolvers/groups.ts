@@ -163,13 +163,14 @@ export const groups = {
       _parent: unknown,
       args: QueryGetGroupArgs,
       ctx: Context,
-    ): Promise<GroupModel> => {
+    ): Promise<{ group: GroupModel; totalStudents: number }> => {
       try {
         const group = await groupCollection(ctx.db).findById(args.id);
         if (!group) {
           throw new Error("400, Group not found");
         }
-        return group;
+
+        return { group, totalStudents: group.students.length };
       } catch (error) {
         throw new Error("500, " + error);
       }

@@ -42,6 +42,12 @@ export const typeDefs = gql`
     data: [Center!]!
   }
 
+  type CenterInfo {
+    center: Center!
+    totalStudents: Number!
+    totalGroups: Number!
+  }
+
   type Center {
     id: ID!
     name: String!
@@ -67,7 +73,8 @@ export const typeDefs = gql`
       page: Int
       pageSize: Int
     ): PaginatedCenters!
-    getCenter(id: String!): Center!
+
+    getCenter(id: String!): CenterInfo!
   }
 
   type Mutation {
