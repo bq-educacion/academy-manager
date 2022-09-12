@@ -11,6 +11,7 @@ import CloseCross from "./close-cross.svg";
 import Tick from "./tick.svg";
 import User from "./user.svg";
 import Eliminate from "./eliminate.svg";
+import Map from "./map.svg";
 
 export {
   ClosePannel,
@@ -26,4 +27,5 @@ export {
   Tick,
   User,
   Eliminate,
+  Map,
 };

@@ -14,6 +14,7 @@ import {
   Tick,
   User,
   Eliminate,
+  Map,
 } from "../assets/icons";
 import { colors } from "../theme";
 
@@ -57,6 +58,8 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <User {...rest} />;
     case "eliminate":
       return <Eliminate {...rest} />;
+    case "map":
+      return <Map {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

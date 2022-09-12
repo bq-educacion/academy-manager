@@ -11,7 +11,7 @@ type Option = {
 };
 const OptionsBoxOrdered: FC<{
   options: Option[];
-  title: string;
+  title: JSX.Element;
   results: string[];
   setResults: (results: string[]) => void;
   orderName: boolean;
@@ -27,13 +27,7 @@ const OptionsBoxOrdered: FC<{
       >
         <Icon name={orderName ? "order-down" : "order-up"} />
       </TitleDiv>
-      <TitleDiv
-        onClick={() => {
-          setOrderName(!orderName);
-        }}
-      >
-        <styles.BoldP4>{title}</styles.BoldP4>
-      </TitleDiv>
+      <TitleDiv>{title}</TitleDiv>
       {options
         .map((option) => (
           <>
@@ -83,7 +77,6 @@ const TitleDiv = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
-  cursor: pointer;
 `;
 
 const InsideDiv = styled.div`
