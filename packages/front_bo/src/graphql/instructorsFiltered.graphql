@@ -21,6 +21,7 @@ query GetInstructors(
       name
       geographicalAvailability
       enrolled
+      active
       availability {
         day
       }
