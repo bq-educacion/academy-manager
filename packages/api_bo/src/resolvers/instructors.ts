@@ -5,6 +5,7 @@ import {
   InstructorModel,
 } from "../models/InstructorModel.ts";
 import {
+  MutationDeleteInstructorArgs,
   PaginatedInstructors,
   QueryCheckCorporateEmailArgs,
   QueryGetInstructorArgs,
@@ -22,6 +23,9 @@ import { ObjectId } from "objectId";
 import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
+import { studentCollection } from "../models/StudentModel.ts";
+import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
+import { updateCourses } from "../lib/courses.ts";
 import { areaCollection } from "../models/AreaModel.ts";
 import { checkAreas } from "../lib/checkAreas.ts";
 
@@ -215,7 +219,7 @@ export const instructors = {
 
         let newInstructor = {
           ...args,
-          activeGroup: false,
+          active: false,
           availability: setIdDays(args.availability) as Availability[],
         };
 
@@ -241,7 +245,7 @@ export const instructors = {
 
         newInstructor = {
           ...newInstructor,
-          activeGroup: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups),
         };
 
         const idInstructor = await instructorCollection(ctx.db).insertOne({
@@ -326,7 +330,7 @@ export const instructors = {
 
           updateInstructor = {
             ...updateInstructor,
-            activeGroup: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups),
           };
 
           const instructorGroupsIds = await groupCollection(ctx.db)
@@ -370,6 +374,65 @@ export const instructors = {
           throw new Error("404, Instructor not found");
         }
         return newInstructor;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    deleteInstructor: async (
+      _parent: unknown,
+      args: MutationDeleteInstructorArgs,
+      ctx: Context,
+    ): Promise<InstructorModel> => {
+      try {
+        const instructor = await instructorCollection(ctx.db).findAndModify(
+          { _id: new ObjectId(args.id) },
+          {
+            remove: true,
+          },
+        );
+        if (!instructor) {
+          throw new Error("404, Instructor not found");
+        }
+
+        //delete instructor from groups
+        await groupCollection(ctx.db).updateMany(
+          { instructors: new ObjectId(args.id) },
+          { $pull: { instructors: new ObjectId(args.id) } },
+        );
+
+        //if there are no instructors in the group, set active to false
+        await groupCollection(ctx.db).updateMany(
+          { instructors: { $size: 0 } },
+          { $set: { active: false } },
+        );
+
+        //if students are not in other groups, set active to false
+        const idStudents = (await groupCollection(ctx.db).distinct("students", {
+          active: false,
+        })).flat() as ObjectId[];
+
+        await setActiveToFalse(
+          idStudents,
+          groupCollection(ctx.db),
+          "students",
+          studentCollection(ctx.db),
+        );
+
+        //update courses
+        let groups: GroupModel[] = [];
+        await Promise.all(idStudents.map(async (id) => {
+          const group = await groupCollection(ctx.db).find({ students: id })
+            .toArray();
+          groups = [...groups, ...group];
+        }));
+        updateCourses(
+          groups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+        );
+
+        return instructor;
       } catch (error) {
         throw new Error("500, " + error);
       }

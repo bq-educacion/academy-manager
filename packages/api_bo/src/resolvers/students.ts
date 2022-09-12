@@ -17,7 +17,6 @@ import {
   MutationEditStudentArgs,
   MutationEditStudentContactArgs,
   StudentContact,
-  StudentStatus,
 } from "../types.ts";
 import { ObjectId } from "objectId";
 import { validDate } from "../lib/validDate.ts";
@@ -151,8 +150,8 @@ export const students = {
 
         let newStudent = {
           ...args,
-          status: StudentStatus.Active,
-          activeGroup: false,
+          enrolled: true,
+          active: false,
         };
 
         if (args.birthDate) {
@@ -175,7 +174,7 @@ export const students = {
 
         newStudent = {
           ...newStudent,
-          activeGroup: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups),
         };
 
         if (args.contacts) {
@@ -307,7 +306,7 @@ export const students = {
 
           updateStudent = {
             ...updateStudent,
-            activeGroup: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups),
           };
         }
 
@@ -457,14 +456,14 @@ export const students = {
         checkNotNull(args);
         let student: StudentModel | undefined = undefined;
 
-        //if status is drop, we will only keep the center, group, course, registration date, name and surname.
-        if (args.status === StudentStatus.Drop) {
+        //if enrolled = false, we will only keep the center, group, course, registration date, name and surname.
+        if (!args.enrolled) {
           student = await studentCollection(ctx.db).findAndModify(
             { _id: new ObjectId(args.id) },
             {
               update: {
                 $set: {
-                  status: args.status,
+                  enrolled: args.enrolled,
                   birthDate: null,
                   allergies: null,
                   descriptionAllergy: null,
@@ -483,11 +482,11 @@ export const students = {
           if (!student) {
             throw new Error("404, Student not found");
           }
-        } else if (args.status === StudentStatus.Active) {
+        } else if (args.enrolled) {
           student = await studentCollection(ctx.db).findAndModify(
             { _id: new ObjectId(args.id) },
             {
-              update: { $set: { status: args.status } },
+              update: { $set: { enrolled: args.enrolled } },
               new: true,
             },
           ) as StudentModel;
