@@ -1,0 +1,5 @@
+mutation DeleteCenter($deleteCenterId: String!) {
+  deleteCenter(id: $deleteCenterId) {
+    id
+  }
+}

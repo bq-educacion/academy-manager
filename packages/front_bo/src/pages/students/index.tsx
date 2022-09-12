@@ -212,7 +212,7 @@ const StudentsPage: NextPage = () => {
                   <div>
                     {t(
                       `components.table.state.${
-                        item.enrolled ? "active" : "inactive"
+                        item.enrolled ? "active" : "withdrawn"
                       }`
                     )}
                   </div>

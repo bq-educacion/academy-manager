@@ -201,8 +201,8 @@ const InstructorsPage: NextPage = () => {
                 content: (item) => (
                   <div>
                     {t(
-                      `components.table.active.${
-                        item.enrolled ? "active" : "inactive"
+                      `components.table.state.${
+                        item.enrolled ? "active" : "withdrawn"
                       }`
                     )}
                   </div>
