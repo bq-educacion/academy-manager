@@ -3,6 +3,7 @@ query SimpleCentersName {
     data {
       name
       id
+      active
     }
   }
 }
