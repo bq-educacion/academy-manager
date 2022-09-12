@@ -502,7 +502,7 @@ export type QueryGetAreaArgs = {
 };
 
 export type QueryGetAreasArgs = {
-  region: Array<Region>;
+  regions: Array<Region>;
 };
 
 export type QueryGetCenterArgs = {
@@ -1284,7 +1284,7 @@ export type QueryResolvers<
     Array<ResolversTypes["Area"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryGetAreasArgs, "region">
+    RequireFields<QueryGetAreasArgs, "regions">
   >;
   getCenter?: Resolver<
     ResolversTypes["CenterInfo"],

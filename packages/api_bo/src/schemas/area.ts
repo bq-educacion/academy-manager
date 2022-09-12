@@ -10,7 +10,7 @@ export const typeDefs = gql`
 
   extend type Query {
     getAreas( 
-      region: [Region!]!
+      regions: [Region!]!
     ): [Area!]!
 
     getArea(id: String!): Area!

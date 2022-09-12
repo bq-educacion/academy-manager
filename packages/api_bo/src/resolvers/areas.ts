@@ -15,6 +15,7 @@ export const areas = {
       return String(parent._id!);
     },
   },
+
   Query: {
     getAreas: async (
       _parent: unknown,
@@ -23,9 +24,8 @@ export const areas = {
     ): Promise<AreaModel[]> => {
       try {
         return await areaCollection(ctx.db).find({
-          region: { $in: args.region },
-        })
-          .toArray();
+          region: { $in: args.regions },
+        }).toArray();
       } catch (error) {
         throw new Error("500, " + error);
       }
@@ -39,7 +39,7 @@ export const areas = {
       try {
         const area = await areaCollection(ctx.db).findById(args.id);
         if (!area) {
-          throw new Error("400, Area not found");
+          throw new Error("404, Area not found");
         }
         return area;
       } catch (error) {
@@ -55,6 +55,14 @@ export const areas = {
     ): Promise<AreaModel> => {
       try {
         checkNotNull(args);
+        const area = await areaCollection(ctx.db).findOne({
+          name: args.name,
+          region: args.region,
+        });
+        if (area) {
+          throw new Error("404, Area already exists");
+        }
+
         const idArea = await areaCollection(ctx.db).insertOne({ ...args });
         return {
           _id: idArea,
@@ -71,10 +79,14 @@ export const areas = {
       ctx: Context,
     ): Promise<AreaModel> => {
       try {
-        return await areaCollection(ctx.db).findAndModify(
+        const area = await areaCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
           { remove: true },
         ) as AreaModel;
+        if (!area) {
+          throw new Error("404, Area not found");
+        }
+        return area;
       } catch (error) {
         throw new Error("500, " + error);
       }
