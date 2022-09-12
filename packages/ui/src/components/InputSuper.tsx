@@ -116,6 +116,10 @@ const InputStyled = styled.input<{
   disabled?: boolean;
   error?: boolean;
 }>`
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 1.43;
+  color: ${colors.colors.black};
   padding: 0 0 0 20px;
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray};
@@ -151,10 +155,15 @@ const AreaStyled = styled.textarea<{
   disabled?: boolean;
   error?: boolean;
 }>`
-  padding: 0 0 0 20px;
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 1.43;
+  color: ${colors.colors.black};
+  padding: 10px 0 0 20px;
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray};
   height: ${(props) => (props.height ? props.height : "40px")};
+
   &::placeholder {
     font-style: italic;
     line-height: 1;
