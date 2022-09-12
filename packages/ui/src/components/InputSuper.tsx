@@ -19,6 +19,7 @@ const InputSuper: FC<{
   textArea?: boolean;
   setValid?: (valid: boolean) => void;
   onEnter?: () => void;
+  onBlur?: () => void;
 }> = ({
   placeholder,
   setInput,
@@ -36,6 +37,7 @@ const InputSuper: FC<{
   textArea,
   onEnter,
   width,
+  onBlur,
 }) => {
   const InputType = type ? type : "text";
   const [localError, setLocalError] = useState<boolean>(error ? true : false);
@@ -45,6 +47,11 @@ const InputSuper: FC<{
   if (!textArea) {
     return (
       <InputStyled
+        onBlur={() => {
+          {
+            onBlur && onBlur();
+          }
+        }}
         width={width ? width : "auto"}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -95,6 +102,11 @@ const InputSuper: FC<{
   } else {
     return (
       <AreaStyled
+        onBlur={() => {
+          {
+            onBlur && onBlur();
+          }
+        }}
         width={width ? width : "auto"}
         height={height}
         disabled={disabled}
