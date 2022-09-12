@@ -191,7 +191,11 @@ const InstructorsPage: NextPage = () => {
                 key: OrderFilterInstructor.State,
                 content: (item) => (
                   <div>
-                    {t(`components.table.active.${item.status?.toLowerCase()}`)}
+                    {t(
+                      `components.table.active.${
+                        item.enrolled ? "active" : "inactive"
+                      }`
+                    )}
                   </div>
                 ),
               },

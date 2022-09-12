@@ -21,7 +21,6 @@ import { Platforms, schedule, Tools, zones } from "../config";
 import {
   AvailabilityInput,
   Days,
-  InstructorStatus,
   Languages,
   PreviousExperienceInstructor,
   SummerAvailabilityInstructor,
@@ -45,7 +44,7 @@ const CreateInstructor: FC<{
   const [emailPro, setEmailPro] = useState<string>("");
   const [emailPersonal, setEmailPersonal] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [state, setState] = useState<InstructorStatus>();
+  const [state, setState] = useState<boolean>();
   const [education, setEducation] = useState<TrainingInstructorInput>();
   const [experience, setExperience] = useState<PreviousExperienceInstructor>();
   const [programming, setProgramming] = useState<boolean>();
@@ -187,18 +186,31 @@ const CreateInstructor: FC<{
               <DropDownUnique
                 error={errorState}
                 setError={setErrorState}
-                options={Object.values(InstructorStatus).map((elem) => {
-                  return {
-                    key: elem,
-                    label: t(
-                      `components.create-instructor.1.state-${elem.toLowerCase()}`
-                    ),
-                  };
-                })}
+                options={[
+                  {
+                    key: "active",
+                    label: t(`components.create-instructor.1.state-active`),
+                  },
+                  {
+                    key: "inactive",
+                    label: t(`components.create-instructor.1.state-inactive`),
+                  },
+                ]}
                 setSelected={(elem) => {
-                  setState(elem as InstructorStatus);
+                  if (elem === "active") {
+                    setState(true);
+                  }
+                  if (elem === "inactive") {
+                    setState(false);
+                  }
                 }}
-                selected={state}
+                selected={
+                  state === undefined
+                    ? undefined
+                    : state
+                    ? "active"
+                    : "inactive"
+                }
                 width="254px"
               />
               {errorState && (
@@ -222,7 +234,7 @@ const CreateInstructor: FC<{
               )}
             </FillIn>
           </FillInSectioned>
-          {state === InstructorStatus.Active && (
+          {state && (
             <FillIn>
               <styles.BoldP4>
                 {t("components.create-instructor.1.email-personal")}
@@ -872,7 +884,7 @@ const CreateInstructor: FC<{
                         corporateEmail: emailPro,
                         personalEmail: emailPersonal,
                         phone: phone,
-                        status: state || InstructorStatus.Inactive,
+                        enrolled: state || false,
                         training: education || {},
                         previousExperience:
                           experience || PreviousExperienceInstructor.No,
@@ -925,7 +937,7 @@ const CreateInstructor: FC<{
                         corporateEmail: emailPro,
                         personalEmail: emailPersonal,
                         phone: phone,
-                        status: state || InstructorStatus.Inactive,
+                        enrolled: state || false,
                         training: education || {},
                         previousExperience:
                           experience || PreviousExperienceInstructor.No,
