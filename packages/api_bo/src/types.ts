@@ -77,6 +77,13 @@ export type CenterContactInput = {
   phone: Scalars["String"];
 };
 
+export type CenterInfo = {
+  __typename?: "CenterInfo";
+  center: Center;
+  totalGroups: Scalars["Number"];
+  totalStudents: Scalars["Number"];
+};
+
 export enum CenterNature {
   Concertado = "CONCERTADO",
   Private = "PRIVATE",
@@ -106,7 +113,7 @@ export enum Days {
 
 export type Group = {
   __typename?: "Group";
-  activeCenter: Scalars["Boolean"];
+  active: Scalars["Boolean"];
   center?: Maybe<Center>;
   course: Course;
   createdAt: Scalars["String"];
@@ -119,6 +126,12 @@ export type Group = {
   students: Array<Student>;
   timetable: Array<Timetable>;
   type: GroupType;
+};
+
+export type GroupInfo = {
+  __typename?: "GroupInfo";
+  group: Group;
+  totalStudents: Scalars["Number"];
 };
 
 export enum GroupModality {
@@ -134,10 +147,11 @@ export enum GroupType {
 
 export type Instructor = {
   __typename?: "Instructor";
-  activeGroup: Scalars["Boolean"];
+  active: Scalars["Boolean"];
   areas: Array<Scalars["String"]>;
   availability: Array<Availability>;
   corporateEmail?: Maybe<Scalars["String"]>;
+  enrolled: Scalars["Boolean"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Group>;
   id: Scalars["ID"];
@@ -151,17 +165,11 @@ export type Instructor = {
   platformEducationExperience?: Maybe<Array<Scalars["String"]>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars["Boolean"];
-  status: InstructorStatus;
   summerAvailability?: Maybe<SummerAvailabilityInstructor>;
   training: TrainingInstructor;
   urlCV?: Maybe<Scalars["String"]>;
   vehicle: TypeVehicleInstructor;
 };
-
-export enum InstructorStatus {
-  Active = "ACTIVE",
-  Inactive = "INACTIVE",
-}
 
 export enum Languages {
   English = "English",
@@ -178,6 +186,7 @@ export type Mutation = {
   createStudent: Student;
   deleteCenter: Center;
   deleteGroup: Group;
+  deleteInstructor: Instructor;
   deleteStudent: Student;
   editCenter: Center;
   editCenterContact: CenterContact;
@@ -186,6 +195,7 @@ export type Mutation = {
   editStudent: Student;
   editStudentContact: StudentContact;
   setActiveCenter: Center;
+  setStatusStudent: Student;
 };
 
 export type MutationAddCenterContactArgs = {
@@ -230,6 +240,7 @@ export type MutationCreateInstructorArgs = {
   areas: Array<Scalars["String"]>;
   availability: Array<AvailabilityInput>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
+  enrolled: Scalars["Boolean"];
   geographicalAvailability: Scalars["String"];
   groups: Array<Scalars["String"]>;
   knowledge?: InputMaybe<Scalars["String"]>;
@@ -242,7 +253,6 @@ export type MutationCreateInstructorArgs = {
   platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
   previousExperience: PreviousExperienceInstructor;
   programmingExperience: Scalars["Boolean"];
-  status: InstructorStatus;
   summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
   training: TrainingInstructorInput;
   urlCV?: InputMaybe<Scalars["String"]>;
@@ -271,6 +281,10 @@ export type MutationDeleteCenterArgs = {
 };
 
 export type MutationDeleteGroupArgs = {
+  id: Scalars["String"];
+};
+
+export type MutationDeleteInstructorArgs = {
   id: Scalars["String"];
 };
 
@@ -315,6 +329,7 @@ export type MutationEditInstructorArgs = {
   areas?: InputMaybe<Array<Scalars["String"]>>;
   availability?: InputMaybe<Array<AvailabilityInput>>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
+  enrolled?: InputMaybe<Scalars["Boolean"]>;
   geographicalAvailability?: InputMaybe<Scalars["String"]>;
   groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
@@ -328,7 +343,6 @@ export type MutationEditInstructorArgs = {
   platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
   previousExperience?: InputMaybe<PreviousExperienceInstructor>;
   programmingExperience?: InputMaybe<Scalars["Boolean"]>;
-  status?: InputMaybe<InstructorStatus>;
   summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
   training?: InputMaybe<TrainingInstructorInput>;
   urlCV?: InputMaybe<Scalars["String"]>;
@@ -363,6 +377,11 @@ export type MutationEditStudentContactArgs = {
 
 export type MutationSetActiveCenterArgs = {
   active: Scalars["Boolean"];
+  id: Scalars["String"];
+};
+
+export type MutationSetStatusStudentArgs = {
+  enrolled: Scalars["Boolean"];
   id: Scalars["String"];
 };
 
@@ -444,9 +463,9 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: "Query";
   checkCorporateEmail: Scalars["String"];
-  getCenter: Center;
+  getCenter: CenterInfo;
   getCenters: PaginatedCenters;
-  getGroup: Group;
+  getGroup: GroupInfo;
   getGroups: PaginatedGroups;
   getInstructor: Instructor;
   getInstructors: PaginatedInstructors;
@@ -508,13 +527,14 @@ export type QueryGetStudentsArgs = {
 
 export type Student = {
   __typename?: "Student";
-  activeGroup: Scalars["Boolean"];
+  active: Scalars["Boolean"];
   allergies?: Maybe<Scalars["Boolean"]>;
   birthDate?: Maybe<Scalars["String"]>;
   collectionPermit?: Maybe<Scalars["String"]>;
   contacts?: Maybe<Array<StudentContact>>;
   course: Scalars["String"];
   descriptionAllergy?: Maybe<Scalars["String"]>;
+  enrolled: Scalars["Boolean"];
   goesAlone?: Maybe<Scalars["Boolean"]>;
   groups: Array<Group>;
   id: Scalars["ID"];
@@ -524,7 +544,6 @@ export type Student = {
   oldStudent?: Maybe<Scalars["Boolean"]>;
   registrationDate?: Maybe<Scalars["String"]>;
   signedMandate?: Maybe<Scalars["Boolean"]>;
-  status: StudentStatus;
 };
 
 export type StudentContact = {
@@ -541,11 +560,6 @@ export type StudentContactInput = {
   phone: Scalars["String"];
   send_info: Scalars["Boolean"];
 };
-
-export enum StudentStatus {
-  Active = "ACTIVE",
-  Withdrawn = "WITHDRAWN",
-}
 
 export type Timetable = {
   __typename?: "Timetable";
@@ -706,16 +720,17 @@ export type ResolversTypes = ResolversObject<{
   CenterActivityType: CenterActivityType;
   CenterContact: ResolverTypeWrapper<CenterContact>;
   CenterContactInput: CenterContactInput;
+  CenterInfo: ResolverTypeWrapper<CenterInfo>;
   CenterNature: CenterNature;
   Course: ResolverTypeWrapper<Course>;
   CourseType: CourseType;
   Days: Days;
   Group: ResolverTypeWrapper<Group>;
+  GroupInfo: ResolverTypeWrapper<GroupInfo>;
   GroupModality: GroupModality;
   GroupType: GroupType;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Instructor: ResolverTypeWrapper<Instructor>;
-  InstructorStatus: InstructorStatus;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Languages: Languages;
   Mutation: ResolverTypeWrapper<{}>;
@@ -733,7 +748,6 @@ export type ResolversTypes = ResolversObject<{
   Student: ResolverTypeWrapper<Student>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
   StudentContactInput: StudentContactInput;
-  StudentStatus: StudentStatus;
   Timetable: ResolverTypeWrapper<Timetable>;
   TimetableInput: TimetableInput;
   TypeVehicleInstructor: TypeVehicleInstructor;
@@ -751,8 +765,10 @@ export type ResolversParentTypes = ResolversObject<{
   Center: Center;
   CenterContact: CenterContact;
   CenterContactInput: CenterContactInput;
+  CenterInfo: CenterInfo;
   Course: Course;
   Group: Group;
+  GroupInfo: GroupInfo;
   ID: Scalars["ID"];
   Instructor: Instructor;
   Int: Scalars["Int"];
@@ -829,6 +845,17 @@ export type CenterContactResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type CenterInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["CenterInfo"] =
+    ResolversParentTypes["CenterInfo"],
+> = ResolversObject<{
+  center?: Resolver<ResolversTypes["Center"], ParentType, ContextType>;
+  totalGroups?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  totalStudents?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type CourseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Course"] =
@@ -844,7 +871,7 @@ export type GroupResolvers<
   ParentType extends ResolversParentTypes["Group"] =
     ResolversParentTypes["Group"],
 > = ResolversObject<{
-  activeCenter?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  active?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   center?: Resolver<Maybe<ResolversTypes["Center"]>, ParentType, ContextType>;
   course?: Resolver<ResolversTypes["Course"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -872,12 +899,22 @@ export type GroupResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GroupInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["GroupInfo"] =
+    ResolversParentTypes["GroupInfo"],
+> = ResolversObject<{
+  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
+  totalStudents?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type InstructorResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Instructor"] =
     ResolversParentTypes["Instructor"],
 > = ResolversObject<{
-  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  active?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   areas?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
   availability?: Resolver<
     Array<ResolversTypes["Availability"]>,
@@ -889,6 +926,7 @@ export type InstructorResolvers<
     ParentType,
     ContextType
   >;
+  enrolled?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   geographicalAvailability?: Resolver<
     ResolversTypes["String"],
     ParentType,
@@ -931,11 +969,6 @@ export type InstructorResolvers<
   >;
   programmingExperience?: Resolver<
     ResolversTypes["Boolean"],
-    ParentType,
-    ContextType
-  >;
-  status?: Resolver<
-    ResolversTypes["InstructorStatus"],
     ParentType,
     ContextType
   >;
@@ -1007,12 +1040,12 @@ export type MutationResolvers<
       MutationCreateInstructorArgs,
       | "areas"
       | "availability"
+      | "enrolled"
       | "geographicalAvailability"
       | "groups"
       | "name"
       | "previousExperience"
       | "programmingExperience"
-      | "status"
       | "training"
       | "vehicle"
     >
@@ -1034,6 +1067,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationDeleteGroupArgs, "id">
+  >;
+  deleteInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteInstructorArgs, "id">
   >;
   deleteStudent?: Resolver<
     ResolversTypes["Student"],
@@ -1082,6 +1121,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSetActiveCenterArgs, "active" | "id">
+  >;
+  setStatusStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSetStatusStudentArgs, "enrolled" | "id">
   >;
 }>;
 
@@ -1154,7 +1199,7 @@ export type QueryResolvers<
     RequireFields<QueryCheckCorporateEmailArgs, "email">
   >;
   getCenter?: Resolver<
-    ResolversTypes["Center"],
+    ResolversTypes["CenterInfo"],
     ParentType,
     ContextType,
     RequireFields<QueryGetCenterArgs, "id">
@@ -1166,7 +1211,7 @@ export type QueryResolvers<
     Partial<QueryGetCentersArgs>
   >;
   getGroup?: Resolver<
-    ResolversTypes["Group"],
+    ResolversTypes["GroupInfo"],
     ParentType,
     ContextType,
     RequireFields<QueryGetGroupArgs, "id">
@@ -1208,7 +1253,7 @@ export type StudentResolvers<
   ParentType extends ResolversParentTypes["Student"] =
     ResolversParentTypes["Student"],
 > = ResolversObject<{
-  activeGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  active?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   allergies?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,
@@ -1235,6 +1280,7 @@ export type StudentResolvers<
     ParentType,
     ContextType
   >;
+  enrolled?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   goesAlone?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,
@@ -1264,7 +1310,6 @@ export type StudentResolvers<
     ParentType,
     ContextType
   >;
-  status?: Resolver<ResolversTypes["StudentStatus"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1314,8 +1359,10 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Availability?: AvailabilityResolvers<ContextType>;
   Center?: CenterResolvers<ContextType>;
   CenterContact?: CenterContactResolvers<ContextType>;
+  CenterInfo?: CenterInfoResolvers<ContextType>;
   Course?: CourseResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
+  GroupInfo?: GroupInfoResolvers<ContextType>;
   Instructor?: InstructorResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Number?: GraphQLScalarType;

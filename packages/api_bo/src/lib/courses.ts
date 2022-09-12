@@ -84,3 +84,35 @@ export const removeCourse = async (
     throw new Error("500 " + error);
   }
 };
+
+export const updateCourses = async (
+  groups: GroupModel[],
+  DBGroups: Collection<GroupModel>,
+  DBStudents: Collection<StudentModel>,
+): Promise<void> => {
+  try {
+    await Promise.all(groups.map(async (group) => {
+      const EPO: string[] = [];
+      const ESO: string[] = [];
+      let students = await DBStudents.distinct("course", {
+        _id: { $in: group.students },
+        enrolled: true,
+        active: true,
+      }) as string[];
+      students = [...new Set(students)];
+      students.forEach((course) => {
+        if ((/.*EPO$/).test(course)) {
+          EPO.push(course);
+        } else if ((/.*ESO$/).test(course)) {
+          ESO.push(course);
+        }
+      });
+      await DBGroups.updateOne(
+        { _id: group._id },
+        { $set: { course: { EPO: EPO, ESO: ESO } } },
+      );
+    }));
+  } catch (error) {
+    throw new Error("500 " + error);
+  }
+};

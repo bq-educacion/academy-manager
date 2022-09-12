@@ -163,13 +163,14 @@ export const groups = {
       _parent: unknown,
       args: QueryGetGroupArgs,
       ctx: Context,
-    ): Promise<GroupModel> => {
+    ): Promise<{ group: GroupModel; totalStudents: number }> => {
       try {
         const group = await groupCollection(ctx.db).findById(args.id);
         if (!group) {
           throw new Error("400, Group not found");
         }
-        return group;
+
+        return { group, totalStudents: group.students.length };
       } catch (error) {
         throw new Error("500, " + error);
       }
@@ -235,7 +236,7 @@ export const groups = {
           ...args,
           id_group,
           timetable,
-          activeCenter: centerExists.active,
+          active: centerExists.active,
           center,
           course,
           instructors: instructors || [],
@@ -326,7 +327,7 @@ export const groups = {
           throw new Error("404, Group not found");
         }
 
-        // if students are not in other groups, activeGroup = false
+        // if students are not in other groups, active = false
         setActiveToFalse(
           deletedGroup.students,
           groupCollection(ctx.db),
@@ -334,7 +335,7 @@ export const groups = {
           studentCollection(ctx.db),
         );
 
-        // if instructors are not in other groups, activeGroup = false
+        // if instructors are not in other groups, active = false
         setActiveToFalse(
           deletedGroup.instructors,
           groupCollection(ctx.db),

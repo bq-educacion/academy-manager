@@ -4,6 +4,7 @@ import { studentCollection, StudentModel } from "../models/StudentModel.ts";
 
 import {
   MutationDeleteStudentArgs,
+  MutationSetStatusStudentArgs,
   PaginatedStudents,
   QueryGetStudentArgs,
   QueryGetStudentsArgs,
@@ -16,12 +17,11 @@ import {
   MutationEditStudentArgs,
   MutationEditStudentContactArgs,
   StudentContact,
-  StudentStatus,
 } from "../types.ts";
 import { ObjectId } from "objectId";
 import { validDate } from "../lib/validDate.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
-import { addCourse, removeCourse } from "../lib/courses.ts";
+import { addCourse, removeCourse, updateCourses } from "../lib/courses.ts";
 import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
 
 export const students = {
@@ -150,8 +150,8 @@ export const students = {
 
         let newStudent = {
           ...args,
-          status: StudentStatus.Active,
-          activeGroup: false,
+          enrolled: true,
+          active: false,
         };
 
         if (args.birthDate) {
@@ -174,7 +174,7 @@ export const students = {
 
         newStudent = {
           ...newStudent,
-          activeGroup: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups),
         };
 
         if (args.contacts) {
@@ -306,7 +306,7 @@ export const students = {
 
           updateStudent = {
             ...updateStudent,
-            activeGroup: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups),
           };
         }
 
@@ -440,6 +440,70 @@ export const students = {
         await studentCollection(ctx.db).deleteOne({
           _id: new ObjectId(args.id),
         });
+
+        return student;
+      } catch (error) {
+        throw new Error("500, " + error);
+      }
+    },
+
+    setStatusStudent: async (
+      _parent: unknown,
+      args: MutationSetStatusStudentArgs,
+      ctx: Context,
+    ): Promise<StudentModel | undefined> => {
+      try {
+        checkNotNull(args);
+        let student: StudentModel | undefined = undefined;
+
+        //if enrolled = false, we will only keep the center, group, course, registration date, name and surname.
+        if (!args.enrolled) {
+          student = await studentCollection(ctx.db).findAndModify(
+            { _id: new ObjectId(args.id) },
+            {
+              update: {
+                $set: {
+                  enrolled: args.enrolled,
+                  birthDate: null,
+                  allergies: null,
+                  descriptionAllergy: null,
+                  oldStudent: null,
+                  signedMandate: null,
+                  imageAuthorisation: null,
+                  collectionPermit: null,
+                  goesAlone: null,
+                  notes: null,
+                  contacts: [],
+                },
+              },
+              new: true,
+            },
+          ) as StudentModel;
+          if (!student) {
+            throw new Error("404, Student not found");
+          }
+        } else if (args.enrolled) {
+          student = await studentCollection(ctx.db).findAndModify(
+            { _id: new ObjectId(args.id) },
+            {
+              update: { $set: { enrolled: args.enrolled } },
+              new: true,
+            },
+          ) as StudentModel;
+          if (!student) {
+            throw new Error("404, Student not found");
+          }
+        }
+
+        // update courses
+        const groups = await groupCollection(ctx.db).find({
+          students: new ObjectId(args.id),
+        }).toArray();
+        updateCourses(
+          groups,
+          groupCollection(ctx.db),
+          studentCollection(ctx.db),
+        );
 
         return student;
       } catch (error) {
