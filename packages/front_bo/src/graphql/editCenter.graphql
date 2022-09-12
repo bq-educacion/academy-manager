@@ -1,0 +1,29 @@
+mutation EditCenter(
+  $editCenterId: String!
+  $name: String
+  $address: String
+  $city: String
+  $phone: String
+  $email: String
+  $type: [CenterActivityType!]
+  $nature: CenterNature
+  $languages: [Languages!]
+  $contacts: [CenterContactInput!]
+  $notes: String
+) {
+  editCenter(
+    id: $editCenterId
+    name: $name
+    address: $address
+    city: $city
+    phone: $phone
+    email: $email
+    type: $type
+    nature: $nature
+    languages: $languages
+    contacts: $contacts
+    notes: $notes
+  ) {
+    id
+  }
+}

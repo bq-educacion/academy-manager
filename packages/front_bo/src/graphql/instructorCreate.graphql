@@ -23,6 +23,7 @@ mutation CreateInstructor(
     name: $name
     corporateEmail: $corporateEmail
     personalEmail: $personalEmail
+    phone: $phone
     enrolled: $enrolled
     training: $training
     previousExperience: $previousExperience

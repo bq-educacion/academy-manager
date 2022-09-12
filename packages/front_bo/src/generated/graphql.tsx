@@ -645,6 +645,37 @@ export type GetCentersFQueryVariables = Exact<{
 
 export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<Languages>, city: string, nature: CenterNature, type: Array<CenterActivityType> }> } };
 
+export type DeleteCenterMutationVariables = Exact<{
+  deleteCenterId: Scalars['String'];
+}>;
+
+
+export type DeleteCenterMutation = { __typename?: 'Mutation', deleteCenter: { __typename?: 'Center', id: string } };
+
+export type EditCenterMutationVariables = Exact<{
+  editCenterId: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
+  address?: InputMaybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Array<CenterActivityType> | CenterActivityType>;
+  nature?: InputMaybe<CenterNature>;
+  languages?: InputMaybe<Array<Languages> | Languages>;
+  contacts?: InputMaybe<Array<CenterContactInput> | CenterContactInput>;
+  notes?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type EditCenterMutation = { __typename?: 'Mutation', editCenter: { __typename?: 'Center', id: string } };
+
+export type GetCenterQueryVariables = Exact<{
+  getCenterId: Scalars['String'];
+}>;
+
+
+export type GetCenterQuery = { __typename?: 'Query', getCenter: { __typename?: 'CenterInfo', totalStudents: any, totalGroups: any, center: { __typename?: 'Center', id: string, active: boolean, type: Array<CenterActivityType>, nature: CenterNature, languages: Array<Languages>, name: string, address: string, city: string, phone?: string | null, email?: string | null, notes?: string | null, createdAt: string, contacts?: Array<{ __typename?: 'CenterContact', name: string, email: string, phone: string }> | null } } };
+
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
   name: Scalars['String'];
@@ -857,6 +888,149 @@ export function useGetCentersFLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCentersFQueryHookResult = ReturnType<typeof useGetCentersFQuery>;
 export type GetCentersFLazyQueryHookResult = ReturnType<typeof useGetCentersFLazyQuery>;
 export type GetCentersFQueryResult = Apollo.QueryResult<GetCentersFQuery, GetCentersFQueryVariables>;
+export const DeleteCenterDocument = gql`
+    mutation DeleteCenter($deleteCenterId: String!) {
+  deleteCenter(id: $deleteCenterId) {
+    id
+  }
+}
+    `;
+export type DeleteCenterMutationFn = Apollo.MutationFunction<DeleteCenterMutation, DeleteCenterMutationVariables>;
+
+/**
+ * __useDeleteCenterMutation__
+ *
+ * To run a mutation, you first call `useDeleteCenterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCenterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCenterMutation, { data, loading, error }] = useDeleteCenterMutation({
+ *   variables: {
+ *      deleteCenterId: // value for 'deleteCenterId'
+ *   },
+ * });
+ */
+export function useDeleteCenterMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCenterMutation, DeleteCenterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCenterMutation, DeleteCenterMutationVariables>(DeleteCenterDocument, options);
+      }
+export type DeleteCenterMutationHookResult = ReturnType<typeof useDeleteCenterMutation>;
+export type DeleteCenterMutationResult = Apollo.MutationResult<DeleteCenterMutation>;
+export type DeleteCenterMutationOptions = Apollo.BaseMutationOptions<DeleteCenterMutation, DeleteCenterMutationVariables>;
+export const EditCenterDocument = gql`
+    mutation EditCenter($editCenterId: String!, $name: String, $address: String, $city: String, $phone: String, $email: String, $type: [CenterActivityType!], $nature: CenterNature, $languages: [Languages!], $contacts: [CenterContactInput!], $notes: String) {
+  editCenter(
+    id: $editCenterId
+    name: $name
+    address: $address
+    city: $city
+    phone: $phone
+    email: $email
+    type: $type
+    nature: $nature
+    languages: $languages
+    contacts: $contacts
+    notes: $notes
+  ) {
+    id
+  }
+}
+    `;
+export type EditCenterMutationFn = Apollo.MutationFunction<EditCenterMutation, EditCenterMutationVariables>;
+
+/**
+ * __useEditCenterMutation__
+ *
+ * To run a mutation, you first call `useEditCenterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditCenterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editCenterMutation, { data, loading, error }] = useEditCenterMutation({
+ *   variables: {
+ *      editCenterId: // value for 'editCenterId'
+ *      name: // value for 'name'
+ *      address: // value for 'address'
+ *      city: // value for 'city'
+ *      phone: // value for 'phone'
+ *      email: // value for 'email'
+ *      type: // value for 'type'
+ *      nature: // value for 'nature'
+ *      languages: // value for 'languages'
+ *      contacts: // value for 'contacts'
+ *      notes: // value for 'notes'
+ *   },
+ * });
+ */
+export function useEditCenterMutation(baseOptions?: Apollo.MutationHookOptions<EditCenterMutation, EditCenterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditCenterMutation, EditCenterMutationVariables>(EditCenterDocument, options);
+      }
+export type EditCenterMutationHookResult = ReturnType<typeof useEditCenterMutation>;
+export type EditCenterMutationResult = Apollo.MutationResult<EditCenterMutation>;
+export type EditCenterMutationOptions = Apollo.BaseMutationOptions<EditCenterMutation, EditCenterMutationVariables>;
+export const GetCenterDocument = gql`
+    query GetCenter($getCenterId: String!) {
+  getCenter(id: $getCenterId) {
+    center {
+      id
+      active
+      type
+      nature
+      languages
+      name
+      address
+      city
+      phone
+      email
+      contacts {
+        name
+        email
+        phone
+      }
+      notes
+      createdAt
+    }
+    totalStudents
+    totalGroups
+  }
+}
+    `;
+
+/**
+ * __useGetCenterQuery__
+ *
+ * To run a query within a React component, call `useGetCenterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCenterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCenterQuery({
+ *   variables: {
+ *      getCenterId: // value for 'getCenterId'
+ *   },
+ * });
+ */
+export function useGetCenterQuery(baseOptions: Apollo.QueryHookOptions<GetCenterQuery, GetCenterQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCenterQuery, GetCenterQueryVariables>(GetCenterDocument, options);
+      }
+export function useGetCenterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCenterQuery, GetCenterQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCenterQuery, GetCenterQueryVariables>(GetCenterDocument, options);
+        }
+export type GetCenterQueryHookResult = ReturnType<typeof useGetCenterQuery>;
+export type GetCenterLazyQueryHookResult = ReturnType<typeof useGetCenterLazyQuery>;
+export type GetCenterQueryResult = Apollo.QueryResult<GetCenterQuery, GetCenterQueryVariables>;
 export const CreateGroupDocument = gql`
     mutation CreateGroup($idCenter: String!, $name: String!, $modality: GroupModality!, $type: GroupType!, $timetable: [TimetableInput!]!, $instructors: [String!]) {
   createGroup(
@@ -974,6 +1148,7 @@ export const CreateInstructorDocument = gql`
     name: $name
     corporateEmail: $corporateEmail
     personalEmail: $personalEmail
+    phone: $phone
     enrolled: $enrolled
     training: $training
     previousExperience: $previousExperience
