@@ -54,6 +54,7 @@ const Background = styled.div`
 
 const ModalContent = styled.div`
   padding: 30px 45px;
+  overflow: visible;
 `;
 
 const ModalWrapper = styled.div`

@@ -6,12 +6,21 @@ import Icon from "./Icon";
 const CheckBox: FC<{
   option: boolean;
   setOption: (option: boolean) => void;
-}> = ({ setOption, option }) => {
+  error?: boolean;
+  setError?: (error: boolean) => void;
+}> = ({ setOption, option, error, setError }) => {
   const handleClick = () => {
     setOption(!option);
+    {
+      setError && setError(false);
+    }
   };
   return (
-    <CheckBoxWrapper clicked={option} onClick={handleClick}>
+    <CheckBoxWrapper
+      error={error ? true : false}
+      clicked={option}
+      onClick={handleClick}
+    >
       <Icon name="tick" />
     </CheckBoxWrapper>
   );
@@ -19,7 +28,7 @@ const CheckBox: FC<{
 
 export default CheckBox;
 
-const CheckBoxWrapper = styled.div<{ clicked: boolean }>`
+const CheckBoxWrapper = styled.div<{ clicked: boolean; error?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,8 +36,12 @@ const CheckBoxWrapper = styled.div<{ clicked: boolean }>`
   width: 20px;
   cursor: pointer;
   border-radius: 3px;
-  border: solid 1px ${colors.colors.gray5};
-  background-color: ${colors.colors.white};
+  ${(props) =>
+    props.error
+      ? `border: solid 1px ${colors.colors.red80};`
+      : `border: solid 1px ${colors.colors.gray5};
+  background-color: ${colors.colors.white};`}
+
   ${(props) =>
     props.clicked &&
     `   

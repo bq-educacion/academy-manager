@@ -6,6 +6,7 @@ import {
   DropDownUnique,
   FillIn,
   FillInSectioned,
+  Icon,
   InputSuper,
   OptionsBox,
   OptionsBoxOrdered,
@@ -15,22 +16,19 @@ import {
 } from "@academy-manager/ui";
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Platforms, schedule, Tools, zones } from "../config";
 import {
   AvailabilityInput,
   Days,
-  InstructorStatus,
   Languages,
-  OrderFilterGroup,
   PreviousExperienceInstructor,
   SummerAvailabilityInstructor,
   TrainingInstructorInput,
   TypeVehicleInstructor,
   useCreateInstructorMutation,
-  useGetGroupsQuery,
-  useSimpleCentersNameQuery,
 } from "../generated/graphql";
+import AddCenter from "./AddCenter";
 
 const CreateInstructor: FC<{
   changeTitle: (title: string) => void;
@@ -46,7 +44,7 @@ const CreateInstructor: FC<{
   const [emailPro, setEmailPro] = useState<string>("");
   const [emailPersonal, setEmailPersonal] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [state, setState] = useState<InstructorStatus>();
+  const [state, setState] = useState<boolean>();
   const [education, setEducation] = useState<TrainingInstructorInput>();
   const [experience, setExperience] = useState<PreviousExperienceInstructor>();
   const [programming, setProgramming] = useState<boolean>();
@@ -80,25 +78,13 @@ const CreateInstructor: FC<{
   const [LocalZones, setLocalZones] = useState<string[]>([]);
   const [orderName, setOrderName] = useState<boolean>(false);
   const [especifyZones, setEspecifyZones] = useState<string[]>([]);
-  const [center, setCenter] = useState<string>("");
+  const [centers, setCenters] = useState<string[]>([""]);
   const [groups, setGroups] = useState<string[]>([]);
   const [summer, setSummer] = useState<SummerAvailabilityInstructor>();
+  const [errorCenters, setErrorCenters] = useState<boolean>(false);
+  const [errorGroups, setErrorGroups] = useState<boolean>(false);
 
   //Mutations
-  const { data: CentersData } = useSimpleCentersNameQuery({
-    variables: {},
-    fetchPolicy: "network-only",
-  });
-  const { data: GroupsData } = useGetGroupsQuery({
-    variables: {
-      searchText: center,
-      orderFilter: OrderFilterGroup.IdGroup,
-      order: 1,
-      page: 1,
-      pageSize: 20,
-    },
-  });
-
   const [createInstructorMutation, { error }] = useCreateInstructorMutation();
 
   if (error) {
@@ -155,8 +141,23 @@ const CreateInstructor: FC<{
     changeTitle(t("pages.instructors.modal-create.title"));
   }
 
+  const [nameError, setNameError] = useState<boolean>(false);
+  const [validEmail, setvalidEmail] = useState<boolean>(false);
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
+  const [ValidProEmail, setValidProEmail] = useState<boolean>(false);
+  const [errorProEmail, setErrorProEmail] = useState<boolean>(false);
+  const [errorPhone, setErrorPhone] = useState<boolean>(false);
+  const [errorState, setErrorState] = useState<boolean>(false);
+
+  const [errorEducation, setErrorEducation] = useState<boolean>(false);
+  const [errorExperience, setErrorExperience] = useState<boolean>(false);
+  const [errorProgramming, setErrorProgramming] = useState<boolean>(false);
+  const [errorCV, setErrorCV] = useState<boolean>(false);
+
+  const FormRef = useRef<HTMLDivElement>(null);
+
   return (
-    <Form>
+    <Form ref={FormRef}>
       {step !== 2 && step !== 4 && step !== 5 && step !== 3 && (
         <styles.P4>{t(`components.create-instructor.${step}.title`)}</styles.P4>
       )}
@@ -168,16 +169,100 @@ const CreateInstructor: FC<{
               {t("components.create-instructor.1.name")}
             </styles.BoldP4>
             <InputSuper
+              namePattern
+              error={nameError}
+              setError={setNameError}
               input={name}
               setInput={setName}
               placeholder={t("components.create-instructor.1.name-placeholder")}
             />
+            {nameError && <styles.P0Error>{t("general.empty")}</styles.P0Error>}
           </FillIn>
+          <FillInSectioned>
+            <FillIn width="254px">
+              <styles.BoldP4>
+                {t("components.create-instructor.1.state")}
+              </styles.BoldP4>
+              <DropDownUnique
+                error={errorState}
+                setError={setErrorState}
+                options={[
+                  {
+                    key: "active",
+                    label: t(`components.create-instructor.1.state-active`),
+                  },
+                  {
+                    key: "inactive",
+                    label: t(`components.create-instructor.1.state-inactive`),
+                  },
+                ]}
+                setSelected={(elem) => {
+                  if (elem === "active") {
+                    setState(true);
+                  }
+                  if (elem === "inactive") {
+                    setState(false);
+                  }
+                }}
+                selected={
+                  state === undefined
+                    ? undefined
+                    : state
+                    ? "active"
+                    : "inactive"
+                }
+                width="254px"
+              />
+              {errorState && (
+                <styles.P0Error>{t("general.empty")}</styles.P0Error>
+              )}
+            </FillIn>
+            <FillIn width="120px">
+              <styles.BoldP4>
+                {t("components.create-instructor.1.phone")}
+              </styles.BoldP4>
+              <InputSuper
+                error={errorPhone}
+                setError={setErrorPhone}
+                telPattern
+                input={phone}
+                setInput={setPhone}
+                placeholder={t("components.create-instructor.1.phone")}
+              />
+              {errorPhone && (
+                <styles.P0Error>{t("general.decline-phone")}</styles.P0Error>
+              )}
+            </FillIn>
+          </FillInSectioned>
+          {state && (
+            <FillIn>
+              <styles.BoldP4>
+                {t("components.create-instructor.1.email-personal")}
+              </styles.BoldP4>
+              <InputSuper
+                type="email"
+                error={errorEmail}
+                setError={setErrorEmail}
+                setValid={setvalidEmail}
+                input={emailPersonal}
+                setInput={setEmailPersonal}
+                placeholder={t(
+                  "components.create-instructor.1.email-personal-placeholder"
+                )}
+              />
+              {errorEmail && (
+                <styles.P0Error>{t(`general.decline-email`)}</styles.P0Error>
+              )}
+            </FillIn>
+          )}
           <FillIn>
             <styles.BoldP4>
               {t("components.create-instructor.1.email-pro")}
             </styles.BoldP4>
             <InputSuper
+              error={errorProEmail}
+              setError={setErrorProEmail}
+              setValid={setValidProEmail}
               type="email"
               input={emailPro}
               setInput={setEmailPro}
@@ -185,53 +270,10 @@ const CreateInstructor: FC<{
                 "components.create-instructor.1.email-pro-placeholder"
               )}
             />
+            {errorProEmail && (
+              <styles.P0Error>{t(`general.decline-email`)}</styles.P0Error>
+            )}
           </FillIn>
-          <FillIn>
-            <styles.BoldP4>
-              {t("components.create-instructor.1.email-personal")}
-            </styles.BoldP4>
-            <InputSuper
-              type="email"
-              input={emailPersonal}
-              setInput={setEmailPersonal}
-              placeholder={t(
-                "components.create-instructor.1.email-personal-placeholder"
-              )}
-            />
-          </FillIn>
-          <FillInSectioned>
-            <FillIn width="120px">
-              <styles.BoldP4>
-                {t("components.create-instructor.1.phone")}
-              </styles.BoldP4>
-              <InputSuper
-                telPattern
-                input={phone}
-                setInput={setPhone}
-                placeholder={t("components.create-instructor.1.phone")}
-              />
-            </FillIn>
-            <FillIn width="254px">
-              <styles.BoldP4>
-                {t("components.create-instructor.1.state")}
-              </styles.BoldP4>
-              <DropDownUnique
-                options={Object.values(InstructorStatus).map((elem) => {
-                  return {
-                    key: elem,
-                    label: t(
-                      `components.create-instructor.1.state-${elem.toLowerCase()}`
-                    ),
-                  };
-                })}
-                setSelected={(elem) => {
-                  setState(elem as InstructorStatus);
-                }}
-                selected={state}
-                width="254px"
-              />
-            </FillIn>
-          </FillInSectioned>
           <NavDiv>
             <Button
               secondary
@@ -240,7 +282,41 @@ const CreateInstructor: FC<{
             />
             <Button
               main
-              onClick={() => setStep(2)}
+              onClick={() => {
+                if (emailPersonal.length > 0 && !validEmail) {
+                  setErrorEmail(true);
+                }
+                if (emailPro.length > 0 && !ValidProEmail) {
+                  setErrorProEmail(true);
+                }
+                if (name.length === 0) {
+                  setNameError(true);
+                }
+                if (phone.length > 0 && !phone.includes("+")) {
+                  {
+                    phone.length !== 9 && setErrorPhone(true);
+                  }
+                }
+                if (phone.length > 0 && phone.includes("+")) {
+                  {
+                    phone.length !== 12 && setErrorPhone(true);
+                  }
+                }
+                if (state === undefined) {
+                  setErrorState(true);
+                }
+                if (name.length > 0 && state !== undefined) {
+                  if (
+                    (emailPersonal.length === 0 || validEmail) &&
+                    (emailPro.length === 0 || ValidProEmail) &&
+                    (phone.length === 0 ||
+                      phone.length === 9 ||
+                      phone.length === 12)
+                  ) {
+                    setStep(2);
+                  }
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDiv>
@@ -248,7 +324,11 @@ const CreateInstructor: FC<{
       )}
       {step === 2 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
@@ -258,7 +338,8 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <CheckBox
-                  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                  error={errorEducation}
+                  setError={setErrorEducation}
                   option={education?.careerInEducation ? true : false}
                   setOption={() => {
                     setEducation({
@@ -273,6 +354,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <CheckBox
+                  error={errorEducation}
+                  setError={setErrorEducation}
                   option={education?.technicalCareer ? true : false}
                   setOption={() => {
                     setEducation({
@@ -285,6 +368,9 @@ const CreateInstructor: FC<{
                   {t(`components.create-instructor.2.education-2`)}
                 </styles.P4>
               </CheckOption>
+              {errorEducation && (
+                <styles.P0Error>{t("general.decline-checkbox")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <styles.BoldP4>
@@ -292,6 +378,8 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <RadioButton
+                  error={errorExperience}
+                  setError={setErrorExperience}
                   option={experience === PreviousExperienceInstructor.Yes}
                   setOption={() => {
                     {
@@ -305,6 +393,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <RadioButton
+                  error={errorExperience}
+                  setError={setErrorExperience}
                   option={experience === PreviousExperienceInstructor.No}
                   setOption={() => {
                     {
@@ -318,6 +408,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <RadioButton
+                  error={errorExperience}
+                  setError={setErrorExperience}
                   option={
                     experience === PreviousExperienceInstructor.NoButInterested
                   }
@@ -336,6 +428,9 @@ const CreateInstructor: FC<{
                   {t(`components.create-instructor.2.experience-noBut`)}
                 </styles.P4>
               </CheckOption>
+              {errorExperience && (
+                <styles.P0Error>{t("general.decline-radio")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <styles.BoldP4>
@@ -343,6 +438,8 @@ const CreateInstructor: FC<{
               </styles.BoldP4>
               <CheckOption>
                 <RadioButton
+                  error={errorProgramming}
+                  setError={setErrorProgramming}
                   option={programming ? true : false}
                   setOption={() => {
                     {
@@ -356,6 +453,8 @@ const CreateInstructor: FC<{
               </CheckOption>
               <CheckOption>
                 <RadioButton
+                  error={errorProgramming}
+                  setError={setErrorProgramming}
                   option={
                     programming === undefined
                       ? false
@@ -373,12 +472,16 @@ const CreateInstructor: FC<{
                 />
                 <styles.P4>{t(`components.create-instructor.2.no`)}</styles.P4>
               </CheckOption>
+              {errorProgramming && (
+                <styles.P0Error>{t("general.decline-radio")}</styles.P0Error>
+              )}
             </FillIn>
             <FillIn>
               <styles.BoldP4>
                 {t("components.create-instructor.2.knowledge")}
               </styles.BoldP4>
               <InputSuper
+                textArea
                 height="60px"
                 placeholder={t(
                   "components.create-instructor.2.knowledge-placeholder"
@@ -392,12 +495,22 @@ const CreateInstructor: FC<{
                 {t("components.create-instructor.2.cv-link")}
               </styles.BoldP4>
               <InputSuper
+                error={errorCV}
+                setError={setErrorCV}
                 placeholder={t(
                   "components.create-instructor.2.cv-link-placeholder"
                 )}
                 input={cvUrl}
                 setInput={setCvUrl}
               />
+              {errorCV && (
+                <styles.P0Error>{t("general.decline-link")}</styles.P0Error>
+              )}
+              {cvUrl.length > 0 && (
+                <a target="_blank" href={cvUrl}>
+                  {t("components.create-instructor.2.linkCV")}
+                </a>
+              )}
             </FillIn>
             <FillIn>
               <OptionsBox
@@ -417,9 +530,12 @@ const CreateInstructor: FC<{
             </FillIn>
             <FillIn>
               <OptionsBox
+                notOther
                 options={Object.values(Languages).map((language) => ({
                   key: language,
-                  label: t(`pages.centers.languages.${language.toLowerCase()}`),
+                  label: t(
+                    `pages.centers.languages.${language.toLowerCase()}-label`
+                  ),
                 }))}
                 title={t("components.create-instructor.2.languages")}
                 results={languages}
@@ -435,7 +551,45 @@ const CreateInstructor: FC<{
             />
             <Button
               main
-              onClick={() => setStep(3)}
+              onClick={() => {
+                if (
+                  education === undefined ||
+                  (education.careerInEducation === false &&
+                    education.technicalCareer === false)
+                ) {
+                  setErrorEducation(true);
+                }
+                if (experience === undefined) {
+                  setErrorExperience(true);
+                }
+                if (programming === undefined) {
+                  setErrorProgramming(true);
+                }
+                if (cvUrl.length > 0) {
+                  const urlRegex =
+                    /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+                  if (!urlRegex.test(cvUrl)) {
+                    setErrorCV(true);
+                  }
+                }
+                if (
+                  education !== undefined &&
+                  experience !== undefined &&
+                  programming !== undefined
+                ) {
+                  if (cvUrl.length > 0) {
+                    const urlRegex =
+                      /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+                    if (!urlRegex.test(cvUrl)) {
+                      setErrorCV(true);
+                    } else {
+                      setStep(3);
+                    }
+                  } else {
+                    setStep(3);
+                  }
+                }
+              }}
               text={t("general.actions.next")}
             />
           </NavDivScroll>
@@ -443,7 +597,11 @@ const CreateInstructor: FC<{
       )}
       {step === 3 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
@@ -541,7 +699,11 @@ const CreateInstructor: FC<{
       )}
       {step === 4 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
@@ -623,7 +785,21 @@ const CreateInstructor: FC<{
                   setOrderName={setOrderName}
                   results={especifyZones}
                   setResults={setEspecifyZones}
-                  title={t("components.create-instructor.4.subtitle.zones-1")}
+                  title={
+                    <ZonesTitle>
+                      <styles.BoldP4>
+                        {t("components.create-instructor.4.subtitle.zones-1")}
+                      </styles.BoldP4>
+                      {/* TODO: Onclick call back */}
+                      <AddZone>
+                        <Icon name="add" />
+                        <Icon name="map" />
+                        <styles.BoldP4>
+                          {t("components.create-instructor.4.subtitle.zones-2")}
+                        </styles.BoldP4>
+                      </AddZone>
+                    </ZonesTitle>
+                  }
                 />
               </FillIn>
             )}
@@ -644,111 +820,153 @@ const CreateInstructor: FC<{
       )}
       {step === 5 && (
         <>
-          <ScrollDiv>
+          <ScrollDiv
+            onScroll={() => {
+              FormRef.current?.click();
+            }}
+          >
             <styles.P4>
               {t(`components.create-instructor.${step}.title`)}
             </styles.P4>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-instructor.5.subtitle.center")}
-              </styles.BoldP4>
-              <DropDownUnique
-                options={
-                  CentersData?.getCenters.data.map((elem) => {
-                    return {
-                      key: elem.name,
-                      label: elem.name,
-                    };
-                  }) || []
-                }
-                width="385px"
-                setSelected={setCenter}
-                selected={center}
-              />
-            </FillIn>
-            <FillIn>
-              <styles.BoldP4>
-                {t("components.create-instructor.5.subtitle.group")}
-              </styles.BoldP4>
-              <DropDown
-                disabled={center === ""}
-                options={
-                  center === undefined
-                    ? []
-                    : GroupsData?.getGroups.data.map((elem) => {
-                        return {
-                          key: elem.id,
-                          label: elem.name,
-                        };
-                      }) || []
-                }
-                width="385px"
-                selected={groups}
-                setSelected={setGroups}
-              />
-            </FillIn>
-          </ScrollDiv>
-          <NavDivScroll>
-            <Button
-              secondary
-              onClick={() => setStep(4)}
-              text={t("general.actions.back")}
-            />
-            <Button
-              create
+            {centers.map((center, index) => {
+              return (
+                <AddCenter
+                  errorCenter={errorCenters}
+                  errorGroups={errorGroups}
+                  setErrorCenter={setErrorCenters}
+                  setErrorGroups={setErrorGroups}
+                  key={index}
+                  center={center}
+                  centers={centers}
+                  setCenters={setCenters}
+                  groups={groups}
+                  setGroups={setGroups}
+                  setCenter={(NewCenter) => {
+                    const newCenters = [...centers];
+                    newCenters[index] = NewCenter;
+                    setCenters(newCenters);
+                  }}
+                />
+              );
+            })}
+            <AddContactButton
               onClick={() => {
-                if (
-                  name !== "" &&
-                  emailPro !== "" &&
-                  emailPersonal !== "" &&
-                  phone !== "" &&
-                  state !== undefined &&
-                  education !== undefined &&
-                  experience !== undefined &&
-                  programming !== undefined &&
-                  cvUrl !== "" &&
-                  // availability !== [] &&
-                  vehicle !== undefined &&
-                  // LocalZones !== [] &&
-                  // especifyZones !== [] &&
-                  center !== "" &&
-                  // groups !== [] &&
-                  summer !== undefined
-                ) {
-                  createInstructorMutation({
-                    variables: {
-                      name,
-                      corporateEmail: emailPro,
-                      personalEmail: emailPersonal,
-                      phone,
-                      status: state,
-                      training: education,
-                      previousExperience: experience,
-                      programmingExperience: programming,
-                      knowledge,
-                      urlCv: cvUrl,
-                      materialsExperience: tools,
-                      platformEducationExperience: platforms,
-                      languages,
-                      availability,
-                      summerAvailability: summer,
-                      vehicle,
-                      geographicalAvailability: LocalZones.join(", "),
-                      areas: especifyZones,
-                      groups,
-                    },
-                  }).then(() => {
-                    changeTitle("");
-                    refetch();
-                    setStep(6);
-                  });
-                } else {
-                  alert("Please fill in all fields");
-                }
+                setCenters([...centers, ""]);
               }}
-              text={t("general.actions.create")}
-            />
-          </NavDivScroll>
+            >
+              <Icon name="add" />
+              <Icon name="user" />
+              <styles.BoldP4>
+                {t("components.create-student.3.add-center")}
+              </styles.BoldP4>
+            </AddContactButton>
+          </ScrollDiv>
+          {centers.length > 1 && (
+            <NavDivScroll>
+              <Button
+                secondary
+                onClick={() => setStep(4)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
+                  if (centers.length === 1 && centers[0] === "") {
+                    setErrorCenters(true);
+                  }
+                  if (groups.length === 0) {
+                    setErrorGroups(true);
+                  }
+                  if (groups.length > 0) {
+                    createInstructorMutation({
+                      variables: {
+                        name,
+                        corporateEmail: emailPro,
+                        personalEmail: emailPersonal,
+                        phone: phone,
+                        enrolled: state || false,
+                        training: education || {},
+                        previousExperience:
+                          experience || PreviousExperienceInstructor.No,
+                        programmingExperience: programming || false,
+                        knowledge,
+                        urlCv: cvUrl,
+                        materialsExperience: tools,
+                        platformEducationExperience: platforms,
+                        languages,
+                        availability,
+                        summerAvailability:
+                          summer || SummerAvailabilityInstructor.No,
+                        vehicle:
+                          vehicle || TypeVehicleInstructor.PublicTransport,
+                        geographicalAvailability: LocalZones.join(", "),
+                        areas: especifyZones,
+                        groups: groups,
+                      },
+                    }).then(() => {
+                      changeTitle("");
+                      refetch();
+                      setStep(6);
+                    });
+                  }
+                }}
+                text={t("general.actions.create")}
+              />
+            </NavDivScroll>
+          )}
+          {centers.length === 1 && (
+            <NavDiv>
+              <Button
+                secondary
+                onClick={() => setStep(4)}
+                text={t("general.actions.back")}
+              />
+              <Button
+                create
+                onClick={() => {
+                  if (centers.length === 1 && centers[0] === "") {
+                    setErrorCenters(true);
+                  }
+                  if (groups.length === 0) {
+                    setErrorGroups(true);
+                  }
+                  if (groups.length > 0) {
+                    createInstructorMutation({
+                      variables: {
+                        name,
+                        corporateEmail: emailPro,
+                        personalEmail: emailPersonal,
+                        phone: phone,
+                        enrolled: state || false,
+                        training: education || {},
+                        previousExperience:
+                          experience || PreviousExperienceInstructor.No,
+                        programmingExperience: programming || false,
+                        knowledge,
+                        urlCv: cvUrl,
+                        materialsExperience: tools,
+                        platformEducationExperience: platforms,
+                        languages,
+                        availability,
+                        summerAvailability:
+                          summer || SummerAvailabilityInstructor.No,
+                        vehicle:
+                          vehicle || TypeVehicleInstructor.PublicTransport,
+                        geographicalAvailability: LocalZones.join(", "),
+                        areas: especifyZones,
+                        groups: groups,
+                      },
+                    }).then(() => {
+                      changeTitle("");
+                      refetch();
+                      setStep(6);
+                    });
+                  }
+                }}
+                text={t("general.actions.create")}
+              />
+            </NavDiv>
+          )}
         </>
       )}
       {step === 6 && (
@@ -771,6 +989,19 @@ export default CreateInstructor;
 
 const EndButton = styled(Button)`
   align-self: flex-start;
+`;
+
+const ZonesTitle = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const AddZone = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: ${colors.colors.blue80};
 `;
 
 const Form = styled.div`
@@ -824,5 +1055,18 @@ const ScrollDiv = styled.div`
   padding-bottom: 30px;
   & > p {
     margin: 30px 0;
+  }
+`;
+
+const AddContactButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: ${colors.colors.white};
+  color: ${colors.colors.blue80};
+  & > p {
+    margin-left: 5px;
   }
 `;

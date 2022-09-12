@@ -21,7 +21,7 @@ export const UserStuff: FC<{ token: string }> = () => {
             <styles.P4>Cerrar sesión</styles.P4>
           </PopoverContent>
         }
-      ></Popover>
+      />
     </UserStuffLayout>
   );
 };
