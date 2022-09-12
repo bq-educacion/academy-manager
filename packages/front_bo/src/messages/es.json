@@ -336,6 +336,9 @@
     }
   },
   "pages": {
+    "edit-group": {
+      "delete": "Eliminar grupo"
+    },
     "edit-center": {
       "delete-modal": {
         "title": "Eliminar Centro",

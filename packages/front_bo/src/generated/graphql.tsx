@@ -676,6 +676,13 @@ export type GetCenterQueryVariables = Exact<{
 
 export type GetCenterQuery = { __typename?: 'Query', getCenter: { __typename?: 'CenterInfo', totalStudents: any, totalGroups: any, center: { __typename?: 'Center', id: string, active: boolean, type: Array<CenterActivityType>, nature: CenterNature, languages: Array<Languages>, name: string, address: string, city: string, phone?: string | null, email?: string | null, notes?: string | null, createdAt: string, contacts?: Array<{ __typename?: 'CenterContact', name: string, email: string, phone: string }> | null } } };
 
+export type GetGroupQueryVariables = Exact<{
+  getGroupId: Scalars['String'];
+}>;
+
+
+export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, center?: { __typename?: 'Center', name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
+
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
   name: Scalars['String'];
@@ -1031,6 +1038,60 @@ export function useGetCenterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetCenterQueryHookResult = ReturnType<typeof useGetCenterQuery>;
 export type GetCenterLazyQueryHookResult = ReturnType<typeof useGetCenterLazyQuery>;
 export type GetCenterQueryResult = Apollo.QueryResult<GetCenterQuery, GetCenterQueryVariables>;
+export const GetGroupDocument = gql`
+    query GetGroup($getGroupId: String!) {
+  getGroup(id: $getGroupId) {
+    group {
+      center {
+        name
+      }
+      name
+      modality
+      type
+      instructors {
+        name
+      }
+      notes
+      createdAt
+      timetable {
+        id_day
+        day
+        start
+        end
+      }
+    }
+    totalStudents
+  }
+}
+    `;
+
+/**
+ * __useGetGroupQuery__
+ *
+ * To run a query within a React component, call `useGetGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupQuery({
+ *   variables: {
+ *      getGroupId: // value for 'getGroupId'
+ *   },
+ * });
+ */
+export function useGetGroupQuery(baseOptions: Apollo.QueryHookOptions<GetGroupQuery, GetGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupQuery, GetGroupQueryVariables>(GetGroupDocument, options);
+      }
+export function useGetGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupQuery, GetGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupQuery, GetGroupQueryVariables>(GetGroupDocument, options);
+        }
+export type GetGroupQueryHookResult = ReturnType<typeof useGetGroupQuery>;
+export type GetGroupLazyQueryHookResult = ReturnType<typeof useGetGroupLazyQuery>;
+export type GetGroupQueryResult = Apollo.QueryResult<GetGroupQuery, GetGroupQueryVariables>;
 export const CreateGroupDocument = gql`
     mutation CreateGroup($idCenter: String!, $name: String!, $modality: GroupModality!, $type: GroupType!, $timetable: [TimetableInput!]!, $instructors: [String!]) {
   createGroup(

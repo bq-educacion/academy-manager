@@ -23,6 +23,7 @@ import {
 } from "../../generated/graphql";
 import { useEffect, useState } from "react";
 import { ApolloError } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const GroupsPage: NextPage = () => {
   const t = useTranslate();
@@ -76,6 +77,9 @@ const GroupsPage: NextPage = () => {
   const [componentError, setComponentError] = useState<ApolloError | undefined>(
     undefined
   );
+
+  const router = useRouter();
+
   if (error || componentError) {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
@@ -168,6 +172,7 @@ const GroupsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Group> & { id: string }>
+            onClickRow={(id) => router.push(`/groups/${id}`)}
             data={tableData}
             order={order}
             onSetOrder={(order) =>
