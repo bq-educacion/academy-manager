@@ -141,7 +141,7 @@
           "friday": "Viernes",
           "saturday": "Sábado",
           "sunday": "Domingo",
-          "placeholder-start": "8:30",
+          "placeholder-start": "08:30",
           "placeholder-end": "14:30"
         }
       },
@@ -207,6 +207,7 @@
         "state-inactive": "Inactivo"
       },
       "2": {
+        "linkCV": "Ver en Drive",
         "title": "Paso 2 de 5 - Formación y experiencia",
         "education": "Formación",
         "education-1": "Carrera o formación profesional de educación",
@@ -240,7 +241,8 @@
           "vehicle-own": "Vehículo propio",
           "vehicle-public": "Transporte público",
           "zones": "Disponibilidad geográfica",
-          "zones-1": "Zonas"
+          "zones-1": "Zonas",
+          "zones-2": "Añadir zona"
         }
       },
       "5": {
@@ -256,8 +258,12 @@
     }
   },
   "general": {
+    "decline-link": "El formato del enlace es incorrecto",
+    "decline-radio": "Debes indicar una opción",
+    "decline-checkbox": "Debes indicar al menos una opción",
     "decline-date": "Fecha incorrecta",
-    "decline-email": "Formato de email incorrecto",
+    "decline-phone": "La longitud no es correcta",
+    "decline-email": "La dirección de correo electrónico incluida es errónea",
     "empty": "Este campo no puede quedar vacío",
     "no-data": "No hay datos",
     "times": {
@@ -333,7 +339,9 @@
     "centers": {
       "languages": {
         "english": "Ing",
-        "spanish": "Esp"
+        "spanish": "Esp",
+        "english-label": "Inglés",
+        "spanish-label": "Español"
       },
       "nature": {
         "private": "Privado",

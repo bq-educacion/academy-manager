@@ -20,7 +20,7 @@ query GetInstructors(
       id
       name
       geographicalAvailability
-      status
+      enrolled
       availability {
         day
       }

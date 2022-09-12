@@ -47,7 +47,6 @@ export const Tools: DropDownItem[] = [
   { label: "general.tools.arduino", key: "arduino" },
   { label: "general.tools.3d", key: "3d" },
   { label: "general.tools.zumkit", key: "zumkit" },
-  { label: "general.tools.other", key: "other" },
 ];
 
 export const Platforms: DropDownItem[] = [
@@ -56,7 +55,6 @@ export const Platforms: DropDownItem[] = [
   { label: "general.platforms.inventor", key: "inventor" },
   { label: "general.platforms.scratch", key: "scratch" },
   { label: "general.platforms.tinker", key: "tinker" },
-  { label: "general.platforms.other", key: "other" },
 ];
 
 export const schedule: string[] = [

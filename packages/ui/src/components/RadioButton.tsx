@@ -5,12 +5,21 @@ import { colors } from "../theme";
 const RadioButton: FC<{
   option: boolean;
   setOption: (option: boolean) => void;
-}> = ({ setOption, option }) => {
+  error?: boolean;
+  setError?: (error: boolean) => void;
+}> = ({ setOption, option, error, setError }) => {
   const handleClick = () => {
     setOption(!option);
+    {
+      setError && setError(false);
+    }
   };
   return (
-    <RadioButtonWrapper clicked={option} onClick={handleClick}>
+    <RadioButtonWrapper
+      error={error ? true : false}
+      clicked={option}
+      onClick={handleClick}
+    >
       {option && <Selected />}
     </RadioButtonWrapper>
   );
@@ -18,7 +27,7 @@ const RadioButton: FC<{
 
 export default RadioButton;
 
-const RadioButtonWrapper = styled.div<{ clicked: boolean }>`
+const RadioButtonWrapper = styled.div<{ error: boolean; clicked: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,8 +35,11 @@ const RadioButtonWrapper = styled.div<{ clicked: boolean }>`
   width: 20px;
   border-radius: 50%;
   cursor: pointer;
-  border: solid 1px ${colors.colors.gray5};
-  background-color: ${colors.colors.white};
+  ${(props) =>
+    props.error
+      ? `border: solid 1px ${colors.colors.red80};`
+      : `border: solid 1px ${colors.colors.gray5};
+  background-color: ${colors.colors.white};`}
 `;
 
 const Selected = styled.div`

@@ -22,7 +22,22 @@ const AddCenter: FC<{
   centers: string[];
   setGroups: (groups: string[]) => void;
   groups: string[];
-}> = ({ setCenter, setCenters, center, centers, setGroups, groups }) => {
+  errorCenter?: boolean;
+  setErrorCenter?: (error: boolean) => void;
+  errorGroups?: boolean;
+  setErrorGroups?: (error: boolean) => void;
+}> = ({
+  setCenter,
+  setCenters,
+  center,
+  centers,
+  setGroups,
+  groups,
+  errorCenter,
+  setErrorCenter,
+  errorGroups,
+  setErrorGroups,
+}) => {
   const t = useTranslate();
 
   const [LocalGroups, setLocalGroups] = useState<string[]>([]);
@@ -68,24 +83,29 @@ const AddCenter: FC<{
           )}
         </Header>
         <DropDownUnique
+          error={errorCenter}
+          setError={setErrorCenter}
           options={
-            CentersData?.getCenters.data.map((elem) => {
-              return {
+            CentersData?.getCenters.data
+              .filter((elem) => elem.active)
+              .map((elem) => ({
                 key: elem.id,
                 label: elem.name,
-              };
-            }) || []
+              })) || []
           }
           width="387px"
           selected={center}
           setSelected={(center) => setCenter(center)}
         />
+        {errorCenter && <styles.P0Error>{t(`general.empty`)}</styles.P0Error>}
       </FillIn>
       <FillIn>
         <styles.BoldP4>
           {t(`components.create-student.1.subtitle.group`)}
         </styles.BoldP4>
         <DropDown
+          error={errorGroups}
+          setError={setErrorGroups}
           disabled={center === ""}
           options={
             (GroupsData.every !== undefined &&
@@ -101,6 +121,7 @@ const AddCenter: FC<{
           selected={LocalGroups}
           setSelected={setLocalGroups}
         />
+        {errorGroups && <styles.P0Error>{t(`general.empty`)}</styles.P0Error>}
       </FillIn>
     </ContactDiv>
   );

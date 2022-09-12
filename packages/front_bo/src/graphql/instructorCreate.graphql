@@ -3,7 +3,7 @@ mutation CreateInstructor(
   $corporateEmail: String!
   $personalEmail: String!
   $phone: String!
-  $status: InstructorStatus!
+  $enrolled: Boolean!
   $training: trainingInstructorInput!
   $previousExperience: previousExperienceInstructor!
   $programmingExperience: Boolean!
@@ -23,8 +23,7 @@ mutation CreateInstructor(
     name: $name
     corporateEmail: $corporateEmail
     personalEmail: $personalEmail
-    phone: $phone
-    status: $status
+    enrolled: $enrolled
     training: $training
     previousExperience: $previousExperience
     programmingExperience: $programmingExperience
