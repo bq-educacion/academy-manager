@@ -35,6 +35,14 @@ const InstructorsPage: NextPage = () => {
   const [tableData, setTableData] = useState<
     Array<Partial<Instructor> & { id: string }>
   >([]);
+  const [inactiveIndexes, setInactiveIndexes] = useState<number[]>([]);
+  useEffect(() => {
+    setInactiveIndexes(
+      tableData
+        .map((item, index) => (item.active ? -1 : index))
+        .filter((item) => item !== -1)
+    );
+  }, [tableData]);
   const [order, setOrder] = useState<{
     key: OrderFilterInstructor;
     direction: number;
@@ -168,6 +176,7 @@ const InstructorsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Instructor> & { id: string }>
+            inactiveIndexes={inactiveIndexes}
             data={tableData}
             order={order}
             onSetOrder={(order) =>
