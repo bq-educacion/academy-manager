@@ -27,6 +27,7 @@ import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 import { studentCollection } from "../models/StudentModel.ts";
 import { updateCourses } from "../lib/courses.ts";
 import { centerCollection } from "../models/CenterModel.ts";
+import { checkActiveCenter } from "../lib/checkActiveCenter.ts";
 
 export const instructors = {
   Instructor: {
@@ -236,9 +237,11 @@ export const instructors = {
           throw new Error("404, Groups not found");
         }
 
+        await checkActiveCenter(existsGroups, centerCollection(ctx.db));
+
         newInstructor = {
           ...newInstructor,
-          active: checkActiveGroups(existsGroups, "createInstructor"),
+          active: checkActiveGroups(existsGroups, false),
         };
 
         const idInstructor = await instructorCollection(ctx.db).insertOne({
@@ -307,7 +310,7 @@ export const instructors = {
 
           updateInstructor = {
             ...updateInstructor,
-            active: checkActiveGroups(existsGroups, "other"),
+            active: checkActiveGroups(existsGroups, true),
           };
 
           const instructorGroupsIds = await groupCollection(ctx.db)
@@ -434,27 +437,37 @@ export const instructors = {
         }
 
         //check if center of groups are active
-        const groupsInstructor = await groupCollection(ctx.db).find({
-          instructors: new ObjectId(args.id),
+        const groups = await groupCollection(ctx.db).aggregate<
+          { _id: ObjectId }
+        >([
+          {
+            $lookup: {
+              from: "centers",
+              localField: "center",
+              foreignField: "_id",
+              as: "center",
+            },
+          },
+          {
+            $match: {
+              instructors: new ObjectId(args.id),
+              "center.active": true,
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+            },
+          },
+        ]).toArray();
+
+        const idsActiveCenterGroups = groups.map((item) => item._id);
+
+        const activeCenterGroups = await groupCollection(ctx.db).find({
+          _id: { $in: idsActiveCenterGroups },
         }).toArray();
-        const activeCenterGroups: GroupModel[] = [];
-        await Promise.all(groupsInstructor.map(async (group) => {
-          if (group.center !== null) {
-            const center = await centerCollection(ctx.db).findOne({
-              _id: group.center,
-              active: true,
-            });
-            if (center) {
-              activeCenterGroups.push(group);
-            }
-          }
-        }));
 
         if (activeCenterGroups.length > 0) {
-          const ids = activeCenterGroups.map((group) => {
-            return group._id;
-          });
-
           if (!args.enrolled) {
             instructor = await instructorCollection(ctx.db).findAndModify(
               { _id: new ObjectId(args.id) },
@@ -467,11 +480,12 @@ export const instructors = {
             //if groups have all inactive instructors, set group active to false
             const updateGroups = await Promise.all(
               activeCenterGroups.map(async (group) => {
-                const instructors = await instructorCollection(ctx.db).find({
-                  _id: { $in: group.instructors },
-                  enrolled: true,
-                }).toArray();
-                if (instructors.length === 0) {
+                const instructors = await instructorCollection(ctx.db)
+                  .countDocuments({
+                    _id: { $in: group.instructors },
+                    enrolled: true,
+                  });
+                if (instructors === 0) {
                   return group._id;
                 }
               }),
@@ -492,16 +506,16 @@ export const instructors = {
               "students",
               studentCollection(ctx.db),
             );
-          } else if (args.enrolled) {
+          } else {
             //set active to true in groups of instructor
             await groupCollection(ctx.db).updateMany({
-              _id: { $in: ids },
+              _id: { $in: idsActiveCenterGroups },
             }, { $set: { active: true } });
 
             //set active to true in students of this groups
             const idStudents =
               (await groupCollection(ctx.db).distinct("students", {
-                _id: { $in: ids },
+                _id: { $in: idsActiveCenterGroups },
               })).flat() as ObjectId[];
             const uniqueStudents = [...new Set(idStudents)];
             await studentCollection(ctx.db).updateMany({
@@ -511,7 +525,7 @@ export const instructors = {
 
           //update courses
           const groups = await groupCollection(ctx.db).find({
-            _id: { $in: ids },
+            _id: { $in: idsActiveCenterGroups },
           }).toArray();
           updateCourses(
             groups,

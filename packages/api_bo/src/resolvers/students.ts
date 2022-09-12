@@ -174,7 +174,7 @@ export const students = {
 
         newStudent = {
           ...newStudent,
-          active: checkActiveGroups(existsGroups, "other"),
+          active: checkActiveGroups(existsGroups, true),
         };
 
         if (args.contacts) {
@@ -306,7 +306,7 @@ export const students = {
 
           updateStudent = {
             ...updateStudent,
-            active: checkActiveGroups(existsGroups, "other"),
+            active: checkActiveGroups(existsGroups, true),
           };
         }
 
