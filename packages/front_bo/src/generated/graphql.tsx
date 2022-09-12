@@ -738,7 +738,7 @@ export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __ty
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SimpleCentersNameQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', data: Array<{ __typename?: 'Center', name: string, id: string }> } };
+export type SimpleCentersNameQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', data: Array<{ __typename?: 'Center', name: string, id: string, active: boolean }> } };
 
 export type SimpleGroupsNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1286,6 +1286,7 @@ export const SimpleCentersNameDocument = gql`
     data {
       name
       id
+      active
     }
   }
 }

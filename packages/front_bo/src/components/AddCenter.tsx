@@ -86,12 +86,12 @@ const AddCenter: FC<{
           error={errorCenter}
           setError={setErrorCenter}
           options={
-            CentersData?.getCenters.data.map((elem) => {
-              return {
+            CentersData?.getCenters.data
+              .filter((elem) => elem.active)
+              .map((elem) => ({
                 key: elem.id,
                 label: elem.name,
-              };
-            }) || []
+              })) || []
           }
           width="387px"
           selected={center}
