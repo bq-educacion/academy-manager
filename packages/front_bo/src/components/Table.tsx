@@ -42,6 +42,7 @@ type TableProps<T> = {
     }>
   >;
   onClickRow?: (id: string) => void;
+  inactiveIndexes: number[];
 };
 
 const Table = <T extends Data>({
@@ -50,6 +51,7 @@ const Table = <T extends Data>({
   order,
   onSetOrder,
   onClickRow,
+  inactiveIndexes,
 }: TableProps<T>) => {
   const [hover, setHover] = useState<string>("");
 
@@ -81,6 +83,7 @@ const Table = <T extends Data>({
         <React.Fragment key={item.id}>
           {columns.map((column) => (
             <Cell
+              InactiveIndexes={inactiveIndexes}
               HoverLine={hover}
               onMouseEnter={() => {
                 setHover(`H${index}`);
@@ -136,7 +139,7 @@ const HeaderCell = styled.div`
   }
 `;
 
-const Cell = styled.div<{ HoverLine: string }>`
+const Cell = styled.div<{ HoverLine: string; InactiveIndexes?: number[] }>`
   display: flex;
   height: 39px;
   align-items: center;
@@ -155,7 +158,21 @@ const Cell = styled.div<{ HoverLine: string }>`
   order: revert;
 
   ${(props) => {
-    if (props.HoverLine !== "") {
+    if (props.InactiveIndexes) {
+      return props.InactiveIndexes.map((value) => {
+        return `&.H${value} {
+          background-color: ${colors.colors.red40Transparent};
+          color: ${colors.colors.red80};
+        }`;
+      });
+    }
+  }}
+
+  ${(props) => {
+    if (
+      props.HoverLine !== "" &&
+      !props.InactiveIndexes?.includes(parseInt(props.HoverLine.slice(1)))
+    ) {
       return `
         &.${props.HoverLine} {
           background-color: ${colors.colors.blue40Transparent1};

@@ -12,6 +12,9 @@ import Tick from "./tick.svg";
 import User from "./user.svg";
 import Eliminate from "./eliminate.svg";
 import Map from "./map.svg";
+import Direction from "./direction.svg";
+import CrossBad from "./bad-cross.svg";
+import Alert from "./alert.svg";
 
 export {
   ClosePannel,
@@ -28,4 +31,7 @@ export {
   User,
   Eliminate,
   Map,
+  Direction,
+  CrossBad,
+  Alert,
 };

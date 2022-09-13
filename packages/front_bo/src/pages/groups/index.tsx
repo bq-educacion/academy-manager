@@ -35,6 +35,14 @@ const GroupsPage: NextPage = () => {
   const [tableData, setTableData] = useState<
     Array<Partial<Group> & { id: string }>
   >([]);
+  const [inactiveIndexes, setInactiveIndexes] = useState<number[]>([]);
+  useEffect(() => {
+    setInactiveIndexes(
+      tableData
+        .map((item, index) => (item.active ? -1 : index))
+        .filter((item) => item !== -1)
+    );
+  }, [tableData]);
   const [order, setOrder] = useState<{
     key: OrderFilterGroup;
     direction: number;
@@ -168,6 +176,7 @@ const GroupsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Group> & { id: string }>
+            inactiveIndexes={inactiveIndexes}
             data={tableData}
             order={order}
             onSetOrder={(order) =>

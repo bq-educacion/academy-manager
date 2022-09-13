@@ -47,7 +47,7 @@ const CreateInstructor: FC<{
   const [state, setState] = useState<boolean>();
   const [education, setEducation] = useState<TrainingInstructorInput>();
   const [experience, setExperience] = useState<PreviousExperienceInstructor>();
-  const [programming, setProgramming] = useState<boolean>();
+  const [programming, setProgramming] = useState<boolean | undefined>();
   const [knowledge, setKnowledge] = useState<string>("");
   const [cvUrl, setCvUrl] = useState<string>("");
   const [tools, setTools] = useState<string[]>([]);

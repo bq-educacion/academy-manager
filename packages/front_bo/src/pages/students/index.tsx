@@ -37,7 +37,14 @@ const StudentsPage: NextPage = () => {
   const [tableData, setTableData] = useState<
     Array<Partial<Student> & { id: string }>
   >([]);
-
+  const [inactiveIndexes, setInactiveIndexes] = useState<number[]>([]);
+  useEffect(() => {
+    setInactiveIndexes(
+      tableData
+        .map((item, index) => (item.active ? -1 : index))
+        .filter((item) => item !== -1)
+    );
+  }, [tableData]);
   const [order, setOrder] = useState<{
     key: OrderFilterStudent;
     direction: number;
@@ -172,6 +179,7 @@ const StudentsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Student> & { id: string }>
+            inactiveIndexes={inactiveIndexes}
             data={tableData}
             order={order}
             onSetOrder={(order) =>
@@ -204,7 +212,7 @@ const StudentsPage: NextPage = () => {
                   <div>
                     {t(
                       `components.table.state.${
-                        item.enrolled ? "active" : "inactive"
+                        item.enrolled ? "active" : "withdrawn"
                       }`
                     )}
                   </div>
