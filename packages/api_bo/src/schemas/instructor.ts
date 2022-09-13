@@ -128,7 +128,6 @@ export const typeDefs = gql`
       personalEmail: String
       corporateEmail:String
       phone:String
-      enrolled:Boolean
       notes:String
       training:trainingInstructorInput
       previousExperience:previousExperienceInstructor
@@ -147,6 +146,8 @@ export const typeDefs = gql`
     ): Instructor!
 
     deleteInstructor(id: String!): Instructor!
+
+    setStatusInstructor(id: String!, enrolled: Boolean!): Instructor!
   }
 
 `;

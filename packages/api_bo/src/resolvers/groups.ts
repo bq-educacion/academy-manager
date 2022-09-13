@@ -311,6 +311,7 @@ export const groups = {
         throw new Error("500, " + error);
       }
     },
+
     deleteGroup: async (
       _parent: unknown,
       args: MutationDeleteGroupArgs,
