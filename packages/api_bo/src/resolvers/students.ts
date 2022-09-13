@@ -174,7 +174,7 @@ export const students = {
 
         newStudent = {
           ...newStudent,
-          active: checkActiveGroups(existsGroups),
+          active: checkActiveGroups(existsGroups, true),
         };
 
         if (args.contacts) {
@@ -306,7 +306,7 @@ export const students = {
 
           updateStudent = {
             ...updateStudent,
-            active: checkActiveGroups(existsGroups),
+            active: checkActiveGroups(existsGroups, true),
           };
         }
 
@@ -478,7 +478,7 @@ export const students = {
               },
               new: true,
             },
-          ) as StudentModel;
+          );
           if (!student) {
             throw new Error("404, Student not found");
           }
@@ -489,7 +489,7 @@ export const students = {
               update: { $set: { enrolled: args.enrolled } },
               new: true,
             },
-          ) as StudentModel;
+          );
           if (!student) {
             throw new Error("404, Student not found");
           }

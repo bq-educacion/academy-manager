@@ -195,6 +195,7 @@ export type Mutation = {
   editStudent: Student;
   editStudentContact: StudentContact;
   setActiveCenter: Center;
+  setStatusInstructor: Instructor;
   setStatusStudent: Student;
 };
 
@@ -329,7 +330,6 @@ export type MutationEditInstructorArgs = {
   areas?: InputMaybe<Array<Scalars["String"]>>;
   availability?: InputMaybe<Array<AvailabilityInput>>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
-  enrolled?: InputMaybe<Scalars["Boolean"]>;
   geographicalAvailability?: InputMaybe<Scalars["String"]>;
   groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
@@ -377,6 +377,11 @@ export type MutationEditStudentContactArgs = {
 
 export type MutationSetActiveCenterArgs = {
   active: Scalars["Boolean"];
+  id: Scalars["String"];
+};
+
+export type MutationSetStatusInstructorArgs = {
+  enrolled: Scalars["Boolean"];
   id: Scalars["String"];
 };
 
@@ -1121,6 +1126,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSetActiveCenterArgs, "active" | "id">
+  >;
+  setStatusInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSetStatusInstructorArgs, "enrolled" | "id">
   >;
   setStatusStudent?: Resolver<
     ResolversTypes["Student"],
