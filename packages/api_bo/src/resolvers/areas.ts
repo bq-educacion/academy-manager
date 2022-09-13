@@ -86,6 +86,13 @@ export const areas = {
         if (!area) {
           throw new Error("404, Area not found");
         }
+
+        //delete area from all instructors
+        await ctx.db.collection("instructors").updateMany(
+          {},
+          { $pull: { areas: area.name } },
+        );
+
         return area;
       } catch (error) {
         throw new Error("500, " + error);
