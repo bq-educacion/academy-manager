@@ -634,6 +634,14 @@ export type CreateCenterMutationVariables = Exact<{
 
 export type CreateCenterMutation = { __typename?: 'Mutation', createCenter: { __typename?: 'Center', id: string } };
 
+export type SetActiveCenterMutationVariables = Exact<{
+  setActiveCenterId: Scalars['String'];
+  active: Scalars['Boolean'];
+}>;
+
+
+export type SetActiveCenterMutation = { __typename?: 'Mutation', setActiveCenter: { __typename?: 'Center', id: string } };
+
 export type GetCentersFQueryVariables = Exact<{
   searchText?: InputMaybe<Scalars['String']>;
   orderFilter?: InputMaybe<OrderFilterCenter>;
@@ -832,6 +840,40 @@ export function useCreateCenterMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateCenterMutationHookResult = ReturnType<typeof useCreateCenterMutation>;
 export type CreateCenterMutationResult = Apollo.MutationResult<CreateCenterMutation>;
 export type CreateCenterMutationOptions = Apollo.BaseMutationOptions<CreateCenterMutation, CreateCenterMutationVariables>;
+export const SetActiveCenterDocument = gql`
+    mutation SetActiveCenter($setActiveCenterId: String!, $active: Boolean!) {
+  setActiveCenter(id: $setActiveCenterId, active: $active) {
+    id
+  }
+}
+    `;
+export type SetActiveCenterMutationFn = Apollo.MutationFunction<SetActiveCenterMutation, SetActiveCenterMutationVariables>;
+
+/**
+ * __useSetActiveCenterMutation__
+ *
+ * To run a mutation, you first call `useSetActiveCenterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetActiveCenterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setActiveCenterMutation, { data, loading, error }] = useSetActiveCenterMutation({
+ *   variables: {
+ *      setActiveCenterId: // value for 'setActiveCenterId'
+ *      active: // value for 'active'
+ *   },
+ * });
+ */
+export function useSetActiveCenterMutation(baseOptions?: Apollo.MutationHookOptions<SetActiveCenterMutation, SetActiveCenterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetActiveCenterMutation, SetActiveCenterMutationVariables>(SetActiveCenterDocument, options);
+      }
+export type SetActiveCenterMutationHookResult = ReturnType<typeof useSetActiveCenterMutation>;
+export type SetActiveCenterMutationResult = Apollo.MutationResult<SetActiveCenterMutation>;
+export type SetActiveCenterMutationOptions = Apollo.BaseMutationOptions<SetActiveCenterMutation, SetActiveCenterMutationVariables>;
 export const GetCentersFDocument = gql`
     query GetCentersF($searchText: String, $orderFilter: OrderFilterCenter, $order: Number, $page: Int, $pageSize: Int) {
   getCenters(

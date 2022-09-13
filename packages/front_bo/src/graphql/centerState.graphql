@@ -1,0 +1,5 @@
+mutation SetActiveCenter($setActiveCenterId: String!, $active: Boolean!) {
+  setActiveCenter(id: $setActiveCenterId, active: $active) {
+    id
+  }
+}
