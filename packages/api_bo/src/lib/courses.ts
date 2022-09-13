@@ -3,6 +3,7 @@ import { Collection, UpdateFilter } from "mongo";
 import { GroupModel } from "../models/GroupModel.ts";
 import { CourseType } from "../types.ts";
 import { StudentModel } from "../models/StudentModel.ts";
+import { getUniqueItems } from "./getUniqueItems.ts";
 
 export const addCourse = async (
   groups: GroupModel[],
@@ -94,12 +95,11 @@ export const updateCourses = async (
     await Promise.all(groups.map(async (group) => {
       const EPO: string[] = [];
       const ESO: string[] = [];
-      let students = await DBStudents.distinct("course", {
+      const students = await getUniqueItems(DBStudents, "course", {
         _id: { $in: group.students },
         enrolled: true,
         active: true,
-      }) as string[];
-      students = [...new Set(students)];
+      });
       students.forEach((course) => {
         if ((/.*EPO$/).test(course)) {
           EPO.push(course);

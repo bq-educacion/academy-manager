@@ -478,7 +478,7 @@ export const students = {
               },
               new: true,
             },
-          ) as StudentModel;
+          );
           if (!student) {
             throw new Error("404, Student not found");
           }
@@ -489,7 +489,7 @@ export const students = {
               update: { $set: { enrolled: args.enrolled } },
               new: true,
             },
-          ) as StudentModel;
+          );
           if (!student) {
             throw new Error("404, Student not found");
           }

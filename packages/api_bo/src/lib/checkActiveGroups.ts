@@ -2,7 +2,7 @@ import { GroupModel } from "../models/GroupModel.ts";
 
 export const checkActiveGroups = (
   groups: GroupModel[],
-  throwError: boolean,
+  throwError?: boolean,
 ): boolean => {
   let active = true;
   const inactiveGroups = groups.find((group) => !group.active);

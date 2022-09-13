@@ -22,6 +22,7 @@ import { checkNotNull } from "../lib/checkNotNull.ts";
 import { studentCollection } from "../models/StudentModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
 import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
+import { getUniqueItems } from "../lib/getUniqueItems.ts";
 
 export const centers = {
   Center: {
@@ -126,7 +127,7 @@ export const centers = {
           groupCollection(ctx.db).countDocuments({
             center: new ObjectId(args.id),
           }),
-          groupCollection(ctx.db).distinct("students", {
+          getUniqueItems(groupCollection(ctx.db), "students", {
             center: new ObjectId(args.id),
           }),
         ]);
@@ -134,7 +135,7 @@ export const centers = {
         return {
           center,
           totalGroups,
-          totalStudents: [...new Set(students.flat())].length,
+          totalStudents: students.length,
         };
       } catch (error) {
         throw new Error("500, " + error);
