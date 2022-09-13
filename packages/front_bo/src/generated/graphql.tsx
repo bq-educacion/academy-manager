@@ -643,7 +643,7 @@ export type GetCentersFQueryVariables = Exact<{
 }>;
 
 
-export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<Languages>, city: string, nature: CenterNature, type: Array<CenterActivityType> }> } };
+export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<Languages>, city: string, nature: CenterNature, type: Array<CenterActivityType>, active: boolean }> } };
 
 export type DeleteCenterMutationVariables = Exact<{
   deleteCenterId: Scalars['String'];
@@ -704,7 +704,7 @@ export type GetGroupsQueryVariables = Exact<{
 }>;
 
 
-export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center?: { __typename?: 'Center', name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
+export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, active: boolean, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center?: { __typename?: 'Center', name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
 
 export type CreateInstructorMutationVariables = Exact<{
   name: Scalars['String'];
@@ -740,12 +740,12 @@ export type GetInstructorsQueryVariables = Exact<{
 }>;
 
 
-export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, enrolled: boolean, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
+export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, enrolled: boolean, active: boolean, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
 
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SimpleCentersNameQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', data: Array<{ __typename?: 'Center', name: string, id: string }> } };
+export type SimpleCentersNameQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', data: Array<{ __typename?: 'Center', name: string, id: string, active: boolean }> } };
 
 export type SimpleGroupsNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -785,7 +785,7 @@ export type GetStudentsQueryVariables = Exact<{
 }>;
 
 
-export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, course: string, enrolled: boolean, groups: Array<{ __typename?: 'Group', name: string, id: string }> }> } };
+export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, active: boolean, course: string, enrolled: boolean, groups: Array<{ __typename?: 'Group', name: string, id: string }> }> } };
 
 
 export const CreateCenterDocument = gql`
@@ -859,6 +859,7 @@ export const GetCentersFDocument = gql`
       city
       nature
       type
+      active
     }
   }
 }
@@ -1155,6 +1156,7 @@ export const GetGroupsDocument = gql`
       id
       id_group
       name
+      active
       timetable {
         day
         id_day
@@ -1293,6 +1295,7 @@ export const GetInstructorsDocument = gql`
       name
       geographicalAvailability
       enrolled
+      active
       availability {
         day
       }
@@ -1347,6 +1350,7 @@ export const SimpleCentersNameDocument = gql`
     data {
       name
       id
+      active
     }
   }
 }
@@ -1528,6 +1532,7 @@ export const GetStudentsDocument = gql`
     data {
       id
       name
+      active
       groups {
         name
         id

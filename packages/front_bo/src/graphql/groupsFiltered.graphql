@@ -20,6 +20,7 @@ query GetGroups(
       id
       id_group
       name
+      active
       timetable {
         day
         id_day

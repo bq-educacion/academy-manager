@@ -19,6 +19,7 @@ const InputSuper: FC<{
   textArea?: boolean;
   setValid?: (valid: boolean) => void;
   onEnter?: () => void;
+  onBlur?: () => void;
 }> = ({
   placeholder,
   setInput,
@@ -36,6 +37,7 @@ const InputSuper: FC<{
   textArea,
   onEnter,
   width,
+  onBlur,
 }) => {
   const InputType = type ? type : "text";
   const [localError, setLocalError] = useState<boolean>(error ? true : false);
@@ -45,6 +47,11 @@ const InputSuper: FC<{
   if (!textArea) {
     return (
       <InputStyled
+        onBlur={() => {
+          {
+            onBlur && onBlur();
+          }
+        }}
         width={width ? width : "auto"}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -95,6 +102,11 @@ const InputSuper: FC<{
   } else {
     return (
       <AreaStyled
+        onBlur={() => {
+          {
+            onBlur && onBlur();
+          }
+        }}
         width={width ? width : "auto"}
         height={height}
         disabled={disabled}
@@ -121,6 +133,10 @@ const InputStyled = styled.input<{
   disabled?: boolean;
   error?: boolean;
 }>`
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 1.43;
+  color: ${colors.colors.black};
   padding: 0 0 0 20px;
   border-radius: 3px;
   width: ${(props) => props.width};
@@ -158,7 +174,11 @@ const AreaStyled = styled.textarea<{
   error?: boolean;
   width?: string;
 }>`
-  padding: 0 0 0 20px;
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 1.43;
+  color: ${colors.colors.black};
+  padding: 10px 0 0 20px;
   border-radius: 3px;
   border: solid 1px ${colors.colors.gray};
   height: ${(props) => (props.height ? props.height : "40px")};

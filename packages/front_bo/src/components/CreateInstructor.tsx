@@ -44,7 +44,7 @@ const CreateInstructor: FC<{
   const [emailPro, setEmailPro] = useState<string>("");
   const [emailPersonal, setEmailPersonal] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [state, setState] = useState<boolean>(false);
+  const [state, setState] = useState<boolean>();
   const [education, setEducation] = useState<TrainingInstructorInput>();
   const [experience, setExperience] = useState<PreviousExperienceInstructor>();
   const [programming, setProgramming] = useState<boolean | undefined>();
@@ -197,11 +197,20 @@ const CreateInstructor: FC<{
                   },
                 ]}
                 setSelected={(elem) => {
-                  {
-                    elem === "active" ? setState(true) : setState(false);
+                  if (elem === "active") {
+                    setState(true);
+                  }
+                  if (elem === "inactive") {
+                    setState(false);
                   }
                 }}
-                selected={state ? "active" : "inactive"}
+                selected={
+                  state === undefined
+                    ? undefined
+                    : state
+                    ? "active"
+                    : "inactive"
+                }
                 width="254px"
               />
               {errorState && (
@@ -875,7 +884,7 @@ const CreateInstructor: FC<{
                         corporateEmail: emailPro,
                         personalEmail: emailPersonal,
                         phone: phone,
-                        enrolled: state,
+                        enrolled: state || false,
                         training: education || {},
                         previousExperience:
                           experience || PreviousExperienceInstructor.No,
@@ -928,7 +937,7 @@ const CreateInstructor: FC<{
                         corporateEmail: emailPro,
                         personalEmail: emailPersonal,
                         phone: phone,
-                        enrolled: state,
+                        enrolled: state || false,
                         training: education || {},
                         previousExperience:
                           experience || PreviousExperienceInstructor.No,

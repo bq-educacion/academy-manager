@@ -115,7 +115,7 @@ const EditCenter: NextPage = () => {
   const [emailError, setEmailError] = useState<boolean>(false);
   const [validEmail, setValidEmail] = useState<boolean>(false);
 
-  const [openModalSave, setOpenModalSave] = useState<boolean>(false);
+  // const [openModalSave, setOpenModalSave] = useState<boolean>(false);
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
 
   useLayoutEffect(() => {
@@ -134,7 +134,7 @@ const EditCenter: NextPage = () => {
     ) {
       setChanges(true);
       window.addEventListener("beforeunload", function (e) {
-        setOpenModalSave(true);
+        // setOpenModalSave(true);
         e.preventDefault();
         e.returnValue = "";
       });
@@ -270,7 +270,7 @@ const EditCenter: NextPage = () => {
           }
         />
       )}
-      {openModalSave && (
+      {/* {openModalSave && (
         <Modal
           setModal={setOpenModalSave}
           title=""
@@ -297,7 +297,7 @@ const EditCenter: NextPage = () => {
             </ModalDiv>
           }
         />
-      )}
+      )} */}
       {openAlertBad && (
         <Alert setOpen={setOpenAlertBad} bad title={t("general.error")} />
       )}
@@ -362,7 +362,9 @@ const EditCenter: NextPage = () => {
                   editCenterMutation()
                     .then(() => {
                       setChanges(false);
-                      setOpenAlertGood(true);
+                      setTimeout(() => {
+                        setOpenAlertGood(true);
+                      }, 1000);
                     })
                     .catch(() => {
                       setOpenAlertBad(true);
