@@ -337,6 +337,15 @@
   },
   "pages": {
     "edit-center": {
+      "state-modal": {
+        "title": "Dar de baja al centro",
+        "text1": "Al dar de baja a este centro se mantendrá en la base de datos del back office su información.",
+        "text2": "El calendario del centro desaparecerá del área de gestión de grupos en la aplicación de los monitores.",
+        "text3": "Los grupos anexos estarán asignados a un centro inactivo y no serán accesibles para los monitores en al app.",
+        "text4": "Los alumnos pasarán a estado “Baja”.",
+        "button1": "Dar de baja",
+        "button2": "Cancelar"
+      },
       "delete-modal": {
         "title": "Eliminar Centro",
         "text": "Eliminando este centro se borrará toda su información de la base de datos del back office. Estos datos no son recuperables una vez eliminados.",
@@ -349,6 +358,7 @@
       "save": "Guardar",
       "info": "Información del centro",
       "state": "Alta centro",
+      "no-state": "Baja centro",
       "date": "Fecha de creación: ",
       "students": "Nº Alumnos: ",
       "groups": "Nº Grupos: ",

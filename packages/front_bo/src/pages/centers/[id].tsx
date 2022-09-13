@@ -26,6 +26,7 @@ import {
   useDeleteCenterMutation,
   useEditCenterMutation,
   useGetCenterQuery,
+  useSetActiveCenterMutation,
 } from "../../generated/graphql";
 
 //TODO: Mutation alta centro
@@ -107,6 +108,8 @@ const EditCenter: NextPage = () => {
     },
   });
 
+  const [setActiveCenterMutation] = useSetActiveCenterMutation();
+
   const [nameError, setNameError] = useState<boolean>(false);
   const [addressError, setAddressError] = useState<boolean>(false);
   const [cityError, setCityError] = useState<boolean>(false);
@@ -117,10 +120,10 @@ const EditCenter: NextPage = () => {
 
   // const [openModalSave, setOpenModalSave] = useState<boolean>(false);
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
+  const [openModalState, setOpenModalState] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     if (
-      centerState !== data?.getCenter.center.active ||
       type !== data?.getCenter.center.type ||
       nature !== data?.getCenter.center.nature ||
       languagesSelection !== data?.getCenter.center.languages ||
@@ -140,7 +143,6 @@ const EditCenter: NextPage = () => {
       });
     }
     if (
-      centerState === data?.getCenter.center.active &&
       type === data?.getCenter.center.type &&
       nature === data?.getCenter.center.nature &&
       languagesSelection === data?.getCenter.center.languages &&
@@ -156,7 +158,6 @@ const EditCenter: NextPage = () => {
     }
   }, [
     showFolder,
-    centerState,
     type,
     nature,
     languagesSelection,
@@ -270,34 +271,62 @@ const EditCenter: NextPage = () => {
           }
         />
       )}
-      {/* {openModalSave && (
+      {openModalState && (
         <Modal
-          setModal={setOpenModalSave}
+          setModal={setOpenModalState}
           title=""
           children={
             <ModalDiv>
-              <styles.BoldP2>{t("general.edit-not-saved")}</styles.BoldP2>
-              <styles.P4>{t("general.edit-not-saved-text")}</styles.P4>
+              <styles.BoldP2>
+                {t("pages.edit-center.state-modal.title")}
+              </styles.BoldP2>
+              <styles.P4>{t("pages.edit-center.state-modal.text1")}</styles.P4>
+              <DelteModalDiv>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-center.state-modal.text2")}
+                </styles.P4>
+              </DelteModalDiv>
+              <DelteModalDiv>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-center.state-modal.text3")}
+                </styles.P4>
+              </DelteModalDiv>
+              <DelteModalDiv2>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-center.state-modal.text4")}
+                </styles.P4>
+              </DelteModalDiv2>
               <ButtonsModalDiv>
                 <Button
-                  text={t("general.edit-not-saved-yes")}
+                  text={t("pages.edit-center.state-modal.button1")}
                   deleteRed
                   onClick={() => {
-                    router.push("/centers");
+                    setActiveCenterMutation({
+                      variables: {
+                        setActiveCenterId: router.query.id as string,
+                        active: false,
+                      },
+                    }).then(() => {
+                      setCenterState(false);
+                      setOpenModalState(false);
+                    });
                   }}
                 />
                 <Button
-                  text={t("general.edit-not-saved-no")}
+                  text={t("pages.edit-center.state-modal.button2")}
                   secondary
                   onClick={() => {
-                    setOpenModalSave(false);
+                    setOpenModalState(false);
                   }}
                 />
               </ButtonsModalDiv>
             </ModalDiv>
           }
         />
-      )} */}
+      )}
       {openAlertBad && (
         <Alert setOpen={setOpenAlertBad} bad title={t("general.error")} />
       )}
@@ -386,8 +415,28 @@ const EditCenter: NextPage = () => {
               <GateFolderTitle>
                 <styles.BoldP4>{t("pages.edit-center.info")}</styles.BoldP4>
                 <CenterStateDiv>
-                  <styles.P4>{t("pages.edit-center.state")}</styles.P4>
-                  <Switch option={centerState} setOption={setCenterState} />
+                  {!centerState && (
+                    <styles.P4>{t("pages.edit-center.state")}</styles.P4>
+                  )}
+                  {centerState && (
+                    <styles.P4>{t("pages.edit-center.no-state")}</styles.P4>
+                  )}
+                  <Switch
+                    option={centerState}
+                    setOption={() => {
+                      if (centerState) setOpenModalState(true);
+                      else {
+                        setActiveCenterMutation({
+                          variables: {
+                            setActiveCenterId: router.query.id as string,
+                            active: true,
+                          },
+                        }).then(() => {
+                          setCenterState(true);
+                        });
+                      }
+                    }}
+                  />
                 </CenterStateDiv>
               </GateFolderTitle>
             </GateFolder>
