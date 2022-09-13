@@ -135,6 +135,7 @@ const InputBox = styled.div<{
     ${(props) => props.clicked && `transform: rotate(-90deg);`}
     position: relative;
     right: 10px;
+    min-width: 20px;
   }
 
   &:hover {
@@ -142,6 +143,9 @@ const InputBox = styled.div<{
   }
   & > p {
     margin: 0 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 

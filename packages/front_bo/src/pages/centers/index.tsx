@@ -36,6 +36,15 @@ const CentersPage: NextPage = () => {
     Array<Partial<Center> & { id: string }>
   >([]);
 
+  const [inactiveIndexes, setInactiveIndexes] = useState<number[]>([]);
+  useEffect(() => {
+    setInactiveIndexes(
+      tableData
+        .map((item, index) => (item.active ? -1 : index))
+        .filter((item) => item !== -1)
+    );
+  }, [tableData]);
+
   const [pageData, setPageData] = useState<{
     page: number;
     pageSize: number;
@@ -168,6 +177,7 @@ const CentersPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Center> & { id: string }>
+            inactiveIndexes={inactiveIndexes}
             onClickRow={(id) => route.push(`/centers/${id}`)}
             data={tableData}
             order={order}

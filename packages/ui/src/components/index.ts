@@ -17,6 +17,8 @@ import RadioButton from "./RadioButton";
 import OptionsBox from "./OptionsBox";
 import OptionsBoxOrdered from "./OptionsBoxOrdered";
 import Button from "./Button";
+import Switch from "./Switch";
+import Alert from "./Alert";
 
 export {
   GoogleButton,
@@ -38,4 +40,6 @@ export {
   OptionsBox,
   OptionsBoxOrdered,
   Button,
+  Switch,
+  Alert,
 };

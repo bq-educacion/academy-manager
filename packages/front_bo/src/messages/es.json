@@ -258,6 +258,12 @@
     }
   },
   "general": {
+    "edit-not-saved": "¿Estás seguro?",
+    "edit-not-saved-text": "Tienes datos sin guardar. Si sales se perderá todo lo que hayas modificado.",
+    "edit-not-saved-yes": "Salir sin guardar",
+    "edit-not-saved-no": "Cancelar",
+    "error": "Error",
+    "saved": "Guardado",
     "decline-link": "El formato del enlace es incorrecto",
     "decline-radio": "Debes indicar una opción",
     "decline-checkbox": "Debes indicar al menos una opción",
@@ -266,6 +272,7 @@
     "decline-email": "La dirección de correo electrónico incluida es errónea",
     "empty": "Este campo no puede quedar vacío",
     "no-data": "No hay datos",
+    "only-letters": "No se pueden introducir ni números, ni caracteres especiales",
     "times": {
       "8:00 a 8:59": "8:00 a 8:59",
       "9:00 a 9:59": "9:00 a 9:59",
@@ -329,6 +336,33 @@
     }
   },
   "pages": {
+    "edit-center": {
+      "delete-modal": {
+        "title": "Eliminar Centro",
+        "text": "Eliminando este centro se borrará toda su información de la base de datos del back office. Estos datos no son recuperables una vez eliminados.",
+        "text1": "Los grupos serán eliminados de la base de datos, de la app no serán recuperables.",
+        "text2": "Los alumnos serán eliminados de la base de datos, de la app no serán recuperables.",
+        "button1": "Eliminar definitivamente",
+        "button2": "Cancelar"
+      },
+      "delete": "Eliminar centro",
+      "save": "Guardar",
+      "info": "Información del centro",
+      "state": "Alta centro",
+      "date": "Fecha de creación: ",
+      "students": "Nº Alumnos: ",
+      "groups": "Nº Grupos: ",
+      "type": "Tipo",
+      "nature": "Naturaleza",
+      "name": "Nombre del centro",
+      "phone": "Teléfono",
+      "email": "Email",
+      "contact-name": "Persona de contacto",
+      "contact-phone": "Teléfono contacto",
+      "contact-email": "Email contacto",
+      "notes": "Notas",
+      "notes-placeholder": "Introduce aquí notas sobre el centro. No será público para nadie."
+    },
     "paginate": {
       "first": "Mostrando",
       "middle": "de"
