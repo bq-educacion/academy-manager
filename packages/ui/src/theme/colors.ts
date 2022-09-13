@@ -53,6 +53,7 @@ const colors = {
   red80: "#e4002b",
   red60: "#ff1842",
   red40: "#ff5776",
+  red40Transparent: adjustColorOpacity("#ff5776", 0.2),
 
   red1: "#ff0a37",
   red2: "#ff002f",

@@ -23,6 +23,7 @@ query GetCentersF(
       city
       nature
       type
+      active
     }
   }
 }
