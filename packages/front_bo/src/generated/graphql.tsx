@@ -689,7 +689,7 @@ export type GetGroupQueryVariables = Exact<{
 }>;
 
 
-export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
+export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
 
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
@@ -1090,6 +1090,7 @@ export const GetGroupDocument = gql`
         ESO
       }
       center {
+        id
         name
       }
       name
@@ -1097,6 +1098,7 @@ export const GetGroupDocument = gql`
       type
       instructors {
         name
+        id
       }
       notes
       createdAt

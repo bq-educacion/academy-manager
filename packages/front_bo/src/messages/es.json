@@ -258,6 +258,7 @@
     }
   },
   "general": {
+    "to": " a ",
     "edit-not-saved": "¿Estás seguro?",
     "edit-not-saved-text": "Tienes datos sin guardar. Si sales se perderá todo lo que hayas modificado.",
     "edit-not-saved-yes": "Salir sin guardar",
@@ -314,7 +315,17 @@
       "1e": "1ºESO",
       "2e": "2ºESO",
       "3e": "3ºESO",
-      "4e": "4ºESO"
+      "4e": "4ºESO",
+      "1EPO": "1ºEPO",
+      "2EPO": "2ºEPO",
+      "3EPO": "3ºEPO",
+      "4EPO": "4ºEPO",
+      "5EPO": "5ºEPO",
+      "6EPO": "6ºEPO",
+      "1ESO": "1ºESO",
+      "2ESO": "2ºESO",
+      "3ESO": "3ºESO",
+      "4ESO": "4ºESO"
     },
     "sections": {
       "title": "Extraescolares",
@@ -339,7 +350,13 @@
     "edit-group": {
       "delete": "Eliminar grupo",
       "info": "Información del grupo",
-      "time": "Horario"
+      "time": "Horario",
+      "course": "Cursos ",
+      "center": "Centro",
+      "name": "Nombre del grupo",
+      "nature": "Modalidad",
+      "type": "Tipo",
+      "teacher": "Monitor"
     },
     "edit-center": {
       "state-modal": {
