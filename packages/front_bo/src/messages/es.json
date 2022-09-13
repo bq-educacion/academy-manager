@@ -337,7 +337,9 @@
   },
   "pages": {
     "edit-group": {
-      "delete": "Eliminar grupo"
+      "delete": "Eliminar grupo",
+      "info": "Información del grupo",
+      "time": "Horario"
     },
     "edit-center": {
       "delete-modal": {

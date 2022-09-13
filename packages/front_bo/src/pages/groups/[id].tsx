@@ -1,7 +1,14 @@
-import { Button, colors, styles, useTranslate } from "@academy-manager/ui";
+import {
+  Button,
+  colors,
+  Icon,
+  styles,
+  useTranslate,
+} from "@academy-manager/ui";
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import withApollo from "../../apollo/withApollo";
 import { Layout } from "../../components";
 import { sections } from "../../config";
@@ -16,6 +23,9 @@ const EditGroup: NextPage = () => {
       getGroupId: router.query.id as string,
     },
   });
+
+  const [showFolder, setShowFolder] = useState<boolean>(true);
+  const [showFolder2, setShowFolder2] = useState<boolean>(true);
 
   return (
     <>
@@ -57,12 +67,105 @@ const EditGroup: NextPage = () => {
             />
           </SubHeaderDiv>
         }
-      ></Layout>
+        children2={
+          data && (
+            <BodyDiv>
+              <GateFolder>
+                <GateFolderButton onClick={() => setShowFolder2(!showFolder2)}>
+                  <GateFolderArrow name="direction" open={showFolder2} />
+                </GateFolderButton>
+                <GateFolderTitle>
+                  <styles.BoldP4>{t("pages.edit-group.time")}</styles.BoldP4>
+                </GateFolderTitle>
+              </GateFolder>
+            </BodyDiv>
+          )
+        }
+      >
+        {data && (
+          <BodyDiv>
+            <GateFolder>
+              <GateFolderButton onClick={() => setShowFolder(!showFolder)}>
+                <GateFolderArrow name="direction" open={showFolder} />
+              </GateFolderButton>
+              <GateFolderTitle>
+                <styles.BoldP4>{t("pages.edit-group.info")}</styles.BoldP4>
+              </GateFolderTitle>
+            </GateFolder>
+            {showFolder && (
+              <>
+                <BodySubHeader>
+                  <styles.P4>
+                    {t("pages.edit-center.date")}
+                    {data?.getGroup.group.createdAt}
+                  </styles.P4>
+                  <styles.P4></styles.P4>
+                  <a>
+                    <styles.P4>
+                      {t("pages.edit-center.students")}
+                      {data?.getGroup.totalStudents}
+                    </styles.P4>
+                  </a>
+                </BodySubHeader>
+              </>
+            )}
+          </BodyDiv>
+        )}
+      </Layout>
     </>
   );
 };
 
 export default withApollo(EditGroup, { requiresAccess: false });
+
+const BodySubHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 25px 0 25px 30px;
+  justify-content: flex-start;
+  align-items: center;
+  & > * {
+    margin-right: 20px;
+  }
+`;
+
+const BodyDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+`;
+
+const GateFolder = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: 100%;
+  margin: 0;
+  border-bottom: 1px solid ${colors.colors.gray40};
+`;
+
+const GateFolderButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  border-right: 1px solid ${colors.colors.gray40};
+`;
+
+const GateFolderArrow = styled(Icon)<{ open: boolean }>`
+  transform: rotate(${(props) => (props.open ? "-90deg" : "-180deg")});
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+`;
+
+const GateFolderTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20px;
+  width: 100%;
+`;
 
 const HeaderDiv = styled.div`
   display: flex;

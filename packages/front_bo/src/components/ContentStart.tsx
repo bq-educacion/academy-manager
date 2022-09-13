@@ -8,7 +8,20 @@ export const ContentStart: FC<{
   children: ReactNode;
   childrenHeader: ReactNode;
   childrenSubHeader?: ReactNode;
-}> = ({ section, children, childrenHeader, childrenSubHeader }) => {
+  children2?: ReactNode;
+  children3?: ReactNode;
+  children4?: ReactNode;
+  children5?: ReactNode;
+}> = ({
+  section,
+  children,
+  childrenHeader,
+  childrenSubHeader,
+  children2,
+  children3,
+  children4,
+  children5,
+}) => {
   const t = useTranslate();
 
   return (
@@ -21,6 +34,18 @@ export const ContentStart: FC<{
       <ContentSubHeader>{childrenHeader}</ContentSubHeader>
       {childrenSubHeader && <>{childrenSubHeader}</>}
       <ContentBody className="scrollbar">{children}</ContentBody>
+      {children2 && (
+        <ContentBody className="scrollbar">{children2}</ContentBody>
+      )}
+      {children3 && (
+        <ContentBody className="scrollbar">{children3}</ContentBody>
+      )}
+      {children4 && (
+        <ContentBody className="scrollbar">{children4}</ContentBody>
+      )}
+      {children5 && (
+        <ContentBody className="scrollbar">{children5}</ContentBody>
+      )}
     </ContentLayout>
   );
 };
@@ -69,7 +94,7 @@ const ContentSubHeader = styled.div`
 const ContentBody = styled.div`
   background-color: ${colors.colors.white};
   width: calc(100% - 41px - 39px);
-  height: calc(100% - 24px - 30px);
+  height: auto;
   margin: 24px 41px 30px 39px;
   display: flex;
   flex-direction: row;

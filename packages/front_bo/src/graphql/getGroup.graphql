@@ -1,6 +1,10 @@
 query GetGroup($getGroupId: String!) {
   getGroup(id: $getGroupId) {
     group {
+      course {
+        EPO
+        ESO
+      }
       center {
         name
       }
