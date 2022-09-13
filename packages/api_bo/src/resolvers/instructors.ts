@@ -11,6 +11,7 @@ import {
   QueryCheckCorporateEmailArgs,
   QueryGetInstructorArgs,
   QueryGetInstructorsArgs,
+  Region,
 } from "../types.ts";
 import { Filter } from "mongo";
 import { paginatedFilters } from "../lib/paginatedFilters.ts";
@@ -29,6 +30,8 @@ import { updateCourses } from "../lib/courses.ts";
 import { centerCollection } from "../models/CenterModel.ts";
 import { checkActiveCenter } from "../lib/checkActiveCenter.ts";
 import { getUniqueItems } from "../lib/getUniqueItems.ts";
+import { areaCollection } from "../models/AreaModel.ts";
+import { checkAreas } from "../lib/checkAreas.ts";
 
 export const instructors = {
   Instructor: {
@@ -212,6 +215,12 @@ export const instructors = {
           throw new Error("400, Fields cannot be null");
         }
 
+        await checkAreas(
+          args.areas,
+          args.geographicalAvailability,
+          areaCollection(ctx.db),
+        );
+
         let newInstructor = {
           ...args,
           active: false,
@@ -295,6 +304,29 @@ export const instructors = {
         if (args.availability) {
           const availability = setIdDays(args.availability) as Availability[];
           updateInstructor = { ...updateInstructor, availability };
+        }
+
+        if (args.areas && args.geographicalAvailability) {
+          await checkAreas(
+            args.areas,
+            args.geographicalAvailability,
+            areaCollection(ctx.db),
+          );
+        } else if (args.areas && !args.geographicalAvailability) {
+          const region = await instructorCollection(ctx.db).distinct(
+            "geographicalAvailability",
+            { _id: new ObjectId(args.id) },
+          ) as Region[];
+          await checkAreas(args.areas, region, areaCollection(ctx.db));
+        } else if (!args.areas && args.geographicalAvailability) {
+          const areas = await instructorCollection(ctx.db).distinct("areas", {
+            _id: new ObjectId(args.id),
+          }) as string[];
+          await checkAreas(
+            areas,
+            args.geographicalAvailability,
+            areaCollection(ctx.db),
+          );
         }
 
         if (args.groups) {
