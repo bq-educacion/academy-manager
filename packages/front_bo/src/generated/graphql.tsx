@@ -772,6 +772,13 @@ export type GetGroupQueryVariables = Exact<{
 
 export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
 
+export type GetStudentQueryVariables = Exact<{
+  getStudentId: Scalars['String'];
+}>;
+
+
+export type GetStudentQuery = { __typename?: 'Query', getStudent: { __typename?: 'Student', id: string, name: string, birthDate?: string | null, course: string, registrationDate?: string | null, allergies?: boolean | null, descriptionAllergy?: string | null, signedMandate?: boolean | null, imageAuthorisation?: boolean | null, goesAlone?: boolean | null, collectionPermit?: string | null, oldStudent?: boolean | null, notes?: string | null, contacts?: Array<{ __typename?: 'StudentContact', name: string, email: string, phone: string, send_info: boolean }> | null, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center?: { __typename?: 'Center', name: string, id: string } | null, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }>, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> } }> } };
+
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
   name: Scalars['String'];
@@ -1304,6 +1311,78 @@ export function useGetGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetGroupQueryHookResult = ReturnType<typeof useGetGroupQuery>;
 export type GetGroupLazyQueryHookResult = ReturnType<typeof useGetGroupLazyQuery>;
 export type GetGroupQueryResult = Apollo.QueryResult<GetGroupQuery, GetGroupQueryVariables>;
+export const GetStudentDocument = gql`
+    query GetStudent($getStudentId: String!) {
+  getStudent(id: $getStudentId) {
+    id
+    name
+    birthDate
+    course
+    registrationDate
+    allergies
+    descriptionAllergy
+    signedMandate
+    imageAuthorisation
+    goesAlone
+    collectionPermit
+    oldStudent
+    notes
+    contacts {
+      name
+      email
+      phone
+      send_info
+    }
+    groups {
+      id
+      id_group
+      name
+      center {
+        name
+        id
+      }
+      timetable {
+        id_day
+        day
+        start
+        end
+      }
+      course {
+        EPO
+        ESO
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetStudentQuery__
+ *
+ * To run a query within a React component, call `useGetStudentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStudentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStudentQuery({
+ *   variables: {
+ *      getStudentId: // value for 'getStudentId'
+ *   },
+ * });
+ */
+export function useGetStudentQuery(baseOptions: Apollo.QueryHookOptions<GetStudentQuery, GetStudentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStudentQuery, GetStudentQueryVariables>(GetStudentDocument, options);
+      }
+export function useGetStudentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStudentQuery, GetStudentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStudentQuery, GetStudentQueryVariables>(GetStudentDocument, options);
+        }
+export type GetStudentQueryHookResult = ReturnType<typeof useGetStudentQuery>;
+export type GetStudentLazyQueryHookResult = ReturnType<typeof useGetStudentLazyQuery>;
+export type GetStudentQueryResult = Apollo.QueryResult<GetStudentQuery, GetStudentQueryVariables>;
 export const CreateGroupDocument = gql`
     mutation CreateGroup($idCenter: String!, $name: String!, $modality: GroupModality!, $type: GroupType!, $timetable: [TimetableInput!]!, $instructors: [String!]) {
   createGroup(

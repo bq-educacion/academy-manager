@@ -1,0 +1,42 @@
+query GetStudent($getStudentId: String!) {
+  getStudent(id: $getStudentId) {
+    id
+    name
+    birthDate
+    course
+    registrationDate
+    allergies
+    descriptionAllergy
+    signedMandate
+    imageAuthorisation
+    goesAlone
+    collectionPermit
+    oldStudent
+    notes
+    contacts {
+      name
+      email
+      phone
+      send_info
+    }
+    groups {
+      id
+      id_group
+      name
+      center {
+        name
+        id
+      }
+      timetable {
+        id_day
+        day
+        start
+        end
+      }
+      course {
+        EPO
+        ESO
+      }
+    }
+  }
+}
