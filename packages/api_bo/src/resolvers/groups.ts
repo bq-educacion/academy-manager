@@ -287,6 +287,26 @@ export const groups = {
             //check if at least one instructor is enrolled
             activeGroups = exists.some((instructor) => instructor.enrolled);
           }
+
+          if (!activeGroups) {
+            const group = await groupCollection(ctx.db).findById(args.id);
+            if (!group) throw new Error("404, Group not found");
+            // if students are not in other groups, active = false
+            setActiveToFalse(
+              group.students,
+              groupCollection(ctx.db),
+              "students",
+              studentCollection(ctx.db),
+            );
+
+            // if instructors are not in other groups, active = false
+            setActiveToFalse(
+              group.instructors,
+              groupCollection(ctx.db),
+              "instructors",
+              instructorCollection(ctx.db),
+            );
+          }
         }
 
         if (args.center) {
