@@ -27,6 +27,13 @@ export type Scalars = {
   Number: number;
 };
 
+export type Area = {
+  __typename?: "Area";
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  region: Region;
+};
+
 export type Availability = {
   __typename?: "Availability";
   day: Days;
@@ -152,7 +159,7 @@ export type Instructor = {
   availability: Array<Availability>;
   corporateEmail?: Maybe<Scalars["String"]>;
   enrolled: Scalars["Boolean"];
-  geographicalAvailability: Scalars["String"];
+  geographicalAvailability: Array<Region>;
   groups: Array<Group>;
   id: Scalars["ID"];
   knowledge?: Maybe<Scalars["String"]>;
@@ -180,10 +187,12 @@ export type Mutation = {
   __typename?: "Mutation";
   addCenterContact: CenterContact;
   addStudentContact: StudentContact;
+  createArea: Area;
   createCenter: Center;
   createGroup: Group;
   createInstructor: Instructor;
   createStudent: Student;
+  deleteArea: Area;
   deleteCenter: Center;
   deleteGroup: Group;
   deleteInstructor: Instructor;
@@ -195,6 +204,7 @@ export type Mutation = {
   editStudent: Student;
   editStudentContact: StudentContact;
   setActiveCenter: Center;
+  setStatusInstructor: Instructor;
   setStatusStudent: Student;
 };
 
@@ -211,6 +221,11 @@ export type MutationAddStudentContactArgs = {
   name: Scalars["String"];
   phone: Scalars["String"];
   send_info: Scalars["Boolean"];
+};
+
+export type MutationCreateAreaArgs = {
+  name: Scalars["String"];
+  region: Region;
 };
 
 export type MutationCreateCenterArgs = {
@@ -241,7 +256,7 @@ export type MutationCreateInstructorArgs = {
   availability: Array<AvailabilityInput>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
   enrolled: Scalars["Boolean"];
-  geographicalAvailability: Scalars["String"];
+  geographicalAvailability: Array<Region>;
   groups: Array<Scalars["String"]>;
   knowledge?: InputMaybe<Scalars["String"]>;
   languages?: InputMaybe<Array<Languages>>;
@@ -274,6 +289,10 @@ export type MutationCreateStudentArgs = {
   oldStudent?: InputMaybe<Scalars["Boolean"]>;
   registrationDate?: InputMaybe<Scalars["String"]>;
   signedMandate?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type MutationDeleteAreaArgs = {
+  id: Scalars["String"];
 };
 
 export type MutationDeleteCenterArgs = {
@@ -329,8 +348,7 @@ export type MutationEditInstructorArgs = {
   areas?: InputMaybe<Array<Scalars["String"]>>;
   availability?: InputMaybe<Array<AvailabilityInput>>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
-  enrolled?: InputMaybe<Scalars["Boolean"]>;
-  geographicalAvailability?: InputMaybe<Scalars["String"]>;
+  geographicalAvailability?: InputMaybe<Array<Region>>;
   groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
   knowledge?: InputMaybe<Scalars["String"]>;
@@ -377,6 +395,11 @@ export type MutationEditStudentContactArgs = {
 
 export type MutationSetActiveCenterArgs = {
   active: Scalars["Boolean"];
+  id: Scalars["String"];
+};
+
+export type MutationSetStatusInstructorArgs = {
+  enrolled: Scalars["Boolean"];
   id: Scalars["String"];
 };
 
@@ -463,6 +486,8 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: "Query";
   checkCorporateEmail: Scalars["String"];
+  getArea: Area;
+  getAreas: Array<Area>;
   getCenter: CenterInfo;
   getCenters: PaginatedCenters;
   getGroup: GroupInfo;
@@ -475,6 +500,14 @@ export type Query = {
 
 export type QueryCheckCorporateEmailArgs = {
   email: Scalars["String"];
+};
+
+export type QueryGetAreaArgs = {
+  id: Scalars["String"];
+};
+
+export type QueryGetAreasArgs = {
+  regions: Array<Region>;
 };
 
 export type QueryGetCenterArgs = {
@@ -524,6 +557,28 @@ export type QueryGetStudentsArgs = {
   pageSize?: InputMaybe<Scalars["Int"]>;
   searchText?: InputMaybe<Scalars["String"]>;
 };
+
+export enum Region {
+  Andalucia = "Andalucia",
+  Aragon = "Aragon",
+  Asturias = "Asturias",
+  Baleares = "Baleares",
+  Canarias = "Canarias",
+  Cantabria = "Cantabria",
+  CastillaLaMancha = "CastillaLaMancha",
+  CastillaYLeon = "CastillaYLeon",
+  Cataluna = "Cataluna",
+  Ceuta = "Ceuta",
+  ComunidadValenciana = "ComunidadValenciana",
+  Extremadura = "Extremadura",
+  Galicia = "Galicia",
+  LaRioja = "LaRioja",
+  Madrid = "Madrid",
+  Melilla = "Melilla",
+  Murcia = "Murcia",
+  Navarra = "Navarra",
+  PaisVasco = "PaisVasco",
+}
 
 export type Student = {
   __typename?: "Student";
@@ -713,6 +768,7 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Area: ResolverTypeWrapper<Area>;
   Availability: ResolverTypeWrapper<Availability>;
   AvailabilityInput: AvailabilityInput;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
@@ -744,6 +800,7 @@ export type ResolversTypes = ResolversObject<{
   PaginatedInstructors: ResolverTypeWrapper<PaginatedInstructors>;
   PaginatedStudents: ResolverTypeWrapper<PaginatedStudents>;
   Query: ResolverTypeWrapper<{}>;
+  Region: Region;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Student: ResolverTypeWrapper<Student>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
@@ -759,6 +816,7 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Area: Area;
   Availability: Availability;
   AvailabilityInput: AvailabilityInput;
   Boolean: Scalars["Boolean"];
@@ -787,6 +845,17 @@ export type ResolversParentTypes = ResolversObject<{
   TimetableInput: TimetableInput;
   trainingInstructor: TrainingInstructor;
   trainingInstructorInput: TrainingInstructorInput;
+}>;
+
+export type AreaResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Area"] =
+    ResolversParentTypes["Area"],
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  region?: Resolver<ResolversTypes["Region"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AvailabilityResolvers<
@@ -928,7 +997,7 @@ export type InstructorResolvers<
   >;
   enrolled?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   geographicalAvailability?: Resolver<
-    ResolversTypes["String"],
+    Array<ResolversTypes["Region"]>,
     ParentType,
     ContextType
   >;
@@ -1014,6 +1083,12 @@ export type MutationResolvers<
       "email" | "idStudent" | "name" | "phone" | "send_info"
     >
   >;
+  createArea?: Resolver<
+    ResolversTypes["Area"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateAreaArgs, "name" | "region">
+  >;
   createCenter?: Resolver<
     ResolversTypes["Center"],
     ParentType,
@@ -1055,6 +1130,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreateStudentArgs, "course" | "idGroups" | "name">
+  >;
+  deleteArea?: Resolver<
+    ResolversTypes["Area"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteAreaArgs, "id">
   >;
   deleteCenter?: Resolver<
     ResolversTypes["Center"],
@@ -1121,6 +1202,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSetActiveCenterArgs, "active" | "id">
+  >;
+  setStatusInstructor?: Resolver<
+    ResolversTypes["Instructor"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSetStatusInstructorArgs, "enrolled" | "id">
   >;
   setStatusStudent?: Resolver<
     ResolversTypes["Student"],
@@ -1197,6 +1284,18 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryCheckCorporateEmailArgs, "email">
+  >;
+  getArea?: Resolver<
+    ResolversTypes["Area"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetAreaArgs, "id">
+  >;
+  getAreas?: Resolver<
+    Array<ResolversTypes["Area"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetAreasArgs, "regions">
   >;
   getCenter?: Resolver<
     ResolversTypes["CenterInfo"],
@@ -1356,6 +1455,7 @@ export type TrainingInstructorResolvers<
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  Area?: AreaResolvers<ContextType>;
   Availability?: AvailabilityResolvers<ContextType>;
   Center?: CenterResolvers<ContextType>;
   CenterContact?: CenterContactResolvers<ContextType>;

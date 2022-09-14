@@ -78,7 +78,7 @@ export const typeDefs = gql`
     availability: [Availability!]!
     summerAvailability: summerAvailabilityInstructor
     vehicle: TypeVehicleInstructor!
-    geographicalAvailability: String!
+    geographicalAvailability: [Region!]!
     areas: [String!]!
     notes: String
     groups: [Group!]!
@@ -116,7 +116,7 @@ export const typeDefs = gql`
       availability: [AvailabilityInput!]!
       summerAvailability: summerAvailabilityInstructor
       vehicle: TypeVehicleInstructor!
-      geographicalAvailability: String!
+      geographicalAvailability: [Region!]!
       areas: [String!]!
       notes: String
       groups: [String!]!
@@ -128,7 +128,6 @@ export const typeDefs = gql`
       personalEmail: String
       corporateEmail:String
       phone:String
-      enrolled:Boolean
       notes:String
       training:trainingInstructorInput
       previousExperience:previousExperienceInstructor
@@ -139,7 +138,7 @@ export const typeDefs = gql`
       platformEducationExperience: [String!]
       languages: [Languages!]
       vehicle:TypeVehicleInstructor
-      geographicalAvailability:String
+      geographicalAvailability:[Region!]
       areas: [String!]
       availability: [AvailabilityInput!]
       summerAvailability: summerAvailabilityInstructor
@@ -147,6 +146,8 @@ export const typeDefs = gql`
     ): Instructor!
 
     deleteInstructor(id: String!): Instructor!
+
+    setStatusInstructor(id: String!, enrolled: Boolean!): Instructor!
   }
 
 `;

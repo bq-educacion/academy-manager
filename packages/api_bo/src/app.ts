@@ -5,12 +5,14 @@ import { centers } from "./resolvers/centers.ts";
 import { groups } from "./resolvers/groups.ts";
 import { instructors } from "./resolvers/instructors.ts";
 import { students } from "./resolvers/students.ts";
+import { areas } from "./resolvers/areas.ts";
 import { typeDefs as center } from "./schemas/center.ts";
 import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
 import { typeDefs as group } from "./schemas/group.ts";
 import { typeDefs as scalars } from "./schemas/scalars.ts";
 import { typeDefs as enums } from "./schemas/enums.ts";
+import { typeDefs as area } from "./schemas/area.ts";
 import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
@@ -60,8 +62,8 @@ try {
 
   const dec = new TextDecoder();
   const schema = makeExecutableSchema({
-    resolvers: [centers, groups, instructors, students],
-    typeDefs: [center, student, instructor, group, scalars, enums],
+    resolvers: [centers, groups, instructors, students, areas],
+    typeDefs: [center, student, instructor, group, area, scalars, enums],
   });
 
   const app = opine();

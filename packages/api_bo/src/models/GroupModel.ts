@@ -4,10 +4,7 @@ import { Collection, Database } from "mongo";
 import { FindById } from "./types.ts";
 
 export type GroupModel =
-  & Omit<
-    Group,
-    "id" | "center" | "students" | "instructors"
-  >
+  & Omit<Group, "id" | "center" | "students" | "instructors">
   & {
     _id: ObjectId;
     center: ObjectId | null;

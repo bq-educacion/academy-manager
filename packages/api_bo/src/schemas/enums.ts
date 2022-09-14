@@ -5,4 +5,26 @@ export const typeDefs = gql`
     English
     Spanish
   }
+  
+  enum Region{
+    Andalucia
+    Aragon
+    Asturias
+    Baleares
+    Canarias
+    Cantabria
+    CastillaLaMancha
+    CastillaYLeon
+    Cataluna
+    Ceuta
+    ComunidadValenciana
+    Extremadura
+    Galicia
+    LaRioja
+    Madrid
+    Melilla
+    Murcia
+    Navarra
+    PaisVasco
+  }
 `;
