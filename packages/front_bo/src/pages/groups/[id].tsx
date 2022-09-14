@@ -432,7 +432,16 @@ const EditGroup: NextPage = () => {
                     <styles.BoldP4>
                       {t("pages.edit-group.teacher")}
                     </styles.BoldP4>
-                    {teachers.length === 0 && teachers.push("")}
+                    {teachers.length === 0 && (
+                      <Bin
+                        onClick={() => {
+                          setTeachers([...teachers, ""]);
+                        }}
+                      >
+                        <Icon name="add" />
+                        <Icon name="user" />
+                      </Bin>
+                    )}
                     {teachers.map((teacher, index) => (
                       <ContactDiv
                         onClick={() => {
@@ -464,7 +473,7 @@ const EditGroup: NextPage = () => {
                             setTeachers(newTeachers);
                           }}
                         >
-                          {teachers.length > 1 && <Icon name="eliminate" />}
+                          <Icon name="eliminate" />
                         </Bin>
                         <Bin
                           onClick={() => {
