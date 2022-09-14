@@ -356,7 +356,14 @@
       "name": "Nombre del grupo",
       "nature": "Modalidad",
       "type": "Tipo",
-      "teacher": "Monitor"
+      "teacher": "Monitor",
+      "delete-modal": {
+        "title": "Eliminar grupo",
+        "text": "Eliminando este grupo se borrará definitivamente y no podrá ser recuperado.",
+        "text1": "Los alumnos anexos serán eliminados y no se podrán recuperar.",
+        "text2": "Los monitores anexos a este grupo no podrán acceder a su información.",
+        "text3": "Las incidencias creadas en relación a este grupo serán eliminadas y no se podrán recuperar."
+      }
     },
     "edit-center": {
       "state-modal": {

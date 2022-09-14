@@ -14,12 +14,13 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import withApollo from "../../apollo/withApollo";
-import { AddTimeTableV2, Layout } from "../../components";
+import { AddTimeTableV2, Layout, Modal } from "../../components";
 import { sections } from "../../config";
 import {
   GroupModality,
   GroupType,
   TimetableInput,
+  useDeleteGroupMutation,
   useEditGroupMutation,
   useGetGroupQuery,
   useSimpleCentersNameQuery,
@@ -35,6 +36,13 @@ const EditGroup: NextPage = () => {
       getGroupId: router.query.id as string,
     },
   });
+
+  const [deleteGroupMutation] = useDeleteGroupMutation({
+    variables: {
+      deleteGroupId: router.query.id as string,
+    },
+  });
+
   const { data: TeachersData } = useSimpleInstructorsNameQuery();
 
   const { data: CentersData } = useSimpleCentersNameQuery();
@@ -172,8 +180,60 @@ const EditGroup: NextPage = () => {
     }
   }, [openAlertBad, openAlertGood]);
 
+  const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
+
   return (
     <>
+      {openModalDelete && (
+        <Modal
+          setModal={setOpenModalDelete}
+          title=""
+          children={
+            <ModalDiv>
+              <styles.BoldP2>
+                {t("pages.edit-group.delete-modal.title")}
+              </styles.BoldP2>
+              <styles.P4>{t("pages.edit-group.delete-modal.text")}</styles.P4>
+              <DelteModalDiv>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-group.delete-modal.text1")}
+                </styles.P4>
+              </DelteModalDiv>
+              <DelteModalDiv>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-group.delete-modal.text2")}
+                </styles.P4>
+              </DelteModalDiv>
+              <DelteModalDiv2>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-group.delete-modal.text3")}
+                </styles.P4>
+              </DelteModalDiv2>
+              <ButtonsModalDiv>
+                <Button
+                  text={t("pages.edit-center.delete-modal.button1")}
+                  deleteRed
+                  onClick={() => {
+                    deleteGroupMutation().then(() => {
+                      router.push("/groups");
+                    });
+                  }}
+                />
+                <Button
+                  text={t("pages.edit-center.delete-modal.button2")}
+                  secondary
+                  onClick={() => {
+                    setOpenModalDelete(false);
+                  }}
+                />
+              </ButtonsModalDiv>
+            </ModalDiv>
+          }
+        />
+      )}
       {openAlertBad && (
         <Alert setOpen={setOpenAlertBad} bad title={t("general.error")} />
       )}
@@ -196,7 +256,7 @@ const EditGroup: NextPage = () => {
             <Button
               text={t("pages.edit-group.delete")}
               onClick={() => {
-                // setOpenModalDelete(true);
+                setOpenModalDelete(true);
               }}
               deleteRed
             />
@@ -586,5 +646,52 @@ const LoadingAnimation = styled.div`
       animation-delay: -0.9s;
       background-color: ${colors.colors.purple80};
     }
+  }
+`;
+
+const ModalDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  & > p:nth-child(1) {
+    margin-top: -40px;
+    margin-bottom: 25px;
+  }
+  & > p:nth-child(2) {
+    margin-bottom: 30px;
+  }
+`;
+
+const ButtonsModalDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: max-content;
+  & > * {
+    margin-right: 10px;
+  }
+`;
+
+const DelteModalDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  & > svg {
+    margin-right: 5px;
+    overflow: visible;
+    color: ${colors.colors.yellow60};
+  }
+`;
+
+const DelteModalDiv2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+  & > svg {
+    margin-right: 5px;
+    overflow: visible;
+    color: ${colors.colors.yellow60};
   }
 `;
