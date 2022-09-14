@@ -13,6 +13,7 @@ type Data = {
 };
 
 type TableProps<T> = {
+  yellow?: boolean;
   data: T[];
   columns: {
     label: string;
@@ -52,6 +53,7 @@ const Table = <T extends Data>({
   onSetOrder,
   onClickRow,
   inactiveIndexes,
+  yellow,
 }: TableProps<T>) => {
   const [hover, setHover] = useState<string>("");
 
@@ -83,6 +85,7 @@ const Table = <T extends Data>({
         <React.Fragment key={item.id}>
           {columns.map((column) => (
             <Cell
+              yellow={yellow ? true : false}
               InactiveIndexes={inactiveIndexes}
               HoverLine={hover}
               onMouseEnter={() => {
@@ -139,7 +142,11 @@ const HeaderCell = styled.div`
   }
 `;
 
-const Cell = styled.div<{ HoverLine: string; InactiveIndexes?: number[] }>`
+const Cell = styled.div<{
+  HoverLine: string;
+  InactiveIndexes?: number[];
+  yellow: boolean;
+}>`
   display: flex;
   height: 39px;
   align-items: center;
@@ -161,8 +168,17 @@ const Cell = styled.div<{ HoverLine: string; InactiveIndexes?: number[] }>`
     if (props.InactiveIndexes) {
       return props.InactiveIndexes.map((value) => {
         return `&.H${value} {
-          background-color: ${colors.colors.red40Transparent};
-          color: ${colors.colors.red80};
+          ${
+            props.yellow
+              ? `background-color: ${colors.colors.yellow40Transparent};`
+              : `background-color: ${colors.colors.red40Transparent}`
+          }
+          ${
+            props.yellow
+              ? `color: ${colors.colors.yellow100};`
+              : `color: ${colors.colors.red80};`
+          }
+          
         }`;
       });
     }

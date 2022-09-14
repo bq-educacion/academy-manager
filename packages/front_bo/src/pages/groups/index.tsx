@@ -180,6 +180,7 @@ const GroupsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Group> & { id: string }>
+            yellow
             onClickRow={(id) => router.push(`/groups/${id}`)}
             inactiveIndexes={inactiveIndexes}
             data={tableData}
