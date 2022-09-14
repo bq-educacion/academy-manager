@@ -348,6 +348,7 @@
   },
   "pages": {
     "edit-group": {
+      "error-top": "Este grupo no tiene monitores",
       "delete": "Eliminar grupo",
       "info": "Información del grupo",
       "time": "Horario",

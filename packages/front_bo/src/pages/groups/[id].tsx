@@ -252,47 +252,55 @@ const EditGroup: NextPage = () => {
         section={sections[0].title}
         label={sections[0].links[2].label}
         childrenSubHeader={
-          <SubHeaderDiv>
-            <Button
-              text={t("pages.edit-group.delete")}
-              onClick={() => {
-                setOpenModalDelete(true);
-              }}
-              deleteRed
-            />
-            <GreyDivider loading={loading2} />
-
-            {loading2 && (
-              <LoadingAnimation>
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
-              </LoadingAnimation>
+          <>
+            {teachers.length === 0 && (
+              <ErrorTopDiv>
+                <Icon name="alert" />
+                <styles.BoldP4>{t("pages.edit-group.error-top")}</styles.BoldP4>
+              </ErrorTopDiv>
             )}
+            <SubHeaderDiv>
+              <Button
+                text={t("pages.edit-group.delete")}
+                onClick={() => {
+                  setOpenModalDelete(true);
+                }}
+                deleteRed
+              />
+              <GreyDivider loading={loading2} />
 
-            <Button
-              text={t("pages.edit-center.save")}
-              onClick={() => {
-                if (name === "") {
-                  setNameError(true);
-                }
-                if (!timeTableError && name !== "") {
-                  editGroupMutation()
-                    .then(() => {
-                      setChanges(false);
-                      setTimeout(() => {
-                        setOpenAlertGood(true);
-                      }, 1000);
-                    })
-                    .catch(() => {
-                      setOpenAlertBad(true);
-                    });
-                }
-              }}
-              create
-              disabled={!changes}
-            />
-          </SubHeaderDiv>
+              {loading2 && (
+                <LoadingAnimation>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </LoadingAnimation>
+              )}
+
+              <Button
+                text={t("pages.edit-center.save")}
+                onClick={() => {
+                  if (name === "") {
+                    setNameError(true);
+                  }
+                  if (!timeTableError && name !== "") {
+                    editGroupMutation()
+                      .then(() => {
+                        setChanges(false);
+                        setTimeout(() => {
+                          setOpenAlertGood(true);
+                        }, 1000);
+                      })
+                      .catch(() => {
+                        setOpenAlertBad(true);
+                      });
+                  }
+                }}
+                create
+                disabled={!changes}
+              />
+            </SubHeaderDiv>
+          </>
         }
         children2={
           data && (
@@ -702,5 +710,23 @@ const DelteModalDiv2 = styled.div`
     margin-right: 5px;
     overflow: visible;
     color: ${colors.colors.yellow60};
+  }
+`;
+
+const ErrorTopDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 20px;
+  margin: 20px 40px 0 40px;
+  border: solid 1px ${colors.colors.yellow60};
+  border-radius: 4px;
+  width: auto;
+  height: 40px;
+  background-color: ${colors.colors.yellow60Transparent};
+  color: ${colors.colors.yellow80};
+  & > svg {
+    margin-right: 10px;
   }
 `;
