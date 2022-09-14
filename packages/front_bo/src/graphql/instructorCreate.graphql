@@ -15,7 +15,7 @@ mutation CreateInstructor(
   $availability: [AvailabilityInput!]!
   $summerAvailability: summerAvailabilityInstructor!
   $vehicle: TypeVehicleInstructor!
-  $geographicalAvailability: String!
+  $geographicalAvailability: [Region!]!
   $areas: [String!]!
   $groups: [String!]!
 ) {

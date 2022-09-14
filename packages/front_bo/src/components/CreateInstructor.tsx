@@ -23,6 +23,7 @@ import {
   Days,
   Languages,
   PreviousExperienceInstructor,
+  Region,
   SummerAvailabilityInstructor,
   TrainingInstructorInput,
   TypeVehicleInstructor,
@@ -899,7 +900,7 @@ const CreateInstructor: FC<{
                           summer || SummerAvailabilityInstructor.No,
                         vehicle:
                           vehicle || TypeVehicleInstructor.PublicTransport,
-                        geographicalAvailability: LocalZones.join(", "),
+                        geographicalAvailability: Region.Andalucia,
                         areas: especifyZones,
                         groups: groups,
                       },
@@ -952,7 +953,7 @@ const CreateInstructor: FC<{
                           summer || SummerAvailabilityInstructor.No,
                         vehicle:
                           vehicle || TypeVehicleInstructor.PublicTransport,
-                        geographicalAvailability: LocalZones.join(", "),
+                        geographicalAvailability: Region.Andalucia,
                         areas: especifyZones,
                         groups: groups,
                       },

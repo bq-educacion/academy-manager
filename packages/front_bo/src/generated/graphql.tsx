@@ -16,6 +16,13 @@ export type Scalars = {
   Number: any;
 };
 
+export type Area = {
+  __typename?: 'Area';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  region: Region;
+};
+
 export type Availability = {
   __typename?: 'Availability';
   day: Days;
@@ -141,7 +148,7 @@ export type Instructor = {
   availability: Array<Availability>;
   corporateEmail?: Maybe<Scalars['String']>;
   enrolled: Scalars['Boolean'];
-  geographicalAvailability: Scalars['String'];
+  geographicalAvailability: Array<Region>;
   groups: Array<Group>;
   id: Scalars['ID'];
   knowledge?: Maybe<Scalars['String']>;
@@ -169,10 +176,12 @@ export type Mutation = {
   __typename?: 'Mutation';
   addCenterContact: CenterContact;
   addStudentContact: StudentContact;
+  createArea: Area;
   createCenter: Center;
   createGroup: Group;
   createInstructor: Instructor;
   createStudent: Student;
+  deleteArea: Area;
   deleteCenter: Center;
   deleteGroup: Group;
   deleteInstructor: Instructor;
@@ -184,6 +193,7 @@ export type Mutation = {
   editStudent: Student;
   editStudentContact: StudentContact;
   setActiveCenter: Center;
+  setStatusInstructor: Instructor;
   setStatusStudent: Student;
 };
 
@@ -202,6 +212,12 @@ export type MutationAddStudentContactArgs = {
   name: Scalars['String'];
   phone: Scalars['String'];
   send_info: Scalars['Boolean'];
+};
+
+
+export type MutationCreateAreaArgs = {
+  name: Scalars['String'];
+  region: Region;
 };
 
 
@@ -235,7 +251,7 @@ export type MutationCreateInstructorArgs = {
   availability: Array<AvailabilityInput>;
   corporateEmail?: InputMaybe<Scalars['String']>;
   enrolled: Scalars['Boolean'];
-  geographicalAvailability: Scalars['String'];
+  geographicalAvailability: Array<Region>;
   groups: Array<Scalars['String']>;
   knowledge?: InputMaybe<Scalars['String']>;
   languages?: InputMaybe<Array<Languages>>;
@@ -269,6 +285,11 @@ export type MutationCreateStudentArgs = {
   oldStudent?: InputMaybe<Scalars['Boolean']>;
   registrationDate?: InputMaybe<Scalars['String']>;
   signedMandate?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationDeleteAreaArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -332,8 +353,7 @@ export type MutationEditInstructorArgs = {
   areas?: InputMaybe<Array<Scalars['String']>>;
   availability?: InputMaybe<Array<AvailabilityInput>>;
   corporateEmail?: InputMaybe<Scalars['String']>;
-  enrolled?: InputMaybe<Scalars['Boolean']>;
-  geographicalAvailability?: InputMaybe<Scalars['String']>;
+  geographicalAvailability?: InputMaybe<Array<Region>>;
   groups?: InputMaybe<Array<Scalars['String']>>;
   id: Scalars['String'];
   knowledge?: InputMaybe<Scalars['String']>;
@@ -383,6 +403,12 @@ export type MutationEditStudentContactArgs = {
 
 export type MutationSetActiveCenterArgs = {
   active: Scalars['Boolean'];
+  id: Scalars['String'];
+};
+
+
+export type MutationSetStatusInstructorArgs = {
+  enrolled: Scalars['Boolean'];
   id: Scalars['String'];
 };
 
@@ -470,6 +496,8 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: 'Query';
   checkCorporateEmail: Scalars['String'];
+  getArea: Area;
+  getAreas: Array<Area>;
   getCenter: CenterInfo;
   getCenters: PaginatedCenters;
   getGroup: GroupInfo;
@@ -483,6 +511,16 @@ export type Query = {
 
 export type QueryCheckCorporateEmailArgs = {
   email: Scalars['String'];
+};
+
+
+export type QueryGetAreaArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetAreasArgs = {
+  regions: Array<Region>;
 };
 
 
@@ -540,6 +578,28 @@ export type QueryGetStudentsArgs = {
   pageSize?: InputMaybe<Scalars['Int']>;
   searchText?: InputMaybe<Scalars['String']>;
 };
+
+export enum Region {
+  Andalucia = 'Andalucia',
+  Aragon = 'Aragon',
+  Asturias = 'Asturias',
+  Baleares = 'Baleares',
+  Canarias = 'Canarias',
+  Cantabria = 'Cantabria',
+  CastillaLaMancha = 'CastillaLaMancha',
+  CastillaYLeon = 'CastillaYLeon',
+  Cataluna = 'Cataluna',
+  Ceuta = 'Ceuta',
+  ComunidadValenciana = 'ComunidadValenciana',
+  Extremadura = 'Extremadura',
+  Galicia = 'Galicia',
+  LaRioja = 'LaRioja',
+  Madrid = 'Madrid',
+  Melilla = 'Melilla',
+  Murcia = 'Murcia',
+  Navarra = 'Navarra',
+  PaisVasco = 'PaisVasco'
+}
 
 export type Student = {
   __typename?: 'Student';
@@ -752,7 +812,7 @@ export type CreateInstructorMutationVariables = Exact<{
   availability: Array<AvailabilityInput> | AvailabilityInput;
   summerAvailability: SummerAvailabilityInstructor;
   vehicle: TypeVehicleInstructor;
-  geographicalAvailability: Scalars['String'];
+  geographicalAvailability: Array<Region> | Region;
   areas: Array<Scalars['String']> | Scalars['String'];
   groups: Array<Scalars['String']> | Scalars['String'];
 }>;
@@ -769,7 +829,7 @@ export type GetInstructorsQueryVariables = Exact<{
 }>;
 
 
-export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: string, enrolled: boolean, active: boolean, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
+export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: Array<Region>, enrolled: boolean, active: boolean, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
 
 export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1357,7 +1417,7 @@ export type GetGroupsQueryHookResult = ReturnType<typeof useGetGroupsQuery>;
 export type GetGroupsLazyQueryHookResult = ReturnType<typeof useGetGroupsLazyQuery>;
 export type GetGroupsQueryResult = Apollo.QueryResult<GetGroupsQuery, GetGroupsQueryVariables>;
 export const CreateInstructorDocument = gql`
-    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $enrolled: Boolean!, $training: trainingInstructorInput!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [Languages!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: String!, $areas: [String!]!, $groups: [String!]!) {
+    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $enrolled: Boolean!, $training: trainingInstructorInput!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [Languages!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: [Region!]!, $areas: [String!]!, $groups: [String!]!) {
   createInstructor(
     name: $name
     corporateEmail: $corporateEmail
