@@ -677,6 +677,20 @@ export type EditCenterMutationVariables = Exact<{
 
 export type EditCenterMutation = { __typename?: 'Mutation', editCenter: { __typename?: 'Center', id: string } };
 
+export type EditGroupMutationVariables = Exact<{
+  editGroupId: Scalars['String'];
+  instructors?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  center?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  timetable?: InputMaybe<Array<TimetableInput> | TimetableInput>;
+  type?: InputMaybe<GroupType>;
+  modality?: InputMaybe<GroupModality>;
+  name?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type EditGroupMutation = { __typename?: 'Mutation', editGroup: { __typename?: 'Group', id: string } };
+
 export type GetCenterQueryVariables = Exact<{
   getCenterId: Scalars['String'];
 }>;
@@ -1026,6 +1040,55 @@ export function useEditCenterMutation(baseOptions?: Apollo.MutationHookOptions<E
 export type EditCenterMutationHookResult = ReturnType<typeof useEditCenterMutation>;
 export type EditCenterMutationResult = Apollo.MutationResult<EditCenterMutation>;
 export type EditCenterMutationOptions = Apollo.BaseMutationOptions<EditCenterMutation, EditCenterMutationVariables>;
+export const EditGroupDocument = gql`
+    mutation EditGroup($editGroupId: String!, $instructors: [String!], $center: String, $notes: String, $timetable: [TimetableInput!], $type: GroupType, $modality: GroupModality, $name: String) {
+  editGroup(
+    id: $editGroupId
+    instructors: $instructors
+    center: $center
+    notes: $notes
+    timetable: $timetable
+    type: $type
+    modality: $modality
+    name: $name
+  ) {
+    id
+  }
+}
+    `;
+export type EditGroupMutationFn = Apollo.MutationFunction<EditGroupMutation, EditGroupMutationVariables>;
+
+/**
+ * __useEditGroupMutation__
+ *
+ * To run a mutation, you first call `useEditGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editGroupMutation, { data, loading, error }] = useEditGroupMutation({
+ *   variables: {
+ *      editGroupId: // value for 'editGroupId'
+ *      instructors: // value for 'instructors'
+ *      center: // value for 'center'
+ *      notes: // value for 'notes'
+ *      timetable: // value for 'timetable'
+ *      type: // value for 'type'
+ *      modality: // value for 'modality'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useEditGroupMutation(baseOptions?: Apollo.MutationHookOptions<EditGroupMutation, EditGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditGroupMutation, EditGroupMutationVariables>(EditGroupDocument, options);
+      }
+export type EditGroupMutationHookResult = ReturnType<typeof useEditGroupMutation>;
+export type EditGroupMutationResult = Apollo.MutationResult<EditGroupMutation>;
+export type EditGroupMutationOptions = Apollo.BaseMutationOptions<EditGroupMutation, EditGroupMutationVariables>;
 export const GetCenterDocument = gql`
     query GetCenter($getCenterId: String!) {
   getCenter(id: $getCenterId) {

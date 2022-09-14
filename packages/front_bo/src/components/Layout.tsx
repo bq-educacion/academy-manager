@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import { FC, ReactNode } from "react";
 import { ContentStart, ErrorContent, LateralMenu } from ".";
 import { sections } from "../config";
@@ -28,7 +29,7 @@ const Layout: FC<{
   children5,
 }) => {
   return (
-    <div>
+    <Container>
       <LateralMenu sections={sections} section={section} label={label} />
       {!error && (
         <ContentStart
@@ -44,8 +45,13 @@ const Layout: FC<{
         </ContentStart>
       )}
       {error && <ErrorContent error={error} />}
-    </div>
+    </Container>
   );
 };
 
 export default Layout;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+`;

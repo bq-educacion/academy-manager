@@ -82,11 +82,10 @@ const Logo = styled(BQLogo)`
 `;
 
 const LateralContainer = styled.div`
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   width: 250px;
   background-color: ${colors.colors.blackBackground};
   color: ${colors.colors.white};

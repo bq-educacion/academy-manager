@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   colors,
   DropDownUnique,
@@ -11,13 +12,15 @@ import {
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import withApollo from "../../apollo/withApollo";
-import { Layout } from "../../components";
+import { AddTimeTableV2, Layout } from "../../components";
 import { sections } from "../../config";
 import {
   GroupModality,
   GroupType,
+  TimetableInput,
+  useEditGroupMutation,
   useGetGroupQuery,
   useSimpleCentersNameQuery,
   useSimpleInstructorsNameQuery,
@@ -53,10 +56,130 @@ const EditGroup: NextPage = () => {
   const [teachers, setTeachers] = useState<string[]>(
     data?.getGroup?.group.instructors.map((t) => t.id) || []
   );
-  const [notes, setNotes] = useState<string>(data?.getGroup?.group.notes || "");
+  const [notes, setNotes] = useState<string | null>(
+    data?.getGroup?.group.notes || null
+  );
+  const [timeTableOnChange, setTimeTableOnChange] = useState<TimetableInput[]>(
+    data?.getGroup.group.timetable || []
+  );
+  const [timeTableError, setTimeTableError] = useState<boolean>(false);
+  const [changes, setChanges] = useState<boolean>(false);
+
+  const [editGroupMutation, { loading }] = useEditGroupMutation({
+    variables: {
+      editGroupId: router.query.id as string,
+      instructors: teachers,
+      center: center,
+      notes: notes,
+      timetable: timeTableOnChange.map((t) => {
+        return {
+          day: t.day,
+          start: t.start,
+          end: t.end,
+        };
+      }),
+      type: type,
+      modality: modality,
+      name: name,
+    },
+  });
+
+  useLayoutEffect(() => {
+    if (
+      name !== data?.getGroup.group.name ||
+      center !== data?.getGroup.group.center?.id ||
+      modality !== data?.getGroup.group.modality ||
+      type !== data?.getGroup.group.type ||
+      !data?.getGroup.group.instructors
+        .map((t) => t.id)
+        .every((t) => teachers.includes(t)) ||
+      notes !== data?.getGroup.group.notes ||
+      !data?.getGroup.group.timetable.every((t) =>
+        timeTableOnChange.includes(t)
+      ) ||
+      data.getGroup.group.timetable.length !== timeTableOnChange.length
+    ) {
+      setChanges(true);
+      window.addEventListener("beforeunload", function (e) {
+        e.preventDefault();
+        e.returnValue = "";
+      });
+    }
+    if (
+      name === data?.getGroup.group.name &&
+      center === data?.getGroup.group.center?.id &&
+      modality === data?.getGroup.group.modality &&
+      type === data?.getGroup.group.type &&
+      data?.getGroup.group.instructors
+        .map((t) => t.id)
+        .every((t) => teachers.includes(t)) &&
+      notes === data?.getGroup.group.notes &&
+      data?.getGroup.group.timetable.every((t) =>
+        timeTableOnChange.includes(t)
+      ) &&
+      data.getGroup.group.timetable.length === timeTableOnChange.length
+    ) {
+      setChanges(false);
+      window.removeEventListener("beforeunload", function (e) {
+        e.preventDefault();
+        e.returnValue = "";
+      });
+    }
+  }, [name, center, modality, type, teachers, notes, timeTableOnChange, data]);
+
+  const [openAlertBad, setOpenAlertBad] = useState<boolean>(false);
+  const [openAlertGood, setOpenAlertGood] = useState<boolean>(false);
+  const [loading2, setLoading2] = useState<boolean>(false);
+  useEffect(() => {
+    if (loading) {
+      setLoading2(true);
+    }
+    const timer = setTimeout(() => {
+      setLoading2(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  useEffect(() => {
+    if (data) {
+      setName(data.getGroup.group.name);
+      {
+        data.getGroup.group.center && setCenter(data.getGroup.group.center.id);
+      }
+      setModality(data.getGroup.group.modality);
+      setType(data.getGroup.group.type);
+      setTeachers(data.getGroup.group.instructors.map((t) => t.id));
+      {
+        (data.getGroup.group.notes && setNotes(data.getGroup.group.notes)) ||
+          setNotes("");
+      }
+      setTimeTableOnChange(data.getGroup.group.timetable);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (openAlertBad) {
+      const timer = setTimeout(() => {
+        setOpenAlertBad(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+    if (openAlertGood) {
+      const timer = setTimeout(() => {
+        setOpenAlertGood(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [openAlertBad, openAlertGood]);
 
   return (
     <>
+      {openAlertBad && (
+        <Alert setOpen={setOpenAlertBad} bad title={t("general.error")} />
+      )}
+      {openAlertGood && (
+        <Alert setOpen={setOpenAlertGood} ok title={t("general.saved")} />
+      )}
       <Layout
         title={sections[0].bigTitle}
         childrenHeader={
@@ -77,21 +200,37 @@ const EditGroup: NextPage = () => {
               }}
               deleteRed
             />
-            <GreyDivider loading={false} />
-            {/* {loading2 && (
+            <GreyDivider loading={loading2} />
+
+            {loading2 && (
               <LoadingAnimation>
                 <span className="dot"></span>
                 <span className="dot"></span>
                 <span className="dot"></span>
               </LoadingAnimation>
-            )} */}
+            )}
+
             <Button
               text={t("pages.edit-center.save")}
               onClick={() => {
-                // updateCenter();
+                if (name === "") {
+                  setNameError(true);
+                }
+                if (!timeTableError && name !== "") {
+                  editGroupMutation()
+                    .then(() => {
+                      setChanges(false);
+                      setTimeout(() => {
+                        setOpenAlertGood(true);
+                      }, 1000);
+                    })
+                    .catch(() => {
+                      setOpenAlertBad(true);
+                    });
+                }
               }}
               create
-              disabled={true}
+              disabled={!changes}
             />
           </SubHeaderDiv>
         }
@@ -106,6 +245,13 @@ const EditGroup: NextPage = () => {
                   <styles.BoldP4>{t("pages.edit-group.time")}</styles.BoldP4>
                 </GateFolderTitle>
               </GateFolder>
+              {showFolder2 && (
+                <AddTimeTableV2
+                  timeTableOnChange={timeTableOnChange}
+                  setTimeTable={setTimeTableOnChange}
+                  checkErrors={setTimeTableError}
+                />
+              )}
             </BodyDiv>
           )
         }
@@ -127,24 +273,29 @@ const EditGroup: NextPage = () => {
                     {t("pages.edit-center.date")}
                     {data?.getGroup.group.createdAt}
                   </styles.P4>
-                  <styles.P4>
-                    {t("pages.edit-group.course")}
-                    {data.getGroup.group.course.ESO &&
-                      data.getGroup.group.course.EPO &&
-                      t(
-                        `general.courses.${
-                          [...data.getGroup.group.course.EPO].sort((a, b) =>
-                            a.localeCompare(b)
-                          )[0]
-                        }`
-                      ) +
-                        t("general.to") +
+                  {(data.getGroup.group.course.EPO.length > 0 ||
+                    data.getGroup.group.course.ESO.length > 0) && (
+                    <styles.P4>
+                      {t("pages.edit-group.course")}
+                      {data.getGroup.group.course.ESO &&
+                        data.getGroup.group.course.EPO &&
                         t(
-                          `general.courses.${[...data.getGroup.group.course.ESO]
-                            .sort((a, b) => a.localeCompare(b))
-                            .at(-1)}`
-                        )}
-                  </styles.P4>
+                          `general.courses.${
+                            [...data.getGroup.group.course.EPO].sort((a, b) =>
+                              a.localeCompare(b)
+                            )[0]
+                          }`
+                        ) +
+                          t("general.to") +
+                          t(
+                            `general.courses.${[
+                              ...data.getGroup.group.course.ESO,
+                            ]
+                              .sort((a, b) => a.localeCompare(b))
+                              .at(-1)}`
+                          )}
+                    </styles.P4>
+                  )}
                   <a>
                     <styles.P4>
                       {t("pages.edit-center.students")}
@@ -221,8 +372,13 @@ const EditGroup: NextPage = () => {
                     <styles.BoldP4>
                       {t("pages.edit-group.teacher")}
                     </styles.BoldP4>
+                    {teachers.length === 0 && teachers.push("")}
                     {teachers.map((teacher, index) => (
-                      <ContactDiv>
+                      <ContactDiv
+                        onClick={() => {
+                          setChanges(true);
+                        }}
+                      >
                         <DropDownUnique
                           key={index}
                           options={
@@ -273,7 +429,7 @@ const EditGroup: NextPage = () => {
                       width="69.5vw"
                       height="8.33vw"
                       placeholder={t("pages.edit-center.notes-placeholder")}
-                      input={notes}
+                      input={notes || ""}
                       setInput={setNotes}
                       textArea
                     />
@@ -387,4 +543,48 @@ const GreyDivider = styled.div<{ loading: boolean }>`
   margin: 0 20px;
   background-color: ${colors.colors.gray40};
   height: 1px;
+`;
+
+const LoadingAnimation = styled.div`
+  @keyframes wave {
+    0%,
+    60%,
+    100% {
+      transform: initial;
+    }
+
+    30% {
+      transform: translateY(-15px);
+    }
+  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 99999;
+  .dot {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 7px;
+    animation: wave 1.3s linear infinite;
+
+    &:nth-child(1) {
+      background-color: ${colors.colors.orange80};
+    }
+
+    &:nth-child(2) {
+      animation-delay: -1.1s;
+      background-color: ${colors.colors.red80};
+    }
+
+    &:nth-child(3) {
+      animation-delay: -0.9s;
+      background-color: ${colors.colors.purple80};
+    }
+  }
 `;

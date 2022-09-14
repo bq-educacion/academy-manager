@@ -55,8 +55,7 @@ export default ContentStart;
 const ContentLayout = styled.div`
   background-color: ${colors.colors.grayBlueTransparent};
   width: calc(100% - 250px);
-  height: 100vh;
-  padding-left: 250px;
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
