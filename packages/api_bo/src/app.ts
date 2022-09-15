@@ -6,6 +6,7 @@ import { groups } from "./resolvers/groups.ts";
 import { instructors } from "./resolvers/instructors.ts";
 import { students } from "./resolvers/students.ts";
 import { areas } from "./resolvers/areas.ts";
+import { users } from "./resolvers/users.ts";
 import { typeDefs as center } from "./schemas/center.ts";
 import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
@@ -13,6 +14,7 @@ import { typeDefs as group } from "./schemas/group.ts";
 import { typeDefs as scalars } from "./schemas/scalars.ts";
 import { typeDefs as enums } from "./schemas/enums.ts";
 import { typeDefs as area } from "./schemas/area.ts";
+import { typeDefs as user } from "./schemas/user.ts";
 import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
@@ -62,8 +64,8 @@ try {
 
   const dec = new TextDecoder();
   const schema = makeExecutableSchema({
-    resolvers: [centers, groups, instructors, students, areas],
-    typeDefs: [center, student, instructor, group, area, scalars, enums],
+    resolvers: [centers, groups, instructors, students, areas, users],
+    typeDefs: [center, student, instructor, group, area, user, scalars, enums],
   });
 
   const app = opine();
@@ -86,7 +88,10 @@ try {
         schema,
         graphiql: true,
         context: () => {
-          return { db: client.database(DB_NAME), request };
+          return {
+            db: client.database(DB_NAME),
+            request,
+          };
         },
       })(request);
 
