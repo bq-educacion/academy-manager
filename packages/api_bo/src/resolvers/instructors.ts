@@ -343,7 +343,9 @@ export const instructors = {
 
           updateInstructor = {
             ...updateInstructor,
-            active: checkActiveGroups(existsGroups, true),
+            active: existsGroups.length === 0
+              ? false
+              : checkActiveGroups(existsGroups, true),
           };
 
           const instructorGroupsIds: ObjectId[] = await groupCollection(ctx.db)
@@ -374,6 +376,31 @@ export const instructors = {
               { $pull: { instructors: new ObjectId(args.id) } },
             );
           }
+          //set groups to inactive if they don't have instructors
+          const groupsWithoutInstructors: ObjectId[] = await groupCollection(
+            ctx.db,
+          ).distinct("_id", {
+            instructors: { $size: 0 },
+          });
+
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: groupsWithoutInstructors } },
+            { $set: { active: false } },
+          );
+
+          //if students are not in other groups, set active to false
+          const idStudents =
+            (await getUniqueItems(groupCollection(ctx.db), "students", {
+              active: false,
+            })).map((student) => {
+              return new ObjectId(student);
+            });
+          setActiveToFalse(
+            idStudents,
+            groupCollection(ctx.db),
+            "students",
+            studentCollection(ctx.db),
+          );
         }
 
         const newInstructor = await instructorCollection(ctx.db).findAndModify(

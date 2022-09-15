@@ -263,6 +263,7 @@ export const groups = {
     ): Promise<GroupModel> => {
       try {
         checkNotNull(args);
+        let activeGroups = false;
         let updateGroup = { ...args } as Partial<GroupModel>;
 
         if (args.instructors) {
@@ -279,13 +280,42 @@ export const groups = {
           if (exists?.length !== instructors?.length) {
             throw new Error("404, Instructors not found");
           }
+
           updateGroup = { ...updateGroup, instructors };
+
+          if (exists.length > 0) {
+            //check if at least one instructor is enrolled
+            activeGroups = exists.some((instructor) => instructor.enrolled);
+          }
+
+          if (!activeGroups) {
+            const group = await groupCollection(ctx.db).findById(args.id);
+            if (!group) throw new Error("404, Group not found");
+            // if students are not in other groups, active = false
+            setActiveToFalse(
+              group.students,
+              groupCollection(ctx.db),
+              "students",
+              studentCollection(ctx.db),
+            );
+
+            // if instructors are not in other groups, active = false
+            setActiveToFalse(
+              group.instructors,
+              groupCollection(ctx.db),
+              "instructors",
+              instructorCollection(ctx.db),
+            );
+          }
         }
 
         if (args.center) {
-          const exists = await centerCollection(ctx.db).findById(args.center);
+          const exists = await centerCollection(ctx.db).findOne({
+            _id: new ObjectId(args.center),
+            active: true,
+          });
           if (!exists) {
-            throw new Error("404, Center not found");
+            throw new Error("404, Center not found or not active");
           }
           updateGroup = { ...updateGroup, center: new ObjectId(args.center) };
         }
@@ -295,6 +325,8 @@ export const groups = {
           validHour(timetable);
           updateGroup = { ...updateGroup, timetable };
         }
+
+        updateGroup = { ...updateGroup, active: activeGroups };
 
         const newGroup = await groupCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
