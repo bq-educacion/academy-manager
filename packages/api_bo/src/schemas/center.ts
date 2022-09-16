@@ -107,7 +107,7 @@ export const typeDefs = gql`
 
   type Query {
     getCenters(
-      center: GetCentersInput!
+      centers: GetCentersInput!
     ): PaginatedCenters!
 
     getCenter(id: String!): CenterInfo!

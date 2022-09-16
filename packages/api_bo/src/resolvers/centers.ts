@@ -46,43 +46,52 @@ export const centers = {
       ctx: Context,
     ): Promise<PaginatedCenters> => {
       const filter: Filter<PaginatedCenters> = { $or: [{}] };
-      if (args.center.searchText) {
+      if (args.centers.searchText) {
         filter["$or"] = [
-          { name: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
+          { name: { $regex: `.*${args.centers.searchText}.*`, $options: "i" } },
           {
-            address: { $regex: `.*${args.center.searchText}.*`, $options: "i" },
+            address: {
+              $regex: `.*${args.centers.searchText}.*`,
+              $options: "i",
+            },
           },
           {
-            city: { $regex: `.*${args.center.searchText}.*`, $options: "i" },
+            city: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
           },
-          { phone: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
-          { email: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
-          { type: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
           {
-            nature: { $regex: `.*${args.center.searchText}.*`, $options: "i" },
+            phone: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
           },
-          { notes: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
+          {
+            email: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
+          },
+          { type: { $regex: `.*${args.centers.searchText}.*`, $options: "i" } },
+          {
+            nature: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
+          },
+          {
+            notes: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
+          },
           {
             createdAt: {
-              $regex: `.*${args.center.searchText}.*`,
+              $regex: `.*${args.centers.searchText}.*`,
               $options: "i",
             },
           },
           {
             languages: {
-              $regex: `.*${args.center.searchText}.*`,
+              $regex: `.*${args.centers.searchText}.*`,
               $options: "i",
             },
           },
           {
             "contacts.name": {
-              $regex: `.*${args.center.searchText}.*`,
+              $regex: `.*${args.centers.searchText}.*`,
               $options: "i",
             },
           },
           {
             "groupsName.name": {
-              $regex: `.*${args.center.searchText}.*`,
+              $regex: `.*${args.centers.searchText}.*`,
               $options: "i",
             },
           },
@@ -97,16 +106,16 @@ export const centers = {
         city: "city",
         type: "type",
       };
-      if (args.center.orderFilter && args.center.order) {
-        if (args.center.order !== 1 && args.center.order !== -1) {
+      if (args.centers.orderFilter && args.centers.order) {
+        if (args.centers.order !== 1 && args.centers.order !== -1) {
           throw new Error("400, wrong order (1 or -1)");
         }
         sortFilter = {
-          [OrderFilter[args.center.orderFilter]]: args.center.order,
+          [OrderFilter[args.centers.orderFilter]]: args.centers.order,
         };
-      } else if (args.center.orderFilter && !args.center.order) {
+      } else if (args.centers.orderFilter && !args.centers.order) {
         throw new Error("400, order is required");
-      } else if (!args.center.orderFilter && args.center.order) {
+      } else if (!args.centers.orderFilter && args.centers.order) {
         throw new Error("400, orderFilter is required");
       } else {
         sortFilter = { name: 1 };
@@ -117,8 +126,8 @@ export const centers = {
         filter,
         "centers",
         sortFilter,
-        args.center.page,
-        args.center.pageSize,
+        args.centers.page,
+        args.centers.pageSize,
       ) as Promise<PaginatedCenters>;
     },
 

@@ -73,75 +73,131 @@ export const instructors = {
       ctx: Context,
     ): Promise<PaginatedInstructors> => {
       const filter: Filter<PaginatedInstructors> = { $or: [{}] };
-      if (args.searchText) {
+      if (args.instructors.searchText) {
         filter["$or"] = [
-          { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
           {
-            corporateEmail: { $regex: `.*${args.searchText}.*`, $options: "i" },
-          },
-          {
-            personalEmail: { $regex: `.*${args.searchText}.*`, $options: "i" },
-          },
-          { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { state: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { training: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          {
-            previousExperience: {
-              $regex: `.*${args.searchText}.*`,
+            name: {
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
-          { knowledge: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { urlCV: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          {
+            corporateEmail: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            personalEmail: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            phone: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            state: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            training: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            previousExperience: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            knowledge: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            urlCV: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
           {
             materialsExperience: {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
           {
             platformEducationExperience: {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
-          { languages: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          {
+            languages: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
           {
             "availability.day": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
           {
             "availability.hours": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
           {
             summerAvailability: {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
-          { vehicle: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          {
+            vehicle: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
           {
             geographicalAvailability: {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
-          { areas: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          {
+            areas: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            notes: {
+              $regex: `.*${args.instructors.searchText}.*`,
+              $options: "i",
+            },
+          },
           {
             "centersName.name": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
           {
             "groupsId.id_group": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.instructors.searchText}.*`,
               $options: "i",
             },
           },
@@ -161,14 +217,16 @@ export const instructors = {
         summerAvailability: "summerAvailability",
       };
 
-      if (args.orderFilter && args.order) {
-        if (args.order !== 1 && args.order !== -1) {
+      if (args.instructors.orderFilter && args.instructors.order) {
+        if (args.instructors.order !== 1 && args.instructors.order !== -1) {
           throw new Error("400, wrong order (1 or -1)");
         }
-        sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
-      } else if (args.orderFilter && !args.order) {
+        sortFilter = {
+          [OrderFilter[args.instructors.orderFilter]]: args.instructors.order,
+        };
+      } else if (args.instructors.orderFilter && !args.instructors.order) {
         throw new Error("400, order is required");
-      } else if (!args.orderFilter && args.order) {
+      } else if (!args.instructors.orderFilter && args.instructors.order) {
         throw new Error("400, orderFilter is required");
       } else {
         sortFilter = { name: 1 };
@@ -179,8 +237,8 @@ export const instructors = {
         filter,
         "instructors",
         sortFilter,
-        args.page,
-        args.pageSize,
+        args.instructors.page,
+        args.instructors.pageSize,
       ) as Promise<PaginatedInstructors>;
     },
 
@@ -207,36 +265,40 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.instructor);
         if (
-          args.training.careerInEducation === null ||
-          args.training.technicalCareer === null
+          args.instructor.training.careerInEducation === null ||
+          args.instructor.training.technicalCareer === null
         ) {
           throw new Error("400, Fields cannot be null");
         }
 
         await checkAreas(
-          args.areas,
-          args.geographicalAvailability,
+          args.instructor.areas,
+          args.instructor.geographicalAvailability,
           areaCollection(ctx.db),
         );
 
         let newInstructor = {
-          ...args,
+          ...args.instructor,
           active: false,
-          availability: setIdDays(args.availability) as Availability[],
+          availability: setIdDays(
+            args.instructor.availability,
+          ) as Availability[],
         };
 
-        if (args.corporateEmail) {
+        if (args.instructor.corporateEmail) {
           const existsInstructor = await instructorCollection(ctx.db).findOne({
-            corporateEmail: args.corporateEmail,
+            corporateEmail: args.instructor.corporateEmail,
           });
           if (existsInstructor) {
             throw new Error("400, Corporate email must be unique");
           }
         }
 
-        const groups = args.groups?.map((group) => new ObjectId(group));
+        const groups = args.instructor.groups?.map((group) =>
+          new ObjectId(group)
+        );
         const existsGroups = await groupCollection(ctx.db)
           .find({
             _id: { $in: groups },
@@ -265,7 +327,7 @@ export const instructors = {
 
         instructors.Mutation.setStatusInstructor(
           _parent,
-          { id: idInstructor.toString(), enrolled: args.enrolled },
+          { id: idInstructor.toString(), enrolled: args.instructor.enrolled },
           ctx,
         );
 
@@ -284,14 +346,16 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
-        checkNotNull(args);
-        let updateInstructor = { ...args } as Partial<InstructorModel>;
+        checkNotNull(args.instructor);
+        let updateInstructor = { ...args.instructor } as Partial<
+          InstructorModel
+        >;
 
-        if (args.corporateEmail) {
+        if (args.instructor.corporateEmail) {
           const existsCorporateEmail = await instructorCollection(ctx.db)
             .findOne(
               {
-                corporateEmail: args.corporateEmail,
+                corporateEmail: args.instructor.corporateEmail,
               },
             );
           if (existsCorporateEmail) {
@@ -301,36 +365,48 @@ export const instructors = {
           }
         }
 
-        if (args.availability) {
-          const availability = setIdDays(args.availability) as Availability[];
+        if (args.instructor.availability) {
+          const availability = setIdDays(
+            args.instructor.availability,
+          ) as Availability[];
           updateInstructor = { ...updateInstructor, availability };
         }
 
-        if (args.areas && args.geographicalAvailability) {
+        if (args.instructor.areas && args.instructor.geographicalAvailability) {
           await checkAreas(
-            args.areas,
-            args.geographicalAvailability,
+            args.instructor.areas,
+            args.instructor.geographicalAvailability,
             areaCollection(ctx.db),
           );
-        } else if (args.areas && !args.geographicalAvailability) {
+        } else if (
+          args.instructor.areas && !args.instructor.geographicalAvailability
+        ) {
           const region = await instructorCollection(ctx.db).distinct(
             "geographicalAvailability",
             { _id: new ObjectId(args.id) },
           ) as Region[];
-          await checkAreas(args.areas, region, areaCollection(ctx.db));
-        } else if (!args.areas && args.geographicalAvailability) {
+          await checkAreas(
+            args.instructor.areas,
+            region,
+            areaCollection(ctx.db),
+          );
+        } else if (
+          !args.instructor.areas && args.instructor.geographicalAvailability
+        ) {
           const areas = await instructorCollection(ctx.db).distinct("areas", {
             _id: new ObjectId(args.id),
           }) as string[];
           await checkAreas(
             areas,
-            args.geographicalAvailability,
+            args.instructor.geographicalAvailability,
             areaCollection(ctx.db),
           );
         }
 
-        if (args.groups) {
-          const groups = args.groups.map((group) => new ObjectId(group));
+        if (args.instructor.groups) {
+          const groups = args.instructor.groups.map((group) =>
+            new ObjectId(group)
+          );
           const existsGroups = await groupCollection(ctx.db)
             .find({
               _id: { $in: groups },

@@ -114,7 +114,7 @@ export const typeDefs = gql`
 
   extend type Query {
     getGroups( 
-      group: GetGroupsInput!
+      groups: GetGroupsInput!
     ): PaginatedGroups!
 
     getGroup(id: String!): GroupInfo!

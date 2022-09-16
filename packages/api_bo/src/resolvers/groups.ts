@@ -73,68 +73,74 @@ export const groups = {
       ctx: Context,
     ): Promise<PaginatedGroups> => {
       const filter: Filter<PaginatedGroups> = { $or: [{}] };
-      if (args.group.searchText) {
+      if (args.groups.searchText) {
         filter["$or"] = [
           {
-            id_group: { $regex: `.*${args.group.searchText}.*`, $options: "i" },
+            id_group: {
+              $regex: `.*${args.groups.searchText}.*`,
+              $options: "i",
+            },
           },
-          { name: { $regex: `.*${args.group.searchText}.*`, $options: "i" } },
-          { type: { $regex: `.*${args.group.searchText}.*`, $options: "i" } },
+          { name: { $regex: `.*${args.groups.searchText}.*`, $options: "i" } },
+          { type: { $regex: `.*${args.groups.searchText}.*`, $options: "i" } },
           {
-            modality: { $regex: `.*${args.group.searchText}.*`, $options: "i" },
+            modality: {
+              $regex: `.*${args.groups.searchText}.*`,
+              $options: "i",
+            },
           },
           {
             createdAt: {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
           {
             "course.ESO": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
           {
             "course.EPO": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
           {
             "timetable.day": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
           {
             "timetable.start": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
           {
             "timetable.end": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
-          { notes: { $regex: `.*${args.group.searchText}.*`, $options: "i" } },
+          { notes: { $regex: `.*${args.groups.searchText}.*`, $options: "i" } },
           {
             "centersName.name": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
           {
             "instructorsName.name": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
           {
             "studentsName.name": {
-              $regex: `.*${args.group.searchText}.*`,
+              $regex: `.*${args.groups.searchText}.*`,
               $options: "i",
             },
           },
@@ -153,16 +159,16 @@ export const groups = {
         end: "timetable.end",
       };
 
-      if (args.group.orderFilter && args.group.order) {
-        if (args.group.order !== 1 && args.group.order !== -1) {
+      if (args.groups.orderFilter && args.groups.order) {
+        if (args.groups.order !== 1 && args.groups.order !== -1) {
           throw new Error("400, wrong order (1 or -1)");
         }
         sortFilter = {
-          [OrderFilter[args.group.orderFilter]]: args.group.order,
+          [OrderFilter[args.groups.orderFilter]]: args.groups.order,
         };
-      } else if (args.group.orderFilter && !args.group.order) {
+      } else if (args.groups.orderFilter && !args.groups.order) {
         throw new Error("400, order is required");
-      } else if (!args.group.orderFilter && args.group.order) {
+      } else if (!args.groups.orderFilter && args.groups.order) {
         throw new Error("400, orderFilter is required");
       } else {
         sortFilter = { id_group: 1 };
@@ -173,8 +179,8 @@ export const groups = {
         filter,
         "groups",
         sortFilter,
-        args.group.page,
-        args.group.pageSize,
+        args.groups.page,
+        args.groups.pageSize,
       ) as Promise<PaginatedGroups>;
     },
 

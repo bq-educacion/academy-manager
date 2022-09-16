@@ -2,14 +2,14 @@ import {
   CenterContactInput,
   CreateCenterInput,
   CreateGroupInput,
+  CreateInstructorInput,
   EditCenterContactInput,
   EditCenterInput,
   EditGroupInput,
+  EditInstructorInput,
   MutationAddStudentContactArgs,
   MutationCreateAreaArgs,
-  MutationCreateInstructorArgs,
   MutationCreateStudentArgs,
-  MutationEditInstructorArgs,
   MutationEditStudentArgs,
   MutationEditStudentContactArgs,
   MutationSetActiveCenterArgs,
@@ -19,9 +19,7 @@ import {
 
 export function checkNotNull(
   args:
-    | MutationCreateInstructorArgs
     | MutationCreateStudentArgs
-    | MutationEditInstructorArgs
     | MutationEditStudentArgs
     | MutationEditStudentContactArgs
     | MutationAddStudentContactArgs
@@ -34,7 +32,9 @@ export function checkNotNull(
     | CenterContactInput
     | EditCenterContactInput
     | CreateGroupInput
-    | EditGroupInput,
+    | EditGroupInput
+    | CreateInstructorInput
+    | EditInstructorInput,
 ): void {
   if (Object.values(args).some((item) => item === null)) {
     throw new Error("Fields cannot be null");
