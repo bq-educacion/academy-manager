@@ -3,26 +3,22 @@ import {
   CreateCenterInput,
   CreateGroupInput,
   CreateInstructorInput,
+  CreateStudentInput,
   EditCenterContactInput,
   EditCenterInput,
   EditGroupInput,
   EditInstructorInput,
-  MutationAddStudentContactArgs,
+  EditStudentContactInput,
+  EditStudentInput,
   MutationCreateAreaArgs,
-  MutationCreateStudentArgs,
-  MutationEditStudentArgs,
-  MutationEditStudentContactArgs,
   MutationSetActiveCenterArgs,
   MutationSetStatusInstructorArgs,
   MutationSetStatusStudentArgs,
+  StudentContactInput,
 } from "../types.ts";
 
 export function checkNotNull(
   args:
-    | MutationCreateStudentArgs
-    | MutationEditStudentArgs
-    | MutationEditStudentContactArgs
-    | MutationAddStudentContactArgs
     | MutationSetActiveCenterArgs
     | MutationSetStatusStudentArgs
     | MutationSetStatusInstructorArgs
@@ -34,7 +30,11 @@ export function checkNotNull(
     | CreateGroupInput
     | EditGroupInput
     | CreateInstructorInput
-    | EditInstructorInput,
+    | EditInstructorInput
+    | CreateStudentInput
+    | EditStudentInput
+    | StudentContactInput
+    | EditStudentContactInput,
 ): void {
   if (Object.values(args).some((item) => item === null)) {
     throw new Error("Fields cannot be null");
