@@ -147,14 +147,14 @@ export const typeDefs = gql`
 
   extend type Mutation {
     createInstructor(
+      idGroups: [String!]!
       instructor: CreateInstructorInput!
-      groups: [String!]!
     ): Instructor!
 
     editInstructor(
       id:String!
       instructor: EditInstructorInput!
-      groups: [String!]
+      idGroups: [String!]
     ): Instructor!
 
     deleteInstructor(id: String!): Instructor!

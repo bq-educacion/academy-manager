@@ -354,7 +354,7 @@ export type MutationCreateGroupArgs = {
 };
 
 export type MutationCreateInstructorArgs = {
-  groups: Array<Scalars["String"]>;
+  idGroups: Array<Scalars["String"]>;
   instructor: CreateInstructorInput;
 };
 
@@ -412,8 +412,8 @@ export type MutationEditGroupArgs = {
 };
 
 export type MutationEditInstructorArgs = {
-  groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
+  idGroups?: InputMaybe<Array<Scalars["String"]>>;
   instructor: EditInstructorInput;
 };
 
@@ -1160,7 +1160,7 @@ export type MutationResolvers<
     ResolversTypes["Instructor"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateInstructorArgs, "groups" | "instructor">
+    RequireFields<MutationCreateInstructorArgs, "idGroups" | "instructor">
   >;
   createStudent?: Resolver<
     ResolversTypes["Student"],
