@@ -23,6 +23,7 @@ import { studentCollection } from "../models/StudentModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
 import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 import { getUniqueItems } from "../lib/getUniqueItems.ts";
+import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
 
 export const centers = {
   Center: {
@@ -48,53 +49,18 @@ export const centers = {
       const filter: Filter<PaginatedCenters> = { $or: [{}] };
       if (args.centers.searchText) {
         filter["$or"] = [
-          { name: { $regex: `.*${args.centers.searchText}.*`, $options: "i" } },
-          {
-            address: {
-              $regex: `.*${args.centers.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            city: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
-          },
-          {
-            phone: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
-          },
-          {
-            email: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
-          },
-          { type: { $regex: `.*${args.centers.searchText}.*`, $options: "i" } },
-          {
-            nature: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
-          },
-          {
-            notes: { $regex: `.*${args.centers.searchText}.*`, $options: "i" },
-          },
-          {
-            createdAt: {
-              $regex: `.*${args.centers.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            languages: {
-              $regex: `.*${args.centers.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "contacts.name": {
-              $regex: `.*${args.centers.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "groupsName.name": {
-              $regex: `.*${args.centers.searchText}.*`,
-              $options: "i",
-            },
-          },
+          { name: mongoSearchRegex(args.centers.searchText) },
+          { address: mongoSearchRegex(args.centers.searchText) },
+          { city: mongoSearchRegex(args.centers.searchText) },
+          { phone: mongoSearchRegex(args.centers.searchText) },
+          { email: mongoSearchRegex(args.centers.searchText) },
+          { type: mongoSearchRegex(args.centers.searchText) },
+          { nature: mongoSearchRegex(args.centers.searchText) },
+          { notes: mongoSearchRegex(args.centers.searchText) },
+          { createdAt: mongoSearchRegex(args.centers.searchText) },
+          { languages: mongoSearchRegex(args.centers.searchText) },
+          { "contacts.name": mongoSearchRegex(args.centers.searchText) },
+          { "groupsName.name": mongoSearchRegex(args.centers.searchText) },
         ];
       }
 

@@ -23,6 +23,7 @@ import { validDate } from "../lib/validDate.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { addCourse, removeCourse, updateCourses } from "../lib/courses.ts";
 import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
+import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
 
 export const students = {
   Student: {
@@ -47,63 +48,17 @@ export const students = {
       const filter: Filter<PaginatedStudents> = { $or: [{}] };
       if (args.students.searchText) {
         filter["$or"] = [
-          {
-            name: { $regex: `.*${args.students.searchText}.*`, $options: "i" },
-          },
-          {
-            birthDate: {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            course: {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            state: { $regex: `.*${args.students.searchText}.*`, $options: "i" },
-          },
-          {
-            registrationDate: {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            descriptionAllergy: {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            collectionPermit: {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            notes: { $regex: `.*${args.students.searchText}.*`, $options: "i" },
-          },
-          {
-            "contacts.name": {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "centersName.name": {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "groupsName.name": {
-              $regex: `.*${args.students.searchText}.*`,
-              $options: "i",
-            },
-          },
+          { name: mongoSearchRegex(args.students.searchText) },
+          { birthDate: mongoSearchRegex(args.students.searchText) },
+          { course: mongoSearchRegex(args.students.searchText) },
+          { state: mongoSearchRegex(args.students.searchText) },
+          { registrationDate: mongoSearchRegex(args.students.searchText) },
+          { descriptionAllergy: mongoSearchRegex(args.students.searchText) },
+          { collectionPermit: mongoSearchRegex(args.students.searchText) },
+          { notes: mongoSearchRegex(args.students.searchText) },
+          { "contacts.name": mongoSearchRegex(args.students.searchText) },
+          { "centersName.name": mongoSearchRegex(args.students.searchText) },
+          { "groupsName.name": mongoSearchRegex(args.students.searchText) },
         ];
       }
 

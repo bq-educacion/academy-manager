@@ -32,6 +32,7 @@ import { checkActiveCenter } from "../lib/checkActiveCenter.ts";
 import { getUniqueItems } from "../lib/getUniqueItems.ts";
 import { areaCollection } from "../models/AreaModel.ts";
 import { checkAreas } from "../lib/checkAreas.ts";
+import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
 
 export const instructors = {
   Instructor: {
@@ -75,131 +76,40 @@ export const instructors = {
       const filter: Filter<PaginatedInstructors> = { $or: [{}] };
       if (args.instructors.searchText) {
         filter["$or"] = [
+          { name: mongoSearchRegex(args.instructors.searchText) },
+          { corporateEmail: mongoSearchRegex(args.instructors.searchText) },
+          { personalEmail: mongoSearchRegex(args.instructors.searchText) },
+          { phone: mongoSearchRegex(args.instructors.searchText) },
+          { state: mongoSearchRegex(args.instructors.searchText) },
+          { training: mongoSearchRegex(args.instructors.searchText) },
+          { previousExperience: mongoSearchRegex(args.instructors.searchText) },
+          { knowledge: mongoSearchRegex(args.instructors.searchText) },
+          { urlCV: mongoSearchRegex(args.instructors.searchText) },
           {
-            name: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
+            materialsExperience: mongoSearchRegex(args.instructors.searchText),
           },
           {
-            corporateEmail: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
+            platformEducationExperience: mongoSearchRegex(
+              args.instructors.searchText,
+            ),
           },
+          { languages: mongoSearchRegex(args.instructors.searchText) },
+          { "availability.day": mongoSearchRegex(args.instructors.searchText) },
           {
-            personalEmail: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
+            "availability.hours": mongoSearchRegex(args.instructors.searchText),
           },
+          { summerAvailability: mongoSearchRegex(args.instructors.searchText) },
+          { vehicle: mongoSearchRegex(args.instructors.searchText) },
           {
-            phone: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
+            geographicalAvailability: mongoSearchRegex(
+              args.instructors.searchText,
+            ),
           },
+          { areas: mongoSearchRegex(args.instructors.searchText) },
+          { notes: mongoSearchRegex(args.instructors.searchText) },
+          { "centersName.name": mongoSearchRegex(args.instructors.searchText) },
           {
-            state: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            training: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            previousExperience: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            knowledge: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            urlCV: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            materialsExperience: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            platformEducationExperience: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            languages: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "availability.day": {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "availability.hours": {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            summerAvailability: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            vehicle: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            geographicalAvailability: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            areas: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            notes: {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "centersName.name": {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "groupsId.id_group": {
-              $regex: `.*${args.instructors.searchText}.*`,
-              $options: "i",
-            },
+            "groupsId.id_group": mongoSearchRegex(args.instructors.searchText),
           },
         ];
       }

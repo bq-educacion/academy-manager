@@ -26,6 +26,7 @@ import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { validHour } from "../lib/validHour.ts";
 import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
+import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
 
 export const groups = {
   Group: {
@@ -75,75 +76,20 @@ export const groups = {
       const filter: Filter<PaginatedGroups> = { $or: [{}] };
       if (args.groups.searchText) {
         filter["$or"] = [
-          {
-            id_group: {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          { name: { $regex: `.*${args.groups.searchText}.*`, $options: "i" } },
-          { type: { $regex: `.*${args.groups.searchText}.*`, $options: "i" } },
-          {
-            modality: {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            createdAt: {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "course.ESO": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "course.EPO": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "timetable.day": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "timetable.start": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "timetable.end": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          { notes: { $regex: `.*${args.groups.searchText}.*`, $options: "i" } },
-          {
-            "centersName.name": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "instructorsName.name": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "studentsName.name": {
-              $regex: `.*${args.groups.searchText}.*`,
-              $options: "i",
-            },
-          },
+          { id_group: mongoSearchRegex(args.groups.searchText) },
+          { name: mongoSearchRegex(args.groups.searchText) },
+          { type: mongoSearchRegex(args.groups.searchText) },
+          { modality: mongoSearchRegex(args.groups.searchText) },
+          { createdAt: mongoSearchRegex(args.groups.searchText) },
+          { "course.ESO": mongoSearchRegex(args.groups.searchText) },
+          { "course.EPO": mongoSearchRegex(args.groups.searchText) },
+          { "timetable.day": mongoSearchRegex(args.groups.searchText) },
+          { "timetable.start": mongoSearchRegex(args.groups.searchText) },
+          { "timetable.end": mongoSearchRegex(args.groups.searchText) },
+          { notes: mongoSearchRegex(args.groups.searchText) },
+          { "centersName.name": mongoSearchRegex(args.groups.searchText) },
+          { "instructorsName.name": mongoSearchRegex(args.groups.searchText) },
+          { "studentsName.name": mongoSearchRegex(args.groups.searchText) },
         ];
       }
 
