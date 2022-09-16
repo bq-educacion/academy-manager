@@ -136,7 +136,6 @@ export type CreateInstructorInput = {
   corporateEmail?: InputMaybe<Scalars["String"]>;
   enrolled: Scalars["Boolean"];
   geographicalAvailability: Array<Region>;
-  groups: Array<Scalars["String"]>;
   knowledge?: InputMaybe<Scalars["String"]>;
   languages?: InputMaybe<Array<Languages>>;
   materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
@@ -197,7 +196,6 @@ export type EditInstructorInput = {
   availability?: InputMaybe<Array<AvailabilityInput>>;
   corporateEmail?: InputMaybe<Scalars["String"]>;
   geographicalAvailability?: InputMaybe<Array<Region>>;
-  groups?: InputMaybe<Array<Scalars["String"]>>;
   knowledge?: InputMaybe<Scalars["String"]>;
   languages?: InputMaybe<Array<Languages>>;
   materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
@@ -356,6 +354,7 @@ export type MutationCreateGroupArgs = {
 };
 
 export type MutationCreateInstructorArgs = {
+  groups: Array<Scalars["String"]>;
   instructor: CreateInstructorInput;
 };
 
@@ -413,6 +412,7 @@ export type MutationEditGroupArgs = {
 };
 
 export type MutationEditInstructorArgs = {
+  groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
   instructor: EditInstructorInput;
 };
@@ -1160,7 +1160,7 @@ export type MutationResolvers<
     ResolversTypes["Instructor"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateInstructorArgs, "instructor">
+    RequireFields<MutationCreateInstructorArgs, "groups" | "instructor">
   >;
   createStudent?: Resolver<
     ResolversTypes["Student"],

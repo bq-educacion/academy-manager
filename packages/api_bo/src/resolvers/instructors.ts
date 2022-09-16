@@ -296,9 +296,7 @@ export const instructors = {
           }
         }
 
-        const groups = args.instructor.groups?.map((group) =>
-          new ObjectId(group)
-        );
+        const groups = args.groups?.map((group) => new ObjectId(group));
         const existsGroups = await groupCollection(ctx.db)
           .find({
             _id: { $in: groups },
@@ -403,10 +401,8 @@ export const instructors = {
           );
         }
 
-        if (args.instructor.groups) {
-          const groups = args.instructor.groups.map((group) =>
-            new ObjectId(group)
-          );
+        if (args.groups) {
+          const groups = args.groups.map((group) => new ObjectId(group));
           const existsGroups = await groupCollection(ctx.db)
             .find({
               _id: { $in: groups },

@@ -87,7 +87,6 @@ export const typeDefs = gql`
     geographicalAvailability: [Region!]!
     areas: [String!]!
     notes: String
-    groups: [String!]!
   }
 
   input EditInstructorInput {
@@ -109,7 +108,6 @@ export const typeDefs = gql`
     areas: [String!]
     availability: [AvailabilityInput!]
     summerAvailability: summerAvailabilityInstructor
-    groups: [String!]
   }
 
   type Instructor {
@@ -150,11 +148,13 @@ export const typeDefs = gql`
   extend type Mutation {
     createInstructor(
       instructor: CreateInstructorInput!
+      groups: [String!]!
     ): Instructor!
 
     editInstructor(
       id:String!
       instructor: EditInstructorInput!
+      groups: [String!]
     ): Instructor!
 
     deleteInstructor(id: String!): Instructor!
