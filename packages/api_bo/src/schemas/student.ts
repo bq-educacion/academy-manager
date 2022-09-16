@@ -25,11 +25,58 @@ export const typeDefs = gql`
     send_info: Boolean!
   }
 
+  input GetStudentsInput {
+    searchText: String
+    orderFilter: OrderFilterStudent
+    order: Number
+    page: Int
+    pageSize: Int
+  }
+
+  input CreateStudentInput {
+    name: String!
+    birthDate: String
+    course: String!
+    registrationDate: String
+    allergies: Boolean
+    descriptionAllergy: String
+    oldStudent: Boolean
+    signedMandate: Boolean
+    imageAuthorisation: Boolean
+    collectionPermit: String
+    goesAlone: Boolean
+    contacts: [StudentContactInput!]
+    notes: String
+  }
+
   input StudentContactInput {
     name: String!
     email: String!
     phone: String!
     send_info: Boolean!
+  }
+
+  input EditStudentInput {
+    name: String
+    birthDate: String
+    course: String
+    registrationDate: String
+    allergies: Boolean
+    descriptionAllergy: String
+    oldStudent: Boolean
+    signedMandate: Boolean
+    imageAuthorisation: Boolean
+    collectionPermit: String
+    goesAlone: Boolean
+    contacts: [StudentContactInput!]
+    notes: String
+  }
+
+  input EditStudentContactInput {
+    name: String
+    email: String
+    phone: String
+    send_info: Boolean
   }
 
   type Student {
@@ -54,11 +101,7 @@ export const typeDefs = gql`
 
   extend type Query {
     getStudents( 
-      searchText: String
-      orderFilter: OrderFilterStudent
-      order: Number
-      page: Int
-      pageSize: Int
+      students: GetStudentsInput!
     ): PaginatedStudents!
 
     getStudent(id: String!): Student!
@@ -67,52 +110,24 @@ export const typeDefs = gql`
   extend type Mutation {
     createStudent(
       idGroups: [String!]!
-      name: String!
-      birthDate: String
-      course: String!
-      registrationDate: String
-      allergies: Boolean
-      descriptionAllergy: String
-      oldStudent: Boolean
-      signedMandate: Boolean
-      imageAuthorisation: Boolean
-      collectionPermit: String
-      goesAlone: Boolean
-      contacts: [StudentContactInput!]
-      notes: String
+      student: CreateStudentInput!
     ): Student!
 
     addStudentContact(
       idStudent: String!
-      name: String!
-      email: String!
-      phone: String!
-      send_info: Boolean!
+      contact: StudentContactInput!
     ): StudentContact!
     
     editStudent(
       id:String!
-      groups: [String!]
-      course: String
-      registrationDate: String
-      name: String
-      birthDate: String
-      allergies: Boolean
-      descriptionAllergy: String
-      oldStudent: Boolean
-      signedMandate: Boolean
-      imageAuthorisation: Boolean
-      collectionPermit: String
-      contacts: [StudentContactInput!]
-      notes: String): Student!
+      student: EditStudentInput!
+      idGroups: [String!]
+    ): Student!
 
     editStudentContact(
       idStudent: String!
       originEmail: String!
-      name: String
-      email: String
-      phone: String
-      send_info: Boolean
+      contact: EditStudentContactInput!
     ): StudentContact!
 
     deleteStudent(id: String!): Student!

@@ -108,6 +108,66 @@ export enum CourseType {
   Eso = "ESO",
 }
 
+export type CreateCenterInput = {
+  address: Scalars["String"];
+  city: Scalars["String"];
+  contacts?: InputMaybe<Array<CenterContactInput>>;
+  email?: InputMaybe<Scalars["String"]>;
+  languages: Array<Languages>;
+  name: Scalars["String"];
+  nature: CenterNature;
+  notes?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  type: Array<CenterActivityType>;
+};
+
+export type CreateGroupInput = {
+  instructors?: InputMaybe<Array<Scalars["String"]>>;
+  modality: GroupModality;
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  timetable: Array<TimetableInput>;
+  type: GroupType;
+};
+
+export type CreateInstructorInput = {
+  areas: Array<Scalars["String"]>;
+  availability: Array<AvailabilityInput>;
+  corporateEmail?: InputMaybe<Scalars["String"]>;
+  enrolled: Scalars["Boolean"];
+  geographicalAvailability: Array<Region>;
+  knowledge?: InputMaybe<Scalars["String"]>;
+  languages?: InputMaybe<Array<Languages>>;
+  materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  personalEmail?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
+  previousExperience: PreviousExperienceInstructor;
+  programmingExperience: Scalars["Boolean"];
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training: TrainingInstructorInput;
+  urlCV?: InputMaybe<Scalars["String"]>;
+  vehicle: TypeVehicleInstructor;
+};
+
+export type CreateStudentInput = {
+  allergies?: InputMaybe<Scalars["Boolean"]>;
+  birthDate?: InputMaybe<Scalars["String"]>;
+  collectionPermit?: InputMaybe<Scalars["String"]>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
+  course: Scalars["String"];
+  descriptionAllergy?: InputMaybe<Scalars["String"]>;
+  goesAlone?: InputMaybe<Scalars["Boolean"]>;
+  imageAuthorisation?: InputMaybe<Scalars["Boolean"]>;
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  oldStudent?: InputMaybe<Scalars["Boolean"]>;
+  registrationDate?: InputMaybe<Scalars["String"]>;
+  signedMandate?: InputMaybe<Scalars["Boolean"]>;
+};
+
 export enum Days {
   Friday = "FRIDAY",
   Monday = "MONDAY",
@@ -117,6 +177,111 @@ export enum Days {
   Tuesday = "TUESDAY",
   Wednesday = "WEDNESDAY",
 }
+
+export type EditCenterContactInput = {
+  email?: InputMaybe<Scalars["String"]>;
+  name?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+};
+
+export type EditCenterInput = {
+  address?: InputMaybe<Scalars["String"]>;
+  city?: InputMaybe<Scalars["String"]>;
+  contacts?: InputMaybe<Array<CenterContactInput>>;
+  email?: InputMaybe<Scalars["String"]>;
+  languages?: InputMaybe<Array<Languages>>;
+  name?: InputMaybe<Scalars["String"]>;
+  nature?: InputMaybe<CenterNature>;
+  notes?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  type?: InputMaybe<Array<CenterActivityType>>;
+};
+
+export type EditGroupInput = {
+  center?: InputMaybe<Scalars["String"]>;
+  instructors?: InputMaybe<Array<Scalars["String"]>>;
+  modality?: InputMaybe<GroupModality>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  timetable?: InputMaybe<Array<TimetableInput>>;
+  type?: InputMaybe<GroupType>;
+};
+
+export type EditInstructorInput = {
+  areas?: InputMaybe<Array<Scalars["String"]>>;
+  availability?: InputMaybe<Array<AvailabilityInput>>;
+  corporateEmail?: InputMaybe<Scalars["String"]>;
+  geographicalAvailability?: InputMaybe<Array<Region>>;
+  knowledge?: InputMaybe<Scalars["String"]>;
+  languages?: InputMaybe<Array<Languages>>;
+  materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  personalEmail?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
+  previousExperience?: InputMaybe<PreviousExperienceInstructor>;
+  programmingExperience?: InputMaybe<Scalars["Boolean"]>;
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training?: InputMaybe<TrainingInstructorInput>;
+  urlCV?: InputMaybe<Scalars["String"]>;
+  vehicle?: InputMaybe<TypeVehicleInstructor>;
+};
+
+export type EditStudentContactInput = {
+  email?: InputMaybe<Scalars["String"]>;
+  name?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  send_info?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type EditStudentInput = {
+  allergies?: InputMaybe<Scalars["Boolean"]>;
+  birthDate?: InputMaybe<Scalars["String"]>;
+  collectionPermit?: InputMaybe<Scalars["String"]>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
+  course?: InputMaybe<Scalars["String"]>;
+  descriptionAllergy?: InputMaybe<Scalars["String"]>;
+  goesAlone?: InputMaybe<Scalars["Boolean"]>;
+  imageAuthorisation?: InputMaybe<Scalars["Boolean"]>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  oldStudent?: InputMaybe<Scalars["Boolean"]>;
+  registrationDate?: InputMaybe<Scalars["String"]>;
+  signedMandate?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type GetCentersInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
+};
+
+export type GetGroupsInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterGroup>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
+};
+
+export type GetInstructorsInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterInstructor>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
+};
+
+export type GetStudentsInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterStudent>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
+};
 
 export type Group = {
   __typename?: "Group";
@@ -210,18 +375,13 @@ export type Mutation = {
 };
 
 export type MutationAddCenterContactArgs = {
-  email: Scalars["String"];
+  contact: CenterContactInput;
   idCenter: Scalars["String"];
-  name: Scalars["String"];
-  phone: Scalars["String"];
 };
 
 export type MutationAddStudentContactArgs = {
-  email: Scalars["String"];
+  contact: StudentContactInput;
   idStudent: Scalars["String"];
-  name: Scalars["String"];
-  phone: Scalars["String"];
-  send_info: Scalars["Boolean"];
 };
 
 export type MutationCreateAreaArgs = {
@@ -230,66 +390,22 @@ export type MutationCreateAreaArgs = {
 };
 
 export type MutationCreateCenterArgs = {
-  address: Scalars["String"];
-  city: Scalars["String"];
-  contacts?: InputMaybe<Array<CenterContactInput>>;
-  email?: InputMaybe<Scalars["String"]>;
-  languages: Array<Languages>;
-  name: Scalars["String"];
-  nature: CenterNature;
-  notes?: InputMaybe<Scalars["String"]>;
-  phone?: InputMaybe<Scalars["String"]>;
-  type: Array<CenterActivityType>;
+  center: CreateCenterInput;
 };
 
 export type MutationCreateGroupArgs = {
+  group: CreateGroupInput;
   idCenter: Scalars["String"];
-  instructors?: InputMaybe<Array<Scalars["String"]>>;
-  modality: GroupModality;
-  name: Scalars["String"];
-  notes?: InputMaybe<Scalars["String"]>;
-  timetable: Array<TimetableInput>;
-  type: GroupType;
 };
 
 export type MutationCreateInstructorArgs = {
-  areas: Array<Scalars["String"]>;
-  availability: Array<AvailabilityInput>;
-  corporateEmail?: InputMaybe<Scalars["String"]>;
-  enrolled: Scalars["Boolean"];
-  geographicalAvailability: Array<Region>;
-  groups: Array<Scalars["String"]>;
-  knowledge?: InputMaybe<Scalars["String"]>;
-  languages?: InputMaybe<Array<Languages>>;
-  materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
-  name: Scalars["String"];
-  notes?: InputMaybe<Scalars["String"]>;
-  personalEmail?: InputMaybe<Scalars["String"]>;
-  phone?: InputMaybe<Scalars["String"]>;
-  platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
-  previousExperience: PreviousExperienceInstructor;
-  programmingExperience: Scalars["Boolean"];
-  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
-  training: TrainingInstructorInput;
-  urlCV?: InputMaybe<Scalars["String"]>;
-  vehicle: TypeVehicleInstructor;
+  idGroups: Array<Scalars["String"]>;
+  instructor: CreateInstructorInput;
 };
 
 export type MutationCreateStudentArgs = {
-  allergies?: InputMaybe<Scalars["Boolean"]>;
-  birthDate?: InputMaybe<Scalars["String"]>;
-  collectionPermit?: InputMaybe<Scalars["String"]>;
-  contacts?: InputMaybe<Array<StudentContactInput>>;
-  course: Scalars["String"];
-  descriptionAllergy?: InputMaybe<Scalars["String"]>;
-  goesAlone?: InputMaybe<Scalars["Boolean"]>;
   idGroups: Array<Scalars["String"]>;
-  imageAuthorisation?: InputMaybe<Scalars["Boolean"]>;
-  name: Scalars["String"];
-  notes?: InputMaybe<Scalars["String"]>;
-  oldStudent?: InputMaybe<Scalars["Boolean"]>;
-  registrationDate?: InputMaybe<Scalars["String"]>;
-  signedMandate?: InputMaybe<Scalars["Boolean"]>;
+  student: CreateStudentInput;
 };
 
 export type MutationDeleteAreaArgs = {
@@ -313,85 +429,37 @@ export type MutationDeleteStudentArgs = {
 };
 
 export type MutationEditCenterArgs = {
-  address?: InputMaybe<Scalars["String"]>;
-  city?: InputMaybe<Scalars["String"]>;
-  contacts?: InputMaybe<Array<CenterContactInput>>;
-  email?: InputMaybe<Scalars["String"]>;
+  center: EditCenterInput;
   id: Scalars["String"];
-  languages?: InputMaybe<Array<Languages>>;
-  name?: InputMaybe<Scalars["String"]>;
-  nature?: InputMaybe<CenterNature>;
-  notes?: InputMaybe<Scalars["String"]>;
-  phone?: InputMaybe<Scalars["String"]>;
-  type?: InputMaybe<Array<CenterActivityType>>;
 };
 
 export type MutationEditCenterContactArgs = {
-  email?: InputMaybe<Scalars["String"]>;
+  contact: EditCenterContactInput;
   idCenter: Scalars["String"];
-  name?: InputMaybe<Scalars["String"]>;
   originEmail: Scalars["String"];
-  phone?: InputMaybe<Scalars["String"]>;
 };
 
 export type MutationEditGroupArgs = {
-  center?: InputMaybe<Scalars["String"]>;
+  group: EditGroupInput;
   id: Scalars["String"];
-  instructors?: InputMaybe<Array<Scalars["String"]>>;
-  modality?: InputMaybe<GroupModality>;
-  name?: InputMaybe<Scalars["String"]>;
-  notes?: InputMaybe<Scalars["String"]>;
-  timetable?: InputMaybe<Array<TimetableInput>>;
-  type?: InputMaybe<GroupType>;
 };
 
 export type MutationEditInstructorArgs = {
-  areas?: InputMaybe<Array<Scalars["String"]>>;
-  availability?: InputMaybe<Array<AvailabilityInput>>;
-  corporateEmail?: InputMaybe<Scalars["String"]>;
-  geographicalAvailability?: InputMaybe<Array<Region>>;
-  groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
-  knowledge?: InputMaybe<Scalars["String"]>;
-  languages?: InputMaybe<Array<Languages>>;
-  materialsExperience?: InputMaybe<Array<Scalars["String"]>>;
-  name?: InputMaybe<Scalars["String"]>;
-  notes?: InputMaybe<Scalars["String"]>;
-  personalEmail?: InputMaybe<Scalars["String"]>;
-  phone?: InputMaybe<Scalars["String"]>;
-  platformEducationExperience?: InputMaybe<Array<Scalars["String"]>>;
-  previousExperience?: InputMaybe<PreviousExperienceInstructor>;
-  programmingExperience?: InputMaybe<Scalars["Boolean"]>;
-  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
-  training?: InputMaybe<TrainingInstructorInput>;
-  urlCV?: InputMaybe<Scalars["String"]>;
-  vehicle?: InputMaybe<TypeVehicleInstructor>;
+  idGroups?: InputMaybe<Array<Scalars["String"]>>;
+  instructor: EditInstructorInput;
 };
 
 export type MutationEditStudentArgs = {
-  allergies?: InputMaybe<Scalars["Boolean"]>;
-  birthDate?: InputMaybe<Scalars["String"]>;
-  collectionPermit?: InputMaybe<Scalars["String"]>;
-  contacts?: InputMaybe<Array<StudentContactInput>>;
-  course?: InputMaybe<Scalars["String"]>;
-  descriptionAllergy?: InputMaybe<Scalars["String"]>;
-  groups?: InputMaybe<Array<Scalars["String"]>>;
   id: Scalars["String"];
-  imageAuthorisation?: InputMaybe<Scalars["Boolean"]>;
-  name?: InputMaybe<Scalars["String"]>;
-  notes?: InputMaybe<Scalars["String"]>;
-  oldStudent?: InputMaybe<Scalars["Boolean"]>;
-  registrationDate?: InputMaybe<Scalars["String"]>;
-  signedMandate?: InputMaybe<Scalars["Boolean"]>;
+  idGroups?: InputMaybe<Array<Scalars["String"]>>;
+  student: EditStudentInput;
 };
 
 export type MutationEditStudentContactArgs = {
-  email?: InputMaybe<Scalars["String"]>;
+  contact: EditStudentContactInput;
   idStudent: Scalars["String"];
-  name?: InputMaybe<Scalars["String"]>;
   originEmail: Scalars["String"];
-  phone?: InputMaybe<Scalars["String"]>;
-  send_info?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export type MutationLoginArgs = {
@@ -522,11 +590,7 @@ export type QueryGetCenterArgs = {
 };
 
 export type QueryGetCentersArgs = {
-  order?: InputMaybe<Scalars["Number"]>;
-  orderFilter?: InputMaybe<OrderFilterCenter>;
-  page?: InputMaybe<Scalars["Int"]>;
-  pageSize?: InputMaybe<Scalars["Int"]>;
-  searchText?: InputMaybe<Scalars["String"]>;
+  centers: GetCentersInput;
 };
 
 export type QueryGetGroupArgs = {
@@ -534,11 +598,7 @@ export type QueryGetGroupArgs = {
 };
 
 export type QueryGetGroupsArgs = {
-  order?: InputMaybe<Scalars["Number"]>;
-  orderFilter?: InputMaybe<OrderFilterGroup>;
-  page?: InputMaybe<Scalars["Int"]>;
-  pageSize?: InputMaybe<Scalars["Int"]>;
-  searchText?: InputMaybe<Scalars["String"]>;
+  groups: GetGroupsInput;
 };
 
 export type QueryGetInstructorArgs = {
@@ -546,11 +606,7 @@ export type QueryGetInstructorArgs = {
 };
 
 export type QueryGetInstructorsArgs = {
-  order?: InputMaybe<Scalars["Number"]>;
-  orderFilter?: InputMaybe<OrderFilterInstructor>;
-  page?: InputMaybe<Scalars["Int"]>;
-  pageSize?: InputMaybe<Scalars["Int"]>;
-  searchText?: InputMaybe<Scalars["String"]>;
+  instructors: GetInstructorsInput;
 };
 
 export type QueryGetStudentArgs = {
@@ -558,11 +614,7 @@ export type QueryGetStudentArgs = {
 };
 
 export type QueryGetStudentsArgs = {
-  order?: InputMaybe<Scalars["Number"]>;
-  orderFilter?: InputMaybe<OrderFilterStudent>;
-  page?: InputMaybe<Scalars["Int"]>;
-  pageSize?: InputMaybe<Scalars["Int"]>;
-  searchText?: InputMaybe<Scalars["String"]>;
+  students: GetStudentsInput;
 };
 
 export type QueryGetUserArgs = {
@@ -798,7 +850,21 @@ export type ResolversTypes = ResolversObject<{
   CenterNature: CenterNature;
   Course: ResolverTypeWrapper<Course>;
   CourseType: CourseType;
+  CreateCenterInput: CreateCenterInput;
+  CreateGroupInput: CreateGroupInput;
+  CreateInstructorInput: CreateInstructorInput;
+  CreateStudentInput: CreateStudentInput;
   Days: Days;
+  EditCenterContactInput: EditCenterContactInput;
+  EditCenterInput: EditCenterInput;
+  EditGroupInput: EditGroupInput;
+  EditInstructorInput: EditInstructorInput;
+  EditStudentContactInput: EditStudentContactInput;
+  EditStudentInput: EditStudentInput;
+  GetCentersInput: GetCentersInput;
+  GetGroupsInput: GetGroupsInput;
+  GetInstructorsInput: GetInstructorsInput;
+  GetStudentsInput: GetStudentsInput;
   Group: ResolverTypeWrapper<Group>;
   GroupInfo: ResolverTypeWrapper<GroupInfo>;
   GroupModality: GroupModality;
@@ -844,6 +910,20 @@ export type ResolversParentTypes = ResolversObject<{
   CenterContactInput: CenterContactInput;
   CenterInfo: CenterInfo;
   Course: Course;
+  CreateCenterInput: CreateCenterInput;
+  CreateGroupInput: CreateGroupInput;
+  CreateInstructorInput: CreateInstructorInput;
+  CreateStudentInput: CreateStudentInput;
+  EditCenterContactInput: EditCenterContactInput;
+  EditCenterInput: EditCenterInput;
+  EditGroupInput: EditGroupInput;
+  EditInstructorInput: EditInstructorInput;
+  EditStudentContactInput: EditStudentContactInput;
+  EditStudentInput: EditStudentInput;
+  GetCentersInput: GetCentersInput;
+  GetGroupsInput: GetGroupsInput;
+  GetInstructorsInput: GetInstructorsInput;
+  GetStudentsInput: GetStudentsInput;
   Group: Group;
   GroupInfo: GroupInfo;
   ID: Scalars["ID"];
@@ -1089,19 +1169,13 @@ export type MutationResolvers<
     ResolversTypes["CenterContact"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationAddCenterContactArgs,
-      "email" | "idCenter" | "name" | "phone"
-    >
+    RequireFields<MutationAddCenterContactArgs, "contact" | "idCenter">
   >;
   addStudentContact?: Resolver<
     ResolversTypes["StudentContact"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationAddStudentContactArgs,
-      "email" | "idStudent" | "name" | "phone" | "send_info"
-    >
+    RequireFields<MutationAddStudentContactArgs, "contact" | "idStudent">
   >;
   createArea?: Resolver<
     ResolversTypes["Area"],
@@ -1113,43 +1187,25 @@ export type MutationResolvers<
     ResolversTypes["Center"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationCreateCenterArgs,
-      "address" | "city" | "languages" | "name" | "nature" | "type"
-    >
+    RequireFields<MutationCreateCenterArgs, "center">
   >;
   createGroup?: Resolver<
     ResolversTypes["Group"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationCreateGroupArgs,
-      "idCenter" | "modality" | "name" | "timetable" | "type"
-    >
+    RequireFields<MutationCreateGroupArgs, "group" | "idCenter">
   >;
   createInstructor?: Resolver<
     ResolversTypes["Instructor"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationCreateInstructorArgs,
-      | "areas"
-      | "availability"
-      | "enrolled"
-      | "geographicalAvailability"
-      | "groups"
-      | "name"
-      | "previousExperience"
-      | "programmingExperience"
-      | "training"
-      | "vehicle"
-    >
+    RequireFields<MutationCreateInstructorArgs, "idGroups" | "instructor">
   >;
   createStudent?: Resolver<
     ResolversTypes["Student"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateStudentArgs, "course" | "idGroups" | "name">
+    RequireFields<MutationCreateStudentArgs, "idGroups" | "student">
   >;
   deleteArea?: Resolver<
     ResolversTypes["Area"],
@@ -1185,37 +1241,43 @@ export type MutationResolvers<
     ResolversTypes["Center"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditCenterArgs, "id">
+    RequireFields<MutationEditCenterArgs, "center" | "id">
   >;
   editCenterContact?: Resolver<
     ResolversTypes["CenterContact"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditCenterContactArgs, "idCenter" | "originEmail">
+    RequireFields<
+      MutationEditCenterContactArgs,
+      "contact" | "idCenter" | "originEmail"
+    >
   >;
   editGroup?: Resolver<
     ResolversTypes["Group"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditGroupArgs, "id">
+    RequireFields<MutationEditGroupArgs, "group" | "id">
   >;
   editInstructor?: Resolver<
     ResolversTypes["Instructor"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditInstructorArgs, "id">
+    RequireFields<MutationEditInstructorArgs, "id" | "instructor">
   >;
   editStudent?: Resolver<
     ResolversTypes["Student"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditStudentArgs, "id">
+    RequireFields<MutationEditStudentArgs, "id" | "student">
   >;
   editStudentContact?: Resolver<
     ResolversTypes["StudentContact"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditStudentContactArgs, "idStudent" | "originEmail">
+    RequireFields<
+      MutationEditStudentContactArgs,
+      "contact" | "idStudent" | "originEmail"
+    >
   >;
   login?: Resolver<
     ResolversTypes["String"],
@@ -1333,7 +1395,7 @@ export type QueryResolvers<
     ResolversTypes["PaginatedCenters"],
     ParentType,
     ContextType,
-    Partial<QueryGetCentersArgs>
+    RequireFields<QueryGetCentersArgs, "centers">
   >;
   getGroup?: Resolver<
     ResolversTypes["GroupInfo"],
@@ -1345,7 +1407,7 @@ export type QueryResolvers<
     ResolversTypes["PaginatedGroups"],
     ParentType,
     ContextType,
-    Partial<QueryGetGroupsArgs>
+    RequireFields<QueryGetGroupsArgs, "groups">
   >;
   getInstructor?: Resolver<
     ResolversTypes["Instructor"],
@@ -1357,7 +1419,7 @@ export type QueryResolvers<
     ResolversTypes["PaginatedInstructors"],
     ParentType,
     ContextType,
-    Partial<QueryGetInstructorsArgs>
+    RequireFields<QueryGetInstructorsArgs, "instructors">
   >;
   getStudent?: Resolver<
     ResolversTypes["Student"],
@@ -1369,7 +1431,7 @@ export type QueryResolvers<
     ResolversTypes["PaginatedStudents"],
     ParentType,
     ContextType,
-    Partial<QueryGetStudentsArgs>
+    RequireFields<QueryGetStudentsArgs, "students">
   >;
   getUser?: Resolver<
     ResolversTypes["User"],
