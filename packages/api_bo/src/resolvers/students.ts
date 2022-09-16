@@ -23,6 +23,7 @@ import { validDate } from "../lib/validDate.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { addCourse, removeCourse, updateCourses } from "../lib/courses.ts";
 import { checkActiveGroups } from "../lib/checkActiveGroups.ts";
+import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
 
 export const students = {
   Student: {
@@ -45,49 +46,19 @@ export const students = {
       ctx: Context,
     ): Promise<PaginatedStudents> => {
       const filter: Filter<PaginatedStudents> = { $or: [{}] };
-      if (args.searchText) {
+      if (args.students.searchText) {
         filter["$or"] = [
-          { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { birthDate: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { course: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { state: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          {
-            registrationDate: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            descriptionAllergy: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            collectionPermit: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          {
-            "contacts.name": {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "centersName.name": {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "groupsName.name": {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
+          { name: mongoSearchRegex(args.students.searchText) },
+          { birthDate: mongoSearchRegex(args.students.searchText) },
+          { course: mongoSearchRegex(args.students.searchText) },
+          { state: mongoSearchRegex(args.students.searchText) },
+          { registrationDate: mongoSearchRegex(args.students.searchText) },
+          { descriptionAllergy: mongoSearchRegex(args.students.searchText) },
+          { collectionPermit: mongoSearchRegex(args.students.searchText) },
+          { notes: mongoSearchRegex(args.students.searchText) },
+          { "contacts.name": mongoSearchRegex(args.students.searchText) },
+          { "centersName.name": mongoSearchRegex(args.students.searchText) },
+          { "groupsName.name": mongoSearchRegex(args.students.searchText) },
         ];
       }
 
@@ -100,14 +71,16 @@ export const students = {
         group: "groupsName.name",
       };
 
-      if (args.orderFilter && args.order) {
-        if (args.order !== 1 && args.order !== -1) {
+      if (args.students.orderFilter && args.students.order) {
+        if (args.students.order !== 1 && args.students.order !== -1) {
           throw new Error("400, wrong order (1 or -1)");
         }
-        sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
-      } else if (args.orderFilter && !args.order) {
+        sortFilter = {
+          [OrderFilter[args.students.orderFilter]]: args.students.order,
+        };
+      } else if (args.students.orderFilter && !args.students.order) {
         throw new Error("400, order is required");
-      } else if (!args.orderFilter && args.order) {
+      } else if (!args.students.orderFilter && args.students.order) {
         throw new Error("400, orderFilter is required");
       } else {
         sortFilter = { name: 1 };
@@ -118,8 +91,8 @@ export const students = {
         filter,
         "students",
         sortFilter,
-        args.page,
-        args.pageSize,
+        args.students.page,
+        args.students.pageSize,
       ) as Promise<PaginatedStudents>;
     },
 
@@ -146,21 +119,21 @@ export const students = {
       ctx: Context,
     ): Promise<StudentModel> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.student);
 
         let newStudent = {
-          ...args,
+          ...args.student,
           enrolled: true,
           active: false,
         };
 
-        if (args.birthDate) {
-          const birthDate = validDate(args.birthDate);
+        if (args.student.birthDate) {
+          const birthDate = validDate(args.student.birthDate);
           newStudent = { ...newStudent, birthDate };
         }
 
-        if (args.registrationDate) {
-          const registrationDate = validDate(args.registrationDate);
+        if (args.student.registrationDate) {
+          const registrationDate = validDate(args.student.registrationDate);
           newStudent = { ...newStudent, registrationDate };
         }
 
@@ -177,14 +150,18 @@ export const students = {
           active: checkActiveGroups(existsGroups, true),
         };
 
-        if (args.contacts) {
+        if (args.student.contacts) {
           newStudent = {
             ...newStudent,
-            contacts: args.contacts?.map((c) => ({ ...c })),
+            contacts: args.student.contacts?.map((c) => ({ ...c })),
           };
         }
 
-        await addCourse(existsGroups, groupCollection(ctx.db), args.course);
+        await addCourse(
+          existsGroups,
+          groupCollection(ctx.db),
+          args.student.course,
+        );
 
         const idStudent = await studentCollection(ctx.db).insertOne({
           ...newStudent,
@@ -210,13 +187,13 @@ export const students = {
       ctx: Context,
     ): Promise<StudentContact> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.contact);
         const newStudentContact = await studentCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.idStudent) },
           {
             update: {
               $push: {
-                contacts: { $each: [{ ...args }] },
+                contacts: { $each: [{ ...args.contact }] },
               },
             },
             new: true,
@@ -225,7 +202,7 @@ export const students = {
         if (!newStudentContact) {
           throw new Error("404, Student not found");
         }
-        return { ...args };
+        return { ...args.contact };
       } catch (error) {
         throw new Error("500, " + error);
       }
@@ -237,11 +214,11 @@ export const students = {
       ctx: Context,
     ): Promise<StudentModel> => {
       try {
-        checkNotNull(args);
-        let updateStudent = { ...args } as Partial<StudentModel>;
+        checkNotNull(args.student);
+        let updateStudent = { ...args.student } as Partial<StudentModel>;
 
-        if (args.groups) {
-          const groups = args.groups.map((group) => new ObjectId(group));
+        if (args.idGroups) {
+          const groups = args.idGroups.map((group) => new ObjectId(group));
           const existsGroups = await groupCollection(ctx.db)
             .find({
               _id: { $in: groups },
@@ -310,17 +287,17 @@ export const students = {
           };
         }
 
-        if (args.birthDate) {
-          const birthDate = validDate(args.birthDate);
+        if (args.student.birthDate) {
+          const birthDate = validDate(args.student.birthDate);
           updateStudent = { ...updateStudent, birthDate };
         }
 
-        if (args.registrationDate) {
-          const registrationDate = validDate(args.registrationDate);
+        if (args.student.registrationDate) {
+          const registrationDate = validDate(args.student.registrationDate);
           updateStudent = { ...updateStudent, registrationDate };
         }
 
-        if (args.course) {
+        if (args.student.course) {
           const oldCourse = (await studentCollection(ctx.db).findById(args.id))
             ?.course;
           if (!oldCourse) {
@@ -333,7 +310,7 @@ export const students = {
             })
             .toArray();
 
-          await addCourse(groups, groupCollection(ctx.db), args.course);
+          await addCourse(groups, groupCollection(ctx.db), args.student.course);
           await removeCourse(
             groups,
             groupCollection(ctx.db),
@@ -364,7 +341,7 @@ export const students = {
       ctx: Context,
     ): Promise<StudentContact> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.contact);
         const contactsStudents = await studentCollection(ctx.db)
           .find(
             {
@@ -384,12 +361,12 @@ export const students = {
         const updateContacts = contactsStudents[0].contacts?.map((contact) => {
           if (contact.email === args.originEmail) {
             contactUpdate = {
-              name: args.name || contact.name,
-              email: args.email || contact.email,
-              phone: args.phone || contact.phone,
-              send_info: args.send_info === undefined
+              name: args.contact.name || contact.name,
+              email: args.contact.email || contact.email,
+              phone: args.contact.phone || contact.phone,
+              send_info: args.contact.send_info === undefined
                 ? contact.send_info
-                : args.send_info,
+                : args.contact.send_info,
             };
             return contactUpdate;
           }

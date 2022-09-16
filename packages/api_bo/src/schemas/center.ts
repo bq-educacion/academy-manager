@@ -28,12 +28,6 @@ export const typeDefs = gql`
     phone: String!
   }
 
-  input CenterContactInput {
-    name: String!
-    email: String!
-    phone: String!
-  }
-
   type PaginatedCenters {
     page: Int!
     totalPages: Int!
@@ -46,6 +40,52 @@ export const typeDefs = gql`
     center: Center!
     totalStudents: Number!
     totalGroups: Number!
+  }
+
+  input GetCentersInput{
+    searchText: String
+    orderFilter: OrderFilterCenter
+    order: Number
+    page: Int
+    pageSize: Int
+  }
+
+  input CreateCenterInput {
+    name: String!
+    address: String!
+    city: String!
+    phone: String
+    email: String
+    type: [CenterActivityType!]!
+    nature: CenterNature!
+    languages: [Languages!]!
+    contacts: [CenterContactInput!]
+    notes: String
+  }
+
+  input EditCenterInput {
+    name: String
+    address: String
+    city: String
+    phone: String
+    email: String
+    type: [CenterActivityType!]
+    nature: CenterNature
+    languages: [Languages!]
+    contacts: [CenterContactInput!]
+    notes: String
+  }
+
+  input CenterContactInput {
+    name: String!
+    email: String!
+    phone: String!
+  }
+
+  input EditCenterContactInput {
+    name: String
+    email: String
+    phone: String
   }
 
   type Center {
@@ -67,11 +107,7 @@ export const typeDefs = gql`
 
   type Query {
     getCenters(
-      searchText: String
-      orderFilter: OrderFilterCenter
-      order: Number
-      page: Int
-      pageSize: Int
+      centers: GetCentersInput!
     ): PaginatedCenters!
 
     getCenter(id: String!): CenterInfo!
@@ -79,45 +115,23 @@ export const typeDefs = gql`
 
   type Mutation {
     createCenter(
-      name: String!
-      address: String!
-      city: String!
-      phone: String
-      email: String
-      type: [CenterActivityType!]!
-      nature: CenterNature!
-      languages: [Languages!]!
-      contacts: [CenterContactInput!]
-      notes: String
+      center: CreateCenterInput!
     ): Center!
 
     addCenterContact(
       idCenter: String!
-      name: String!
-      email: String!
-      phone: String!
+      contact: CenterContactInput!
     ): CenterContact!
 
     editCenter(
       id: String!
-      name: String
-      address: String
-      city: String
-      phone: String
-      email: String
-      type: [CenterActivityType!]
-      nature: CenterNature
-      languages: [Languages!]
-      contacts: [CenterContactInput!]
-      notes: String
+      center: EditCenterInput!
     ): Center!
 
     editCenterContact(
       idCenter: String!
       originEmail: String!
-      name: String
-      phone: String
-      email: String
+      contact: EditCenterContactInput!
     ): CenterContact!
 
     deleteCenter(id: String!): Center!
