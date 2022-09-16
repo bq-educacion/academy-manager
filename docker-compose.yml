@@ -39,6 +39,7 @@ services:
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:6005/graphql
       NEXT_PUBLIC_API_URL_SERVER: http://api_bo:3000/graphql
+      NEXT_PUBLIC_CLIENT_ID: 739231185059-4eds5lgb3bisj9m3mnoi26ksm1n74986.apps.googleusercontent.com
       PORT: 3000
     volumes:
       - type: bind

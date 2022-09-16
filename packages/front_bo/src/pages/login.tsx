@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
-// import { v1} from "uuid";
-// import queryString from "query-string";
+import { v1 } from "uuid";
+import queryString from "query-string";
 import {
   BQLogoGray,
   colors,
@@ -13,9 +13,9 @@ import {
 import withApollo from "../apollo/withApollo";
 import { googleAuthEndpoint, googleScopes } from "../config";
 
-// const uuid = v1;
+const uuid = v1;
 
-const appID = process.env.GOOGLE_CLIENT_ID;
+const appID = process.env.NEXT_PUBLIC_CLIENT_ID || "";
 
 export interface IloginProps {
   clientId?: string;
@@ -24,7 +24,7 @@ export interface IloginProps {
 
 const LogInPage: NextPage<IloginProps> = ({
   clientId = appID,
-  redirectUri = "/google-redirect",
+  redirectUri = "google-redirect",
 }) => {
   const t = useTranslate();
 
@@ -33,8 +33,8 @@ const LogInPage: NextPage<IloginProps> = ({
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    // sessionStorage.setItem("googleAuthState", uuid());
-    // sessionStorage.setItem("googleAuthNonce", uuid());
+    sessionStorage.setItem("googleAuthState", uuid());
+    sessionStorage.setItem("googleAuthNonce", uuid());
     sessionStorage.setItem("googlePrevPathname", router.pathname);
 
     const location = window.location;
@@ -44,8 +44,10 @@ const LogInPage: NextPage<IloginProps> = ({
       redirect_uri: `${location.protocol}//${location.host}/${redirectUri}`,
       scope: googleScopes,
     };
-    //queryString.stringify(authParams)
-    location.assign(googleAuthEndpoint + "?" + authParams);
+
+    location.assign(
+      googleAuthEndpoint + "?" + queryString.stringify(authParams)
+    );
   };
 
   return (

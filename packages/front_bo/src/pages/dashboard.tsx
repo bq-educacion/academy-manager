@@ -15,4 +15,4 @@ const DashboardPage: NextPage = () => {
   );
 };
 
-export default withApollo(DashboardPage, { requiresAccess: false });
+export default withApollo(DashboardPage, { requiresAccess: true });

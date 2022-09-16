@@ -261,7 +261,7 @@ const CentersPage: NextPage = () => {
 };
 
 // export default withApollo(CentersPage);
-export default withApollo(CentersPage, { requiresAccess: false });
+export default withApollo(CentersPage, { requiresAccess: true });
 
 export const ContentDiv = styled.div`
   display: flex;

@@ -679,7 +679,7 @@ const EditCenter: NextPage = () => {
   );
 };
 
-export default withApollo(EditCenter, { requiresAccess: false });
+export default withApollo(EditCenter, { requiresAccess: true });
 
 const HeaderDiv = styled.div`
   display: flex;
