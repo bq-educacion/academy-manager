@@ -46,33 +46,43 @@ export const centers = {
       ctx: Context,
     ): Promise<PaginatedCenters> => {
       const filter: Filter<PaginatedCenters> = { $or: [{}] };
-      if (args.searchText) {
+      if (args.center.searchText) {
         filter["$or"] = [
-          { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { address: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          { name: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
           {
-            city: { $regex: `.*${args.searchText}.*`, $options: "i" },
-          },
-          { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { email: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { nature: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          {
-            createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
+            address: { $regex: `.*${args.center.searchText}.*`, $options: "i" },
           },
           {
-            languages: { $regex: `.*${args.searchText}.*`, $options: "i" },
+            city: { $regex: `.*${args.center.searchText}.*`, $options: "i" },
+          },
+          { phone: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
+          { email: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
+          { type: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
+          {
+            nature: { $regex: `.*${args.center.searchText}.*`, $options: "i" },
+          },
+          { notes: { $regex: `.*${args.center.searchText}.*`, $options: "i" } },
+          {
+            createdAt: {
+              $regex: `.*${args.center.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            languages: {
+              $regex: `.*${args.center.searchText}.*`,
+              $options: "i",
+            },
           },
           {
             "contacts.name": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.center.searchText}.*`,
               $options: "i",
             },
           },
           {
             "groupsName.name": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.center.searchText}.*`,
               $options: "i",
             },
           },
@@ -87,14 +97,16 @@ export const centers = {
         city: "city",
         type: "type",
       };
-      if (args.orderFilter && args.order) {
-        if (args.order !== 1 && args.order !== -1) {
+      if (args.center.orderFilter && args.center.order) {
+        if (args.center.order !== 1 && args.center.order !== -1) {
           throw new Error("400, wrong order (1 or -1)");
         }
-        sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
-      } else if (args.orderFilter && !args.order) {
+        sortFilter = {
+          [OrderFilter[args.center.orderFilter]]: args.center.order,
+        };
+      } else if (args.center.orderFilter && !args.center.order) {
         throw new Error("400, order is required");
-      } else if (!args.orderFilter && args.order) {
+      } else if (!args.center.orderFilter && args.center.order) {
         throw new Error("400, orderFilter is required");
       } else {
         sortFilter = { name: 1 };
@@ -105,8 +117,8 @@ export const centers = {
         filter,
         "centers",
         sortFilter,
-        args.page,
-        args.pageSize,
+        args.center.page,
+        args.center.pageSize,
       ) as Promise<PaginatedCenters>;
     },
 
@@ -150,10 +162,10 @@ export const centers = {
       ctx: Context,
     ): Promise<CenterModel> => {
       try {
-        checkNotNull(args);
-        if (args.email) {
+        checkNotNull(args.center);
+        if (args.center.email) {
           const email = await centerCollection(ctx.db).findOne({
-            email: args.email,
+            email: args.center.email,
           });
           if (email) {
             throw new Error("400, Email must be unique");
@@ -163,15 +175,15 @@ export const centers = {
         const createdAt = new Date().toLocaleDateString("en-GB");
 
         let center = {
-          ...args,
+          ...args.center,
           createdAt,
           active: true,
         };
 
-        if (args.contacts) {
+        if (args.center.contacts) {
           center = {
             ...center,
-            contacts: args.contacts?.map((c) => ({ ...c })),
+            contacts: args.center.contacts.map((c) => ({ ...c })),
           };
         }
         const idCenter = await centerCollection(ctx.db).insertOne({
@@ -193,11 +205,11 @@ export const centers = {
       ctx: Context,
     ): Promise<CenterContact> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.contact);
         const newCenterContact = await centerCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.idCenter) },
           {
-            update: { $push: { contacts: { $each: [{ ...args }] } } },
+            update: { $push: { contacts: { $each: [{ ...args.contact }] } } },
             new: true,
           },
         );
@@ -205,7 +217,7 @@ export const centers = {
           throw new Error("404, Center not found");
         }
         return {
-          ...args,
+          ...args.contact,
         };
       } catch (error) {
         throw new Error("500, " + error);
@@ -218,12 +230,12 @@ export const centers = {
       ctx: Context,
     ): Promise<CenterModel> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.center);
         // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
         const newCenter = await centerCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
           {
-            update: { $set: { ...(args as Partial<CenterModel>) } },
+            update: { $set: { ...(args.center as Partial<CenterModel>) } },
             new: true,
           },
         );
@@ -242,7 +254,7 @@ export const centers = {
       ctx: Context,
     ): Promise<CenterContact> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.contact);
         const contactsCenter = await centerCollection(ctx.db)
           .find(
             {
@@ -266,9 +278,9 @@ export const centers = {
         const updateContacts = contactsCenter[0]?.contacts?.map((contact) => {
           if (contact.email === args.originEmail) {
             contactUpdate = {
-              name: args.name || contact.name,
-              email: args.email || contact.email,
-              phone: args.phone || contact.phone,
+              name: args.contact.name || contact.name,
+              email: args.contact.email || contact.email,
+              phone: args.contact.phone || contact.phone,
             };
             return contactUpdate;
           }

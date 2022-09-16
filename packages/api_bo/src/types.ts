@@ -108,6 +108,19 @@ export enum CourseType {
   Eso = "ESO",
 }
 
+export type CreateCenterInput = {
+  address: Scalars["String"];
+  city: Scalars["String"];
+  contacts?: InputMaybe<Array<CenterContactInput>>;
+  email?: InputMaybe<Scalars["String"]>;
+  languages: Array<Languages>;
+  name: Scalars["String"];
+  nature: CenterNature;
+  notes?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  type: Array<CenterActivityType>;
+};
+
 export enum Days {
   Friday = "FRIDAY",
   Monday = "MONDAY",
@@ -117,6 +130,33 @@ export enum Days {
   Tuesday = "TUESDAY",
   Wednesday = "WEDNESDAY",
 }
+
+export type EditCenterContactInput = {
+  email?: InputMaybe<Scalars["String"]>;
+  name?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+};
+
+export type EditCenterInput = {
+  address?: InputMaybe<Scalars["String"]>;
+  city?: InputMaybe<Scalars["String"]>;
+  contacts?: InputMaybe<Array<CenterContactInput>>;
+  email?: InputMaybe<Scalars["String"]>;
+  languages?: InputMaybe<Array<Languages>>;
+  name?: InputMaybe<Scalars["String"]>;
+  nature?: InputMaybe<CenterNature>;
+  notes?: InputMaybe<Scalars["String"]>;
+  phone?: InputMaybe<Scalars["String"]>;
+  type?: InputMaybe<Array<CenterActivityType>>;
+};
+
+export type GetCenterInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
+};
 
 export type Group = {
   __typename?: "Group";
@@ -209,10 +249,8 @@ export type Mutation = {
 };
 
 export type MutationAddCenterContactArgs = {
-  email: Scalars["String"];
+  contact: CenterContactInput;
   idCenter: Scalars["String"];
-  name: Scalars["String"];
-  phone: Scalars["String"];
 };
 
 export type MutationAddStudentContactArgs = {
@@ -229,16 +267,7 @@ export type MutationCreateAreaArgs = {
 };
 
 export type MutationCreateCenterArgs = {
-  address: Scalars["String"];
-  city: Scalars["String"];
-  contacts?: InputMaybe<Array<CenterContactInput>>;
-  email?: InputMaybe<Scalars["String"]>;
-  languages: Array<Languages>;
-  name: Scalars["String"];
-  nature: CenterNature;
-  notes?: InputMaybe<Scalars["String"]>;
-  phone?: InputMaybe<Scalars["String"]>;
-  type: Array<CenterActivityType>;
+  center: CreateCenterInput;
 };
 
 export type MutationCreateGroupArgs = {
@@ -312,25 +341,14 @@ export type MutationDeleteStudentArgs = {
 };
 
 export type MutationEditCenterArgs = {
-  address?: InputMaybe<Scalars["String"]>;
-  city?: InputMaybe<Scalars["String"]>;
-  contacts?: InputMaybe<Array<CenterContactInput>>;
-  email?: InputMaybe<Scalars["String"]>;
+  center: EditCenterInput;
   id: Scalars["String"];
-  languages?: InputMaybe<Array<Languages>>;
-  name?: InputMaybe<Scalars["String"]>;
-  nature?: InputMaybe<CenterNature>;
-  notes?: InputMaybe<Scalars["String"]>;
-  phone?: InputMaybe<Scalars["String"]>;
-  type?: InputMaybe<Array<CenterActivityType>>;
 };
 
 export type MutationEditCenterContactArgs = {
-  email?: InputMaybe<Scalars["String"]>;
+  contact: EditCenterContactInput;
   idCenter: Scalars["String"];
-  name?: InputMaybe<Scalars["String"]>;
   originEmail: Scalars["String"];
-  phone?: InputMaybe<Scalars["String"]>;
 };
 
 export type MutationEditGroupArgs = {
@@ -515,11 +533,7 @@ export type QueryGetCenterArgs = {
 };
 
 export type QueryGetCentersArgs = {
-  order?: InputMaybe<Scalars["Number"]>;
-  orderFilter?: InputMaybe<OrderFilterCenter>;
-  page?: InputMaybe<Scalars["Int"]>;
-  pageSize?: InputMaybe<Scalars["Int"]>;
-  searchText?: InputMaybe<Scalars["String"]>;
+  center: GetCenterInput;
 };
 
 export type QueryGetGroupArgs = {
@@ -780,7 +794,11 @@ export type ResolversTypes = ResolversObject<{
   CenterNature: CenterNature;
   Course: ResolverTypeWrapper<Course>;
   CourseType: CourseType;
+  CreateCenterInput: CreateCenterInput;
   Days: Days;
+  EditCenterContactInput: EditCenterContactInput;
+  EditCenterInput: EditCenterInput;
+  GetCenterInput: GetCenterInput;
   Group: ResolverTypeWrapper<Group>;
   GroupInfo: ResolverTypeWrapper<GroupInfo>;
   GroupModality: GroupModality;
@@ -825,6 +843,10 @@ export type ResolversParentTypes = ResolversObject<{
   CenterContactInput: CenterContactInput;
   CenterInfo: CenterInfo;
   Course: Course;
+  CreateCenterInput: CreateCenterInput;
+  EditCenterContactInput: EditCenterContactInput;
+  EditCenterInput: EditCenterInput;
+  GetCenterInput: GetCenterInput;
   Group: Group;
   GroupInfo: GroupInfo;
   ID: Scalars["ID"];
@@ -1069,10 +1091,7 @@ export type MutationResolvers<
     ResolversTypes["CenterContact"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationAddCenterContactArgs,
-      "email" | "idCenter" | "name" | "phone"
-    >
+    RequireFields<MutationAddCenterContactArgs, "contact" | "idCenter">
   >;
   addStudentContact?: Resolver<
     ResolversTypes["StudentContact"],
@@ -1093,10 +1112,7 @@ export type MutationResolvers<
     ResolversTypes["Center"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationCreateCenterArgs,
-      "address" | "city" | "languages" | "name" | "nature" | "type"
-    >
+    RequireFields<MutationCreateCenterArgs, "center">
   >;
   createGroup?: Resolver<
     ResolversTypes["Group"],
@@ -1165,13 +1181,16 @@ export type MutationResolvers<
     ResolversTypes["Center"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditCenterArgs, "id">
+    RequireFields<MutationEditCenterArgs, "center" | "id">
   >;
   editCenterContact?: Resolver<
     ResolversTypes["CenterContact"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditCenterContactArgs, "idCenter" | "originEmail">
+    RequireFields<
+      MutationEditCenterContactArgs,
+      "contact" | "idCenter" | "originEmail"
+    >
   >;
   editGroup?: Resolver<
     ResolversTypes["Group"],
@@ -1307,7 +1326,7 @@ export type QueryResolvers<
     ResolversTypes["PaginatedCenters"],
     ParentType,
     ContextType,
-    Partial<QueryGetCentersArgs>
+    RequireFields<QueryGetCentersArgs, "center">
   >;
   getGroup?: Resolver<
     ResolversTypes["GroupInfo"],
