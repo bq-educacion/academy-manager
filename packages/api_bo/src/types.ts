@@ -121,6 +121,15 @@ export type CreateCenterInput = {
   type: Array<CenterActivityType>;
 };
 
+export type CreateGroupInput = {
+  instructors?: InputMaybe<Array<Scalars["String"]>>;
+  modality: GroupModality;
+  name: Scalars["String"];
+  notes?: InputMaybe<Scalars["String"]>;
+  timetable: Array<TimetableInput>;
+  type: GroupType;
+};
+
 export enum Days {
   Friday = "FRIDAY",
   Monday = "MONDAY",
@@ -150,9 +159,27 @@ export type EditCenterInput = {
   type?: InputMaybe<Array<CenterActivityType>>;
 };
 
-export type GetCenterInput = {
+export type EditGroupInput = {
+  center?: InputMaybe<Scalars["String"]>;
+  instructors?: InputMaybe<Array<Scalars["String"]>>;
+  modality?: InputMaybe<GroupModality>;
+  name?: InputMaybe<Scalars["String"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  timetable?: InputMaybe<Array<TimetableInput>>;
+  type?: InputMaybe<GroupType>;
+};
+
+export type GetCentersInput = {
   order?: InputMaybe<Scalars["Number"]>;
   orderFilter?: InputMaybe<OrderFilterCenter>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<Scalars["String"]>;
+};
+
+export type GetGroupsInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterGroup>;
   page?: InputMaybe<Scalars["Int"]>;
   pageSize?: InputMaybe<Scalars["Int"]>;
   searchText?: InputMaybe<Scalars["String"]>;
@@ -271,13 +298,8 @@ export type MutationCreateCenterArgs = {
 };
 
 export type MutationCreateGroupArgs = {
+  group: CreateGroupInput;
   idCenter: Scalars["String"];
-  instructors?: InputMaybe<Array<Scalars["String"]>>;
-  modality: GroupModality;
-  name: Scalars["String"];
-  notes?: InputMaybe<Scalars["String"]>;
-  timetable: Array<TimetableInput>;
-  type: GroupType;
 };
 
 export type MutationCreateInstructorArgs = {
@@ -352,14 +374,8 @@ export type MutationEditCenterContactArgs = {
 };
 
 export type MutationEditGroupArgs = {
-  center?: InputMaybe<Scalars["String"]>;
+  group: EditGroupInput;
   id: Scalars["String"];
-  instructors?: InputMaybe<Array<Scalars["String"]>>;
-  modality?: InputMaybe<GroupModality>;
-  name?: InputMaybe<Scalars["String"]>;
-  notes?: InputMaybe<Scalars["String"]>;
-  timetable?: InputMaybe<Array<TimetableInput>>;
-  type?: InputMaybe<GroupType>;
 };
 
 export type MutationEditInstructorArgs = {
@@ -533,7 +549,7 @@ export type QueryGetCenterArgs = {
 };
 
 export type QueryGetCentersArgs = {
-  center: GetCenterInput;
+  center: GetCentersInput;
 };
 
 export type QueryGetGroupArgs = {
@@ -541,11 +557,7 @@ export type QueryGetGroupArgs = {
 };
 
 export type QueryGetGroupsArgs = {
-  order?: InputMaybe<Scalars["Number"]>;
-  orderFilter?: InputMaybe<OrderFilterGroup>;
-  page?: InputMaybe<Scalars["Int"]>;
-  pageSize?: InputMaybe<Scalars["Int"]>;
-  searchText?: InputMaybe<Scalars["String"]>;
+  group: GetGroupsInput;
 };
 
 export type QueryGetInstructorArgs = {
@@ -795,10 +807,13 @@ export type ResolversTypes = ResolversObject<{
   Course: ResolverTypeWrapper<Course>;
   CourseType: CourseType;
   CreateCenterInput: CreateCenterInput;
+  CreateGroupInput: CreateGroupInput;
   Days: Days;
   EditCenterContactInput: EditCenterContactInput;
   EditCenterInput: EditCenterInput;
-  GetCenterInput: GetCenterInput;
+  EditGroupInput: EditGroupInput;
+  GetCentersInput: GetCentersInput;
+  GetGroupsInput: GetGroupsInput;
   Group: ResolverTypeWrapper<Group>;
   GroupInfo: ResolverTypeWrapper<GroupInfo>;
   GroupModality: GroupModality;
@@ -844,9 +859,12 @@ export type ResolversParentTypes = ResolversObject<{
   CenterInfo: CenterInfo;
   Course: Course;
   CreateCenterInput: CreateCenterInput;
+  CreateGroupInput: CreateGroupInput;
   EditCenterContactInput: EditCenterContactInput;
   EditCenterInput: EditCenterInput;
-  GetCenterInput: GetCenterInput;
+  EditGroupInput: EditGroupInput;
+  GetCentersInput: GetCentersInput;
+  GetGroupsInput: GetGroupsInput;
   Group: Group;
   GroupInfo: GroupInfo;
   ID: Scalars["ID"];
@@ -1118,10 +1136,7 @@ export type MutationResolvers<
     ResolversTypes["Group"],
     ParentType,
     ContextType,
-    RequireFields<
-      MutationCreateGroupArgs,
-      "idCenter" | "modality" | "name" | "timetable" | "type"
-    >
+    RequireFields<MutationCreateGroupArgs, "group" | "idCenter">
   >;
   createInstructor?: Resolver<
     ResolversTypes["Instructor"],
@@ -1196,7 +1211,7 @@ export type MutationResolvers<
     ResolversTypes["Group"],
     ParentType,
     ContextType,
-    RequireFields<MutationEditGroupArgs, "id">
+    RequireFields<MutationEditGroupArgs, "group" | "id">
   >;
   editInstructor?: Resolver<
     ResolversTypes["Instructor"],
@@ -1338,7 +1353,7 @@ export type QueryResolvers<
     ResolversTypes["PaginatedGroups"],
     ParentType,
     ContextType,
-    Partial<QueryGetGroupsArgs>
+    RequireFields<QueryGetGroupsArgs, "group">
   >;
   getInstructor?: Resolver<
     ResolversTypes["Instructor"],

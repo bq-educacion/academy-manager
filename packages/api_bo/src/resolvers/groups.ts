@@ -73,51 +73,68 @@ export const groups = {
       ctx: Context,
     ): Promise<PaginatedGroups> => {
       const filter: Filter<PaginatedGroups> = { $or: [{}] };
-      if (args.searchText) {
+      if (args.group.searchText) {
         filter["$or"] = [
-          { id_group: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { type: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { modality: { $regex: `.*${args.searchText}.*`, $options: "i" } },
           {
-            createdAt: { $regex: `.*${args.searchText}.*`, $options: "i" },
+            id_group: { $regex: `.*${args.group.searchText}.*`, $options: "i" },
           },
-          { "course.ESO": { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { "course.EPO": { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          { name: { $regex: `.*${args.group.searchText}.*`, $options: "i" } },
+          { type: { $regex: `.*${args.group.searchText}.*`, $options: "i" } },
+          {
+            modality: { $regex: `.*${args.group.searchText}.*`, $options: "i" },
+          },
+          {
+            createdAt: {
+              $regex: `.*${args.group.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            "course.ESO": {
+              $regex: `.*${args.group.searchText}.*`,
+              $options: "i",
+            },
+          },
+          {
+            "course.EPO": {
+              $regex: `.*${args.group.searchText}.*`,
+              $options: "i",
+            },
+          },
           {
             "timetable.day": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.group.searchText}.*`,
               $options: "i",
             },
           },
           {
             "timetable.start": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.group.searchText}.*`,
               $options: "i",
             },
           },
           {
             "timetable.end": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.group.searchText}.*`,
               $options: "i",
             },
           },
-          { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          { notes: { $regex: `.*${args.group.searchText}.*`, $options: "i" } },
           {
             "centersName.name": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.group.searchText}.*`,
               $options: "i",
             },
           },
           {
             "instructorsName.name": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.group.searchText}.*`,
               $options: "i",
             },
           },
           {
             "studentsName.name": {
-              $regex: `.*${args.searchText}.*`,
+              $regex: `.*${args.group.searchText}.*`,
               $options: "i",
             },
           },
@@ -136,14 +153,16 @@ export const groups = {
         end: "timetable.end",
       };
 
-      if (args.orderFilter && args.order) {
-        if (args.order !== 1 && args.order !== -1) {
+      if (args.group.orderFilter && args.group.order) {
+        if (args.group.order !== 1 && args.group.order !== -1) {
           throw new Error("400, wrong order (1 or -1)");
         }
-        sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
-      } else if (args.orderFilter && !args.order) {
+        sortFilter = {
+          [OrderFilter[args.group.orderFilter]]: args.group.order,
+        };
+      } else if (args.group.orderFilter && !args.group.order) {
         throw new Error("400, order is required");
-      } else if (!args.orderFilter && args.order) {
+      } else if (!args.group.orderFilter && args.group.order) {
         throw new Error("400, orderFilter is required");
       } else {
         sortFilter = { id_group: 1 };
@@ -154,8 +173,8 @@ export const groups = {
         filter,
         "groups",
         sortFilter,
-        args.page,
-        args.pageSize,
+        args.group.page,
+        args.group.pageSize,
       ) as Promise<PaginatedGroups>;
     },
 
@@ -183,10 +202,10 @@ export const groups = {
       ctx: Context,
     ): Promise<GroupModel> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.group);
         const group = await groupCollection(ctx.db).findOne({
           center: new ObjectId(args.idCenter),
-          name: { $regex: args.name, $options: "i" },
+          name: { $regex: args.group.name, $options: "i" },
         });
         if (group) throw new Error("404, Group already exists");
 
@@ -210,10 +229,10 @@ export const groups = {
         if (!centerExists) throw new Error("404, Center not found");
         const center = new ObjectId(args.idCenter);
 
-        const instructors = args.instructors?.map(
+        const instructors = args.group.instructors?.map(
           (instructor) => new ObjectId(instructor),
         );
-        if (args.instructors) {
+        if (args.group.instructors) {
           const exists = await instructorCollection(ctx.db)
             .find({
               _id: { $in: instructors },
@@ -224,7 +243,7 @@ export const groups = {
           }
         }
 
-        const timetable = setIdDays(args.timetable) as Timetable[];
+        const timetable = setIdDays(args.group.timetable) as Timetable[];
         validHour(timetable);
 
         const course: Course = {
@@ -233,7 +252,7 @@ export const groups = {
         };
 
         const newGroup = {
-          ...args,
+          ...args.group,
           id_group,
           timetable,
           active: centerExists.active,
@@ -262,12 +281,12 @@ export const groups = {
       ctx: Context,
     ): Promise<GroupModel> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.group);
         let activeGroups = false;
-        let updateGroup = { ...args } as Partial<GroupModel>;
+        let updateGroup = { ...args.group } as Partial<GroupModel>;
 
-        if (args.instructors) {
-          const instructors = args.instructors?.map(
+        if (args.group.instructors) {
+          const instructors = args.group.instructors?.map(
             (instructor) => new ObjectId(instructor),
           );
 
@@ -309,19 +328,22 @@ export const groups = {
           }
         }
 
-        if (args.center) {
+        if (args.group.center) {
           const exists = await centerCollection(ctx.db).findOne({
-            _id: new ObjectId(args.center),
+            _id: new ObjectId(args.group.center),
             active: true,
           });
           if (!exists) {
             throw new Error("404, Center not found or not active");
           }
-          updateGroup = { ...updateGroup, center: new ObjectId(args.center) };
+          updateGroup = {
+            ...updateGroup,
+            center: new ObjectId(args.group.center),
+          };
         }
 
-        if (args.timetable) {
-          const timetable = setIdDays(args.timetable) as Timetable[];
+        if (args.group.timetable) {
+          const timetable = setIdDays(args.group.timetable) as Timetable[];
           validHour(timetable);
           updateGroup = { ...updateGroup, timetable };
         }

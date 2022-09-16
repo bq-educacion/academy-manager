@@ -42,7 +42,7 @@ export const typeDefs = gql`
     totalGroups: Number!
   }
 
-  input GetCenterInput{
+  input GetCentersInput{
     searchText: String
     orderFilter: OrderFilterCenter
     order: Number
@@ -107,7 +107,7 @@ export const typeDefs = gql`
 
   type Query {
     getCenters(
-      center: GetCenterInput!
+      center: GetCentersInput!
     ): PaginatedCenters!
 
     getCenter(id: String!): CenterInfo!
