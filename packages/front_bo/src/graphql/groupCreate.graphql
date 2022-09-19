@@ -1,18 +1,10 @@
 mutation CreateGroup(
   $idCenter: String!
-  $name: String!
-  $modality: GroupModality!
-  $type: GroupType!
-  $timetable: [TimetableInput!]!
-  $instructors: [String!]
+  $group: CreateGroupInput!
 ) {
   createGroup(
     idCenter: $idCenter
-    name: $name
-    modality: $modality
-    type: $type
-    timetable: $timetable
-    instructors: $instructors
+    group: $group
   ) {
     name
     id_group

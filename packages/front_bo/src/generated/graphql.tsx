@@ -97,6 +97,66 @@ export enum CourseType {
   Eso = 'ESO'
 }
 
+export type CreateCenterInput = {
+  address: Scalars['String'];
+  city: Scalars['String'];
+  contacts?: InputMaybe<Array<CenterContactInput>>;
+  email?: InputMaybe<Scalars['String']>;
+  languages: Array<Languages>;
+  name: Scalars['String'];
+  nature: CenterNature;
+  notes?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  type: Array<CenterActivityType>;
+};
+
+export type CreateGroupInput = {
+  instructors?: InputMaybe<Array<Scalars['String']>>;
+  modality: GroupModality;
+  name: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
+  timetable: Array<TimetableInput>;
+  type: GroupType;
+};
+
+export type CreateInstructorInput = {
+  areas: Array<Scalars['String']>;
+  availability: Array<AvailabilityInput>;
+  corporateEmail?: InputMaybe<Scalars['String']>;
+  enrolled: Scalars['Boolean'];
+  geographicalAvailability: Array<Region>;
+  knowledge?: InputMaybe<Scalars['String']>;
+  languages?: InputMaybe<Array<Languages>>;
+  materialsExperience?: InputMaybe<Array<Scalars['String']>>;
+  name: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
+  personalEmail?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
+  previousExperience: PreviousExperienceInstructor;
+  programmingExperience: Scalars['Boolean'];
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training: TrainingInstructorInput;
+  urlCV?: InputMaybe<Scalars['String']>;
+  vehicle: TypeVehicleInstructor;
+};
+
+export type CreateStudentInput = {
+  allergies?: InputMaybe<Scalars['Boolean']>;
+  birthDate?: InputMaybe<Scalars['String']>;
+  collectionPermit?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
+  course: Scalars['String'];
+  descriptionAllergy?: InputMaybe<Scalars['String']>;
+  goesAlone?: InputMaybe<Scalars['Boolean']>;
+  imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
+  oldStudent?: InputMaybe<Scalars['Boolean']>;
+  registrationDate?: InputMaybe<Scalars['String']>;
+  signedMandate?: InputMaybe<Scalars['Boolean']>;
+};
+
 export enum Days {
   Friday = 'FRIDAY',
   Monday = 'MONDAY',
@@ -106,6 +166,111 @@ export enum Days {
   Tuesday = 'TUESDAY',
   Wednesday = 'WEDNESDAY'
 }
+
+export type EditCenterContactInput = {
+  email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+};
+
+export type EditCenterInput = {
+  address?: InputMaybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<CenterContactInput>>;
+  email?: InputMaybe<Scalars['String']>;
+  languages?: InputMaybe<Array<Languages>>;
+  name?: InputMaybe<Scalars['String']>;
+  nature?: InputMaybe<CenterNature>;
+  notes?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Array<CenterActivityType>>;
+};
+
+export type EditGroupInput = {
+  center?: InputMaybe<Scalars['String']>;
+  instructors?: InputMaybe<Array<Scalars['String']>>;
+  modality?: InputMaybe<GroupModality>;
+  name?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  timetable?: InputMaybe<Array<TimetableInput>>;
+  type?: InputMaybe<GroupType>;
+};
+
+export type EditInstructorInput = {
+  areas?: InputMaybe<Array<Scalars['String']>>;
+  availability?: InputMaybe<Array<AvailabilityInput>>;
+  corporateEmail?: InputMaybe<Scalars['String']>;
+  geographicalAvailability?: InputMaybe<Array<Region>>;
+  knowledge?: InputMaybe<Scalars['String']>;
+  languages?: InputMaybe<Array<Languages>>;
+  materialsExperience?: InputMaybe<Array<Scalars['String']>>;
+  name?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  personalEmail?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
+  previousExperience?: InputMaybe<PreviousExperienceInstructor>;
+  programmingExperience?: InputMaybe<Scalars['Boolean']>;
+  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
+  training?: InputMaybe<TrainingInstructorInput>;
+  urlCV?: InputMaybe<Scalars['String']>;
+  vehicle?: InputMaybe<TypeVehicleInstructor>;
+};
+
+export type EditStudentContactInput = {
+  email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  send_info?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type EditStudentInput = {
+  allergies?: InputMaybe<Scalars['Boolean']>;
+  birthDate?: InputMaybe<Scalars['String']>;
+  collectionPermit?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<StudentContactInput>>;
+  course?: InputMaybe<Scalars['String']>;
+  descriptionAllergy?: InputMaybe<Scalars['String']>;
+  goesAlone?: InputMaybe<Scalars['Boolean']>;
+  imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  oldStudent?: InputMaybe<Scalars['Boolean']>;
+  registrationDate?: InputMaybe<Scalars['String']>;
+  signedMandate?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type GetCentersInput = {
+  order?: InputMaybe<Scalars['Number']>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  searchText?: InputMaybe<Scalars['String']>;
+};
+
+export type GetGroupsInput = {
+  order?: InputMaybe<Scalars['Number']>;
+  orderFilter?: InputMaybe<OrderFilterGroup>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  searchText?: InputMaybe<Scalars['String']>;
+};
+
+export type GetInstructorsInput = {
+  order?: InputMaybe<Scalars['Number']>;
+  orderFilter?: InputMaybe<OrderFilterInstructor>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  searchText?: InputMaybe<Scalars['String']>;
+};
+
+export type GetStudentsInput = {
+  order?: InputMaybe<Scalars['Number']>;
+  orderFilter?: InputMaybe<OrderFilterStudent>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  searchText?: InputMaybe<Scalars['String']>;
+};
 
 export type Group = {
   __typename?: 'Group';
@@ -199,19 +364,14 @@ export type Mutation = {
 
 
 export type MutationAddCenterContactArgs = {
-  email: Scalars['String'];
+  contact: CenterContactInput;
   idCenter: Scalars['String'];
-  name: Scalars['String'];
-  phone: Scalars['String'];
 };
 
 
 export type MutationAddStudentContactArgs = {
-  email: Scalars['String'];
+  contact: StudentContactInput;
   idStudent: Scalars['String'];
-  name: Scalars['String'];
-  phone: Scalars['String'];
-  send_info: Scalars['Boolean'];
 };
 
 
@@ -222,69 +382,25 @@ export type MutationCreateAreaArgs = {
 
 
 export type MutationCreateCenterArgs = {
-  address: Scalars['String'];
-  city: Scalars['String'];
-  contacts?: InputMaybe<Array<CenterContactInput>>;
-  email?: InputMaybe<Scalars['String']>;
-  languages: Array<Languages>;
-  name: Scalars['String'];
-  nature: CenterNature;
-  notes?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  type: Array<CenterActivityType>;
+  center: CreateCenterInput;
 };
 
 
 export type MutationCreateGroupArgs = {
+  group: CreateGroupInput;
   idCenter: Scalars['String'];
-  instructors?: InputMaybe<Array<Scalars['String']>>;
-  modality: GroupModality;
-  name: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
-  timetable: Array<TimetableInput>;
-  type: GroupType;
 };
 
 
 export type MutationCreateInstructorArgs = {
-  areas: Array<Scalars['String']>;
-  availability: Array<AvailabilityInput>;
-  corporateEmail?: InputMaybe<Scalars['String']>;
-  enrolled: Scalars['Boolean'];
-  geographicalAvailability: Array<Region>;
-  groups: Array<Scalars['String']>;
-  knowledge?: InputMaybe<Scalars['String']>;
-  languages?: InputMaybe<Array<Languages>>;
-  materialsExperience?: InputMaybe<Array<Scalars['String']>>;
-  name: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
-  personalEmail?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
-  previousExperience: PreviousExperienceInstructor;
-  programmingExperience: Scalars['Boolean'];
-  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
-  training: TrainingInstructorInput;
-  urlCV?: InputMaybe<Scalars['String']>;
-  vehicle: TypeVehicleInstructor;
+  idGroups: Array<Scalars['String']>;
+  instructor: CreateInstructorInput;
 };
 
 
 export type MutationCreateStudentArgs = {
-  allergies?: InputMaybe<Scalars['Boolean']>;
-  birthDate?: InputMaybe<Scalars['String']>;
-  collectionPermit?: InputMaybe<Scalars['String']>;
-  contacts?: InputMaybe<Array<StudentContactInput>>;
-  course: Scalars['String'];
-  descriptionAllergy?: InputMaybe<Scalars['String']>;
-  goesAlone?: InputMaybe<Scalars['Boolean']>;
   idGroups: Array<Scalars['String']>;
-  imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
-  name: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
-  oldStudent?: InputMaybe<Scalars['Boolean']>;
-  registrationDate?: InputMaybe<Scalars['String']>;
-  signedMandate?: InputMaybe<Scalars['Boolean']>;
+  student: CreateStudentInput;
 };
 
 
@@ -314,90 +430,42 @@ export type MutationDeleteStudentArgs = {
 
 
 export type MutationEditCenterArgs = {
-  address?: InputMaybe<Scalars['String']>;
-  city?: InputMaybe<Scalars['String']>;
-  contacts?: InputMaybe<Array<CenterContactInput>>;
-  email?: InputMaybe<Scalars['String']>;
+  center: EditCenterInput;
   id: Scalars['String'];
-  languages?: InputMaybe<Array<Languages>>;
-  name?: InputMaybe<Scalars['String']>;
-  nature?: InputMaybe<CenterNature>;
-  notes?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Array<CenterActivityType>>;
 };
 
 
 export type MutationEditCenterContactArgs = {
-  email?: InputMaybe<Scalars['String']>;
+  contact: EditCenterContactInput;
   idCenter: Scalars['String'];
-  name?: InputMaybe<Scalars['String']>;
   originEmail: Scalars['String'];
-  phone?: InputMaybe<Scalars['String']>;
 };
 
 
 export type MutationEditGroupArgs = {
-  center?: InputMaybe<Scalars['String']>;
+  group: EditGroupInput;
   id: Scalars['String'];
-  instructors?: InputMaybe<Array<Scalars['String']>>;
-  modality?: InputMaybe<GroupModality>;
-  name?: InputMaybe<Scalars['String']>;
-  notes?: InputMaybe<Scalars['String']>;
-  timetable?: InputMaybe<Array<TimetableInput>>;
-  type?: InputMaybe<GroupType>;
 };
 
 
 export type MutationEditInstructorArgs = {
-  areas?: InputMaybe<Array<Scalars['String']>>;
-  availability?: InputMaybe<Array<AvailabilityInput>>;
-  corporateEmail?: InputMaybe<Scalars['String']>;
-  geographicalAvailability?: InputMaybe<Array<Region>>;
-  groups?: InputMaybe<Array<Scalars['String']>>;
   id: Scalars['String'];
-  knowledge?: InputMaybe<Scalars['String']>;
-  languages?: InputMaybe<Array<Languages>>;
-  materialsExperience?: InputMaybe<Array<Scalars['String']>>;
-  name?: InputMaybe<Scalars['String']>;
-  notes?: InputMaybe<Scalars['String']>;
-  personalEmail?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  platformEducationExperience?: InputMaybe<Array<Scalars['String']>>;
-  previousExperience?: InputMaybe<PreviousExperienceInstructor>;
-  programmingExperience?: InputMaybe<Scalars['Boolean']>;
-  summerAvailability?: InputMaybe<SummerAvailabilityInstructor>;
-  training?: InputMaybe<TrainingInstructorInput>;
-  urlCV?: InputMaybe<Scalars['String']>;
-  vehicle?: InputMaybe<TypeVehicleInstructor>;
+  idGroups?: InputMaybe<Array<Scalars['String']>>;
+  instructor: EditInstructorInput;
 };
 
 
 export type MutationEditStudentArgs = {
-  allergies?: InputMaybe<Scalars['Boolean']>;
-  birthDate?: InputMaybe<Scalars['String']>;
-  collectionPermit?: InputMaybe<Scalars['String']>;
-  contacts?: InputMaybe<Array<StudentContactInput>>;
-  course?: InputMaybe<Scalars['String']>;
-  descriptionAllergy?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<Array<Scalars['String']>>;
   id: Scalars['String'];
-  imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
-  name?: InputMaybe<Scalars['String']>;
-  notes?: InputMaybe<Scalars['String']>;
-  oldStudent?: InputMaybe<Scalars['Boolean']>;
-  registrationDate?: InputMaybe<Scalars['String']>;
-  signedMandate?: InputMaybe<Scalars['Boolean']>;
+  idGroups?: InputMaybe<Array<Scalars['String']>>;
+  student: EditStudentInput;
 };
 
 
 export type MutationEditStudentContactArgs = {
-  email?: InputMaybe<Scalars['String']>;
+  contact: EditStudentContactInput;
   idStudent: Scalars['String'];
-  name?: InputMaybe<Scalars['String']>;
   originEmail: Scalars['String'];
-  phone?: InputMaybe<Scalars['String']>;
-  send_info?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -530,11 +598,7 @@ export type QueryGetCenterArgs = {
 
 
 export type QueryGetCentersArgs = {
-  order?: InputMaybe<Scalars['Number']>;
-  orderFilter?: InputMaybe<OrderFilterCenter>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
-  searchText?: InputMaybe<Scalars['String']>;
+  centers: GetCentersInput;
 };
 
 
@@ -544,11 +608,7 @@ export type QueryGetGroupArgs = {
 
 
 export type QueryGetGroupsArgs = {
-  order?: InputMaybe<Scalars['Number']>;
-  orderFilter?: InputMaybe<OrderFilterGroup>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
-  searchText?: InputMaybe<Scalars['String']>;
+  groups: GetGroupsInput;
 };
 
 
@@ -558,11 +618,7 @@ export type QueryGetInstructorArgs = {
 
 
 export type QueryGetInstructorsArgs = {
-  order?: InputMaybe<Scalars['Number']>;
-  orderFilter?: InputMaybe<OrderFilterInstructor>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
-  searchText?: InputMaybe<Scalars['String']>;
+  instructors: GetInstructorsInput;
 };
 
 
@@ -572,11 +628,7 @@ export type QueryGetStudentArgs = {
 
 
 export type QueryGetStudentsArgs = {
-  order?: InputMaybe<Scalars['Number']>;
-  orderFilter?: InputMaybe<OrderFilterStudent>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
-  searchText?: InputMaybe<Scalars['String']>;
+  students: GetStudentsInput;
 };
 
 export enum Region {
@@ -680,15 +732,7 @@ export type TrainingInstructorInput = {
 };
 
 export type CreateCenterMutationVariables = Exact<{
-  name: Scalars['String'];
-  address: Scalars['String'];
-  city: Scalars['String'];
-  type: Array<CenterActivityType> | CenterActivityType;
-  nature: CenterNature;
-  languages: Array<Languages> | Languages;
-  phone?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
-  contacts: Array<CenterContactInput> | CenterContactInput;
+  center: CreateCenterInput;
 }>;
 
 
@@ -703,11 +747,7 @@ export type SetActiveCenterMutationVariables = Exact<{
 export type SetActiveCenterMutation = { __typename?: 'Mutation', setActiveCenter: { __typename?: 'Center', id: string } };
 
 export type GetCentersFQueryVariables = Exact<{
-  searchText?: InputMaybe<Scalars['String']>;
-  orderFilter?: InputMaybe<OrderFilterCenter>;
-  order?: InputMaybe<Scalars['Number']>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
+  centers: GetCentersInput;
 }>;
 
 
@@ -736,16 +776,7 @@ export type DeleteStudentMutation = { __typename?: 'Mutation', deleteStudent: { 
 
 export type EditCenterMutationVariables = Exact<{
   editCenterId: Scalars['String'];
-  name?: InputMaybe<Scalars['String']>;
-  address?: InputMaybe<Scalars['String']>;
-  city?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Array<CenterActivityType> | CenterActivityType>;
-  nature?: InputMaybe<CenterNature>;
-  languages?: InputMaybe<Array<Languages> | Languages>;
-  contacts?: InputMaybe<Array<CenterContactInput> | CenterContactInput>;
-  notes?: InputMaybe<Scalars['String']>;
+  center: EditCenterInput;
 }>;
 
 
@@ -753,13 +784,7 @@ export type EditCenterMutation = { __typename?: 'Mutation', editCenter: { __type
 
 export type EditGroupMutationVariables = Exact<{
   editGroupId: Scalars['String'];
-  instructors?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-  center?: InputMaybe<Scalars['String']>;
-  notes?: InputMaybe<Scalars['String']>;
-  timetable?: InputMaybe<Array<TimetableInput> | TimetableInput>;
-  type?: InputMaybe<GroupType>;
-  modality?: InputMaybe<GroupModality>;
-  name?: InputMaybe<Scalars['String']>;
+  group: EditGroupInput;
 }>;
 
 
@@ -815,91 +840,57 @@ export type GetStudentQuery = { __typename?: 'Query', getStudent: { __typename?:
 
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
-  name: Scalars['String'];
-  modality: GroupModality;
-  type: GroupType;
-  timetable: Array<TimetableInput> | TimetableInput;
-  instructors?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  group: CreateGroupInput;
 }>;
 
 
 export type CreateGroupMutation = { __typename?: 'Mutation', createGroup: { __typename?: 'Group', name: string, id_group: any } };
 
 export type GetGroupsQueryVariables = Exact<{
-  searchText?: InputMaybe<Scalars['String']>;
-  orderFilter?: InputMaybe<OrderFilterGroup>;
-  order?: InputMaybe<Scalars['Number']>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
+  groups: GetGroupsInput;
 }>;
 
 
 export type GetGroupsQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, active: boolean, timetable: Array<{ __typename?: 'Timetable', day: Days, id_day: any, start: string, end: string }>, center?: { __typename?: 'Center', name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string }> }> } };
 
 export type CreateInstructorMutationVariables = Exact<{
-  name: Scalars['String'];
-  corporateEmail: Scalars['String'];
-  personalEmail: Scalars['String'];
-  phone: Scalars['String'];
-  enrolled: Scalars['Boolean'];
-  training: TrainingInstructorInput;
-  previousExperience: PreviousExperienceInstructor;
-  programmingExperience: Scalars['Boolean'];
-  knowledge: Scalars['String'];
-  urlCv: Scalars['String'];
-  materialsExperience: Array<Scalars['String']> | Scalars['String'];
-  platformEducationExperience: Array<Scalars['String']> | Scalars['String'];
-  languages: Array<Languages> | Languages;
-  availability: Array<AvailabilityInput> | AvailabilityInput;
-  summerAvailability: SummerAvailabilityInstructor;
-  vehicle: TypeVehicleInstructor;
-  geographicalAvailability: Array<Region> | Region;
-  areas: Array<Scalars['String']> | Scalars['String'];
-  groups: Array<Scalars['String']> | Scalars['String'];
+  instructor: CreateInstructorInput;
+  idGroups: Array<Scalars['String']> | Scalars['String'];
 }>;
 
 
 export type CreateInstructorMutation = { __typename?: 'Mutation', createInstructor: { __typename?: 'Instructor', name: string, id: string } };
 
 export type GetInstructorsQueryVariables = Exact<{
-  searchText?: InputMaybe<Scalars['String']>;
-  orderFilter?: InputMaybe<OrderFilterInstructor>;
-  order?: InputMaybe<Scalars['Number']>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
+  instructors: GetInstructorsInput;
 }>;
 
 
 export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: Array<Region>, enrolled: boolean, active: boolean, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
 
-export type SimpleCentersNameQueryVariables = Exact<{ [key: string]: never; }>;
+export type SimpleCentersNameQueryVariables = Exact<{
+  centers: GetCentersInput;
+}>;
 
 
 export type SimpleCentersNameQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', data: Array<{ __typename?: 'Center', name: string, id: string, active: boolean }> } };
 
-export type SimpleGroupsNameQueryVariables = Exact<{ [key: string]: never; }>;
+export type SimpleGroupsNameQueryVariables = Exact<{
+  groups: GetGroupsInput;
+}>;
 
 
 export type SimpleGroupsNameQuery = { __typename?: 'Query', getGroups: { __typename?: 'PaginatedGroups', data: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center?: { __typename?: 'Center', id: string } | null }> } };
 
-export type SimpleInstructorsNameQueryVariables = Exact<{ [key: string]: never; }>;
+export type SimpleInstructorsNameQueryVariables = Exact<{
+  instructors: GetInstructorsInput;
+}>;
 
 
 export type SimpleInstructorsNameQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', data: Array<{ __typename?: 'Instructor', name: string, id: string }> } };
 
 export type CreateStudentMutationVariables = Exact<{
-  name: Scalars['String'];
-  birthDate: Scalars['String'];
-  course: Scalars['String'];
-  allergies: Scalars['Boolean'];
-  oldStudent: Scalars['Boolean'];
-  signedMandate: Scalars['Boolean'];
-  imageAuthorisation: Scalars['Boolean'];
-  collectionPermit: Scalars['String'];
-  goesAlone: Scalars['Boolean'];
-  contacts: Array<StudentContactInput> | StudentContactInput;
-  descriptionAllergy?: InputMaybe<Scalars['String']>;
-  registrationDate: Scalars['String'];
+  student: CreateStudentInput;
   idGroups: Array<Scalars['String']> | Scalars['String'];
 }>;
 
@@ -907,11 +898,7 @@ export type CreateStudentMutationVariables = Exact<{
 export type CreateStudentMutation = { __typename?: 'Mutation', createStudent: { __typename?: 'Student', name: string, id: string } };
 
 export type GetStudentsQueryVariables = Exact<{
-  searchText?: InputMaybe<Scalars['String']>;
-  orderFilter?: InputMaybe<OrderFilterStudent>;
-  order?: InputMaybe<Scalars['Number']>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
+  students: GetStudentsInput;
 }>;
 
 
@@ -927,18 +914,8 @@ export type SetStatusStudentMutation = { __typename?: 'Mutation', setStatusStude
 
 
 export const CreateCenterDocument = gql`
-    mutation CreateCenter($name: String!, $address: String!, $city: String!, $type: [CenterActivityType!]!, $nature: CenterNature!, $languages: [Languages!]!, $phone: String, $email: String, $contacts: [CenterContactInput!]!) {
-  createCenter(
-    name: $name
-    address: $address
-    city: $city
-    type: $type
-    nature: $nature
-    languages: $languages
-    phone: $phone
-    email: $email
-    contacts: $contacts
-  ) {
+    mutation CreateCenter($center: CreateCenterInput!) {
+  createCenter(center: $center) {
     id
   }
 }
@@ -958,15 +935,7 @@ export type CreateCenterMutationFn = Apollo.MutationFunction<CreateCenterMutatio
  * @example
  * const [createCenterMutation, { data, loading, error }] = useCreateCenterMutation({
  *   variables: {
- *      name: // value for 'name'
- *      address: // value for 'address'
- *      city: // value for 'city'
- *      type: // value for 'type'
- *      nature: // value for 'nature'
- *      languages: // value for 'languages'
- *      phone: // value for 'phone'
- *      email: // value for 'email'
- *      contacts: // value for 'contacts'
+ *      center: // value for 'center'
  *   },
  * });
  */
@@ -1012,14 +981,8 @@ export type SetActiveCenterMutationHookResult = ReturnType<typeof useSetActiveCe
 export type SetActiveCenterMutationResult = Apollo.MutationResult<SetActiveCenterMutation>;
 export type SetActiveCenterMutationOptions = Apollo.BaseMutationOptions<SetActiveCenterMutation, SetActiveCenterMutationVariables>;
 export const GetCentersFDocument = gql`
-    query GetCentersF($searchText: String, $orderFilter: OrderFilterCenter, $order: Number, $page: Int, $pageSize: Int) {
-  getCenters(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
-  ) {
+    query GetCentersF($centers: GetCentersInput!) {
+  getCenters(centers: $centers) {
     page
     pageSize
     totalPages
@@ -1049,15 +1012,11 @@ export const GetCentersFDocument = gql`
  * @example
  * const { data, loading, error } = useGetCentersFQuery({
  *   variables: {
- *      searchText: // value for 'searchText'
- *      orderFilter: // value for 'orderFilter'
- *      order: // value for 'order'
- *      page: // value for 'page'
- *      pageSize: // value for 'pageSize'
+ *      centers: // value for 'centers'
  *   },
  * });
  */
-export function useGetCentersFQuery(baseOptions?: Apollo.QueryHookOptions<GetCentersFQuery, GetCentersFQueryVariables>) {
+export function useGetCentersFQuery(baseOptions: Apollo.QueryHookOptions<GetCentersFQuery, GetCentersFQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCentersFQuery, GetCentersFQueryVariables>(GetCentersFDocument, options);
       }
@@ -1169,20 +1128,8 @@ export type DeleteStudentMutationHookResult = ReturnType<typeof useDeleteStudent
 export type DeleteStudentMutationResult = Apollo.MutationResult<DeleteStudentMutation>;
 export type DeleteStudentMutationOptions = Apollo.BaseMutationOptions<DeleteStudentMutation, DeleteStudentMutationVariables>;
 export const EditCenterDocument = gql`
-    mutation EditCenter($editCenterId: String!, $name: String, $address: String, $city: String, $phone: String, $email: String, $type: [CenterActivityType!], $nature: CenterNature, $languages: [Languages!], $contacts: [CenterContactInput!], $notes: String) {
-  editCenter(
-    id: $editCenterId
-    name: $name
-    address: $address
-    city: $city
-    phone: $phone
-    email: $email
-    type: $type
-    nature: $nature
-    languages: $languages
-    contacts: $contacts
-    notes: $notes
-  ) {
+    mutation EditCenter($editCenterId: String!, $center: EditCenterInput!) {
+  editCenter(id: $editCenterId, center: $center) {
     id
   }
 }
@@ -1203,16 +1150,7 @@ export type EditCenterMutationFn = Apollo.MutationFunction<EditCenterMutation, E
  * const [editCenterMutation, { data, loading, error }] = useEditCenterMutation({
  *   variables: {
  *      editCenterId: // value for 'editCenterId'
- *      name: // value for 'name'
- *      address: // value for 'address'
- *      city: // value for 'city'
- *      phone: // value for 'phone'
- *      email: // value for 'email'
- *      type: // value for 'type'
- *      nature: // value for 'nature'
- *      languages: // value for 'languages'
- *      contacts: // value for 'contacts'
- *      notes: // value for 'notes'
+ *      center: // value for 'center'
  *   },
  * });
  */
@@ -1224,17 +1162,8 @@ export type EditCenterMutationHookResult = ReturnType<typeof useEditCenterMutati
 export type EditCenterMutationResult = Apollo.MutationResult<EditCenterMutation>;
 export type EditCenterMutationOptions = Apollo.BaseMutationOptions<EditCenterMutation, EditCenterMutationVariables>;
 export const EditGroupDocument = gql`
-    mutation EditGroup($editGroupId: String!, $instructors: [String!], $center: String, $notes: String, $timetable: [TimetableInput!], $type: GroupType, $modality: GroupModality, $name: String) {
-  editGroup(
-    id: $editGroupId
-    instructors: $instructors
-    center: $center
-    notes: $notes
-    timetable: $timetable
-    type: $type
-    modality: $modality
-    name: $name
-  ) {
+    mutation EditGroup($editGroupId: String!, $group: EditGroupInput!) {
+  editGroup(id: $editGroupId, group: $group) {
     id
   }
 }
@@ -1255,13 +1184,7 @@ export type EditGroupMutationFn = Apollo.MutationFunction<EditGroupMutation, Edi
  * const [editGroupMutation, { data, loading, error }] = useEditGroupMutation({
  *   variables: {
  *      editGroupId: // value for 'editGroupId'
- *      instructors: // value for 'instructors'
- *      center: // value for 'center'
- *      notes: // value for 'notes'
- *      timetable: // value for 'timetable'
- *      type: // value for 'type'
- *      modality: // value for 'modality'
- *      name: // value for 'name'
+ *      group: // value for 'group'
  *   },
  * });
  */
@@ -1664,15 +1587,8 @@ export type GetStudentQueryHookResult = ReturnType<typeof useGetStudentQuery>;
 export type GetStudentLazyQueryHookResult = ReturnType<typeof useGetStudentLazyQuery>;
 export type GetStudentQueryResult = Apollo.QueryResult<GetStudentQuery, GetStudentQueryVariables>;
 export const CreateGroupDocument = gql`
-    mutation CreateGroup($idCenter: String!, $name: String!, $modality: GroupModality!, $type: GroupType!, $timetable: [TimetableInput!]!, $instructors: [String!]) {
-  createGroup(
-    idCenter: $idCenter
-    name: $name
-    modality: $modality
-    type: $type
-    timetable: $timetable
-    instructors: $instructors
-  ) {
+    mutation CreateGroup($idCenter: String!, $group: CreateGroupInput!) {
+  createGroup(idCenter: $idCenter, group: $group) {
     name
     id_group
   }
@@ -1694,11 +1610,7 @@ export type CreateGroupMutationFn = Apollo.MutationFunction<CreateGroupMutation,
  * const [createGroupMutation, { data, loading, error }] = useCreateGroupMutation({
  *   variables: {
  *      idCenter: // value for 'idCenter'
- *      name: // value for 'name'
- *      modality: // value for 'modality'
- *      type: // value for 'type'
- *      timetable: // value for 'timetable'
- *      instructors: // value for 'instructors'
+ *      group: // value for 'group'
  *   },
  * });
  */
@@ -1710,14 +1622,8 @@ export type CreateGroupMutationHookResult = ReturnType<typeof useCreateGroupMuta
 export type CreateGroupMutationResult = Apollo.MutationResult<CreateGroupMutation>;
 export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<CreateGroupMutation, CreateGroupMutationVariables>;
 export const GetGroupsDocument = gql`
-    query GetGroups($searchText: String, $orderFilter: OrderFilterGroup, $order: Number, $page: Int, $pageSize: Int) {
-  getGroups(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
-  ) {
+    query GetGroups($groups: GetGroupsInput!) {
+  getGroups(groups: $groups) {
     page
     totalPages
     totalNumber
@@ -1756,15 +1662,11 @@ export const GetGroupsDocument = gql`
  * @example
  * const { data, loading, error } = useGetGroupsQuery({
  *   variables: {
- *      searchText: // value for 'searchText'
- *      orderFilter: // value for 'orderFilter'
- *      order: // value for 'order'
- *      page: // value for 'page'
- *      pageSize: // value for 'pageSize'
+ *      groups: // value for 'groups'
  *   },
  * });
  */
-export function useGetGroupsQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupsQuery, GetGroupsQueryVariables>) {
+export function useGetGroupsQuery(baseOptions: Apollo.QueryHookOptions<GetGroupsQuery, GetGroupsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetGroupsQuery, GetGroupsQueryVariables>(GetGroupsDocument, options);
       }
@@ -1776,28 +1678,8 @@ export type GetGroupsQueryHookResult = ReturnType<typeof useGetGroupsQuery>;
 export type GetGroupsLazyQueryHookResult = ReturnType<typeof useGetGroupsLazyQuery>;
 export type GetGroupsQueryResult = Apollo.QueryResult<GetGroupsQuery, GetGroupsQueryVariables>;
 export const CreateInstructorDocument = gql`
-    mutation CreateInstructor($name: String!, $corporateEmail: String!, $personalEmail: String!, $phone: String!, $enrolled: Boolean!, $training: trainingInstructorInput!, $previousExperience: previousExperienceInstructor!, $programmingExperience: Boolean!, $knowledge: String!, $urlCv: String!, $materialsExperience: [String!]!, $platformEducationExperience: [String!]!, $languages: [Languages!]!, $availability: [AvailabilityInput!]!, $summerAvailability: summerAvailabilityInstructor!, $vehicle: TypeVehicleInstructor!, $geographicalAvailability: [Region!]!, $areas: [String!]!, $groups: [String!]!) {
-  createInstructor(
-    name: $name
-    corporateEmail: $corporateEmail
-    personalEmail: $personalEmail
-    phone: $phone
-    enrolled: $enrolled
-    training: $training
-    previousExperience: $previousExperience
-    programmingExperience: $programmingExperience
-    knowledge: $knowledge
-    urlCV: $urlCv
-    materialsExperience: $materialsExperience
-    platformEducationExperience: $platformEducationExperience
-    languages: $languages
-    availability: $availability
-    summerAvailability: $summerAvailability
-    vehicle: $vehicle
-    geographicalAvailability: $geographicalAvailability
-    areas: $areas
-    groups: $groups
-  ) {
+    mutation CreateInstructor($instructor: CreateInstructorInput!, $idGroups: [String!]!) {
+  createInstructor(instructor: $instructor, idGroups: $idGroups) {
     name
     id
   }
@@ -1818,25 +1700,8 @@ export type CreateInstructorMutationFn = Apollo.MutationFunction<CreateInstructo
  * @example
  * const [createInstructorMutation, { data, loading, error }] = useCreateInstructorMutation({
  *   variables: {
- *      name: // value for 'name'
- *      corporateEmail: // value for 'corporateEmail'
- *      personalEmail: // value for 'personalEmail'
- *      phone: // value for 'phone'
- *      enrolled: // value for 'enrolled'
- *      training: // value for 'training'
- *      previousExperience: // value for 'previousExperience'
- *      programmingExperience: // value for 'programmingExperience'
- *      knowledge: // value for 'knowledge'
- *      urlCv: // value for 'urlCv'
- *      materialsExperience: // value for 'materialsExperience'
- *      platformEducationExperience: // value for 'platformEducationExperience'
- *      languages: // value for 'languages'
- *      availability: // value for 'availability'
- *      summerAvailability: // value for 'summerAvailability'
- *      vehicle: // value for 'vehicle'
- *      geographicalAvailability: // value for 'geographicalAvailability'
- *      areas: // value for 'areas'
- *      groups: // value for 'groups'
+ *      instructor: // value for 'instructor'
+ *      idGroups: // value for 'idGroups'
  *   },
  * });
  */
@@ -1848,14 +1713,8 @@ export type CreateInstructorMutationHookResult = ReturnType<typeof useCreateInst
 export type CreateInstructorMutationResult = Apollo.MutationResult<CreateInstructorMutation>;
 export type CreateInstructorMutationOptions = Apollo.BaseMutationOptions<CreateInstructorMutation, CreateInstructorMutationVariables>;
 export const GetInstructorsDocument = gql`
-    query GetInstructors($searchText: String, $orderFilter: OrderFilterInstructor, $order: Number, $page: Int, $pageSize: Int) {
-  getInstructors(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
-  ) {
+    query GetInstructors($instructors: GetInstructorsInput!) {
+  getInstructors(instructors: $instructors) {
     page
     totalPages
     totalNumber
@@ -1895,15 +1754,11 @@ export const GetInstructorsDocument = gql`
  * @example
  * const { data, loading, error } = useGetInstructorsQuery({
  *   variables: {
- *      searchText: // value for 'searchText'
- *      orderFilter: // value for 'orderFilter'
- *      order: // value for 'order'
- *      page: // value for 'page'
- *      pageSize: // value for 'pageSize'
+ *      instructors: // value for 'instructors'
  *   },
  * });
  */
-export function useGetInstructorsQuery(baseOptions?: Apollo.QueryHookOptions<GetInstructorsQuery, GetInstructorsQueryVariables>) {
+export function useGetInstructorsQuery(baseOptions: Apollo.QueryHookOptions<GetInstructorsQuery, GetInstructorsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetInstructorsQuery, GetInstructorsQueryVariables>(GetInstructorsDocument, options);
       }
@@ -1915,8 +1770,8 @@ export type GetInstructorsQueryHookResult = ReturnType<typeof useGetInstructorsQ
 export type GetInstructorsLazyQueryHookResult = ReturnType<typeof useGetInstructorsLazyQuery>;
 export type GetInstructorsQueryResult = Apollo.QueryResult<GetInstructorsQuery, GetInstructorsQueryVariables>;
 export const SimpleCentersNameDocument = gql`
-    query SimpleCentersName {
-  getCenters {
+    query SimpleCentersName($centers: GetCentersInput!) {
+  getCenters(centers: $centers) {
     data {
       name
       id
@@ -1938,10 +1793,11 @@ export const SimpleCentersNameDocument = gql`
  * @example
  * const { data, loading, error } = useSimpleCentersNameQuery({
  *   variables: {
+ *      centers: // value for 'centers'
  *   },
  * });
  */
-export function useSimpleCentersNameQuery(baseOptions?: Apollo.QueryHookOptions<SimpleCentersNameQuery, SimpleCentersNameQueryVariables>) {
+export function useSimpleCentersNameQuery(baseOptions: Apollo.QueryHookOptions<SimpleCentersNameQuery, SimpleCentersNameQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SimpleCentersNameQuery, SimpleCentersNameQueryVariables>(SimpleCentersNameDocument, options);
       }
@@ -1953,8 +1809,8 @@ export type SimpleCentersNameQueryHookResult = ReturnType<typeof useSimpleCenter
 export type SimpleCentersNameLazyQueryHookResult = ReturnType<typeof useSimpleCentersNameLazyQuery>;
 export type SimpleCentersNameQueryResult = Apollo.QueryResult<SimpleCentersNameQuery, SimpleCentersNameQueryVariables>;
 export const SimpleGroupsNameDocument = gql`
-    query simpleGroupsName {
-  getGroups {
+    query simpleGroupsName($groups: GetGroupsInput!) {
+  getGroups(groups: $groups) {
     data {
       center {
         id
@@ -1979,10 +1835,11 @@ export const SimpleGroupsNameDocument = gql`
  * @example
  * const { data, loading, error } = useSimpleGroupsNameQuery({
  *   variables: {
+ *      groups: // value for 'groups'
  *   },
  * });
  */
-export function useSimpleGroupsNameQuery(baseOptions?: Apollo.QueryHookOptions<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>) {
+export function useSimpleGroupsNameQuery(baseOptions: Apollo.QueryHookOptions<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>(SimpleGroupsNameDocument, options);
       }
@@ -1994,8 +1851,8 @@ export type SimpleGroupsNameQueryHookResult = ReturnType<typeof useSimpleGroupsN
 export type SimpleGroupsNameLazyQueryHookResult = ReturnType<typeof useSimpleGroupsNameLazyQuery>;
 export type SimpleGroupsNameQueryResult = Apollo.QueryResult<SimpleGroupsNameQuery, SimpleGroupsNameQueryVariables>;
 export const SimpleInstructorsNameDocument = gql`
-    query SimpleInstructorsName {
-  getInstructors {
+    query SimpleInstructorsName($instructors: GetInstructorsInput!) {
+  getInstructors(instructors: $instructors) {
     data {
       name
       id
@@ -2016,10 +1873,11 @@ export const SimpleInstructorsNameDocument = gql`
  * @example
  * const { data, loading, error } = useSimpleInstructorsNameQuery({
  *   variables: {
+ *      instructors: // value for 'instructors'
  *   },
  * });
  */
-export function useSimpleInstructorsNameQuery(baseOptions?: Apollo.QueryHookOptions<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>) {
+export function useSimpleInstructorsNameQuery(baseOptions: Apollo.QueryHookOptions<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>(SimpleInstructorsNameDocument, options);
       }
@@ -2031,22 +1889,8 @@ export type SimpleInstructorsNameQueryHookResult = ReturnType<typeof useSimpleIn
 export type SimpleInstructorsNameLazyQueryHookResult = ReturnType<typeof useSimpleInstructorsNameLazyQuery>;
 export type SimpleInstructorsNameQueryResult = Apollo.QueryResult<SimpleInstructorsNameQuery, SimpleInstructorsNameQueryVariables>;
 export const CreateStudentDocument = gql`
-    mutation CreateStudent($name: String!, $birthDate: String!, $course: String!, $allergies: Boolean!, $oldStudent: Boolean!, $signedMandate: Boolean!, $imageAuthorisation: Boolean!, $collectionPermit: String!, $goesAlone: Boolean!, $contacts: [StudentContactInput!]!, $descriptionAllergy: String, $registrationDate: String!, $idGroups: [String!]!) {
-  createStudent(
-    name: $name
-    birthDate: $birthDate
-    course: $course
-    allergies: $allergies
-    oldStudent: $oldStudent
-    signedMandate: $signedMandate
-    imageAuthorisation: $imageAuthorisation
-    collectionPermit: $collectionPermit
-    goesAlone: $goesAlone
-    contacts: $contacts
-    descriptionAllergy: $descriptionAllergy
-    registrationDate: $registrationDate
-    idGroups: $idGroups
-  ) {
+    mutation CreateStudent($student: CreateStudentInput!, $idGroups: [String!]!) {
+  createStudent(student: $student, idGroups: $idGroups) {
     name
     id
   }
@@ -2067,18 +1911,7 @@ export type CreateStudentMutationFn = Apollo.MutationFunction<CreateStudentMutat
  * @example
  * const [createStudentMutation, { data, loading, error }] = useCreateStudentMutation({
  *   variables: {
- *      name: // value for 'name'
- *      birthDate: // value for 'birthDate'
- *      course: // value for 'course'
- *      allergies: // value for 'allergies'
- *      oldStudent: // value for 'oldStudent'
- *      signedMandate: // value for 'signedMandate'
- *      imageAuthorisation: // value for 'imageAuthorisation'
- *      collectionPermit: // value for 'collectionPermit'
- *      goesAlone: // value for 'goesAlone'
- *      contacts: // value for 'contacts'
- *      descriptionAllergy: // value for 'descriptionAllergy'
- *      registrationDate: // value for 'registrationDate'
+ *      student: // value for 'student'
  *      idGroups: // value for 'idGroups'
  *   },
  * });
@@ -2091,14 +1924,8 @@ export type CreateStudentMutationHookResult = ReturnType<typeof useCreateStudent
 export type CreateStudentMutationResult = Apollo.MutationResult<CreateStudentMutation>;
 export type CreateStudentMutationOptions = Apollo.BaseMutationOptions<CreateStudentMutation, CreateStudentMutationVariables>;
 export const GetStudentsDocument = gql`
-    query GetStudents($searchText: String, $orderFilter: OrderFilterStudent, $order: Number, $page: Int, $pageSize: Int) {
-  getStudents(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
-  ) {
+    query GetStudents($students: GetStudentsInput!) {
+  getStudents(students: $students) {
     data {
       id
       name
@@ -2130,15 +1957,11 @@ export const GetStudentsDocument = gql`
  * @example
  * const { data, loading, error } = useGetStudentsQuery({
  *   variables: {
- *      searchText: // value for 'searchText'
- *      orderFilter: // value for 'orderFilter'
- *      order: // value for 'order'
- *      page: // value for 'page'
- *      pageSize: // value for 'pageSize'
+ *      students: // value for 'students'
  *   },
  * });
  */
-export function useGetStudentsQuery(baseOptions?: Apollo.QueryHookOptions<GetStudentsQuery, GetStudentsQueryVariables>) {
+export function useGetStudentsQuery(baseOptions: Apollo.QueryHookOptions<GetStudentsQuery, GetStudentsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetStudentsQuery, GetStudentsQueryVariables>(GetStudentsDocument, options);
       }

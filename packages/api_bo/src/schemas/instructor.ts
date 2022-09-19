@@ -18,6 +18,18 @@ export const typeDefs = gql`
     NO_BUT_INTERESTED
   }
 
+  enum OrderFilterInstructor {
+    name
+    center
+    areas
+    id_day
+    state
+    id_group
+    vehicle
+    languages
+    summerAvailability
+  }
+
   type trainingInstructor {
     careerInEducation: Boolean
     technicalCareer: Boolean
@@ -34,29 +46,68 @@ export const typeDefs = gql`
     hours: [String!]!
   }
 
-  input AvailabilityInput {
-    day: Days!
-    hours: [String!]!
-  }
-  
-  enum OrderFilterInstructor {
-    name
-    center
-    areas
-    id_day
-    state
-    id_group
-    vehicle
-    languages
-    summerAvailability
-  }
-
   type PaginatedInstructors {
     page: Int!
     totalPages: Int!
     totalNumber: Int!
     pageSize: Int!
     data: [Instructor!]!
+  }
+
+  input AvailabilityInput {
+    day: Days!
+    hours: [String!]!
+  }
+
+  input GetInstructorsInput {
+    searchText: String
+    orderFilter: OrderFilterInstructor
+    order: Number
+    page: Int
+    pageSize: Int
+  }
+
+  input CreateInstructorInput {
+    name: String!
+    corporateEmail: String
+    personalEmail: String
+    phone: String
+    enrolled: Boolean!
+    training: trainingInstructorInput!
+    previousExperience: previousExperienceInstructor!
+    programmingExperience: Boolean!
+    knowledge: String
+    urlCV: String
+    materialsExperience: [String!]
+    platformEducationExperience: [String!]
+    languages: [Languages!]
+    availability: [AvailabilityInput!]!
+    summerAvailability: summerAvailabilityInstructor
+    vehicle: TypeVehicleInstructor!
+    geographicalAvailability: [Region!]!
+    areas: [String!]!
+    notes: String
+  }
+
+  input EditInstructorInput {
+    name:String
+    personalEmail: String
+    corporateEmail:String
+    phone:String
+    notes:String
+    training:trainingInstructorInput
+    previousExperience:previousExperienceInstructor
+    programmingExperience:Boolean
+    knowledge:String
+    urlCV:String
+    materialsExperience: [String!]
+    platformEducationExperience: [String!]
+    languages: [Languages!]
+    vehicle:TypeVehicleInstructor
+    geographicalAvailability:[Region!]
+    areas: [String!]
+    availability: [AvailabilityInput!]
+    summerAvailability: summerAvailabilityInstructor
   }
 
   type Instructor {
@@ -88,11 +139,7 @@ export const typeDefs = gql`
     checkCorporateEmail(email: String!): String!
 
     getInstructors(
-      searchText: String
-      orderFilter: OrderFilterInstructor
-      order: Number
-      page: Int
-      pageSize: Int
+      instructors: GetInstructorsInput!
     ): PaginatedInstructors!
 
     getInstructor(id: String!): Instructor!
@@ -100,49 +147,14 @@ export const typeDefs = gql`
 
   extend type Mutation {
     createInstructor(
-      name: String!
-      corporateEmail: String
-      personalEmail: String
-      phone: String
-      enrolled: Boolean!
-      training: trainingInstructorInput!
-      previousExperience: previousExperienceInstructor!
-      programmingExperience: Boolean!
-      knowledge: String
-      urlCV: String
-      materialsExperience: [String!]
-      platformEducationExperience: [String!]
-      languages: [Languages!]
-      availability: [AvailabilityInput!]!
-      summerAvailability: summerAvailabilityInstructor
-      vehicle: TypeVehicleInstructor!
-      geographicalAvailability: [Region!]!
-      areas: [String!]!
-      notes: String
-      groups: [String!]!
+      idGroups: [String!]!
+      instructor: CreateInstructorInput!
     ): Instructor!
 
     editInstructor(
       id:String!
-      name:String
-      personalEmail: String
-      corporateEmail:String
-      phone:String
-      notes:String
-      training:trainingInstructorInput
-      previousExperience:previousExperienceInstructor
-      programmingExperience:Boolean
-      knowledge:String
-      urlCV:String
-      materialsExperience: [String!]
-      platformEducationExperience: [String!]
-      languages: [Languages!]
-      vehicle:TypeVehicleInstructor
-      geographicalAvailability:[Region!]
-      areas: [String!]
-      availability: [AvailabilityInput!]
-      summerAvailability: summerAvailabilityInstructor
-      groups: [String!]
+      instructor: EditInstructorInput!
+      idGroups: [String!]
     ): Instructor!
 
     deleteInstructor(id: String!): Instructor!

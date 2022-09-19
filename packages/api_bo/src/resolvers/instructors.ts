@@ -32,6 +32,7 @@ import { checkActiveCenter } from "../lib/checkActiveCenter.ts";
 import { getUniqueItems } from "../lib/getUniqueItems.ts";
 import { areaCollection } from "../models/AreaModel.ts";
 import { checkAreas } from "../lib/checkAreas.ts";
+import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
 
 export const instructors = {
   Instructor: {
@@ -73,77 +74,42 @@ export const instructors = {
       ctx: Context,
     ): Promise<PaginatedInstructors> => {
       const filter: Filter<PaginatedInstructors> = { $or: [{}] };
-      if (args.searchText) {
+      if (args.instructors.searchText) {
         filter["$or"] = [
-          { name: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          { name: mongoSearchRegex(args.instructors.searchText) },
+          { corporateEmail: mongoSearchRegex(args.instructors.searchText) },
+          { personalEmail: mongoSearchRegex(args.instructors.searchText) },
+          { phone: mongoSearchRegex(args.instructors.searchText) },
+          { state: mongoSearchRegex(args.instructors.searchText) },
+          { training: mongoSearchRegex(args.instructors.searchText) },
+          { previousExperience: mongoSearchRegex(args.instructors.searchText) },
+          { knowledge: mongoSearchRegex(args.instructors.searchText) },
+          { urlCV: mongoSearchRegex(args.instructors.searchText) },
           {
-            corporateEmail: { $regex: `.*${args.searchText}.*`, $options: "i" },
+            materialsExperience: mongoSearchRegex(args.instructors.searchText),
           },
           {
-            personalEmail: { $regex: `.*${args.searchText}.*`, $options: "i" },
+            platformEducationExperience: mongoSearchRegex(
+              args.instructors.searchText,
+            ),
           },
-          { phone: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { state: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { training: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          { languages: mongoSearchRegex(args.instructors.searchText) },
+          { "availability.day": mongoSearchRegex(args.instructors.searchText) },
           {
-            previousExperience: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
+            "availability.hours": mongoSearchRegex(args.instructors.searchText),
           },
-          { knowledge: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { urlCV: { $regex: `.*${args.searchText}.*`, $options: "i" } },
+          { summerAvailability: mongoSearchRegex(args.instructors.searchText) },
+          { vehicle: mongoSearchRegex(args.instructors.searchText) },
           {
-            materialsExperience: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
+            geographicalAvailability: mongoSearchRegex(
+              args.instructors.searchText,
+            ),
           },
+          { areas: mongoSearchRegex(args.instructors.searchText) },
+          { notes: mongoSearchRegex(args.instructors.searchText) },
+          { "centersName.name": mongoSearchRegex(args.instructors.searchText) },
           {
-            platformEducationExperience: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          { languages: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          {
-            "availability.day": {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "availability.hours": {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            summerAvailability: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          { vehicle: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          {
-            geographicalAvailability: {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          { areas: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          { notes: { $regex: `.*${args.searchText}.*`, $options: "i" } },
-          {
-            "centersName.name": {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
-          },
-          {
-            "groupsId.id_group": {
-              $regex: `.*${args.searchText}.*`,
-              $options: "i",
-            },
+            "groupsId.id_group": mongoSearchRegex(args.instructors.searchText),
           },
         ];
       }
@@ -161,14 +127,16 @@ export const instructors = {
         summerAvailability: "summerAvailability",
       };
 
-      if (args.orderFilter && args.order) {
-        if (args.order !== 1 && args.order !== -1) {
+      if (args.instructors.orderFilter && args.instructors.order) {
+        if (args.instructors.order !== 1 && args.instructors.order !== -1) {
           throw new Error("400, wrong order (1 or -1)");
         }
-        sortFilter = { [OrderFilter[args.orderFilter]]: args.order };
-      } else if (args.orderFilter && !args.order) {
+        sortFilter = {
+          [OrderFilter[args.instructors.orderFilter]]: args.instructors.order,
+        };
+      } else if (args.instructors.orderFilter && !args.instructors.order) {
         throw new Error("400, order is required");
-      } else if (!args.orderFilter && args.order) {
+      } else if (!args.instructors.orderFilter && args.instructors.order) {
         throw new Error("400, orderFilter is required");
       } else {
         sortFilter = { name: 1 };
@@ -179,8 +147,8 @@ export const instructors = {
         filter,
         "instructors",
         sortFilter,
-        args.page,
-        args.pageSize,
+        args.instructors.page,
+        args.instructors.pageSize,
       ) as Promise<PaginatedInstructors>;
     },
 
@@ -207,36 +175,38 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
-        checkNotNull(args);
+        checkNotNull(args.instructor);
         if (
-          args.training.careerInEducation === null ||
-          args.training.technicalCareer === null
+          args.instructor.training.careerInEducation === null ||
+          args.instructor.training.technicalCareer === null
         ) {
           throw new Error("400, Fields cannot be null");
         }
 
         await checkAreas(
-          args.areas,
-          args.geographicalAvailability,
+          args.instructor.areas,
+          args.instructor.geographicalAvailability,
           areaCollection(ctx.db),
         );
 
         let newInstructor = {
-          ...args,
+          ...args.instructor,
           active: false,
-          availability: setIdDays(args.availability) as Availability[],
+          availability: setIdDays(
+            args.instructor.availability,
+          ) as Availability[],
         };
 
-        if (args.corporateEmail) {
+        if (args.instructor.corporateEmail) {
           const existsInstructor = await instructorCollection(ctx.db).findOne({
-            corporateEmail: args.corporateEmail,
+            corporateEmail: args.instructor.corporateEmail,
           });
           if (existsInstructor) {
             throw new Error("400, Corporate email must be unique");
           }
         }
 
-        const groups = args.groups?.map((group) => new ObjectId(group));
+        const groups = args.idGroups?.map((group) => new ObjectId(group));
         const existsGroups = await groupCollection(ctx.db)
           .find({
             _id: { $in: groups },
@@ -265,7 +235,7 @@ export const instructors = {
 
         instructors.Mutation.setStatusInstructor(
           _parent,
-          { id: idInstructor.toString(), enrolled: args.enrolled },
+          { id: idInstructor.toString(), enrolled: args.instructor.enrolled },
           ctx,
         );
 
@@ -284,14 +254,16 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
-        checkNotNull(args);
-        let updateInstructor = { ...args } as Partial<InstructorModel>;
+        checkNotNull(args.instructor);
+        let updateInstructor = { ...args.instructor } as Partial<
+          InstructorModel
+        >;
 
-        if (args.corporateEmail) {
+        if (args.instructor.corporateEmail) {
           const existsCorporateEmail = await instructorCollection(ctx.db)
             .findOne(
               {
-                corporateEmail: args.corporateEmail,
+                corporateEmail: args.instructor.corporateEmail,
               },
             );
           if (existsCorporateEmail) {
@@ -301,36 +273,46 @@ export const instructors = {
           }
         }
 
-        if (args.availability) {
-          const availability = setIdDays(args.availability) as Availability[];
+        if (args.instructor.availability) {
+          const availability = setIdDays(
+            args.instructor.availability,
+          ) as Availability[];
           updateInstructor = { ...updateInstructor, availability };
         }
 
-        if (args.areas && args.geographicalAvailability) {
+        if (args.instructor.areas && args.instructor.geographicalAvailability) {
           await checkAreas(
-            args.areas,
-            args.geographicalAvailability,
+            args.instructor.areas,
+            args.instructor.geographicalAvailability,
             areaCollection(ctx.db),
           );
-        } else if (args.areas && !args.geographicalAvailability) {
+        } else if (
+          args.instructor.areas && !args.instructor.geographicalAvailability
+        ) {
           const region = await instructorCollection(ctx.db).distinct(
             "geographicalAvailability",
             { _id: new ObjectId(args.id) },
           ) as Region[];
-          await checkAreas(args.areas, region, areaCollection(ctx.db));
-        } else if (!args.areas && args.geographicalAvailability) {
+          await checkAreas(
+            args.instructor.areas,
+            region,
+            areaCollection(ctx.db),
+          );
+        } else if (
+          !args.instructor.areas && args.instructor.geographicalAvailability
+        ) {
           const areas = await instructorCollection(ctx.db).distinct("areas", {
             _id: new ObjectId(args.id),
           }) as string[];
           await checkAreas(
             areas,
-            args.geographicalAvailability,
+            args.instructor.geographicalAvailability,
             areaCollection(ctx.db),
           );
         }
 
-        if (args.groups) {
-          const groups = args.groups.map((group) => new ObjectId(group));
+        if (args.idGroups) {
+          const groups = args.idGroups.map((group) => new ObjectId(group));
           const existsGroups = await groupCollection(ctx.db)
             .find({
               _id: { $in: groups },
@@ -343,7 +325,9 @@ export const instructors = {
 
           updateInstructor = {
             ...updateInstructor,
-            active: checkActiveGroups(existsGroups, true),
+            active: existsGroups.length === 0
+              ? false
+              : checkActiveGroups(existsGroups, true),
           };
 
           const instructorGroupsIds: ObjectId[] = await groupCollection(ctx.db)
@@ -374,6 +358,31 @@ export const instructors = {
               { $pull: { instructors: new ObjectId(args.id) } },
             );
           }
+          //set groups to inactive if they don't have instructors
+          const groupsWithoutInstructors: ObjectId[] = await groupCollection(
+            ctx.db,
+          ).distinct("_id", {
+            instructors: { $size: 0 },
+          });
+
+          await groupCollection(ctx.db).updateMany(
+            { _id: { $in: groupsWithoutInstructors } },
+            { $set: { active: false } },
+          );
+
+          //if students are not in other groups, set active to false
+          const idStudents =
+            (await getUniqueItems(groupCollection(ctx.db), "students", {
+              active: false,
+            })).map((student) => {
+              return new ObjectId(student);
+            });
+          setActiveToFalse(
+            idStudents,
+            groupCollection(ctx.db),
+            "students",
+            studentCollection(ctx.db),
+          );
         }
 
         const newInstructor = await instructorCollection(ctx.db).findAndModify(

@@ -1,5 +1,5 @@
-query SimpleCentersName {
-  getCenters {
+query SimpleCentersName($centers: GetCentersInput!) {
+  getCenters(centers: $centers) {
     data {
       name
       id

@@ -1,5 +1,5 @@
-query simpleGroupsName {
-  getGroups {
+query simpleGroupsName($groups: GetGroupsInput!) {
+  getGroups (groups: $groups) {
     data {
       center {
         id

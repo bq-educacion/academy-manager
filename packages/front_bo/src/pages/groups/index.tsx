@@ -60,11 +60,13 @@ const GroupsPage: NextPage = () => {
 
   const { data, error, refetch, loading } = useGetGroupsQuery({
     variables: {
-      searchText,
-      orderFilter: order.key,
-      order: order.direction,
-      page: 1,
-      pageSize: 20,
+      groups: {
+        searchText,
+        orderFilter: order.key,
+        order: order.direction,
+        page: 1,
+        pageSize: 20,
+      },
     },
     fetchPolicy: "network-only",
   });
