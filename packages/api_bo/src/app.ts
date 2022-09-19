@@ -21,6 +21,7 @@ import { opineCors } from "cors";
 import { verify } from "jwt";
 import { userCollection } from "./models/UserModel.ts";
 import { getCookies } from "cookies";
+import { auth } from "./lib/auth.ts";
 
 type Params = {
   variables?: Record<string, unknown>;
@@ -100,36 +101,7 @@ try {
         context: async () => {
           const db = client.database(DB_NAME);
 
-          const reqAuth = [
-            "getAreas",
-            "getArea",
-            "createArea",
-            "deleteArea",
-            "getCenters",
-            "getCenter",
-            "createCenter",
-            "addCenterContact",
-            "editCenter",
-            "editCenterContact",
-            "deleteCenter",
-            "getGroups",
-            "getGroup",
-            "createGroup",
-            "deleteGroup",
-            "editGroup",
-            "getInstructors",
-            "getInstructor",
-            "createInstructor",
-            "deleteInstructor",
-            "editInstructor",
-            "getStudents",
-            "getStudent",
-            "createStudent",
-            "deleteStudent",
-            "editStudent",
-            "addStudentContact",
-            "editStudentContact",
-          ];
+          const reqAuth = auth();
 
           if (
             reqAuth.some((auth) => request._parsedUrl!.query?.includes(auth))
