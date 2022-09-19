@@ -7,6 +7,7 @@ import { NextApiRequest, NextPage } from "next";
 import React from "react";
 import { createApolloClient } from "./client";
 import redirect from "../lib/redirect";
+import cookie from "cookie";
 
 type TApolloClient = ApolloClient<NormalizedCacheObject>;
 
@@ -24,7 +25,16 @@ let globalApolloClient: TApolloClient;
  */
 function initApolloClient(initialState?: any, req?: NextApiRequest) { // eslint-disable-line
   const isServer = !!req;
-  const getToken = () => null; // TODO: Add getToken when session exists
+  const getToken = (req?: NextApiRequest): string | null => {
+    const cookies = cookie.parse(
+      req
+        ? req.headers.cookie || ""
+        : typeof document !== "undefined"
+        ? document.cookie
+        : ""
+    );
+    return cookies.token;
+  };
 
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
@@ -130,7 +140,7 @@ export default function withApollo(
       try {
         // TODO: Uncomment when session exists
         // const { data } = await apolloClient.query({
-        //   query: ME_QUERY,
+        //   query: useGetUserQuery,
         //   errorPolicy: "all"
         // })
         const data = { me: undefined };

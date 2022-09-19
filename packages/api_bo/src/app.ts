@@ -18,6 +18,9 @@ import { typeDefs as user } from "./schemas/user.ts";
 import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
+import { verify } from "jwt";
+import { userCollection } from "./models/UserModel.ts";
+import { getCookies } from "https://deno.land/std@0.137.0/http/cookie.ts";
 
 type Params = {
   variables?: Record<string, unknown>;
@@ -48,6 +51,13 @@ export type Context = {
 const MONGO_URL = Deno.env.get("MONGO_URL");
 const DB_NAME = Deno.env.get("DB_NAME");
 const PORT = Deno.env.get("PORT") || "3000";
+
+//create a JSON Web Token
+export const key = await crypto.subtle.generateKey(
+  { name: "HMAC", hash: "SHA-512" },
+  true,
+  ["sign", "verify"],
+);
 
 if (!MONGO_URL) {
   throw new Error("MONGO_URL is not set");
@@ -87,9 +97,59 @@ try {
       const resp = await GraphQLHTTP<Request, Context>({
         schema,
         graphiql: true,
-        context: () => {
+        context: async () => {
+          const db = client.database(DB_NAME);
+
+          const reqAuth = [
+            "getAreas",
+            "getArea",
+            "createArea",
+            "deleteArea",
+            "getCenters",
+            "getCenter",
+            "createCenter",
+            "addCenterContact",
+            "editCenter",
+            "editCenterContact",
+            "deleteCenter",
+            "getGroups",
+            "getGroup",
+            "createGroup",
+            "deleteGroup",
+            "editGroup",
+            "getInstructors",
+            "getInstructor",
+            "createInstructor",
+            "deleteInstructor",
+            "editInstructor",
+            "getStudents",
+            "getStudent",
+            "createStudent",
+            "deleteStudent",
+            "editStudent",
+            "addStudentContact",
+            "editStudentContact",
+          ];
+
+          if (
+            reqAuth.some((auth) => request._parsedUrl!.query?.includes(auth))
+          ) {
+            const token = getCookies(req.headers).token;
+            const check = await verify(token, key);
+            if (!check) {
+              throw new Error("400, Unauthorized");
+            }
+            const data = JSON.parse(check.toString());
+            const user = userCollection(db).findOne({ email: data.email });
+            return {
+              db,
+              user,
+              request,
+            };
+          }
+
           return {
-            db: client.database(DB_NAME),
+            db,
             request,
           };
         },

@@ -1,9 +1,10 @@
 import { userCollection, UserModel } from "../models/UserModel.ts";
-import { Context } from "../app.ts";
-import { MutationLoginArgs, QueryGetUserArgs } from "../types.ts";
+import { Context, key } from "../app.ts";
+import { MutationLoginArgs } from "../types.ts";
 import { axiod } from "axios";
 import { ObjectId } from "objectId";
 import { create } from "jwt";
+
 export const users = {
   User: {
     id: (parent: UserModel): string => {
@@ -26,14 +27,22 @@ export const users = {
 
     getUser: async (
       _parent: unknown,
-      args: QueryGetUserArgs,
+      _args: unknown,
       ctx: Context,
+      user: UserModel,
     ): Promise<UserModel> => {
       try {
-        const user = await userCollection(ctx.db).findById(args.id);
         if (!user) {
-          throw new Error("404, User not found");
+          throw new Error("404, Unauthorized");
         }
+        user = await userCollection(ctx.db).findAndModify(
+          { _id: user._id },
+          {
+            update: { $set: { user } },
+            new: true,
+          },
+        ) as UserModel;
+
         return user;
       } catch (error) {
         throw new Error("500, " + error);
@@ -68,13 +77,6 @@ export const users = {
             email: data.email,
           });
         }
-
-        //create a JSON Web Token
-        const key = await crypto.subtle.generateKey(
-          { name: "HMAC", hash: "SHA-512" },
-          true,
-          ["sign", "verify"],
-        );
 
         const token = await create(
           { "alg": "HS256", "typ": "JWT" },

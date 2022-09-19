@@ -617,10 +617,6 @@ export type QueryGetStudentsArgs = {
   students: GetStudentsInput;
 };
 
-export type QueryGetUserArgs = {
-  id: Scalars["String"];
-};
-
 export enum Region {
   Andalucia = "Andalucia",
   Aragon = "Aragon",
@@ -1433,12 +1429,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetStudentsArgs, "students">
   >;
-  getUser?: Resolver<
-    ResolversTypes["User"],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetUserArgs, "id">
-  >;
+  getUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   getUsers?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 }>;
 
