@@ -1,34 +1,12 @@
 mutation EditStudent(
   $editStudentId: String!
-  $groups: [String!]
-  $course: String
-  $registrationDate: String
-  $name: String
-  $birthDate: String
-  $notes: String
-  $contacts: [StudentContactInput!]
-  $collectionPermit: String
-  $imageAuthorisation: Boolean
-  $signedMandate: Boolean
-  $oldStudent: Boolean
-  $descriptionAllergy: String
-  $allergies: Boolean
+  $idGroups: [String!], 
+  $student: EditStudentInput!,
 ) {
   editStudent(
-    id: $editStudentId
-    groups: $groups
-    course: $course
-    registrationDate: $registrationDate
-    name: $name
-    birthDate: $birthDate
-    notes: $notes
-    contacts: $contacts
-    collectionPermit: $collectionPermit
-    imageAuthorisation: $imageAuthorisation
-    signedMandate: $signedMandate
-    oldStudent: $oldStudent
-    descriptionAllergy: $descriptionAllergy
-    allergies: $allergies
+    idGroups: $idGroups,,
+    student: $student,
+    id: $editStudentId,
   ) {
     id
     name

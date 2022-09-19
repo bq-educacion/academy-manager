@@ -792,19 +792,8 @@ export type EditGroupMutation = { __typename?: 'Mutation', editGroup: { __typena
 
 export type EditStudentMutationVariables = Exact<{
   editStudentId: Scalars['String'];
-  groups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-  course?: InputMaybe<Scalars['String']>;
-  registrationDate?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  birthDate?: InputMaybe<Scalars['String']>;
-  notes?: InputMaybe<Scalars['String']>;
-  contacts?: InputMaybe<Array<StudentContactInput> | StudentContactInput>;
-  collectionPermit?: InputMaybe<Scalars['String']>;
-  imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
-  signedMandate?: InputMaybe<Scalars['Boolean']>;
-  oldStudent?: InputMaybe<Scalars['Boolean']>;
-  descriptionAllergy?: InputMaybe<Scalars['String']>;
-  allergies?: InputMaybe<Scalars['Boolean']>;
+  idGroups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  student: EditStudentInput;
 }>;
 
 
@@ -1196,23 +1185,8 @@ export type EditGroupMutationHookResult = ReturnType<typeof useEditGroupMutation
 export type EditGroupMutationResult = Apollo.MutationResult<EditGroupMutation>;
 export type EditGroupMutationOptions = Apollo.BaseMutationOptions<EditGroupMutation, EditGroupMutationVariables>;
 export const EditStudentDocument = gql`
-    mutation EditStudent($editStudentId: String!, $groups: [String!], $course: String, $registrationDate: String, $name: String, $birthDate: String, $notes: String, $contacts: [StudentContactInput!], $collectionPermit: String, $imageAuthorisation: Boolean, $signedMandate: Boolean, $oldStudent: Boolean, $descriptionAllergy: String, $allergies: Boolean) {
-  editStudent(
-    id: $editStudentId
-    groups: $groups
-    course: $course
-    registrationDate: $registrationDate
-    name: $name
-    birthDate: $birthDate
-    notes: $notes
-    contacts: $contacts
-    collectionPermit: $collectionPermit
-    imageAuthorisation: $imageAuthorisation
-    signedMandate: $signedMandate
-    oldStudent: $oldStudent
-    descriptionAllergy: $descriptionAllergy
-    allergies: $allergies
-  ) {
+    mutation EditStudent($editStudentId: String!, $idGroups: [String!], $student: EditStudentInput!) {
+  editStudent(idGroups: $idGroups, student: $student, id: $editStudentId) {
     id
     name
   }
@@ -1234,19 +1208,8 @@ export type EditStudentMutationFn = Apollo.MutationFunction<EditStudentMutation,
  * const [editStudentMutation, { data, loading, error }] = useEditStudentMutation({
  *   variables: {
  *      editStudentId: // value for 'editStudentId'
- *      groups: // value for 'groups'
- *      course: // value for 'course'
- *      registrationDate: // value for 'registrationDate'
- *      name: // value for 'name'
- *      birthDate: // value for 'birthDate'
- *      notes: // value for 'notes'
- *      contacts: // value for 'contacts'
- *      collectionPermit: // value for 'collectionPermit'
- *      imageAuthorisation: // value for 'imageAuthorisation'
- *      signedMandate: // value for 'signedMandate'
- *      oldStudent: // value for 'oldStudent'
- *      descriptionAllergy: // value for 'descriptionAllergy'
- *      allergies: // value for 'allergies'
+ *      idGroups: // value for 'idGroups'
+ *      student: // value for 'student'
  *   },
  * });
  */

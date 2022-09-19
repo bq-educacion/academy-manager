@@ -48,7 +48,9 @@ const EditStudent: NextPage = () => {
   });
 
   const { data: dataCenters } = useSimpleCentersNameQuery({
-    variables: {},
+    variables: {
+      centers: {},
+    },
   });
 
   const [addGroup, setAddGroup] = useState<boolean>(false);
@@ -248,26 +250,28 @@ const EditStudent: NextPage = () => {
   const [editStudentMutation, { loading }] = useEditStudentMutation({
     variables: {
       editStudentId: router.query.id as string,
-      groups: groupsId,
-      course,
-      registrationDate: dateIn,
-      name,
-      birthDate: birth,
-      notes,
-      contacts: contacts.map((elem) => {
-        return {
-          name: elem.name,
-          phone: elem.phone,
-          email: elem.email,
-          send_info: elem.send_info,
-        };
-      }),
-      collectionPermit: pickup,
-      imageAuthorisation: images,
-      signedMandate: mandate,
-      oldStudent: prev,
-      descriptionAllergy: allergiesText,
-      allergies,
+      idGroups: groupsId,
+      student: {
+        course,
+        registrationDate: dateIn,
+        name,
+        birthDate: birth,
+        notes,
+        contacts: contacts.map((elem) => {
+          return {
+            name: elem.name,
+            phone: elem.phone,
+            email: elem.email,
+            send_info: elem.send_info,
+          };
+        }),
+        collectionPermit: pickup,
+        imageAuthorisation: images,
+        signedMandate: mandate,
+        oldStudent: prev,
+        descriptionAllergy: allergiesText,
+        allergies,
+      },
     },
   });
 
