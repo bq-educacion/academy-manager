@@ -55,19 +55,21 @@ const CreateStudent: FC<{
   //Mutations
   const [createStudentMutation, { error }] = useCreateStudentMutation({
     variables: {
-      registrationDate: inscriptionDay,
+      student: {
+        registrationDate: inscriptionDay,
+        name,
+        birthDate,
+        course: course,
+        allergies,
+        oldStudent,
+        signedMandate,
+        imageAuthorisation,
+        collectionPermit,
+        goesAlone,
+        contacts,
+        descriptionAllergy: descriptionAllergy,
+      },
       idGroups: groups,
-      name,
-      birthDate,
-      course: course,
-      allergies,
-      oldStudent,
-      signedMandate,
-      imageAuthorisation,
-      collectionPermit,
-      goesAlone,
-      contacts,
-      descriptionAllergy: descriptionAllergy,
     },
   });
 

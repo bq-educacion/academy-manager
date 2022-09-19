@@ -43,9 +43,17 @@ const EditGroup: NextPage = () => {
     },
   });
 
-  const { data: TeachersData } = useSimpleInstructorsNameQuery();
+  const { data: TeachersData } = useSimpleInstructorsNameQuery({
+    variables: {
+      instructors: {},
+    },
+  });
 
-  const { data: CentersData } = useSimpleCentersNameQuery();
+  const { data: CentersData } = useSimpleCentersNameQuery({
+    variables: {
+      centers: {},
+    },
+  });
 
   const [showFolder, setShowFolder] = useState<boolean>(true);
   const [showFolder2, setShowFolder2] = useState<boolean>(true);
@@ -76,19 +84,21 @@ const EditGroup: NextPage = () => {
   const [editGroupMutation, { loading }] = useEditGroupMutation({
     variables: {
       editGroupId: router.query.id as string,
-      instructors: teachers,
-      center: center,
-      notes: notes,
-      timetable: timeTableOnChange.map((t) => {
-        return {
-          day: t.day,
-          start: t.start,
-          end: t.end,
-        };
-      }),
-      type: type,
-      modality: modality,
-      name: name,
+      group: {
+        instructors: teachers,
+        center: center,
+        notes: notes,
+        timetable: timeTableOnChange.map((t) => {
+          return {
+            day: t.day,
+            start: t.start,
+            end: t.end,
+          };
+        }),
+        type: type,
+        modality: modality,
+        name: name,
+      },
     },
   });
 

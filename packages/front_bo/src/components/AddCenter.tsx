@@ -46,7 +46,9 @@ const AddCenter: FC<{
     fetchPolicy: "network-only",
   });
   const { data: StraightGroupsData } = useSimpleGroupsNameQuery({
-    variables: {},
+    variables: {
+      groups: {},
+    },
   });
   const [GroupsData, setGroupsData] = useState<Partial<Group[]>>([]);
   useEffect(() => {

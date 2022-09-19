@@ -1,44 +1,10 @@
 mutation CreateInstructor(
-  $name: String!
-  $corporateEmail: String!
-  $personalEmail: String!
-  $phone: String!
-  $enrolled: Boolean!
-  $training: trainingInstructorInput!
-  $previousExperience: previousExperienceInstructor!
-  $programmingExperience: Boolean!
-  $knowledge: String!
-  $urlCv: String!
-  $materialsExperience: [String!]!
-  $platformEducationExperience: [String!]!
-  $languages: [Languages!]!
-  $availability: [AvailabilityInput!]!
-  $summerAvailability: summerAvailabilityInstructor!
-  $vehicle: TypeVehicleInstructor!
-  $geographicalAvailability: [Region!]!
-  $areas: [String!]!
-  $groups: [String!]!
+  $instructor: CreateInstructorInput!
+  $idGroups: [String!]!
 ) {
   createInstructor(
-    name: $name
-    corporateEmail: $corporateEmail
-    personalEmail: $personalEmail
-    phone: $phone
-    enrolled: $enrolled
-    training: $training
-    previousExperience: $previousExperience
-    programmingExperience: $programmingExperience
-    knowledge: $knowledge
-    urlCV: $urlCv
-    materialsExperience: $materialsExperience
-    platformEducationExperience: $platformEducationExperience
-    languages: $languages
-    availability: $availability
-    summerAvailability: $summerAvailability
-    vehicle: $vehicle
-    geographicalAvailability: $geographicalAvailability
-    areas: $areas
-    groups: $groups
+    instructor: $instructor
+    idGroups: $idGroups
   ) {
     name
     id

@@ -1,16 +1,8 @@
 query GetInstructors(
-  $searchText: String
-  $orderFilter: OrderFilterInstructor
-  $order: Number
-  $page: Int
-  $pageSize: Int
+  $instructors: GetInstructorsInput!
 ) {
   getInstructors(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
+    instructors: $instructors
   ) {
     page
     totalPages

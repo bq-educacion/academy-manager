@@ -1,16 +1,8 @@
 query GetCentersF(
-  $searchText: String
-  $orderFilter: OrderFilterCenter
-  $order: Number
-  $page: Int
-  $pageSize: Int
+  $centers: GetCentersInput!
 ) {
   getCenters(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
+    centers: $centers
   ) {
     page
     pageSize

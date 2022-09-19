@@ -1,5 +1,5 @@
-query SimpleInstructorsName {
-  getInstructors {
+query SimpleInstructorsName($instructors: GetInstructorsInput!) {
+  getInstructors(instructors: $instructors) {
     data {
       name
       id

@@ -1,31 +1,9 @@
 mutation CreateStudent(
-  $name: String!
-  $birthDate: String!
-  $course: String!
-  $allergies: Boolean!
-  $oldStudent: Boolean!
-  $signedMandate: Boolean!
-  $imageAuthorisation: Boolean!
-  $collectionPermit: String!
-  $goesAlone: Boolean!
-  $contacts: [StudentContactInput!]!
-  $descriptionAllergy: String
-  $registrationDate: String!
+  $student: CreateStudentInput!
   $idGroups: [String!]!
 ) {
   createStudent(
-    name: $name
-    birthDate: $birthDate
-    course: $course
-    allergies: $allergies
-    oldStudent: $oldStudent
-    signedMandate: $signedMandate
-    imageAuthorisation: $imageAuthorisation
-    collectionPermit: $collectionPermit
-    goesAlone: $goesAlone
-    contacts: $contacts
-    descriptionAllergy: $descriptionAllergy
-    registrationDate: $registrationDate
+    student: $student
     idGroups: $idGroups
   ) {
     name

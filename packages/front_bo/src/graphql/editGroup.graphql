@@ -1,23 +1,5 @@
-mutation EditGroup(
-  $editGroupId: String!
-  $instructors: [String!]
-  $center: String
-  $notes: String
-  $timetable: [TimetableInput!]
-  $type: GroupType
-  $modality: GroupModality
-  $name: String
-) {
-  editGroup(
-    id: $editGroupId
-    instructors: $instructors
-    center: $center
-    notes: $notes
-    timetable: $timetable
-    type: $type
-    modality: $modality
-    name: $name
-  ) {
+mutation EditGroup($editGroupId: String!, $group: EditGroupInput!) {
+  editGroup(id: $editGroupId, group: $group) {
     id
   }
 }
