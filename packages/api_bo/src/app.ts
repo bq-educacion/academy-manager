@@ -20,7 +20,7 @@ import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
 import { verify } from "jwt";
 import { userCollection } from "./models/UserModel.ts";
-import { getCookies } from "https://deno.land/std@0.137.0/http/cookie.ts";
+import { getCookies } from "cookies";
 
 type Params = {
   variables?: Record<string, unknown>;

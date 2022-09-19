@@ -8,8 +8,18 @@ import {
   Popover,
   colors,
 } from "@academy-manager/ui";
+import { useCookies } from "react-cookie";
 
 export const UserStuff: FC<{ token: string }> = () => {
+  const onClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const [cookie, removeCookie] = useCookies(["token"]);
+    if (cookie.token) {
+      removeCookie("token", { path: "/" });
+    }
+    true && (window.location.href = "/login");
+  };
+
   return (
     <UserStuffLayout>
       <SecondActionButton />
@@ -17,7 +27,7 @@ export const UserStuff: FC<{ token: string }> = () => {
       <Popover
         title={<OptionsButton />}
         content={
-          <PopoverContent>
+          <PopoverContent onClick={onClick}>
             <styles.P4>Cerrar sesión</styles.P4>
           </PopoverContent>
         }
