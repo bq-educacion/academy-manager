@@ -43,6 +43,8 @@ const colors = {
   yellow80: "#f6a001",
   yellow60: "#f8b333",
   yellow40: "#facf7f",
+  yellow40Transparent: adjustColorOpacity("#facf7f", 0.5),
+  yellow60Transparent: adjustColorOpacity("#f8b333", 0.2),
 
   purple100: "#56195e",
   purple80: "#6d2077",

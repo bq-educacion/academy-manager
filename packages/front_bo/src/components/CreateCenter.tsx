@@ -350,15 +350,17 @@ const CreateCenter: FC<{
                   ) {
                     createCenterMutation({
                       variables: {
-                        name,
-                        address,
-                        city,
-                        type: typeSelection,
-                        nature: natureSelection as CenterNature,
-                        languages: languagesSelection,
-                        phone,
-                        email,
-                        contacts,
+                        center: {
+                          name,
+                          address,
+                          city,
+                          type: typeSelection,
+                          nature: natureSelection as CenterNature,
+                          languages: languagesSelection,
+                          phone,
+                          email,
+                          contacts,
+                        },
                       },
                     }).then(() => {
                       changeTitle("");
@@ -374,14 +376,16 @@ const CreateCenter: FC<{
                   ) {
                     createCenterMutation({
                       variables: {
-                        name,
-                        address,
-                        city,
-                        type: typeSelection,
-                        nature: natureSelection as CenterNature,
-                        languages: languagesSelection,
-                        phone,
-                        contacts,
+                        center: {
+                          name,
+                          address,
+                          city,
+                          type: typeSelection,
+                          nature: natureSelection as CenterNature,
+                          languages: languagesSelection,
+                          phone,
+                          contacts,
+                        },
                       },
                     }).then(() => {
                       changeTitle("");
@@ -412,15 +416,17 @@ const CreateCenter: FC<{
                   ) {
                     createCenterMutation({
                       variables: {
-                        name,
-                        address,
-                        city,
-                        type: typeSelection,
-                        nature: natureSelection as CenterNature,
-                        languages: languagesSelection,
-                        phone,
-                        email,
-                        contacts,
+                        center: {
+                          name,
+                          address,
+                          city,
+                          type: typeSelection,
+                          nature: natureSelection as CenterNature,
+                          languages: languagesSelection,
+                          phone,
+                          email,
+                          contacts,
+                        },
                       },
                     }).then(() => {
                       changeTitle("");
@@ -436,14 +442,16 @@ const CreateCenter: FC<{
                   ) {
                     createCenterMutation({
                       variables: {
-                        name,
-                        address,
-                        city,
-                        type: typeSelection,
-                        nature: natureSelection as CenterNature,
-                        languages: languagesSelection,
-                        phone,
-                        contacts,
+                        center: {
+                          name,
+                          address,
+                          city,
+                          type: typeSelection,
+                          nature: natureSelection as CenterNature,
+                          languages: languagesSelection,
+                          phone,
+                          contacts,
+                        },
                       },
                     }).then(() => {
                       changeTitle("");

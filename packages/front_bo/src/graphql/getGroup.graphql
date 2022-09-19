@@ -1,0 +1,30 @@
+query GetGroup($getGroupId: String!) {
+  getGroup(id: $getGroupId) {
+    group {
+      course {
+        EPO
+        ESO
+      }
+      center {
+        id
+        name
+      }
+      name
+      modality
+      type
+      instructors {
+        name
+        id
+      }
+      notes
+      createdAt
+      timetable {
+        id_day
+        day
+        start
+        end
+      }
+    }
+    totalStudents
+  }
+}

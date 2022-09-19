@@ -53,11 +53,13 @@ const CentersPage: NextPage = () => {
 
   const { data, error, refetch, loading } = useGetCentersFQuery({
     variables: {
-      searchText,
-      orderFilter: order.key,
-      order: order.direction,
-      page: pageData.page,
-      pageSize: 20,
+      centers: {
+        searchText,
+        orderFilter: order.key,
+        order: order.direction,
+        page: pageData.page,
+        pageSize: 20,
+      },
     },
     fetchPolicy: "network-only",
   });

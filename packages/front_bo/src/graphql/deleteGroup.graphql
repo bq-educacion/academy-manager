@@ -1,0 +1,5 @@
+mutation DeleteGroup($deleteGroupId: String!) {
+  deleteGroup(id: $deleteGroupId) {
+    id
+  }
+}

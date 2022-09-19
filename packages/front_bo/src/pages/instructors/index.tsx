@@ -58,11 +58,13 @@ const InstructorsPage: NextPage = () => {
 
   const { data, error, refetch, loading } = useGetInstructorsQuery({
     variables: {
-      searchText,
-      orderFilter: order.key,
-      order: order.direction,
-      page: 1,
-      pageSize: 20,
+      instructors: {
+        searchText,
+        orderFilter: order.key,
+        order: order.direction,
+        page: 1,
+        pageSize: 20,
+      },
     },
     fetchPolicy: "network-only",
   });

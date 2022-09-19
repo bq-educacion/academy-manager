@@ -23,6 +23,7 @@ import {
   Days,
   Languages,
   PreviousExperienceInstructor,
+  Region,
   SummerAvailabilityInstructor,
   TrainingInstructorInput,
   TypeVehicleInstructor,
@@ -880,28 +881,30 @@ const CreateInstructor: FC<{
                   if (groups.length > 0) {
                     createInstructorMutation({
                       variables: {
-                        name,
-                        corporateEmail: emailPro,
-                        personalEmail: emailPersonal,
-                        phone: phone,
-                        enrolled: state || false,
-                        training: education || {},
-                        previousExperience:
-                          experience || PreviousExperienceInstructor.No,
-                        programmingExperience: programming || false,
-                        knowledge,
-                        urlCv: cvUrl,
-                        materialsExperience: tools,
-                        platformEducationExperience: platforms,
-                        languages,
-                        availability,
-                        summerAvailability:
-                          summer || SummerAvailabilityInstructor.No,
-                        vehicle:
-                          vehicle || TypeVehicleInstructor.PublicTransport,
-                        geographicalAvailability: LocalZones.join(", "),
-                        areas: especifyZones,
-                        groups: groups,
+                        instructor: {
+                          name,
+                          corporateEmail: emailPro,
+                          personalEmail: emailPersonal,
+                          phone: phone,
+                          enrolled: state || false,
+                          training: education || {},
+                          previousExperience:
+                            experience || PreviousExperienceInstructor.No,
+                          programmingExperience: programming || false,
+                          knowledge,
+                          urlCV: cvUrl,
+                          materialsExperience: tools,
+                          platformEducationExperience: platforms,
+                          languages,
+                          availability,
+                          summerAvailability:
+                            summer || SummerAvailabilityInstructor.No,
+                          vehicle:
+                            vehicle || TypeVehicleInstructor.PublicTransport,
+                          areas: especifyZones,
+                          geographicalAvailability: [Region.Madrid],
+                        },
+                        idGroups: groups,
                       },
                     }).then(() => {
                       changeTitle("");
@@ -933,28 +936,30 @@ const CreateInstructor: FC<{
                   if (groups.length > 0) {
                     createInstructorMutation({
                       variables: {
-                        name,
-                        corporateEmail: emailPro,
-                        personalEmail: emailPersonal,
-                        phone: phone,
-                        enrolled: state || false,
-                        training: education || {},
-                        previousExperience:
-                          experience || PreviousExperienceInstructor.No,
-                        programmingExperience: programming || false,
-                        knowledge,
-                        urlCv: cvUrl,
-                        materialsExperience: tools,
-                        platformEducationExperience: platforms,
-                        languages,
-                        availability,
-                        summerAvailability:
-                          summer || SummerAvailabilityInstructor.No,
-                        vehicle:
-                          vehicle || TypeVehicleInstructor.PublicTransport,
-                        geographicalAvailability: LocalZones.join(", "),
-                        areas: especifyZones,
-                        groups: groups,
+                        instructor: {
+                          name,
+                          corporateEmail: emailPro,
+                          personalEmail: emailPersonal,
+                          phone: phone,
+                          enrolled: state || false,
+                          training: education || {},
+                          previousExperience:
+                            experience || PreviousExperienceInstructor.No,
+                          programmingExperience: programming || false,
+                          knowledge,
+                          urlCV: cvUrl,
+                          materialsExperience: tools,
+                          platformEducationExperience: platforms,
+                          languages,
+                          availability,
+                          summerAvailability:
+                            summer || SummerAvailabilityInstructor.No,
+                          vehicle:
+                            vehicle || TypeVehicleInstructor.PublicTransport,
+                          geographicalAvailability: [Region.Andalucia],
+                          areas: especifyZones,
+                        },
+                        idGroups: groups,
                       },
                     }).then(() => {
                       changeTitle("");

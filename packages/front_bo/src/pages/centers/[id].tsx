@@ -91,20 +91,22 @@ const EditCenter: NextPage = () => {
   const [editCenterMutation, { loading }] = useEditCenterMutation({
     variables: {
       editCenterId: router.query.id as string,
-      name,
-      address,
-      city,
-      phone,
-      email,
-      type,
-      nature,
-      languages: languagesSelection,
-      contacts: contacts.map((c) => ({
-        name: c.name,
-        phone: c.phone,
-        email: c.email,
-      })),
-      notes,
+      center: {
+        name,
+        address,
+        city,
+        phone,
+        email,
+        type,
+        nature,
+        languages: languagesSelection,
+        contacts: contacts.map((c) => ({
+          name: c.name,
+          phone: c.phone,
+          email: c.email,
+        })),
+        notes,
+      },
     },
   });
 

@@ -29,16 +29,16 @@ export const sections: ISection[] = [
 ];
 
 export const courses: DropDownItem[] = [
-  { label: "general.courses.1p", key: "1p" },
-  { label: "general.courses.2p", key: "2p" },
-  { label: "general.courses.3p", key: "3p" },
-  { label: "general.courses.4p", key: "4p" },
-  { label: "general.courses.5p", key: "5p" },
-  { label: "general.courses.6p", key: "6p" },
-  { label: "general.courses.1e", key: "1e" },
-  { label: "general.courses.2e", key: "2e" },
-  { label: "general.courses.3e", key: "3e" },
-  { label: "general.courses.4e", key: "4e" },
+  { label: "general.courses.1p", key: "1EPO" },
+  { label: "general.courses.2p", key: "2EPO" },
+  { label: "general.courses.3p", key: "3EPO" },
+  { label: "general.courses.4p", key: "4EPO" },
+  { label: "general.courses.5p", key: "5EPO" },
+  { label: "general.courses.6p", key: "6EPO" },
+  { label: "general.courses.1e", key: "1ESO" },
+  { label: "general.courses.2e", key: "2ESO" },
+  { label: "general.courses.3e", key: "3ESO" },
+  { label: "general.courses.4e", key: "4ESO" },
 ];
 
 export const Tools: DropDownItem[] = [
