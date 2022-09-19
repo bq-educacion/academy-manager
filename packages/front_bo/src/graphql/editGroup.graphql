@@ -1,0 +1,5 @@
+mutation EditGroup($editGroupId: String!, $group: EditGroupInput!) {
+  editGroup(id: $editGroupId, group: $group) {
+    id
+  }
+}

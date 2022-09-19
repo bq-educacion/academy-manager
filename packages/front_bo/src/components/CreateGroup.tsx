@@ -60,11 +60,13 @@ const CreateGroup: FC<{
         createGroupMutation({
           variables: {
             idCenter: center,
-            name,
-            modality,
-            type,
-            timetable: timeTableOnChange,
-            instructors,
+            group: {
+              name,
+              modality,
+              type,
+              timetable: timeTableOnChange,
+              instructors,
+            },
           },
         }).then(() => {
           refetch();

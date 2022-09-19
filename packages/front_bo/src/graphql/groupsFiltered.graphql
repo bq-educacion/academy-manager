@@ -1,17 +1,5 @@
-query GetGroups(
-  $searchText: String
-  $orderFilter: OrderFilterGroup
-  $order: Number
-  $page: Int
-  $pageSize: Int
-) {
-  getGroups(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
-  ) {
+query GetGroups($groups: GetGroupsInput!) {
+  getGroups(groups: $groups) {
     page
     totalPages
     totalNumber

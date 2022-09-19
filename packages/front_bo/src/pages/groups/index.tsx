@@ -23,6 +23,7 @@ import {
 } from "../../generated/graphql";
 import { useEffect, useState } from "react";
 import { ApolloError } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const GroupsPage: NextPage = () => {
   const t = useTranslate();
@@ -59,11 +60,13 @@ const GroupsPage: NextPage = () => {
 
   const { data, error, refetch, loading } = useGetGroupsQuery({
     variables: {
-      searchText,
-      orderFilter: order.key,
-      order: order.direction,
-      page: 1,
-      pageSize: 20,
+      groups: {
+        searchText,
+        orderFilter: order.key,
+        order: order.direction,
+        page: 1,
+        pageSize: 20,
+      },
     },
     fetchPolicy: "network-only",
   });
@@ -84,6 +87,9 @@ const GroupsPage: NextPage = () => {
   const [componentError, setComponentError] = useState<ApolloError | undefined>(
     undefined
   );
+
+  const router = useRouter();
+
   if (error || componentError) {
     return <Layout section={sections[0].title} error={500} label={""} />;
   }
@@ -176,6 +182,8 @@ const GroupsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Group> & { id: string }>
+            yellow
+            onClickRow={(id) => router.push(`/groups/${id}`)}
             inactiveIndexes={inactiveIndexes}
             data={tableData}
             order={order}

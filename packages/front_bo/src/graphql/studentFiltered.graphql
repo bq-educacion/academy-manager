@@ -1,16 +1,8 @@
 query GetStudents(
-  $searchText: String
-  $orderFilter: OrderFilterStudent
-  $order: Number
-  $page: Int
-  $pageSize: Int
+  $students: GetStudentsInput!
 ) {
   getStudents(
-    searchText: $searchText
-    orderFilter: $orderFilter
-    order: $order
-    page: $page
-    pageSize: $pageSize
+    students: $students
   ) {
     data {
       id
