@@ -22,6 +22,7 @@ import {
   Group,
   OrderFilterGroup,
   StudentContact,
+  useDeleteStudentMutation,
   useEditStudentMutation,
   useGetCenterGroupsQuery,
   useGetGroupQuery,
@@ -37,6 +38,12 @@ const EditStudent: NextPage = () => {
   const { data } = useGetStudentQuery({
     variables: {
       getStudentId: router.query.id as string,
+    },
+  });
+
+  const [deleteStudentMutation] = useDeleteStudentMutation({
+    variables: {
+      deleteStudentId: router.query.id as string,
     },
   });
 
@@ -333,9 +340,43 @@ const EditStudent: NextPage = () => {
 
   const [setStatusStudentMutation] = useSetStatusStudentMutation();
   const [openModalState, setOpenModalState] = useState<boolean>(false);
+  const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
 
   return (
     <>
+      {openModalDelete && (
+        <Modal
+          setModal={setOpenModalDelete}
+          title=""
+          children={
+            <ModalDiv>
+              <styles.BoldP2>
+                {t("pages.edit-student.delete-modal.title")}
+              </styles.BoldP2>
+              <styles.P4>{t("pages.edit-student.delete-modal.text")}</styles.P4>
+
+              <ButtonsModalDiv>
+                <Button
+                  text={t("pages.edit-center.delete-modal.button1")}
+                  deleteRed
+                  onClick={() => {
+                    deleteStudentMutation().then(() => {
+                      router.push("/students");
+                    });
+                  }}
+                />
+                <Button
+                  text={t("pages.edit-center.delete-modal.button2")}
+                  secondary
+                  onClick={() => {
+                    setOpenModalDelete(false);
+                  }}
+                />
+              </ButtonsModalDiv>
+            </ModalDiv>
+          }
+        />
+      )}
       {openAlertBad && (
         <Alert setOpen={setOpenAlertBad} bad title={t("general.error")} />
       )}
@@ -408,7 +449,7 @@ const EditStudent: NextPage = () => {
             <Button
               text={t("pages.edit-student.delete")}
               onClick={() => {
-                // setOpenModalDelete(true);
+                setOpenModalDelete(true);
               }}
               deleteRed
             />
@@ -425,7 +466,28 @@ const EditStudent: NextPage = () => {
             <Button
               text={t("pages.edit-center.save")}
               onClick={() => {
-                if (!contactsError) {
+                if (
+                  birth.length > 1 &&
+                  !birth.match(
+                    /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
+                  )
+                ) {
+                  setBirthError(true);
+                }
+                if (name === "") {
+                  setNameError(true);
+                }
+                if (
+                  dateIn.length > 1 &&
+                  !dateIn.match(
+                    /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
+                  )
+                ) {
+                  setDateInError(true);
+                }
+                if (contactsError) {
+                  setContactsError(true);
+                } else {
                   editStudentMutation()
                     .then(() => {
                       setChanges(false);
@@ -821,6 +883,9 @@ const EditStudent: NextPage = () => {
                       setError={setNameError}
                       width="38.281vw"
                     />
+                    {nameError && (
+                      <styles.P0Error>{t("general.empty")}</styles.P0Error>
+                    )}
                   </FillIn>
                   <FillIn>
                     <styles.P4>{t("pages.edit-student.birth")}</styles.P4>
@@ -833,6 +898,11 @@ const EditStudent: NextPage = () => {
                       width="12vw"
                       datePattern
                     />
+                    {birthError && (
+                      <styles.P0Error>
+                        {t("general.decline-date")}
+                      </styles.P0Error>
+                    )}
                   </FillIn>
                   <FillIn>
                     <styles.P4>{t("pages.edit-student.course")}</styles.P4>
@@ -861,6 +931,11 @@ const EditStudent: NextPage = () => {
                       width="12vw"
                       datePattern
                     />
+                    {dateInError && (
+                      <styles.P0Error>
+                        {t("general.decline-date")}
+                      </styles.P0Error>
+                    )}
                   </FillIn>
                 </BodyContent>
                 <BodyContent>

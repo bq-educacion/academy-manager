@@ -349,6 +349,10 @@
   },
   "pages": {
     "edit-student": {
+      "delete-modal": {
+        "title": "Eliminar alumno",
+        "text": "Eliminando al alumno se borrará toda su información de la base de datos del back office. Estos datos no son recuperables una vez eliminados."
+      },
       "sate-modal": {
         "title": "Dar de baja al alumno",
         "text1": "Al dar de baja a este alumno se mantendrá en la base de datos del back office el nombre, colegio, grupo y fecha de alta. El resto de datos serán eliminados.",

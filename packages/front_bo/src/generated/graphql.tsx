@@ -727,6 +727,13 @@ export type DeleteGroupMutationVariables = Exact<{
 
 export type DeleteGroupMutation = { __typename?: 'Mutation', deleteGroup: { __typename?: 'Group', id: string } };
 
+export type DeleteStudentMutationVariables = Exact<{
+  deleteStudentId: Scalars['String'];
+}>;
+
+
+export type DeleteStudentMutation = { __typename?: 'Mutation', deleteStudent: { __typename?: 'Student', id: string, name: string } };
+
 export type EditCenterMutationVariables = Exact<{
   editCenterId: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
@@ -1127,6 +1134,40 @@ export function useDeleteGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteGroupMutationHookResult = ReturnType<typeof useDeleteGroupMutation>;
 export type DeleteGroupMutationResult = Apollo.MutationResult<DeleteGroupMutation>;
 export type DeleteGroupMutationOptions = Apollo.BaseMutationOptions<DeleteGroupMutation, DeleteGroupMutationVariables>;
+export const DeleteStudentDocument = gql`
+    mutation DeleteStudent($deleteStudentId: String!) {
+  deleteStudent(id: $deleteStudentId) {
+    id
+    name
+  }
+}
+    `;
+export type DeleteStudentMutationFn = Apollo.MutationFunction<DeleteStudentMutation, DeleteStudentMutationVariables>;
+
+/**
+ * __useDeleteStudentMutation__
+ *
+ * To run a mutation, you first call `useDeleteStudentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteStudentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteStudentMutation, { data, loading, error }] = useDeleteStudentMutation({
+ *   variables: {
+ *      deleteStudentId: // value for 'deleteStudentId'
+ *   },
+ * });
+ */
+export function useDeleteStudentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteStudentMutation, DeleteStudentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteStudentMutation, DeleteStudentMutationVariables>(DeleteStudentDocument, options);
+      }
+export type DeleteStudentMutationHookResult = ReturnType<typeof useDeleteStudentMutation>;
+export type DeleteStudentMutationResult = Apollo.MutationResult<DeleteStudentMutation>;
+export type DeleteStudentMutationOptions = Apollo.BaseMutationOptions<DeleteStudentMutation, DeleteStudentMutationVariables>;
 export const EditCenterDocument = gql`
     mutation EditCenter($editCenterId: String!, $name: String, $address: String, $city: String, $phone: String, $email: String, $type: [CenterActivityType!], $nature: CenterNature, $languages: [Languages!], $contacts: [CenterContactInput!], $notes: String) {
   editCenter(
