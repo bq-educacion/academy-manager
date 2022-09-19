@@ -58,15 +58,42 @@ export const typeDefs = gql`
     data: [Group!]!
   }
 
+  type GroupInfo{
+    group: Group!
+    totalStudents: Number!
+  }
+
   input TimetableInput {
     day: Days!
     start: String!
     end: String!
   }
 
-  type GroupInfo{
-    group: Group!
-    totalStudents: Number!
+  input GetGroupsInput {
+    searchText: String
+    orderFilter: OrderFilterGroup
+    order: Number
+    page: Int
+    pageSize: Int
+  }
+
+  input CreateGroupInput {
+    name: String!
+    modality: GroupModality!
+    type: GroupType!
+    timetable: [TimetableInput!]!
+    instructors: [String!]
+    notes: String
+  }
+
+  input EditGroupInput {
+    name: String,
+    modality: GroupModality,
+    type: GroupType, 
+    timetable: [TimetableInput!], 
+    notes: String, 
+    center: String, 
+    instructors: [String!]
   }
 
   type Group {
@@ -87,11 +114,7 @@ export const typeDefs = gql`
 
   extend type Query {
     getGroups( 
-      searchText: String
-      orderFilter: OrderFilterGroup
-      order: Number
-      page: Int
-      pageSize: Int
+      groups: GetGroupsInput!
     ): PaginatedGroups!
 
     getGroup(id: String!): GroupInfo!
@@ -99,23 +122,12 @@ export const typeDefs = gql`
   extend type Mutation {
     createGroup(
       idCenter: String!
-      name: String!
-      modality: GroupModality!
-      type: GroupType!
-      timetable: [TimetableInput!]!
-      instructors: [String!]
-      notes: String
+      group: CreateGroupInput!
     ): Group!
 
     editGroup(
       id:String!,
-      name: String,
-      modality: GroupModality,
-      type: GroupType, 
-      timetable: [TimetableInput!], 
-      notes: String, 
-      center: String, 
-      instructors: [String!]
+      group: EditGroupInput!
     ): Group!
 
     deleteGroup(id: String!): Group!
