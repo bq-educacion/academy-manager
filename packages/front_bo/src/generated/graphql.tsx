@@ -758,6 +758,26 @@ export type EditGroupMutationVariables = Exact<{
 
 export type EditGroupMutation = { __typename?: 'Mutation', editGroup: { __typename?: 'Group', id: string } };
 
+export type EditStudentMutationVariables = Exact<{
+  editStudentId: Scalars['String'];
+  groups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  course?: InputMaybe<Scalars['String']>;
+  registrationDate?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  birthDate?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  contacts?: InputMaybe<Array<StudentContactInput> | StudentContactInput>;
+  collectionPermit?: InputMaybe<Scalars['String']>;
+  imageAuthorisation?: InputMaybe<Scalars['Boolean']>;
+  signedMandate?: InputMaybe<Scalars['Boolean']>;
+  oldStudent?: InputMaybe<Scalars['Boolean']>;
+  descriptionAllergy?: InputMaybe<Scalars['String']>;
+  allergies?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type EditStudentMutation = { __typename?: 'Mutation', editStudent: { __typename?: 'Student', id: string, name: string } };
+
 export type GetCenterQueryVariables = Exact<{
   getCenterId: Scalars['String'];
 }>;
@@ -765,19 +785,26 @@ export type GetCenterQueryVariables = Exact<{
 
 export type GetCenterQuery = { __typename?: 'Query', getCenter: { __typename?: 'CenterInfo', totalStudents: any, totalGroups: any, center: { __typename?: 'Center', id: string, active: boolean, type: Array<CenterActivityType>, nature: CenterNature, languages: Array<Languages>, name: string, address: string, city: string, phone?: string | null, email?: string | null, notes?: string | null, createdAt: string, contacts?: Array<{ __typename?: 'CenterContact', name: string, email: string, phone: string }> | null } } };
 
+export type GetCenterGroupsQueryVariables = Exact<{
+  getCenterId: Scalars['String'];
+}>;
+
+
+export type GetCenterGroupsQuery = { __typename?: 'Query', getCenter: { __typename?: 'CenterInfo', center: { __typename?: 'Center', groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, active: boolean, modality: GroupModality, type: GroupType, createdAt: string, notes?: string | null, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }>, center?: { __typename?: 'Center', id: string, name: string, address: string, city: string, phone?: string | null, email?: string | null, active: boolean, type: Array<CenterActivityType>, nature: CenterNature, languages: Array<Languages>, notes?: string | null, createdAt: string, contacts?: Array<{ __typename?: 'CenterContact', name: string, email: string, phone: string }> | null, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, active: boolean, modality: GroupModality, type: GroupType, createdAt: string, notes?: string | null }> } | null, instructors: Array<{ __typename?: 'Instructor', id: string, name: string, corporateEmail?: string | null, personalEmail?: string | null, phone?: string | null, enrolled: boolean, active: boolean, previousExperience: PreviousExperienceInstructor, programmingExperience: boolean, knowledge?: string | null, urlCV?: string | null, materialsExperience?: Array<string> | null, platformEducationExperience?: Array<string> | null, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, vehicle: TypeVehicleInstructor, geographicalAvailability: Array<Region>, areas: Array<string>, notes?: string | null, training: { __typename?: 'trainingInstructor', careerInEducation?: boolean | null, technicalCareer?: boolean | null }, availability: Array<{ __typename?: 'Availability', id_day: any, day: Days, hours: Array<string> }> }>, students: Array<{ __typename?: 'Student', id: string, name: string, birthDate?: string | null, course: string, enrolled: boolean, active: boolean, registrationDate?: string | null, allergies?: boolean | null, descriptionAllergy?: string | null, oldStudent?: boolean | null, signedMandate?: boolean | null, imageAuthorisation?: boolean | null, collectionPermit?: string | null, goesAlone?: boolean | null, notes?: string | null, contacts?: Array<{ __typename?: 'StudentContact', name: string, email: string, phone: string, send_info: boolean }> | null }> }> } } };
+
 export type GetGroupQueryVariables = Exact<{
   getGroupId: Scalars['String'];
 }>;
 
 
-export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
+export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', id: string, id_group: any, name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
 
 export type GetStudentQueryVariables = Exact<{
   getStudentId: Scalars['String'];
 }>;
 
 
-export type GetStudentQuery = { __typename?: 'Query', getStudent: { __typename?: 'Student', id: string, name: string, birthDate?: string | null, course: string, registrationDate?: string | null, allergies?: boolean | null, descriptionAllergy?: string | null, signedMandate?: boolean | null, imageAuthorisation?: boolean | null, goesAlone?: boolean | null, collectionPermit?: string | null, oldStudent?: boolean | null, notes?: string | null, contacts?: Array<{ __typename?: 'StudentContact', name: string, email: string, phone: string, send_info: boolean }> | null, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center?: { __typename?: 'Center', name: string, id: string } | null, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }>, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> } }> } };
+export type GetStudentQuery = { __typename?: 'Query', getStudent: { __typename?: 'Student', id: string, name: string, birthDate?: string | null, course: string, active: boolean, enrolled: boolean, registrationDate?: string | null, allergies?: boolean | null, descriptionAllergy?: string | null, signedMandate?: boolean | null, imageAuthorisation?: boolean | null, goesAlone?: boolean | null, collectionPermit?: string | null, oldStudent?: boolean | null, notes?: string | null, contacts?: Array<{ __typename?: 'StudentContact', name: string, email: string, phone: string, send_info: boolean }> | null, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center?: { __typename?: 'Center', name: string, id: string } | null, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }>, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> } }> } };
 
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
@@ -882,6 +909,14 @@ export type GetStudentsQueryVariables = Exact<{
 
 
 export type GetStudentsQuery = { __typename?: 'Query', getStudents: { __typename?: 'PaginatedStudents', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Student', id: string, name: string, active: boolean, course: string, enrolled: boolean, groups: Array<{ __typename?: 'Group', name: string, id: string }> }> } };
+
+export type SetStatusStudentMutationVariables = Exact<{
+  setStatusStudentId: Scalars['String'];
+  enrolled: Scalars['Boolean'];
+}>;
+
+
+export type SetStatusStudentMutation = { __typename?: 'Mutation', setStatusStudent: { __typename?: 'Student', name: string, id: string } };
 
 
 export const CreateCenterDocument = gql`
@@ -1196,6 +1231,68 @@ export function useEditGroupMutation(baseOptions?: Apollo.MutationHookOptions<Ed
 export type EditGroupMutationHookResult = ReturnType<typeof useEditGroupMutation>;
 export type EditGroupMutationResult = Apollo.MutationResult<EditGroupMutation>;
 export type EditGroupMutationOptions = Apollo.BaseMutationOptions<EditGroupMutation, EditGroupMutationVariables>;
+export const EditStudentDocument = gql`
+    mutation EditStudent($editStudentId: String!, $groups: [String!], $course: String, $registrationDate: String, $name: String, $birthDate: String, $notes: String, $contacts: [StudentContactInput!], $collectionPermit: String, $imageAuthorisation: Boolean, $signedMandate: Boolean, $oldStudent: Boolean, $descriptionAllergy: String, $allergies: Boolean) {
+  editStudent(
+    id: $editStudentId
+    groups: $groups
+    course: $course
+    registrationDate: $registrationDate
+    name: $name
+    birthDate: $birthDate
+    notes: $notes
+    contacts: $contacts
+    collectionPermit: $collectionPermit
+    imageAuthorisation: $imageAuthorisation
+    signedMandate: $signedMandate
+    oldStudent: $oldStudent
+    descriptionAllergy: $descriptionAllergy
+    allergies: $allergies
+  ) {
+    id
+    name
+  }
+}
+    `;
+export type EditStudentMutationFn = Apollo.MutationFunction<EditStudentMutation, EditStudentMutationVariables>;
+
+/**
+ * __useEditStudentMutation__
+ *
+ * To run a mutation, you first call `useEditStudentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditStudentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editStudentMutation, { data, loading, error }] = useEditStudentMutation({
+ *   variables: {
+ *      editStudentId: // value for 'editStudentId'
+ *      groups: // value for 'groups'
+ *      course: // value for 'course'
+ *      registrationDate: // value for 'registrationDate'
+ *      name: // value for 'name'
+ *      birthDate: // value for 'birthDate'
+ *      notes: // value for 'notes'
+ *      contacts: // value for 'contacts'
+ *      collectionPermit: // value for 'collectionPermit'
+ *      imageAuthorisation: // value for 'imageAuthorisation'
+ *      signedMandate: // value for 'signedMandate'
+ *      oldStudent: // value for 'oldStudent'
+ *      descriptionAllergy: // value for 'descriptionAllergy'
+ *      allergies: // value for 'allergies'
+ *   },
+ * });
+ */
+export function useEditStudentMutation(baseOptions?: Apollo.MutationHookOptions<EditStudentMutation, EditStudentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditStudentMutation, EditStudentMutationVariables>(EditStudentDocument, options);
+      }
+export type EditStudentMutationHookResult = ReturnType<typeof useEditStudentMutation>;
+export type EditStudentMutationResult = Apollo.MutationResult<EditStudentMutation>;
+export type EditStudentMutationOptions = Apollo.BaseMutationOptions<EditStudentMutation, EditStudentMutationVariables>;
 export const GetCenterDocument = gql`
     query GetCenter($getCenterId: String!) {
   getCenter(id: $getCenterId) {
@@ -1251,10 +1348,150 @@ export function useGetCenterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetCenterQueryHookResult = ReturnType<typeof useGetCenterQuery>;
 export type GetCenterLazyQueryHookResult = ReturnType<typeof useGetCenterLazyQuery>;
 export type GetCenterQueryResult = Apollo.QueryResult<GetCenterQuery, GetCenterQueryVariables>;
+export const GetCenterGroupsDocument = gql`
+    query GetCenterGroups($getCenterId: String!) {
+  getCenter(id: $getCenterId) {
+    center {
+      groups {
+        id
+        id_group
+        name
+        active
+        course {
+          EPO
+          ESO
+        }
+        modality
+        type
+        createdAt
+        timetable {
+          id_day
+          day
+          start
+          end
+        }
+        notes
+        center {
+          id
+          name
+          address
+          city
+          phone
+          email
+          active
+          type
+          nature
+          languages
+          notes
+          createdAt
+          contacts {
+            name
+            email
+            phone
+          }
+          groups {
+            id
+            id_group
+            name
+            active
+            modality
+            type
+            createdAt
+            notes
+          }
+        }
+        instructors {
+          id
+          name
+          corporateEmail
+          personalEmail
+          phone
+          enrolled
+          active
+          training {
+            careerInEducation
+            technicalCareer
+          }
+          previousExperience
+          programmingExperience
+          knowledge
+          urlCV
+          materialsExperience
+          platformEducationExperience
+          languages
+          availability {
+            id_day
+            day
+            hours
+          }
+          summerAvailability
+          vehicle
+          geographicalAvailability
+          areas
+          notes
+        }
+        students {
+          id
+          name
+          birthDate
+          course
+          enrolled
+          active
+          registrationDate
+          allergies
+          descriptionAllergy
+          oldStudent
+          signedMandate
+          imageAuthorisation
+          collectionPermit
+          goesAlone
+          notes
+          contacts {
+            name
+            email
+            phone
+            send_info
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCenterGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetCenterGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCenterGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCenterGroupsQuery({
+ *   variables: {
+ *      getCenterId: // value for 'getCenterId'
+ *   },
+ * });
+ */
+export function useGetCenterGroupsQuery(baseOptions: Apollo.QueryHookOptions<GetCenterGroupsQuery, GetCenterGroupsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCenterGroupsQuery, GetCenterGroupsQueryVariables>(GetCenterGroupsDocument, options);
+      }
+export function useGetCenterGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCenterGroupsQuery, GetCenterGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCenterGroupsQuery, GetCenterGroupsQueryVariables>(GetCenterGroupsDocument, options);
+        }
+export type GetCenterGroupsQueryHookResult = ReturnType<typeof useGetCenterGroupsQuery>;
+export type GetCenterGroupsLazyQueryHookResult = ReturnType<typeof useGetCenterGroupsLazyQuery>;
+export type GetCenterGroupsQueryResult = Apollo.QueryResult<GetCenterGroupsQuery, GetCenterGroupsQueryVariables>;
 export const GetGroupDocument = gql`
     query GetGroup($getGroupId: String!) {
   getGroup(id: $getGroupId) {
     group {
+      id
+      id_group
       course {
         EPO
         ESO
@@ -1318,6 +1555,8 @@ export const GetStudentDocument = gql`
     name
     birthDate
     course
+    active
+    enrolled
     registrationDate
     allergies
     descriptionAllergy
@@ -1869,3 +2108,38 @@ export function useGetStudentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetStudentsQueryHookResult = ReturnType<typeof useGetStudentsQuery>;
 export type GetStudentsLazyQueryHookResult = ReturnType<typeof useGetStudentsLazyQuery>;
 export type GetStudentsQueryResult = Apollo.QueryResult<GetStudentsQuery, GetStudentsQueryVariables>;
+export const SetStatusStudentDocument = gql`
+    mutation SetStatusStudent($setStatusStudentId: String!, $enrolled: Boolean!) {
+  setStatusStudent(id: $setStatusStudentId, enrolled: $enrolled) {
+    name
+    id
+  }
+}
+    `;
+export type SetStatusStudentMutationFn = Apollo.MutationFunction<SetStatusStudentMutation, SetStatusStudentMutationVariables>;
+
+/**
+ * __useSetStatusStudentMutation__
+ *
+ * To run a mutation, you first call `useSetStatusStudentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetStatusStudentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setStatusStudentMutation, { data, loading, error }] = useSetStatusStudentMutation({
+ *   variables: {
+ *      setStatusStudentId: // value for 'setStatusStudentId'
+ *      enrolled: // value for 'enrolled'
+ *   },
+ * });
+ */
+export function useSetStatusStudentMutation(baseOptions?: Apollo.MutationHookOptions<SetStatusStudentMutation, SetStatusStudentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetStatusStudentMutation, SetStatusStudentMutationVariables>(SetStatusStudentDocument, options);
+      }
+export type SetStatusStudentMutationHookResult = ReturnType<typeof useSetStatusStudentMutation>;
+export type SetStatusStudentMutationResult = Apollo.MutationResult<SetStatusStudentMutation>;
+export type SetStatusStudentMutationOptions = Apollo.BaseMutationOptions<SetStatusStudentMutation, SetStatusStudentMutationVariables>;

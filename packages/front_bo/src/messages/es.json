@@ -306,6 +306,7 @@
       "other": "Otro"
     },
     "courses": {
+      "undefined": "-",
       "1p": "1ºEPO",
       "2p": "2ºEPO",
       "3p": "3ºEPO",
@@ -347,6 +348,41 @@
     }
   },
   "pages": {
+    "edit-student": {
+      "sate-modal": {
+        "title": "Dar de baja al alumno",
+        "text1": "Al dar de baja a este alumno se mantendrá en la base de datos del back office el nombre, colegio, grupo y fecha de alta. El resto de datos serán eliminados.",
+        "text2": "Este alumno no aparecerá en el listado de alumnos del grupos cuando el monitor pase lista.",
+        "text3": "      El monitor no podrá generar incidencias que incluyan a este alumno."
+      },
+      "delete": "Eliminar alumno",
+      "info": "Información del alumno",
+      "info-contact": "Información de contacto",
+      "info-groups": "Grupos",
+      "state": "Alta alumno",
+      "no-state": "Baja alumno",
+      "name": "Nombre y apellidos",
+      "birth": "Fecha de nacimiento",
+      "birth-placeholder": "Fecha",
+      "course": "Curso",
+      "dateIn": "Fecha de inscripción",
+      "allergies": "Tiene alergias",
+      "allergies-text": "Descripción de la alergia",
+      "pickup": "Autorización de recogida",
+      "pickup-placeholder": "Introduce aquí el nombre de la persona de recogida",
+      "image": "Autorización imagenes",
+      "alone": "Sale sólo",
+      "previous": "Es un antiguo alumno",
+      "mandate": "Mandato firmado",
+      "notes": "Notas",
+      "notes-placeholder": "Introduce aquí notas sobre el alumno. No será público para nadie.",
+      "contact-email": "Email",
+      "contact-phone": "Teléfono",
+      "info-send": "Enviar información",
+      "add-group": "Añadir grupo",
+      "group-name": "Nombre del grupo",
+      "group-course": "Cursos"
+    },
     "edit-group": {
       "error-top": "Este grupo no tiene monitores",
       "delete": "Eliminar grupo",

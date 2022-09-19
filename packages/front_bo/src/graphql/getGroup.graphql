@@ -1,6 +1,8 @@
 query GetGroup($getGroupId: String!) {
   getGroup(id: $getGroupId) {
     group {
+      id
+      id_group
       course {
         EPO
         ESO

@@ -14,6 +14,7 @@ import AddContactStudent from "./AddContactStudent";
 import AddCenter from "./AddCenter";
 import AddContactFilterCenter from "./AddContactFilterCenter";
 import AddTimeTableV2 from "./AddTimeTableV2";
+import AddContactEditStudent from "./AddContactEditStudent";
 
 export {
   ContentStart,
@@ -32,4 +33,5 @@ export {
   AddCenter,
   AddContactFilterCenter,
   AddTimeTableV2,
+  AddContactEditStudent,
 };

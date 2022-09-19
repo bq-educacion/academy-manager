@@ -107,7 +107,7 @@ const EditGroup: NextPage = () => {
       ) ||
       data.getGroup.group.timetable.length !== timeTableOnChange.length
     ) {
-      setChanges(true);
+      setChanges(false);
       window.addEventListener("beforeunload", function (e) {
         e.preventDefault();
         e.returnValue = "";
@@ -127,7 +127,7 @@ const EditGroup: NextPage = () => {
       ) &&
       data.getGroup.group.timetable.length === timeTableOnChange.length
     ) {
-      setChanges(false);
+      setChanges(true);
       window.removeEventListener("beforeunload", function (e) {
         e.preventDefault();
         e.returnValue = "";

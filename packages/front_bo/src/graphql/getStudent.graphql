@@ -4,6 +4,8 @@ query GetStudent($getStudentId: String!) {
     name
     birthDate
     course
+    active
+    enrolled
     registrationDate
     allergies
     descriptionAllergy
