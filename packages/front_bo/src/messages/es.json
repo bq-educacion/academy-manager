@@ -258,6 +258,15 @@
     }
   },
   "general": {
+    "days": {
+      "M": "Lunes",
+      "T": "Martes",
+      "W": "Miércoles",
+      "R": "Jueves",
+      "F": "Viernes",
+      "S": "Sábado",
+      "U": "Domingo"
+    },
     "to": " a ",
     "edit-not-saved": "¿Estás seguro?",
     "edit-not-saved-text": "Tienes datos sin guardar. Si sales se perderá todo lo que hayas modificado.",
@@ -382,7 +391,10 @@
       "cv-url": "Ver en drive",
       "tools": "Experiencia con materiales",
       "education2": "Experiencia con plataformas educativas",
-      "langiages": "Idiomas en los que puede dar clase"
+      "languages": "Idiomas en los que puede dar clase",
+      "summer": "Contactar para campamentos de verano durante junio-julio de 9.00 a 15.00",
+      "summer1": "Sólo extraescolares",
+      "availability": "Disponibilidad horaria"
     },
     "edit-student": {
       "delete-modal": {

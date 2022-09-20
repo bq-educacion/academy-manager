@@ -2,9 +2,11 @@ import {
   Button,
   CheckBox,
   colors,
+  EditTeacherTimeTable,
   FillIn,
   Icon,
   InputSuper,
+  OptionsBoxFilter,
   RadioButton,
   styles,
   Switch,
@@ -16,9 +18,12 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import withApollo from "../../apollo/withApollo";
 import { Layout, Modal } from "../../components";
-import { sections } from "../../config";
+import { Platforms, sections, Tools } from "../../config";
 import {
+  AvailabilityInput,
+  Languages,
   PreviousExperienceInstructor,
+  SummerAvailabilityInstructor,
   TrainingInstructor,
   useGetInstructorQuery,
   useSetStatusInstructorMutation,
@@ -77,6 +82,21 @@ const EditInstructor: NextPage = () => {
   );
   const [cv, setCV] = useState<string>(data?.getInstructor.urlCV || "");
   const [CVError, setCVError] = useState<boolean>(false);
+  const [tools, setTools] = useState<string[]>(
+    data?.getInstructor.materialsExperience || []
+  );
+  const [platforms, setPlatforms] = useState<string[]>(
+    data?.getInstructor.platformEducationExperience || []
+  );
+  const [languages, setLanguages] = useState<string[]>(
+    data?.getInstructor.languages || []
+  );
+  const [summer, setSummer] = useState<
+    SummerAvailabilityInstructor | undefined
+  >(data?.getInstructor.summerAvailability || undefined);
+  const [timeTable, setTimeTable] = useState<AvailabilityInput[]>(
+    data?.getInstructor.availability || []
+  );
 
   return (
     <>
@@ -327,6 +347,64 @@ const EditInstructor: NextPage = () => {
                       )}
                     </FillIn>
                   </BodyContent>
+                  <BodyContent>
+                    <RowDiv2>
+                      <OptionsBoxFilter
+                        options={[
+                          ...Tools,
+                          ...tools
+                            .filter((elem1) => {
+                              return !Tools.find((elem) => {
+                                return elem.key === elem1;
+                              });
+                            })
+                            .map((tool) => {
+                              return {
+                                label: tool,
+                                key: tool,
+                              };
+                            }),
+                        ]}
+                        title={t("components.create-instructor.2.tools")}
+                        results={tools}
+                        setResults={setTools}
+                      />
+                      <OptionsBoxFilter
+                        options={[
+                          ...Platforms,
+                          ...platforms
+                            .filter((elem1) => {
+                              return !Platforms.find((elem) => {
+                                return elem.key === elem1;
+                              });
+                            })
+                            .map((platform) => {
+                              return {
+                                label: platform,
+                                key: platform,
+                              };
+                            }),
+                        ]}
+                        title={t("components.create-instructor.2.platforms")}
+                        results={platforms}
+                        setResults={setPlatforms}
+                      />
+                      <OptionsBoxFilter
+                        notOther
+                        options={Object.values(Languages).map((language) => ({
+                          key: language,
+                          label: t(
+                            `pages.centers.languages.${language.toLowerCase()}-label`
+                          ),
+                        }))}
+                        title={t("components.create-instructor.2.languages")}
+                        results={languages}
+                        setResults={
+                          setLanguages as (languages: string[]) => void
+                        }
+                      />
+                    </RowDiv2>
+                  </BodyContent>
                 </>
               )}
             </BodyDiv>
@@ -341,7 +419,63 @@ const EditInstructor: NextPage = () => {
                   <styles.BoldP4>{t("pages.edit-teacher.time")}</styles.BoldP4>
                 </GateFolderTitle>
               </GateFolder>
-              {showFolder2 && <></>}
+              {showFolder2 && (
+                <>
+                  <MarginDiv />
+                  <BodyContent>
+                    <FillIn>
+                      <styles.P4>{t("pages.edit-teacher.summer")}</styles.P4>
+                      <RowDiv>
+                        <CheckDiv>
+                          <RadioButton
+                            option={summer === SummerAvailabilityInstructor.Yes}
+                            setOption={() =>
+                              setSummer(SummerAvailabilityInstructor.Yes)
+                            }
+                          />
+                          <styles.P4>{t("pages.edit-teacher.xp1")}</styles.P4>
+                        </CheckDiv>
+                        <CheckDiv>
+                          <RadioButton
+                            option={summer === SummerAvailabilityInstructor.No}
+                            setOption={() =>
+                              setSummer(SummerAvailabilityInstructor.No)
+                            }
+                          />
+                          <styles.P4>{t("pages.edit-teacher.xp2")}</styles.P4>
+                        </CheckDiv>
+                        <CheckDiv>
+                          <RadioButton
+                            option={
+                              summer ===
+                              SummerAvailabilityInstructor.ExtracurricularsOnly
+                            }
+                            setOption={() =>
+                              setSummer(
+                                SummerAvailabilityInstructor.ExtracurricularsOnly
+                              )
+                            }
+                          />
+                          <styles.P4>
+                            {t("pages.edit-teacher.summer1")}
+                          </styles.P4>
+                        </CheckDiv>
+                      </RowDiv>
+                    </FillIn>
+                  </BodyContent>
+                  <BodyContent>
+                    <FillIn width="100%">
+                      <styles.P4>
+                        {t("pages.edit-teacher.availability")}
+                      </styles.P4>
+                      <EditTeacherTimeTable
+                        time={timeTable}
+                        setTime={setTimeTable}
+                      />
+                    </FillIn>
+                  </BodyContent>
+                </>
+              )}
             </BodyDiv>
           }
           children4={
@@ -566,7 +700,7 @@ const BodyContent = styled.div`
   display: flex;
   flex-direction: row;
   margin: 0 45px 0 30px;
-  width: min-content;
+  width: max-content;
   justify-content: flex-start;
   & > :not(div:first-child) {
     margin-left: 10px;
@@ -657,9 +791,21 @@ const CheckDiv1 = styled.div`
 
 const RowDiv = styled.div`
   display: flex;
+  width: 50vw;
   flex-direction: row;
   & > * {
     margin-right: 20px;
+  }
+`;
+const RowDiv2 = styled.div`
+  display: flex;
+  margin-left: -30px;
+  width: 82.75vw;
+  justify-content: space-around;
+  border-top: 1px solid ${colors.colors.gray40};
+  flex-direction: row;
+  & > :not(:last-child) {
+    margin-right: 10px;
   }
 `;
 
