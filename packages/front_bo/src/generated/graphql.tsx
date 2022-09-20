@@ -357,6 +357,7 @@ export type Mutation = {
   editInstructor: Instructor;
   editStudent: Student;
   editStudentContact: StudentContact;
+  login: Scalars['String'];
   setActiveCenter: Center;
   setStatusInstructor: Instructor;
   setStatusStudent: Student;
@@ -469,6 +470,11 @@ export type MutationEditStudentContactArgs = {
 };
 
 
+export type MutationLoginArgs = {
+  token: Scalars['String'];
+};
+
+
 export type MutationSetActiveCenterArgs = {
   active: Scalars['Boolean'];
   id: Scalars['String'];
@@ -574,6 +580,8 @@ export type Query = {
   getInstructors: PaginatedInstructors;
   getStudent: Student;
   getStudents: PaginatedStudents;
+  getUser: User;
+  getUsers: Array<User>;
 };
 
 
@@ -708,6 +716,13 @@ export enum TypeVehicleInstructor {
   PublicTransport = 'PUBLIC_TRANSPORT'
 }
 
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
 export enum PreviousExperienceInstructor {
   No = 'NO',
   NoButInterested = 'NO_BUT_INTERESTED',
@@ -797,6 +812,11 @@ export type GetGroupQueryVariables = Exact<{
 
 export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
 
+export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', id: string, name: string, email: string } };
+
 export type CreateGroupMutationVariables = Exact<{
   idCenter: Scalars['String'];
   group: CreateGroupInput;
@@ -826,6 +846,13 @@ export type GetInstructorsQueryVariables = Exact<{
 
 
 export type GetInstructorsQuery = { __typename?: 'Query', getInstructors: { __typename?: 'PaginatedInstructors', page: number, totalPages: number, totalNumber: number, pageSize: number, data: Array<{ __typename?: 'Instructor', id: string, name: string, geographicalAvailability: Array<Region>, enrolled: boolean, active: boolean, vehicle: TypeVehicleInstructor, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, areas: Array<string>, availability: Array<{ __typename?: 'Availability', day: Days }>, groups: Array<{ __typename?: 'Group', name: string, id: string, id_group: any }> }> } };
+
+export type LoginMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: string };
 
 export type SimpleCentersNameQueryVariables = Exact<{
   centers: GetCentersInput;
@@ -1227,6 +1254,42 @@ export function useGetGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetGroupQueryHookResult = ReturnType<typeof useGetGroupQuery>;
 export type GetGroupLazyQueryHookResult = ReturnType<typeof useGetGroupLazyQuery>;
 export type GetGroupQueryResult = Apollo.QueryResult<GetGroupQuery, GetGroupQueryVariables>;
+export const GetUserDocument = gql`
+    query GetUser {
+  getUser {
+    id
+    name
+    email
+  }
+}
+    `;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+      }
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
 export const CreateGroupDocument = gql`
     mutation CreateGroup($idCenter: String!, $group: CreateGroupInput!) {
   createGroup(idCenter: $idCenter, group: $group) {
@@ -1410,6 +1473,37 @@ export function useGetInstructorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetInstructorsQueryHookResult = ReturnType<typeof useGetInstructorsQuery>;
 export type GetInstructorsLazyQueryHookResult = ReturnType<typeof useGetInstructorsLazyQuery>;
 export type GetInstructorsQueryResult = Apollo.QueryResult<GetInstructorsQuery, GetInstructorsQueryVariables>;
+export const LoginDocument = gql`
+    mutation Login($token: String!) {
+  login(token: $token)
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const SimpleCentersNameDocument = gql`
     query SimpleCentersName($centers: GetCentersInput!) {
   getCenters(centers: $centers) {

@@ -8,6 +8,7 @@ import React from "react";
 import { createApolloClient } from "./client";
 import redirect from "../lib/redirect";
 import cookie from "cookie";
+import { GetUserDocument } from "../generated/graphql";
 
 type TApolloClient = ApolloClient<NormalizedCacheObject>;
 
@@ -139,11 +140,11 @@ export default function withApollo(
 
       try {
         // TODO: Uncomment when session exists
-        // const { data } = await apolloClient.query({
-        //   query: useGetUserQuery,
-        //   errorPolicy: "all"
-        // })
-        const data = { me: undefined };
+        const { data } = await apolloClient.query({
+          query: GetUserDocument,
+          errorPolicy: "all",
+        });
+        //const data = { me: undefined };
 
         if (requiresAccess && (!data || !data.me)) {
           redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);

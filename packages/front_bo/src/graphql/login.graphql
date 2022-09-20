@@ -1,0 +1,3 @@
+mutation Login($token: String!) {
+  login(token: $token)
+}
