@@ -43,6 +43,9 @@ const AddCenter: FC<{
   const [LocalGroups, setLocalGroups] = useState<string[]>([]);
 
   const { data: CentersData } = useSimpleCentersNameQuery({
+    variables: {
+      centers: {},
+    },
     fetchPolicy: "network-only",
   });
   const { data: StraightGroupsData } = useSimpleGroupsNameQuery({

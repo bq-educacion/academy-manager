@@ -820,6 +820,13 @@ export type GetGroupQueryVariables = Exact<{
 
 export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', id: string, id_group: any, name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
 
+export type GetInstructorQueryVariables = Exact<{
+  getInstructorId: Scalars['String'];
+}>;
+
+
+export type GetInstructorQuery = { __typename?: 'Query', getInstructor: { __typename?: 'Instructor', id: string, name: string, corporateEmail?: string | null, personalEmail?: string | null, phone?: string | null, enrolled: boolean, active: boolean, notes?: string | null, previousExperience: PreviousExperienceInstructor, programmingExperience: boolean, knowledge?: string | null, urlCV?: string | null, materialsExperience?: Array<string> | null, platformEducationExperience?: Array<string> | null, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, vehicle: TypeVehicleInstructor, geographicalAvailability: Array<Region>, areas: Array<string>, training: { __typename?: 'trainingInstructor', careerInEducation?: boolean | null, technicalCareer?: boolean | null }, availability: Array<{ __typename?: 'Availability', id_day: any, day: Days, hours: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center?: { __typename?: 'Center', name: string, id: string } | null, timetable: Array<{ __typename?: 'Timetable', start: string, end: string, day: Days, id_day: any }>, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> } }> } };
+
 export type GetStudentQueryVariables = Exact<{
   getStudentId: Scalars['String'];
 }>;
@@ -849,6 +856,14 @@ export type CreateInstructorMutationVariables = Exact<{
 
 
 export type CreateInstructorMutation = { __typename?: 'Mutation', createInstructor: { __typename?: 'Instructor', name: string, id: string } };
+
+export type SetStatusInstructorMutationVariables = Exact<{
+  setStatusInstructorId: Scalars['String'];
+  enrolled: Scalars['Boolean'];
+}>;
+
+
+export type SetStatusInstructorMutation = { __typename?: 'Mutation', setStatusInstructor: { __typename?: 'Instructor', id: string, name: string } };
 
 export type GetInstructorsQueryVariables = Exact<{
   instructors: GetInstructorsInput;
@@ -1475,6 +1490,87 @@ export function useGetGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetGroupQueryHookResult = ReturnType<typeof useGetGroupQuery>;
 export type GetGroupLazyQueryHookResult = ReturnType<typeof useGetGroupLazyQuery>;
 export type GetGroupQueryResult = Apollo.QueryResult<GetGroupQuery, GetGroupQueryVariables>;
+export const GetInstructorDocument = gql`
+    query GetInstructor($getInstructorId: String!) {
+  getInstructor(id: $getInstructorId) {
+    id
+    name
+    corporateEmail
+    personalEmail
+    phone
+    enrolled
+    active
+    notes
+    training {
+      careerInEducation
+      technicalCareer
+    }
+    previousExperience
+    programmingExperience
+    knowledge
+    urlCV
+    materialsExperience
+    platformEducationExperience
+    languages
+    availability {
+      id_day
+      day
+      hours
+    }
+    summerAvailability
+    vehicle
+    geographicalAvailability
+    areas
+    groups {
+      id
+      id_group
+      center {
+        name
+        id
+      }
+      name
+      timetable {
+        start
+        end
+        day
+        id_day
+      }
+      course {
+        EPO
+        ESO
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetInstructorQuery__
+ *
+ * To run a query within a React component, call `useGetInstructorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInstructorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInstructorQuery({
+ *   variables: {
+ *      getInstructorId: // value for 'getInstructorId'
+ *   },
+ * });
+ */
+export function useGetInstructorQuery(baseOptions: Apollo.QueryHookOptions<GetInstructorQuery, GetInstructorQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInstructorQuery, GetInstructorQueryVariables>(GetInstructorDocument, options);
+      }
+export function useGetInstructorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInstructorQuery, GetInstructorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInstructorQuery, GetInstructorQueryVariables>(GetInstructorDocument, options);
+        }
+export type GetInstructorQueryHookResult = ReturnType<typeof useGetInstructorQuery>;
+export type GetInstructorLazyQueryHookResult = ReturnType<typeof useGetInstructorLazyQuery>;
+export type GetInstructorQueryResult = Apollo.QueryResult<GetInstructorQuery, GetInstructorQueryVariables>;
 export const GetStudentDocument = gql`
     query GetStudent($getStudentId: String!) {
   getStudent(id: $getStudentId) {
@@ -1675,6 +1771,41 @@ export function useCreateInstructorMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateInstructorMutationHookResult = ReturnType<typeof useCreateInstructorMutation>;
 export type CreateInstructorMutationResult = Apollo.MutationResult<CreateInstructorMutation>;
 export type CreateInstructorMutationOptions = Apollo.BaseMutationOptions<CreateInstructorMutation, CreateInstructorMutationVariables>;
+export const SetStatusInstructorDocument = gql`
+    mutation SetStatusInstructor($setStatusInstructorId: String!, $enrolled: Boolean!) {
+  setStatusInstructor(id: $setStatusInstructorId, enrolled: $enrolled) {
+    id
+    name
+  }
+}
+    `;
+export type SetStatusInstructorMutationFn = Apollo.MutationFunction<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>;
+
+/**
+ * __useSetStatusInstructorMutation__
+ *
+ * To run a mutation, you first call `useSetStatusInstructorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetStatusInstructorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setStatusInstructorMutation, { data, loading, error }] = useSetStatusInstructorMutation({
+ *   variables: {
+ *      setStatusInstructorId: // value for 'setStatusInstructorId'
+ *      enrolled: // value for 'enrolled'
+ *   },
+ * });
+ */
+export function useSetStatusInstructorMutation(baseOptions?: Apollo.MutationHookOptions<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>(SetStatusInstructorDocument, options);
+      }
+export type SetStatusInstructorMutationHookResult = ReturnType<typeof useSetStatusInstructorMutation>;
+export type SetStatusInstructorMutationResult = Apollo.MutationResult<SetStatusInstructorMutation>;
+export type SetStatusInstructorMutationOptions = Apollo.BaseMutationOptions<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>;
 export const GetInstructorsDocument = gql`
     query GetInstructors($instructors: GetInstructorsInput!) {
   getInstructors(instructors: $instructors) {

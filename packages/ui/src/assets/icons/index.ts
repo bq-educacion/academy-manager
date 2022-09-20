@@ -15,6 +15,7 @@ import Map from "./map.svg";
 import Direction from "./direction.svg";
 import CrossBad from "./bad-cross.svg";
 import Alert from "./alert.svg";
+import External from "./external.svg";
 
 export {
   ClosePannel,
@@ -34,4 +35,5 @@ export {
   Direction,
   CrossBad,
   Alert,
+  External,
 };

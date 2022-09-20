@@ -457,7 +457,7 @@ const EditStudent: NextPage = () => {
               }}
               deleteRed
             />
-            <GreyDivider loading={false} />
+            <GreyDivider loading={loading2} />
 
             {loading2 && (
               <LoadingAnimation>
@@ -1122,6 +1122,7 @@ const CheckDiv = styled.div`
   margin: 35px 0px 0px 0px;
   & > * {
     margin-right: 10px;
+    align-self: center;
   }
 `;
 
@@ -1132,6 +1133,7 @@ const CheckDiv1 = styled.div`
   margin: 10px 0px 0px 0px;
   & > * {
     margin-right: 10px;
+    align-self: center;
   }
 `;
 
