@@ -35,7 +35,7 @@ export const users = {
     ): Promise<UserModel> => {
       try {
         let user = ctx.user;
-        console.log("user", user);
+        
         if (!user) {
           throw new Error("404, Unauthorized");
         }
@@ -71,23 +71,23 @@ export const users = {
           },
         );
         const data = await googleUser.data;
-
-        let user: ObjectId = await userCollection(ctx.db).distinct("_id", {
+        
+        let user: UserModel | undefined = await userCollection(ctx.db).findOne<UserModel | undefined>({
           email: data.email,
         });
-        if (!user) {
+        
+        if (!user?._id) {
           user = await userCollection(ctx.db).insertOne({
             name: data.name || data.email,
             email: data.email,
           });
         }
-
+  
         const token = await signJwt({
           userEmail: data.email,
           secretKey: JWT_SECRET,
         });
-
-        console.log("login token", token);
+  
         return token;
       } catch (error) {
         throw new Error("500, " + error);

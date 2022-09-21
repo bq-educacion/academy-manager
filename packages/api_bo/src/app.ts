@@ -97,7 +97,6 @@ try {
           let emailUser = "";
           const [type, token] = req.headers.get("authorization")?.split(" ") ||
             [];
-          console.log("token", token);
           if (token && token !== "null") {
             if (type === "Bearer") {
               const check: Payload = await verifyJwt(token, JWT_SECRET);
@@ -105,7 +104,6 @@ try {
             }
           }
           const user = await userCollection(db).findOne({ email: emailUser });
-
           return {
             db,
             user,
