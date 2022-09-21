@@ -34,6 +34,7 @@ function initApolloClient(initialState?: any, req?: NextApiRequest) { // eslint-
         ? document.cookie
         : ""
     );
+    console.log("initApollo", cookies)
     return cookies.token;
   };
 
@@ -139,16 +140,15 @@ export default function withApollo(
       const apolloState = apolloClient.cache.extract();
 
       try {
-        // TODO: Uncomment when session exists
         let user = undefined;
         if (requiresAccess) {
           const { data } = await apolloClient.query({
             query: GetUserDocument,
             errorPolicy: "all",
           });
-          user = data;
+          user = data.getUser;
         }
-
+        
         if (requiresAccess && (!user || !user.getUser)) {
           redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
         } else if (ctx.pathname === "/login" && user?.getUser) {
