@@ -1,0 +1,6 @@
+mutation SetStatusStudent($setStatusStudentId: String!, $enrolled: Boolean!) {
+  setStatusStudent(id: $setStatusStudentId, enrolled: $enrolled) {
+    name
+    id
+  }
+}

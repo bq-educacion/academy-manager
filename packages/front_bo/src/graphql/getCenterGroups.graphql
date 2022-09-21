@@ -1,0 +1,108 @@
+query GetCenterGroups($getCenterId: String!) {
+  getCenter(id: $getCenterId) {
+    center {
+      groups {
+        id
+        id_group
+        name
+        active
+        course {
+          EPO
+          ESO
+        }
+        modality
+        type
+        createdAt
+        timetable {
+          id_day
+          day
+          start
+          end
+        }
+        notes
+        center {
+          id
+          name
+          address
+          city
+          phone
+          email
+          active
+          type
+          nature
+          languages
+          notes
+          createdAt
+          contacts {
+            name
+            email
+            phone
+          }
+          groups {
+            id
+            id_group
+            name
+            active
+            modality
+            type
+            createdAt
+            notes
+          }
+        }
+        instructors {
+          id
+          name
+          corporateEmail
+          personalEmail
+          phone
+          enrolled
+          active
+          training {
+            careerInEducation
+            technicalCareer
+          }
+          previousExperience
+          programmingExperience
+          knowledge
+          urlCV
+          materialsExperience
+          platformEducationExperience
+          languages
+          availability {
+            id_day
+            day
+            hours
+          }
+          summerAvailability
+          vehicle
+          geographicalAvailability
+          areas
+          notes
+        }
+        students {
+          id
+          name
+          birthDate
+          course
+          enrolled
+          active
+          registrationDate
+          allergies
+          descriptionAllergy
+          oldStudent
+          signedMandate
+          imageAuthorisation
+          collectionPermit
+          goesAlone
+          notes
+          contacts {
+            name
+            email
+            phone
+            send_info
+          }
+        }
+      }
+    }
+  }
+}
