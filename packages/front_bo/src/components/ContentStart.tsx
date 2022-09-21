@@ -28,7 +28,7 @@ export const ContentStart: FC<{
     <ContentLayout>
       <ContentHeader>
         <styles.BoldP1>{t(section)}</styles.BoldP1>
-        <UserStuff token="token" />
+        <UserStuff />
       </ContentHeader>
       <styles.RainbowDivider />
       <ContentSubHeader>{childrenHeader}</ContentSubHeader>

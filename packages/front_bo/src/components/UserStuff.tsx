@@ -8,15 +8,14 @@ import {
   Popover,
   colors,
 } from "@academy-manager/ui";
-import { useCookies } from "react-cookie";
+import { useApolloClient } from "@apollo/client";
 
-export const UserStuff: FC<{ token: string }> = () => {
-  const [cookie, removeCookie] = useCookies(["token"]);
+export const UserStuff: FC = () => {
+  const useClient = useApolloClient();
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (cookie.token) {
-      removeCookie("token", { path: "/" });
-    }
+    useClient.resetStore();
+    document.cookie = `token="";path=/;`;
     true && (window.location.href = "/login");
   };
 
