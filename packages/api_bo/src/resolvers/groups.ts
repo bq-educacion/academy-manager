@@ -74,7 +74,7 @@ export const groups = {
       ctx: Context,
     ): Promise<PaginatedGroups> => {
       if (!ctx.user) {
-        throw new Error("404, Unauthorized");
+        throw new Error("403, Unauthorized");
       }
       const filter: Filter<PaginatedGroups> = { $or: [{}] };
       if (args.groups.searchText) {
@@ -140,7 +140,7 @@ export const groups = {
     ): Promise<{ group: GroupModel; totalStudents: number }> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const group = await groupCollection(ctx.db).findById(args.id);
         if (!group) {
@@ -161,7 +161,7 @@ export const groups = {
     ): Promise<GroupModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.group);
         const group = await groupCollection(ctx.db).findOne({
@@ -243,7 +243,7 @@ export const groups = {
     ): Promise<GroupModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.group);
         let activeGroups = false;
@@ -337,7 +337,7 @@ export const groups = {
     ): Promise<GroupModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const deletedGroup = await groupCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },

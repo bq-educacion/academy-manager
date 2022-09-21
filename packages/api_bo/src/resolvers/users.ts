@@ -2,7 +2,6 @@ import { userCollection, UserModel } from "../models/UserModel.ts";
 import { Context, JWT_SECRET } from "../app.ts";
 import { MutationLoginArgs } from "../types.ts";
 import { axiod } from "axios";
-import { ObjectId } from "objectId";
 import { signJwt } from "../lib/jwt.ts";
 
 export const users = {
@@ -20,7 +19,7 @@ export const users = {
     ): Promise<UserModel[]> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         return await userCollection(ctx.db).find({}).toArray();
       } catch (error) {
@@ -35,9 +34,9 @@ export const users = {
     ): Promise<UserModel> => {
       try {
         let user = ctx.user;
-        
+
         if (!user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         user = await userCollection(ctx.db).findAndModify(
           { _id: user._id },
@@ -71,23 +70,24 @@ export const users = {
           },
         );
         const data = await googleUser.data;
-        
-        let user: UserModel | undefined = await userCollection(ctx.db).findOne<UserModel | undefined>({
-          email: data.email,
-        });
-        
+
+        const user: UserModel | undefined = await userCollection(ctx.db)
+          .findOne({
+            email: data.email,
+          });
+
         if (!user?._id) {
-          user = await userCollection(ctx.db).insertOne({
+          await userCollection(ctx.db).insertOne({
             name: data.name || data.email,
             email: data.email,
           });
         }
-  
+
         const token = await signJwt({
           userEmail: data.email,
           secretKey: JWT_SECRET,
         });
-  
+
         return token;
       } catch (error) {
         throw new Error("500, " + error);

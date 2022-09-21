@@ -47,7 +47,7 @@ export const centers = {
       ctx: Context,
     ): Promise<PaginatedCenters> => {
       if (!ctx.user) {
-        throw new Error("404, Unauthorized");
+        throw new Error("403, Unauthorized");
       }
       const filter: Filter<PaginatedCenters> = { $or: [{}] };
       if (args.centers.searchText) {
@@ -109,7 +109,7 @@ export const centers = {
     > => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const center = await centerCollection(ctx.db).findById(args.id);
         if (!center) {
@@ -144,7 +144,7 @@ export const centers = {
     ): Promise<CenterModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.center);
         if (args.center.email) {
@@ -190,7 +190,7 @@ export const centers = {
     ): Promise<CenterContact> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.contact);
         const newCenterContact = await centerCollection(ctx.db).findAndModify(
@@ -218,7 +218,7 @@ export const centers = {
     ): Promise<CenterModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.center);
         // TODO(@pruizj): update to findOneAndUpdate, findAndModify will be deprecated
@@ -245,7 +245,7 @@ export const centers = {
     ): Promise<CenterContact> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.contact);
         const contactsCenter = await centerCollection(ctx.db)
@@ -300,7 +300,7 @@ export const centers = {
     ): Promise<CenterModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const center = await centerCollection(ctx.db).findById(args.id);
         if (!center) {
@@ -355,7 +355,7 @@ export const centers = {
       checkNotNull(args);
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const newCenter = await centerCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },

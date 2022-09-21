@@ -46,7 +46,7 @@ export const students = {
       ctx: Context,
     ): Promise<PaginatedStudents> => {
       if (!ctx.user) {
-        throw new Error("404, Unauthorized");
+        throw new Error("403, Unauthorized");
       }
       const filter: Filter<PaginatedStudents> = { $or: [{}] };
       if (args.students.searchText) {
@@ -106,7 +106,7 @@ export const students = {
     ): Promise<StudentModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const student = await studentCollection(ctx.db).findById(args.id);
         if (!student) {
@@ -126,7 +126,7 @@ export const students = {
     ): Promise<StudentModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.student);
 
@@ -197,7 +197,7 @@ export const students = {
     ): Promise<StudentContact> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.contact);
         const newStudentContact = await studentCollection(ctx.db).findAndModify(
@@ -227,7 +227,7 @@ export const students = {
     ): Promise<StudentModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.student);
         let updateStudent = { ...args.student } as Partial<StudentModel>;
@@ -408,7 +408,7 @@ export const students = {
     ): Promise<StudentModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const student = await studentCollection(ctx.db).findById(args.id);
         if (!student) {
@@ -449,7 +449,7 @@ export const students = {
     ): Promise<StudentModel | undefined> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args);
         let student: StudentModel | undefined = undefined;

@@ -149,14 +149,14 @@ export default function withApollo(
         }
         if (requiresAccess && !user) {
           redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
-        } else if (ctx.pathname === "/login" && user?.getUser) {
+        } else if (ctx.pathname === "/login" && user) {
           redirect(ctx, "/");
         }
 
         return {
           ...pageProps,
           apolloState,
-          userData: user.getUser,
+          userData: user,
         };
       } catch (e) {
         return {

@@ -57,7 +57,7 @@ export const instructors = {
     ): Promise<string> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const instructor = await instructorCollection(ctx.db).findOne({
           corporateEmail: args.email,
@@ -77,7 +77,7 @@ export const instructors = {
       ctx: Context,
     ): Promise<PaginatedInstructors> => {
       if (!ctx.user) {
-        throw new Error("404, Unauthorized");
+        throw new Error("403, Unauthorized");
       }
       const filter: Filter<PaginatedInstructors> = { $or: [{}] };
       if (args.instructors.searchText) {
@@ -165,7 +165,7 @@ export const instructors = {
     ): Promise<InstructorModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const instructor = await instructorCollection(ctx.db).findById(args.id);
         if (!instructor) {
@@ -185,7 +185,7 @@ export const instructors = {
     ): Promise<InstructorModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.instructor);
         if (
@@ -267,7 +267,7 @@ export const instructors = {
     ): Promise<InstructorModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args.instructor);
         let updateInstructor = { ...args.instructor } as Partial<
@@ -423,7 +423,7 @@ export const instructors = {
     ): Promise<InstructorModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         const instructor = await instructorCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
@@ -486,7 +486,7 @@ export const instructors = {
     ): Promise<InstructorModel> => {
       try {
         if (!ctx.user) {
-          throw new Error("404, Unauthorized");
+          throw new Error("403, Unauthorized");
         }
         checkNotNull(args);
         let instructor = await instructorCollection(ctx.db).findAndModify(
