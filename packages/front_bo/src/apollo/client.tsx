@@ -31,7 +31,6 @@ const request = async (
   let authHeader = "";
 
   const token = context.token || getToken();
-  console.log("request client", token)
   authHeader = `Bearer ${token}`;
 
   operation.setContext({

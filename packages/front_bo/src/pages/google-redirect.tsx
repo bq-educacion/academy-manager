@@ -19,7 +19,6 @@ const GoogleRedirectPage: NextPage = () => {
       }
     );
     const { login } = await data;
-    console.log({data, login})
     if (login) {
       document.cookie = `token=${login};path=/;`;
     }

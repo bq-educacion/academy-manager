@@ -34,7 +34,6 @@ function initApolloClient(initialState?: any, req?: NextApiRequest) { // eslint-
         ? document.cookie
         : ""
     );
-    console.log("initApollo", cookies)
     return cookies.token;
   };
 
@@ -148,8 +147,7 @@ export default function withApollo(
           });
           user = data.getUser;
         }
-        
-        if (requiresAccess && (!user || !user.getUser)) {
+        if (requiresAccess && !user) {
           redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
         } else if (ctx.pathname === "/login" && user?.getUser) {
           redirect(ctx, "/");
