@@ -249,15 +249,12 @@ const EditInstructor: NextPage = () => {
     {
       summer !== data?.getInstructor.summerAvailability && setChanges(true);
     }
-    // {
-    //   timeTable !== data?.getInstructor.availability && setChanges(true);
-    // }
-    // {
-    //   groups !== data?.getInstructor.groups && setChanges(true);
-    // }
-    // {
-    //   areas !== data?.getInstructor.areas && setChanges(true);
-    // }
+    {
+      groups !== data?.getInstructor.groups && setChanges(true);
+    }
+    {
+      areas !== data?.getInstructor.areas && setChanges(true);
+    }
   }, [
     name,
     emailpro,
@@ -750,6 +747,7 @@ const EditInstructor: NextPage = () => {
                     </FillIn>
                   </BodyContent>
                   <EditTeacherTimeTable
+                    setChanges={setChanges}
                     time={timeTable}
                     setTime={setTimeTable}
                   />

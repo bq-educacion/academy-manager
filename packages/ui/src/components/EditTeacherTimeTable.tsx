@@ -9,9 +9,10 @@ import { colors, styles } from "../theme";
 import CheckBox from "./CheckBox";
 
 const EditTeacherTimeTable: FC<{
+  setChanges: (changes: boolean) => void;
   time: AvailabilityInput[];
   setTime: (time: AvailabilityInput[]) => void;
-}> = ({ time, setTime }) => {
+}> = ({ time, setTime, setChanges }) => {
   const t = useTranslate();
 
   const [monday0, setMonday0] = useState<boolean>(false);
@@ -861,7 +862,11 @@ const EditTeacherTimeTable: FC<{
   ]);
 
   return (
-    <Content>
+    <Content
+      onClick={() => {
+        setChanges(true);
+      }}
+    >
       <LeftCell className="Top" />
       <Cell className="Top Left">
         <styles.P4>{t("general.days.M")}</styles.P4>
