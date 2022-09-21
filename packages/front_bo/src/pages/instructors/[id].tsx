@@ -2,6 +2,7 @@ import {
   Button,
   CheckBox,
   colors,
+  DropDownUnique,
   EditTeacherTimeTable,
   FillIn,
   Icon,
@@ -15,18 +16,27 @@ import {
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import withApollo from "../../apollo/withApollo";
-import { Layout, Modal } from "../../components";
+import { AddAreasEditTeacher, Layout, Modal, Table } from "../../components";
 import { Platforms, sections, Tools } from "../../config";
 import {
   AvailabilityInput,
+  Group,
   Languages,
+  OrderFilterGroup,
   PreviousExperienceInstructor,
+  Region,
   SummerAvailabilityInstructor,
   TrainingInstructor,
+  TypeVehicleInstructor,
+  useEditInstructorMutation,
+  useGetCenterGroupsQuery,
+  useGetGroupQuery,
   useGetInstructorQuery,
   useSetStatusInstructorMutation,
+  useSimpleCentersNameQuery,
 } from "../../generated/graphql";
 
 const EditInstructor: NextPage = () => {
@@ -34,14 +44,29 @@ const EditInstructor: NextPage = () => {
   const t = useTranslate();
 
   //Queries
-  const { data } = useGetInstructorQuery({
+  const { data, refetch } = useGetInstructorQuery({
     variables: {
       getInstructorId: router.query.id as string,
     },
   });
-
-  //Mutations
-  const [setStatusInstructorMutation] = useSetStatusInstructorMutation();
+  const { data: dataCenters } = useSimpleCentersNameQuery({
+    variables: {
+      centers: {},
+    },
+  });
+  const [newCenter, setNewCenter] = useState<string>("");
+  const [newGroup, setNewGroup] = useState<string>("");
+  const { data: dataGroups } = useGetCenterGroupsQuery({
+    variables: {
+      getCenterId: newCenter,
+    },
+  });
+  const { data: newGroupData, refetch: refetchGroups } = useGetGroupQuery({
+    variables: {
+      getGroupId: newGroup,
+    },
+    fetchPolicy: "network-only",
+  });
 
   //hooks
   const [showFolder, setShowFolder] = useState<boolean>(true);
@@ -69,7 +94,10 @@ const EditInstructor: NextPage = () => {
   const [phoneError, setPhoneError] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>(data?.getInstructor.notes || "");
   const [education, setEducation] = useState<TrainingInstructor>(
-    data?.getInstructor.training || {}
+    {
+      careerInEducation: data?.getInstructor.training.careerInEducation,
+      technicalCareer: data?.getInstructor.training.technicalCareer,
+    } || {}
   );
   const [experience, setExperience] = useState<
     PreviousExperienceInstructor | undefined
@@ -88,7 +116,7 @@ const EditInstructor: NextPage = () => {
   const [platforms, setPlatforms] = useState<string[]>(
     data?.getInstructor.platformEducationExperience || []
   );
-  const [languages, setLanguages] = useState<string[]>(
+  const [languages, setLanguages] = useState<Languages[]>(
     data?.getInstructor.languages || []
   );
   const [summer, setSummer] = useState<
@@ -97,9 +125,206 @@ const EditInstructor: NextPage = () => {
   const [timeTable, setTimeTable] = useState<AvailabilityInput[]>(
     data?.getInstructor.availability || []
   );
+  const [groups, setGroups] = useState<Group[]>(
+    (data?.getInstructor.groups as Group[]) || []
+  );
+  const [groupsId, setGroupsId] = useState<string[]>(
+    (data?.getInstructor.groups.map((elem) => {
+      return elem.id;
+    }) as string[]) || []
+  );
+  const [order, setOrder] = useState<{
+    key: OrderFilterGroup;
+    direction: number;
+  }>({
+    key: OrderFilterGroup.IdGroup,
+    direction: 1,
+  });
+  const [changes, setChanges] = useState<boolean>(false);
+  const [addGroup, setAddGroup] = useState<boolean>(false);
+  const [vehicle, setVehicle] = useState<TypeVehicleInstructor | undefined>(
+    data?.getInstructor.vehicle || undefined
+  );
+  const [geographicalAvailability, setGeographicalAvailability] =
+    useState<Region>(
+      (data?.getInstructor.geographicalAvailability.at(0) as Region) || [
+        Region.Madrid,
+      ]
+    );
+  const [areas, setAreas] = useState<string[]>(data?.getInstructor.areas || []);
+  const [loading2, setLoading2] = useState<boolean>(false);
+  const [modalDeleteGroup, setModalDeleteGroup] = useState<boolean>(false);
+  const [deleteGroupID, setDeleteGroupID] = useState<string>("");
+
+  //Mutations
+  const [setStatusInstructorMutation] = useSetStatusInstructorMutation();
+
+  const [editInstructorMutation, { loading }] = useEditInstructorMutation({
+    variables: {
+      editInstructorId: router.query.id as string,
+      idGroups: groupsId,
+      instructor: {
+        name,
+        corporateEmail: emailpro,
+        personalEmail: email,
+        phone,
+        notes,
+        areas,
+        availability: timeTable,
+        geographicalAvailability: [geographicalAvailability],
+        previousExperience: experience,
+        knowledge,
+        languages,
+        materialsExperience: tools,
+        platformEducationExperience: platforms,
+        programmingExperience: progra,
+        summerAvailability: summer,
+        training: education,
+        vehicle,
+      },
+    },
+  });
+
+  useEffect(() => {
+    setGroupsId([
+      ...groups.map((elem) => {
+        return elem.id;
+      }),
+    ]);
+  }, [groups, newGroup]);
+
+  useEffect(() => {
+    if (loading) {
+      setLoading2(true);
+    }
+    const timer = setTimeout(() => {
+      setLoading2(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  useEffect(() => {
+    {
+      name !== data?.getInstructor.name && setChanges(true);
+    }
+    {
+      emailpro !== "" &&
+        emailpro !== data?.getInstructor.corporateEmail &&
+        setChanges(true);
+    }
+
+    {
+      email !== "" &&
+        email !== data?.getInstructor.personalEmail &&
+        setChanges(true);
+    }
+
+    {
+      phone !== "" && phone !== data?.getInstructor.phone && setChanges(true);
+    }
+    {
+      notes !== "" && notes !== data?.getInstructor.notes && setChanges(true);
+    }
+
+    {
+      knowledge !== "" &&
+        knowledge !== data?.getInstructor.knowledge &&
+        setChanges(true);
+    }
+
+    {
+      cv !== "" && cv !== data?.getInstructor.urlCV && setChanges(true);
+    }
+
+    {
+      tools !== data?.getInstructor.materialsExperience && setChanges(true);
+    }
+    {
+      platforms !== data?.getInstructor.platformEducationExperience &&
+        setChanges(true);
+    }
+    {
+      languages !== data?.getInstructor.languages && setChanges(true);
+    }
+    {
+      summer !== data?.getInstructor.summerAvailability && setChanges(true);
+    }
+    // {
+    //   timeTable !== data?.getInstructor.availability && setChanges(true);
+    // }
+    // {
+    //   groups !== data?.getInstructor.groups && setChanges(true);
+    // }
+    // {
+    //   areas !== data?.getInstructor.areas && setChanges(true);
+    // }
+  }, [
+    name,
+    emailpro,
+    email,
+    phone,
+    notes,
+    education,
+    experience,
+    progra,
+    knowledge,
+    cv,
+    tools,
+    platforms,
+    languages,
+    summer,
+    timeTable,
+    groups,
+    vehicle,
+    geographicalAvailability,
+    areas,
+  ]);
 
   return (
     <>
+      {modalDeleteGroup && (
+        <Modal
+          setModal={setModalDeleteGroup}
+          title=""
+          children={
+            <ModalDiv>
+              <styles.BoldP2>
+                {t("pages.edit-teacher.delete-group-modal.title")}
+              </styles.BoldP2>
+              <styles.P4>
+                {t("pages.edit-teacher.delete-group-modal.text1")}
+              </styles.P4>
+              <DelteModalDiv2>
+                <Icon name="alert" />
+                <styles.P4>
+                  {t("pages.edit-teacher.delete-group-modal.text2")}
+                </styles.P4>
+              </DelteModalDiv2>
+              <ButtonsModalDiv>
+                <Button
+                  text={t("pages.edit-teacher.delete-group-modal.red")}
+                  deleteRed
+                  onClick={() => {
+                    setGroups(
+                      groups.filter((elem) => {
+                        return elem.id !== deleteGroupID;
+                      })
+                    );
+                    setModalDeleteGroup(false);
+                  }}
+                />
+                <Button
+                  text={t("pages.edit-center.state-modal.button2")}
+                  secondary
+                  onClick={() => {
+                    setModalDeleteGroup(false);
+                  }}
+                />
+              </ButtonsModalDiv>
+            </ModalDiv>
+          }
+        />
+      )}
       {modalEnrolled && (
         <Modal
           setModal={setModalEnrolled}
@@ -174,21 +399,64 @@ const EditInstructor: NextPage = () => {
               />
               <GreyDivider loading={false} />
 
-              {/* {loading2 && (
+              {loading2 && (
                 <LoadingAnimation>
                   <span className="dot"></span>
                   <span className="dot"></span>
                   <span className="dot"></span>
                 </LoadingAnimation>
-              )} */}
+              )}
 
               <Button
                 text={t("pages.edit-center.save")}
                 onClick={() => {
-                  //updateCenter();
+                  {
+                    name === "" && setNameError(true);
+                  }
+                  {
+                    emailpro !== "" &&
+                      emailpro.includes("@") === false &&
+                      setEmailproError(true);
+                  }
+                  {
+                    email !== "" &&
+                      email.includes("@") === false &&
+                      setEmailError(true);
+                  }
+                  {
+                    phone !== "" &&
+                      phone.length !== 9 &&
+                      phone.length !== 12 &&
+                      setPhoneError(true);
+                  }
+                  {
+                    cv !== "" &&
+                      cv.match(/^(ftp|http|https):\/\/[^ "]+$/) === null &&
+                      setCVError(true);
+                  }
+
+                  if (
+                    name !== "" &&
+                    (emailpro === "" ||
+                      (emailpro !== "" && emailpro.includes("@") === true)) &&
+                    (email === "" ||
+                      (email !== "" && email.includes("@") === true)) &&
+                    (phone === "" ||
+                      (phone !== "" && phone.length === 9) ||
+                      (phone !== "" && phone.length === 12)) &&
+                    (cv === "" ||
+                      (cv !== "" &&
+                        cv.match(/^(ftp|http|https):\/\/[^ "]+$/) !== null))
+                  ) {
+                    editInstructorMutation().then(() => {
+                      setChanges(false);
+                      refetch();
+                      refetchGroups();
+                    });
+                  }
                 }}
                 create
-                disabled={false}
+                disabled={!changes}
               />
             </SubHeaderDiv>
           }
@@ -215,12 +483,15 @@ const EditInstructor: NextPage = () => {
                       <CheckDiv>
                         <CheckBox
                           option={education.careerInEducation ? true : false}
-                          setOption={() =>
+                          setOption={() => {
+                            setChanges(true);
                             setEducation({
-                              ...education,
+                              technicalCareer: education.technicalCareer
+                                ? true
+                                : false,
                               careerInEducation: !education.careerInEducation,
-                            })
-                          }
+                            });
+                          }}
                         />
                         <styles.P4>{t("pages.edit-teacher.edu11")}</styles.P4>
                       </CheckDiv>
@@ -229,12 +500,15 @@ const EditInstructor: NextPage = () => {
                       <CheckDiv1>
                         <CheckBox
                           option={education.technicalCareer ? true : false}
-                          setOption={() =>
+                          setOption={() => {
+                            setChanges(true);
                             setEducation({
-                              ...education,
+                              careerInEducation: education.careerInEducation
+                                ? true
+                                : false,
                               technicalCareer: !education.technicalCareer,
-                            })
-                          }
+                            });
+                          }}
                         />
                         <styles.P4>{t("pages.edit-teacher.edu12")}</styles.P4>
                       </CheckDiv1>
@@ -251,9 +525,10 @@ const EditInstructor: NextPage = () => {
                                 ? true
                                 : false
                             }
-                            setOption={() =>
-                              setExperience(PreviousExperienceInstructor.Yes)
-                            }
+                            setOption={() => {
+                              setChanges(true);
+                              setExperience(PreviousExperienceInstructor.Yes);
+                            }}
                           />
                           <styles.P4>{t("pages.edit-teacher.xp1")}</styles.P4>
                         </CheckDiv>
@@ -264,9 +539,10 @@ const EditInstructor: NextPage = () => {
                                 ? true
                                 : false
                             }
-                            setOption={() =>
-                              setExperience(PreviousExperienceInstructor.No)
-                            }
+                            setOption={() => {
+                              setChanges(true);
+                              setExperience(PreviousExperienceInstructor.No);
+                            }}
                           />
                           <styles.P4>{t("pages.edit-teacher.xp2")}</styles.P4>
                         </CheckDiv>
@@ -278,11 +554,12 @@ const EditInstructor: NextPage = () => {
                                 ? true
                                 : false
                             }
-                            setOption={() =>
+                            setOption={() => {
+                              setChanges(true);
                               setExperience(
                                 PreviousExperienceInstructor.NoButInterested
-                              )
-                            }
+                              );
+                            }}
                           />
                           <styles.P4>{t("pages.edit-teacher.xp3")}</styles.P4>
                         </CheckDiv>
@@ -296,14 +573,20 @@ const EditInstructor: NextPage = () => {
                         <CheckDiv>
                           <RadioButton
                             option={progra ? true : false}
-                            setOption={() => setProgra(true)}
+                            setOption={() => {
+                              setChanges(true);
+                              setProgra(true);
+                            }}
                           />
                           <styles.P4>{t("pages.edit-teacher.xp1")}</styles.P4>
                         </CheckDiv>
                         <CheckDiv>
                           <RadioButton
                             option={progra ? false : true}
-                            setOption={() => setProgra(false)}
+                            setOption={() => {
+                              setChanges(true);
+                              setProgra(false);
+                            }}
                           />
                           <styles.P4>{t("pages.edit-teacher.xp2")}</styles.P4>
                         </CheckDiv>
@@ -347,64 +630,60 @@ const EditInstructor: NextPage = () => {
                       )}
                     </FillIn>
                   </BodyContent>
-                  <BodyContent>
-                    <RowDiv2>
-                      <OptionsBoxFilter
-                        options={[
-                          ...Tools,
-                          ...tools
-                            .filter((elem1) => {
-                              return !Tools.find((elem) => {
-                                return elem.key === elem1;
-                              });
-                            })
-                            .map((tool) => {
-                              return {
-                                label: tool,
-                                key: tool,
-                              };
-                            }),
-                        ]}
-                        title={t("components.create-instructor.2.tools")}
-                        results={tools}
-                        setResults={setTools}
-                      />
-                      <OptionsBoxFilter
-                        options={[
-                          ...Platforms,
-                          ...platforms
-                            .filter((elem1) => {
-                              return !Platforms.find((elem) => {
-                                return elem.key === elem1;
-                              });
-                            })
-                            .map((platform) => {
-                              return {
-                                label: platform,
-                                key: platform,
-                              };
-                            }),
-                        ]}
-                        title={t("components.create-instructor.2.platforms")}
-                        results={platforms}
-                        setResults={setPlatforms}
-                      />
-                      <OptionsBoxFilter
-                        notOther
-                        options={Object.values(Languages).map((language) => ({
-                          key: language,
-                          label: t(
-                            `pages.centers.languages.${language.toLowerCase()}-label`
-                          ),
-                        }))}
-                        title={t("components.create-instructor.2.languages")}
-                        results={languages}
-                        setResults={
-                          setLanguages as (languages: string[]) => void
-                        }
-                      />
-                    </RowDiv2>
-                  </BodyContent>
+                  <RowDiv2>
+                    <OptionsBoxFilter
+                      options={[
+                        ...Tools,
+                        ...tools
+                          .filter((elem1) => {
+                            return !Tools.find((elem) => {
+                              return elem.key === elem1;
+                            });
+                          })
+                          .map((tool) => {
+                            return {
+                              label: tool,
+                              key: tool,
+                            };
+                          }),
+                      ]}
+                      title={t("components.create-instructor.2.tools")}
+                      results={tools}
+                      setResults={setTools}
+                    />
+                    <OptionsBoxFilter
+                      options={[
+                        ...Platforms,
+                        ...platforms
+                          .filter((elem1) => {
+                            return !Platforms.find((elem) => {
+                              return elem.key === elem1;
+                            });
+                          })
+                          .map((platform) => {
+                            return {
+                              label: platform,
+                              key: platform,
+                            };
+                          }),
+                      ]}
+                      title={t("components.create-instructor.2.platforms")}
+                      results={platforms}
+                      setResults={setPlatforms}
+                    />
+                    <OptionsBoxFilter
+                      notOther
+                      options={Object.values(Languages).map((language) => ({
+                        key: language,
+                        label: t(
+                          `pages.centers.languages.${language.toLowerCase()}-label`
+                        ),
+                      }))}
+                      title={t("components.create-instructor.2.languages")}
+                      results={languages}
+                      setResults={setLanguages as (languages: string[]) => void}
+                    />
+                  </RowDiv2>
                 </>
               )}
             </BodyDiv>
@@ -468,12 +747,12 @@ const EditInstructor: NextPage = () => {
                       <styles.P4>
                         {t("pages.edit-teacher.availability")}
                       </styles.P4>
-                      <EditTeacherTimeTable
-                        time={timeTable}
-                        setTime={setTimeTable}
-                      />
                     </FillIn>
                   </BodyContent>
+                  <EditTeacherTimeTable
+                    time={timeTable}
+                    setTime={setTimeTable}
+                  />
                 </>
               )}
             </BodyDiv>
@@ -490,7 +769,67 @@ const EditInstructor: NextPage = () => {
                   </styles.BoldP4>
                 </GateFolderTitle>
               </GateFolder>
-              {showFolder3 && <></>}
+              {showFolder3 && (
+                <>
+                  <MarginDiv />
+                  <BodyContent>
+                    <FillIn>
+                      <styles.P4>{t("pages.edit-teacher.movtype")}</styles.P4>
+                      <RowDiv>
+                        <CheckDiv>
+                          <RadioButton
+                            option={
+                              vehicle === TypeVehicleInstructor.Own
+                                ? true
+                                : false
+                            }
+                            setOption={() =>
+                              setVehicle(TypeVehicleInstructor.Own)
+                            }
+                          />
+                          <styles.P4>{t("pages.edit-teacher.own")}</styles.P4>
+                        </CheckDiv>
+                        <CheckDiv>
+                          <RadioButton
+                            option={
+                              vehicle === TypeVehicleInstructor.PublicTransport
+                                ? true
+                                : false
+                            }
+                            setOption={() =>
+                              setVehicle(TypeVehicleInstructor.PublicTransport)
+                            }
+                          />
+                          <styles.P4>
+                            {t("pages.edit-teacher.public")}
+                          </styles.P4>
+                        </CheckDiv>
+                      </RowDiv>
+                    </FillIn>
+                  </BodyContent>
+                  <BodyContent>
+                    <FillIn>
+                      <styles.P4>{t("pages.edit-teacher.zones")}</styles.P4>
+                      <DropDownUnique
+                        options={Object.values(Region).map((region) => ({
+                          key: region,
+                          label: region,
+                        }))}
+                        selected={geographicalAvailability}
+                        setSelected={(region) => {
+                          setGeographicalAvailability(region as Region);
+                        }}
+                        width="22.031vw"
+                      />
+                    </FillIn>
+                  </BodyContent>
+                  <AddAreasEditTeacher
+                    Region={geographicalAvailability}
+                    areas={areas}
+                    setAreas={setAreas}
+                  />
+                </>
+              )}
             </BodyDiv>
           }
           children5={
@@ -503,9 +842,284 @@ const EditInstructor: NextPage = () => {
                   <styles.BoldP4>
                     {t("pages.edit-teacher.groups")}
                   </styles.BoldP4>
+                  <AddContactButton
+                    onClick={() => {
+                      setAddGroup(true);
+                    }}
+                  >
+                    <Icon name="add" />
+                    <Icon name="user" />
+                    <styles.BoldP4>
+                      {t("pages.edit-student.add-group")}
+                    </styles.BoldP4>
+                  </AddContactButton>
                 </GateFolderTitle>
               </GateFolder>
-              {showFolder4 && <></>}
+              {showFolder4 && (
+                <>
+                  <Table
+                    inactiveIndexes={[]}
+                    data={groups}
+                    order={order}
+                    onSetOrder={(order) => {
+                      setOrder(
+                        order as { key: OrderFilterGroup; direction: number }
+                      );
+                    }}
+                    columns={[
+                      {
+                        label: t("components.table.id"),
+                        key: OrderFilterGroup.IdGroup,
+                        content: (item) => <div>{item.id_group}</div>,
+                      },
+                      {
+                        label: t("components.table.center"),
+                        key: OrderFilterGroup.Center,
+                        content: (item) => <div>{item.center?.name}</div>,
+                      },
+                      {
+                        label: t("pages.edit-student.group-name"),
+                        key: OrderFilterGroup.IdGroup,
+                        content: (item) => <div>{item.name}</div>,
+                      },
+                      {
+                        label: t("components.table.start-time"),
+                        key: OrderFilterGroup.Start,
+                        content: (item) => (
+                          <div>
+                            {item.timetable?.every(
+                              (elem) => elem.start !== ""
+                            ) &&
+                              item.timetable
+                                ?.map((elem) => elem.start)
+                                .join(", ")}
+                            {(item.timetable?.every(
+                              (elem) => elem.start == ""
+                            ) ||
+                              item.timetable === undefined ||
+                              item.timetable?.length === 0) &&
+                              "-"}
+                          </div>
+                        ),
+                      },
+                      {
+                        label: t("components.table.end-time"),
+                        key: OrderFilterGroup.End,
+                        content: (item) => (
+                          <div>
+                            {item.timetable?.every((elem) => elem.end !== "") &&
+                              item.timetable
+                                ?.map((elem) => elem.end)
+                                .join(", ")}
+                            {(item.timetable?.every(
+                              (elem) => elem.start == ""
+                            ) ||
+                              item.timetable === undefined ||
+                              item.timetable?.length === 0) &&
+                              "-"}
+                          </div>
+                        ),
+                      },
+                      {
+                        label: t("components.table.days"),
+                        key: OrderFilterGroup.IdDay,
+                        content: (item) => (
+                          <div>
+                            {item.timetable
+                              ?.map((elem) =>
+                                t(
+                                  `components.table.time-table.${elem.day.toLowerCase()}`
+                                )
+                              )
+                              .join(" - ")}
+                            {(item.timetable === undefined ||
+                              item.timetable?.length === 0) &&
+                              "-"}
+                          </div>
+                        ),
+                      },
+                      {
+                        label: t("pages.edit-student.group-course"),
+                        key: OrderFilterGroup.Course,
+                        content: (item) =>
+                          (item.course.EPO.length > 0 ||
+                            item.course.ESO.length > 0) && (
+                            <>
+                              <styles.P4>
+                                {t("pages.edit-group.course")}
+                                {item.course.ESO &&
+                                  item.course.EPO &&
+                                  t(
+                                    `general.courses.${
+                                      [...item.course.EPO].sort((a, b) =>
+                                        a.localeCompare(b)
+                                      )[0]
+                                    }`
+                                  ) +
+                                    t("general.to") +
+                                    t(
+                                      `general.courses.${[...item.course.ESO]
+                                        .sort((a, b) => a.localeCompare(b))
+                                        .at(-1)}`
+                                    )}
+                              </styles.P4>
+                              <div
+                                onClick={() => {
+                                  setModalDeleteGroup(true);
+                                  setDeleteGroupID(item.id);
+                                }}
+                              >
+                                <BinButton name="eliminate" />
+                              </div>
+                            </>
+                          ),
+                      },
+                    ]}
+                  />
+                  {addGroup && dataCenters && (
+                    <AddGroup>
+                      <React.Fragment>
+                        <Cell>
+                          {newGroupData?.getGroup.group.id_group && (
+                            <div>{newGroupData.getGroup.group.id_group}</div>
+                          )}
+                        </Cell>
+                        <Cell>
+                          <DropDownUnique
+                            options={dataCenters.getCenters.data.map(
+                              (elem) => ({
+                                key: elem.id,
+                                label: elem.name,
+                              })
+                            )}
+                            setSelected={setNewCenter}
+                            selected={newCenter}
+                            width="7vw"
+                          />
+                        </Cell>
+                        <Cell>
+                          <DropDownUnique
+                            disabled={newCenter === ""}
+                            options={
+                              dataGroups?.getCenter.center.groups.map(
+                                (elem) => ({
+                                  key: elem.id,
+                                  label: elem.name,
+                                })
+                              ) || []
+                            }
+                            setSelected={(elem) => {
+                              if (!groupsId.includes(elem)) {
+                                setNewGroup(elem);
+                                setGroups([
+                                  ...groups,
+                                  dataGroups?.getCenter.center.groups.find(
+                                    (elem2) => elem2.id === elem
+                                  ) as Group,
+                                ]);
+                              }
+                            }}
+                            selected={newGroup}
+                            width="7vw"
+                          />
+                        </Cell>
+                        <Cell>
+                          {newGroupData?.getGroup.group.timetable && (
+                            <div>
+                              {newGroupData.getGroup.group.timetable?.every(
+                                (elem) => elem.start !== ""
+                              ) &&
+                                newGroupData.getGroup.group.timetable
+                                  ?.map((elem) => elem.start)
+                                  .join(", ")}
+                              {(newGroupData.getGroup.group.timetable?.every(
+                                (elem) => elem.start == ""
+                              ) ||
+                                newGroupData.getGroup.group.timetable ===
+                                  undefined ||
+                                newGroupData.getGroup.group.timetable
+                                  ?.length === 0) &&
+                                "-"}
+                            </div>
+                          )}
+                        </Cell>
+                        <Cell>
+                          {newGroupData?.getGroup.group.timetable && (
+                            <div>
+                              {newGroupData.getGroup.group.timetable?.every(
+                                (elem) => elem.end !== ""
+                              ) &&
+                                newGroupData.getGroup.group.timetable
+                                  ?.map((elem) => elem.end)
+                                  .join(", ")}
+                              {(newGroupData.getGroup.group.timetable?.every(
+                                (elem) => elem.start == ""
+                              ) ||
+                                newGroupData.getGroup.group.timetable ===
+                                  undefined ||
+                                newGroupData.getGroup.group.timetable
+                                  ?.length === 0) &&
+                                "-"}
+                            </div>
+                          )}
+                        </Cell>
+                        <Cell>
+                          {newGroupData?.getGroup.group.timetable && (
+                            <div>
+                              {newGroupData.getGroup.group.timetable
+                                ?.map((elem) =>
+                                  t(
+                                    `components.table.time-table.${elem.day.toLowerCase()}`
+                                  )
+                                )
+                                .join(" - ")}
+                              {(newGroupData.getGroup.group.timetable ===
+                                undefined ||
+                                newGroupData.getGroup.group.timetable
+                                  ?.length === 0) &&
+                                "-"}
+                            </div>
+                          )}
+                        </Cell>
+                        <Cell>
+                          {newGroupData &&
+                            (newGroupData.getGroup.group.course.EPO.length >
+                              0 ||
+                              newGroupData.getGroup.group.course.ESO.length >
+                                0) &&
+                            (newGroupData.getGroup.group.course.EPO.length >
+                              0 ||
+                              newGroupData.getGroup.group.course.ESO.length >
+                                0) && (
+                              <styles.P4>
+                                {t("pages.edit-group.course")}
+                                {newGroupData.getGroup.group.course.ESO &&
+                                  newGroupData.getGroup.group.course.EPO &&
+                                  t(
+                                    `general.courses.${
+                                      [
+                                        ...newGroupData.getGroup.group.course
+                                          .EPO,
+                                      ].sort((a, b) => a.localeCompare(b))[0]
+                                    }`
+                                  ) +
+                                    t("general.to") +
+                                    t(
+                                      `general.courses.${[
+                                        ...newGroupData.getGroup.group.course
+                                          .ESO,
+                                      ]
+                                        .sort((a, b) => a.localeCompare(b))
+                                        .at(-1)}`
+                                    )}
+                              </styles.P4>
+                            )}
+                        </Cell>
+                      </React.Fragment>
+                    </AddGroup>
+                  )}
+                </>
+              )}
             </BodyDiv>
           }
         >
@@ -799,8 +1413,7 @@ const RowDiv = styled.div`
 `;
 const RowDiv2 = styled.div`
   display: flex;
-  margin-left: -30px;
-  width: 82.75vw;
+  width: 100%;
   justify-content: space-around;
   border-top: 1px solid ${colors.colors.gray40};
   flex-direction: row;
@@ -825,4 +1438,87 @@ const LinkDiv = styled.a`
     margin-right: 5px;
   }
   color: ${colors.colors.blue80};
+`;
+
+const BinButton = styled(Icon)`
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
+const AddContactButton = styled.button`
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: ${colors.colors.white};
+  color: ${colors.colors.blue80};
+  & > p {
+    margin-left: 5px;
+  }
+  width: max-content;
+`;
+
+const AddGroup = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+`;
+
+const Cell = styled.div`
+  display: flex;
+  height: 60px;
+  width: 100%;
+  align-items: center;
+  border-bottom: solid 1px ${colors.colors.grayBlue};
+  border-left: solid 1px ${colors.colors.grayBlue};
+  justify-content: flex-start;
+  padding: 0 2em;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const LoadingAnimation = styled.div`
+  @keyframes wave {
+    0%,
+    60%,
+    100% {
+      transform: initial;
+    }
+
+    30% {
+      transform: translateY(-15px);
+    }
+  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 99999;
+  .dot {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 7px;
+    animation: wave 1.3s linear infinite;
+
+    &:nth-child(1) {
+      background-color: ${colors.colors.orange80};
+    }
+
+    &:nth-child(2) {
+      animation-delay: -1.1s;
+      background-color: ${colors.colors.red80};
+    }
+
+    &:nth-child(3) {
+      animation-delay: -0.9s;
+      background-color: ${colors.colors.purple80};
+    }
+  }
 `;

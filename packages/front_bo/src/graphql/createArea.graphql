@@ -1,0 +1,7 @@
+mutation CreateArea($name: String!, $region: Region!) {
+  createArea(name: $name, region: $region) {
+    id
+    name
+    region
+  }
+}

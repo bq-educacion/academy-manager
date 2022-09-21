@@ -1203,9 +1203,7 @@ const EditTeacherTimeTable: FC<{
 export default EditTeacherTimeTable;
 
 const Content = styled.div`
-  margin-bottom: -20px;
-  margin-left: -30px;
-  width: 82.7vw;
+  width: 100%;
   display: grid;
   border-top: 1px solid ${colors.colors.grayBlue};
   grid-template-columns: repeat(8, 1fr);

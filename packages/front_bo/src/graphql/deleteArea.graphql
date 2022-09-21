@@ -1,0 +1,7 @@
+mutation DeleteArea($deleteAreaId: String!) {
+  deleteArea(id: $deleteAreaId) {
+    id
+    name
+    region
+  }
+}

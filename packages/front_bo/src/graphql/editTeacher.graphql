@@ -1,0 +1,13 @@
+mutation EditInstructor(
+  $editInstructorId: String!
+  $idGroups: [String!]
+  $instructor: EditInstructorInput!
+) {
+  editInstructor(
+    id: $editInstructorId
+    idGroups: $idGroups
+    instructor: $instructor
+  ) {
+    id
+  }
+}

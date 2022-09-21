@@ -358,6 +358,19 @@
   },
   "pages": {
     "edit-teacher": {
+      "delete-group-modal": {
+        "title": "Desvincular grupo",
+        "text1": "Al desvincular, el monitor no podrá pasar lista o generar incidencias a este grupo.",
+        "text2": "Es posible que algunos grupos se queden sin montor. Por favor revisa la sección de grupos.",
+        "red": "Desvincular grupo"
+      },
+      "movtype": "Tipo de desplazamiento",
+      "own": "Vehículo propio",
+      "public": "Transporte público",
+      "zones": "Disponibilidad geográfica",
+      "zones-1": "Zonas",
+      "zones-2": "Añadir zona",
+      "zones-3": "Nombre de la zona",
       "state": "Alta monitor",
       "no-state": "Baja monitor",
       "state-modal": {
