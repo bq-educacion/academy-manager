@@ -18,10 +18,9 @@ import { typeDefs as user } from "./schemas/user.ts";
 import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
-import { verify } from "jwt";
-import { userCollection } from "./models/UserModel.ts";
-import { getCookies } from "cookies";
-import { auth } from "./lib/auth.ts";
+import { Payload } from "jwt";
+import { userCollection, UserModel } from "./models/UserModel.ts";
+import { verifyJwt } from "./lib/jwt.ts";
 
 type Params = {
   variables?: Record<string, unknown>;
@@ -46,19 +45,14 @@ type Request = OpineRequest & {
 
 export type Context = {
   db: Database;
+  user: UserModel | undefined;
   request: Request;
 };
 
 const MONGO_URL = Deno.env.get("MONGO_URL");
 const DB_NAME = Deno.env.get("DB_NAME");
 const PORT = Deno.env.get("PORT") || "3000";
-
-//create a JSON Web Token
-export const key = await crypto.subtle.generateKey(
-  { name: "HMAC", hash: "SHA-512" },
-  true,
-  ["sign", "verify"],
-);
+export const JWT_SECRET = Deno.env.get("JWT_SECRET") || "";
 
 if (!MONGO_URL) {
   throw new Error("MONGO_URL is not set");
@@ -100,28 +94,21 @@ try {
         graphiql: true,
         context: async () => {
           const db = client.database(DB_NAME);
-
-          const reqAuth = auth();
-
-          if (
-            reqAuth.some((auth) => request._parsedUrl!.query?.includes(auth))
-          ) {
-            const token = getCookies(req.headers).token;
-            const check = await verify(token, key);
-            if (!check) {
-              throw new Error("400, Unauthorized");
+          let emailUser = "";
+          const [type, token] = req.headers.get("authorization")?.split(" ") ||
+            [];
+          console.log("token", token);
+          if (token && token !== "null") {
+            if (type === "Bearer") {
+              const check: Payload = await verifyJwt(token, JWT_SECRET);
+              emailUser = check.sub || "";
             }
-            const data = JSON.parse(check.toString());
-            const user = userCollection(db).findOne({ email: data.email });
-            return {
-              db,
-              user,
-              request,
-            };
           }
+          const user = await userCollection(db).findOne({ email: emailUser });
 
           return {
             db,
+            user,
             request,
           };
         },

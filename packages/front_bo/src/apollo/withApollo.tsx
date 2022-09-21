@@ -140,22 +140,25 @@ export default function withApollo(
 
       try {
         // TODO: Uncomment when session exists
-        const { data } = await apolloClient.query({
-          query: GetUserDocument,
-          errorPolicy: "all",
-        });
-        //const data = { me: undefined };
+        let user = undefined;
+        if (requiresAccess) {
+          const { data } = await apolloClient.query({
+            query: GetUserDocument,
+            errorPolicy: "all",
+          });
+          user = data;
+        }
 
-        if (requiresAccess && (!data || !data.me)) {
+        if (requiresAccess && (!user || !user.getUser)) {
           redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
-        } else if (ctx.pathname === "/login" && data?.me) {
+        } else if (ctx.pathname === "/login" && user?.getUser) {
           redirect(ctx, "/");
         }
 
         return {
           ...pageProps,
           apolloState,
-          userData: data.me,
+          userData: user.getUser,
         };
       } catch (e) {
         return {

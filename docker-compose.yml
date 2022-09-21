@@ -17,6 +17,7 @@ services:
       - MONGO_URL=mongodb://mongo_db:27017/academy_db
       - DB_NAME=academy_db
       - PORT=3000
+      - JWT_SECRET=my-ultra-secure-jwt-secret
 
   api_m:
     image: denoland/deno:debian-1.24.3

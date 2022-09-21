@@ -11,9 +11,9 @@ import {
 import { useCookies } from "react-cookie";
 
 export const UserStuff: FC<{ token: string }> = () => {
+  const [cookie, removeCookie] = useCookies(["token"]);
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    const [cookie, removeCookie] = useCookies(["token"]);
     if (cookie.token) {
       removeCookie("token", { path: "/" });
     }

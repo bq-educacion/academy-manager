@@ -1,9 +1,9 @@
 import { userCollection, UserModel } from "../models/UserModel.ts";
-import { Context, key } from "../app.ts";
+import { Context, JWT_SECRET } from "../app.ts";
 import { MutationLoginArgs } from "../types.ts";
 import { axiod } from "axios";
 import { ObjectId } from "objectId";
-import { create } from "jwt";
+import { signJwt } from "../lib/jwt.ts";
 
 export const users = {
   User: {
@@ -19,6 +19,9 @@ export const users = {
       ctx: Context,
     ): Promise<UserModel[]> => {
       try {
+        if (!ctx.user) {
+          throw new Error("404, Unauthorized");
+        }
         return await userCollection(ctx.db).find({}).toArray();
       } catch (error) {
         throw new Error("500, " + error);
@@ -29,9 +32,10 @@ export const users = {
       _parent: unknown,
       _args: unknown,
       ctx: Context,
-      user: UserModel,
     ): Promise<UserModel> => {
       try {
+        let user = ctx.user;
+        console.log("user", user);
         if (!user) {
           throw new Error("404, Unauthorized");
         }
@@ -66,7 +70,7 @@ export const users = {
             },
           },
         );
-        const data = googleUser.data;
+        const data = await googleUser.data;
 
         let user: ObjectId = await userCollection(ctx.db).distinct("_id", {
           email: data.email,
@@ -78,12 +82,12 @@ export const users = {
           });
         }
 
-        const token = await create(
-          { "alg": "HS256", "typ": "JWT" },
-          googleUser.data,
-          key,
-        );
+        const token = await signJwt({
+          userEmail: data.email,
+          secretKey: JWT_SECRET,
+        });
 
+        console.log("login token", token);
         return token;
       } catch (error) {
         throw new Error("500, " + error);

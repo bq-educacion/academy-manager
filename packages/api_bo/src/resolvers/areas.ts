@@ -23,6 +23,9 @@ export const areas = {
       ctx: Context,
     ): Promise<AreaModel[]> => {
       try {
+        if (!ctx.user) {
+          throw new Error("404, Unauthorized");
+        }
         return await areaCollection(ctx.db).find({
           region: { $in: args.regions },
         }).toArray();
@@ -37,6 +40,9 @@ export const areas = {
       ctx: Context,
     ): Promise<AreaModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("404, Unauthorized");
+        }
         const area = await areaCollection(ctx.db).findById(args.id);
         if (!area) {
           throw new Error("404, Area not found");
@@ -54,6 +60,9 @@ export const areas = {
       ctx: Context,
     ): Promise<AreaModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("404, Unauthorized");
+        }
         checkNotNull(args);
         const area = await areaCollection(ctx.db).findOne({
           name: args.name,
@@ -79,6 +88,9 @@ export const areas = {
       ctx: Context,
     ): Promise<AreaModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("404, Unauthorized");
+        }
         const area = await areaCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
           { remove: true },
