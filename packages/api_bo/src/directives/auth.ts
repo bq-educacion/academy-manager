@@ -15,7 +15,7 @@ function authDirective(
         if (authDirective) {
           const { resolve = defaultFieldResolver } = fieldConfig;
           // TODO(@pruizj): actualizar tipo de función
-          fieldConfig.resolve = function (args: Context[]) {
+          fieldConfig.resolve = function (...args: Context[]) {
             const context = args[2] as Context;
             if (!context.user) {
               throw new Error("403, Not authorized");
