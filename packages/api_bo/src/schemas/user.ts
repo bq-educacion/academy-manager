@@ -10,8 +10,6 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    getUsers: [User!]!
-
     getUser: User!
   }
   extend type Mutation {

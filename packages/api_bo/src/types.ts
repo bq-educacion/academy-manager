@@ -570,7 +570,6 @@ export type Query = {
   getStudent: Student;
   getStudents: PaginatedStudents;
   getUser: User;
-  getUsers: Array<User>;
 };
 
 export type QueryCheckCorporateEmailArgs = {
@@ -1431,7 +1430,6 @@ export type QueryResolvers<
     RequireFields<QueryGetStudentsArgs, "students">
   >;
   getUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
-  getUsers?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 }>;
 
 export type StudentResolvers<

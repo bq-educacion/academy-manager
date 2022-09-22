@@ -12,21 +12,6 @@ export const users = {
   },
 
   Query: {
-    getUsers: async (
-      _parent: unknown,
-      _args: unknown,
-      ctx: Context,
-    ): Promise<UserModel[]> => {
-      try {
-        if (!ctx.user) {
-          throw new Error("403, Unauthorized");
-        }
-        return await userCollection(ctx.db).find({}).toArray();
-      } catch (error) {
-        throw new Error("500, " + error);
-      }
-    },
-
     getUser: async (
       _parent: unknown,
       _args: unknown,

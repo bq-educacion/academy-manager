@@ -581,7 +581,6 @@ export type Query = {
   getStudent: Student;
   getStudents: PaginatedStudents;
   getUser: User;
-  getUsers: Array<User>;
 };
 
 
