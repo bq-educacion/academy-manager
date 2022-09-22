@@ -258,6 +258,15 @@
     }
   },
   "general": {
+    "days": {
+      "M": "Lunes",
+      "T": "Martes",
+      "W": "Miércoles",
+      "R": "Jueves",
+      "F": "Viernes",
+      "S": "Sábado",
+      "U": "Domingo"
+    },
     "to": " a ",
     "edit-not-saved": "¿Estás seguro?",
     "edit-not-saved-text": "Tienes datos sin guardar. Si sales se perderá todo lo que hayas modificado.",
@@ -348,6 +357,62 @@
     }
   },
   "pages": {
+    "edit-teacher": {
+      "delete-modal": {
+        "title": "Eliminar monitor",
+        "text": "Eliminando al monitor se borrará toda su información de la base de datos del back office. Estos datos no son recuperables una vez eliminados."
+      },
+      "delete-group-modal": {
+        "title": "Desvincular grupo",
+        "text1": "Al desvincular, el monitor no podrá pasar lista o generar incidencias a este grupo.",
+        "text2": "Es posible que algunos grupos se queden sin montor. Por favor revisa la sección de grupos.",
+        "red": "Desvincular grupo"
+      },
+      "movtype": "Tipo de desplazamiento",
+      "own": "Vehículo propio",
+      "public": "Transporte público",
+      "zones": "Disponibilidad geográfica",
+      "zones-1": "Zonas",
+      "zones-2": "Añadir zona",
+      "zones-3": "Nombre de la zona",
+      "state": "Alta monitor",
+      "no-state": "Baja monitor",
+      "state-modal": {
+        "title": "Desactivar monitor",
+        "text": "Desactivando al monitor le retirarás el acceso al área de gestión de grupo y se borrará su correo electrónico corporativo de la base de datos del back office.",
+        "text1": "Ya no tendrá grupos asignados a su perfil. Por favor revisa los grupos grupos afectados, es posible que se queden sin monitor.",
+        "text2": "El monitor podrá seguir accediendo a los servicios corporativos de Google mientras no se de de baja su correo corporativo. Por favor avisa al equipo de desarrollo para proceder a la cancelación de la cuenta BQ."
+      },
+      "delete": "Eliminar monitor",
+      "education": "Formación y experiencia",
+      "info": "Información del monitor",
+      "time": "Disponibilidad",
+      "movility": "Movilidad",
+      "groups": "Grupos",
+      "name": "Nombre y apellidos",
+      "emailpro": "Email corporativo",
+      "email": "Email personal",
+      "phone": "Teléfono",
+      "notes": "Notas",
+      "notes-placeholder": "Introduce aquí notas sobre el monitor. No será público para nadie.",
+      "education1": "Formación",
+      "edu11": "Carrera o formación profesional de educación",
+      "edu12": "Formación profesional o carreras técnicas",
+      "xp": "Experiencia previa como formador",
+      "xp1": "Si",
+      "xp2": "No",
+      "xp3": "No, pero me interesa mucho",
+      "xpProgra": "Sabe programación",
+      "knowledge": "Qué conocimientos tiene",
+      "cv": "Url al curriculum",
+      "cv-url": "Ver en drive",
+      "tools": "Experiencia con materiales",
+      "education2": "Experiencia con plataformas educativas",
+      "languages": "Idiomas en los que puede dar clase",
+      "summer": "Contactar para campamentos de verano durante junio-julio de 9.00 a 15.00",
+      "summer1": "Sólo extraescolares",
+      "availability": "Disponibilidad horaria"
+    },
     "edit-student": {
       "delete-modal": {
         "title": "Eliminar alumno",

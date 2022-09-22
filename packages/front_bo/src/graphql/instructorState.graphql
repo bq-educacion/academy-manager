@@ -1,0 +1,9 @@
+mutation SetStatusInstructor(
+  $setStatusInstructorId: String!
+  $enrolled: Boolean!
+) {
+  setStatusInstructor(id: $setStatusInstructorId, enrolled: $enrolled) {
+    id
+    name
+  }
+}

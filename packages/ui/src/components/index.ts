@@ -19,6 +19,8 @@ import OptionsBoxOrdered from "./OptionsBoxOrdered";
 import Button from "./Button";
 import Switch from "./Switch";
 import Alert from "./Alert";
+import OptionsBoxFilter from "./OptionsBoxFilter";
+import EditTeacherTimeTable from "./EditTeacherTimeTable";
 
 export {
   GoogleButton,
@@ -42,4 +44,6 @@ export {
   Button,
   Switch,
   Alert,
+  OptionsBoxFilter,
+  EditTeacherTimeTable,
 };

@@ -39,6 +39,7 @@ const EditCenter: NextPage = () => {
     variables: {
       getCenterId: router.query.id as string,
     },
+    fetchPolicy: "network-only",
   });
 
   const [deleteCenterMutation] = useDeleteCenterMutation({
@@ -172,13 +173,13 @@ const EditCenter: NextPage = () => {
     notes,
   ]);
 
-  const [loading2, setLoading2] = useState<boolean>(false);
+  const [loadingWithOffset, setloadingWithOffset] = useState<boolean>(false);
   useEffect(() => {
     if (loading) {
-      setLoading2(true);
+      setloadingWithOffset(true);
     }
     const timer = setTimeout(() => {
-      setLoading2(false);
+      setloadingWithOffset(false);
     }, 1000);
     return () => clearTimeout(timer);
   }, [loading]);
@@ -357,8 +358,8 @@ const EditCenter: NextPage = () => {
               }}
               deleteRed
             />
-            <GreyDivider loading={loading2} />
-            {loading2 && (
+            <GreyDivider loading={loadingWithOffset} />
+            {loadingWithOffset && (
               <LoadingAnimation>
                 <span className="dot"></span>
                 <span className="dot"></span>

@@ -23,8 +23,10 @@ import {
   SubHeaderP4,
 } from "../centers";
 import { ApolloError } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const InstructorsPage: NextPage = () => {
+  const router = useRouter();
   const t = useTranslate();
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
@@ -178,7 +180,9 @@ const InstructorsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Instructor> & { id: string }>
+            onClickRow={(id) => router.push(`/instructors/${id}`)}
             inactiveIndexes={inactiveIndexes}
+            yellow
             data={tableData}
             order={order}
             onSetOrder={(order) =>

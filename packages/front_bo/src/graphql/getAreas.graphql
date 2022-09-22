@@ -1,0 +1,7 @@
+query Query($regions: [Region!]!) {
+  getAreas(regions: $regions) {
+    id
+    name
+    region
+  }
+}
