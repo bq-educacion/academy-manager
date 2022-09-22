@@ -168,16 +168,12 @@ const Cell = styled.div<{
     if (props.InactiveIndexes) {
       return props.InactiveIndexes.map((value) => {
         return `&.H${value} {
+          ${`background-color: ${colors.colors.red40Transparent}; color: ${colors.colors.red80};`}
           ${
-            props.yellow
-              ? `background-color: ${colors.colors.yellow40Transparent};`
-              : `background-color: ${colors.colors.red40Transparent}`
+            props.yellow &&
+            `background-color: ${colors.colors.yellow40Transparent};`
           }
-          ${
-            props.yellow
-              ? `color: ${colors.colors.yellow100};`
-              : `color: ${colors.colors.red80};`
-          }
+          ${props.yellow && `color: ${colors.colors.yellow100};`}
           
         }`;
       });
