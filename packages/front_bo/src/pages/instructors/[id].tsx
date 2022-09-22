@@ -154,7 +154,7 @@ const EditInstructor: NextPage = () => {
       ]
     );
   const [areas, setAreas] = useState<string[]>(data?.getInstructor.areas || []);
-  const [loading2, setLoading2] = useState<boolean>(false);
+  const [loadingWithOffset, setloadingWithOffset] = useState<boolean>(false);
   const [modalDeleteGroup, setModalDeleteGroup] = useState<boolean>(false);
   const [deleteGroupID, setDeleteGroupID] = useState<string>("");
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
@@ -204,10 +204,10 @@ const EditInstructor: NextPage = () => {
 
   useEffect(() => {
     if (loading) {
-      setLoading2(true);
+      setloadingWithOffset(true);
     }
     const timer = setTimeout(() => {
-      setLoading2(false);
+      setloadingWithOffset(false);
     }, 1000);
     return () => clearTimeout(timer);
   }, [loading]);
@@ -459,7 +459,7 @@ const EditInstructor: NextPage = () => {
               />
               <GreyDivider loading={false} />
 
-              {loading2 && (
+              {loadingWithOffset && (
                 <LoadingAnimation>
                   <span className="dot"></span>
                   <span className="dot"></span>

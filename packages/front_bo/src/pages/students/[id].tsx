@@ -278,17 +278,17 @@ const EditStudent: NextPage = () => {
 
   const [openAlertBad, setOpenAlertBad] = useState<boolean>(false);
   const [openAlertGood, setOpenAlertGood] = useState<boolean>(false);
-  const [loading2, setLoading2] = useState<boolean>(false);
+  const [loadingWithOffset, setloadingWithOffset] = useState<boolean>(false);
   const [studentState, setStudentState] = useState<boolean>(
     data?.getStudent.enrolled || false
   );
 
   useEffect(() => {
     if (loading) {
-      setLoading2(true);
+      setloadingWithOffset(true);
     }
     const timer = setTimeout(() => {
-      setLoading2(false);
+      setloadingWithOffset(false);
     }, 1000);
     return () => clearTimeout(timer);
   }, [loading]);
@@ -458,9 +458,9 @@ const EditStudent: NextPage = () => {
               }}
               deleteRed
             />
-            <GreyDivider loading={loading2} />
+            <GreyDivider loading={loadingWithOffset} />
 
-            {loading2 && (
+            {loadingWithOffset && (
               <LoadingAnimation>
                 <span className="dot"></span>
                 <span className="dot"></span>
