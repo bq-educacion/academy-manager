@@ -39,6 +39,7 @@ const EditCenter: NextPage = () => {
     variables: {
       getCenterId: router.query.id as string,
     },
+    fetchPolicy: "network-only",
   });
 
   const [deleteCenterMutation] = useDeleteCenterMutation({

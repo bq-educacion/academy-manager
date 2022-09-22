@@ -358,6 +358,10 @@
   },
   "pages": {
     "edit-teacher": {
+      "delete-modal": {
+        "title": "Eliminar monitor",
+        "text": "Eliminando al monitor se borrará toda su información de la base de datos del back office. Estos datos no son recuperables una vez eliminados."
+      },
       "delete-group-modal": {
         "title": "Desvincular grupo",
         "text1": "Al desvincular, el monitor no podrá pasar lista o generar incidencias a este grupo.",

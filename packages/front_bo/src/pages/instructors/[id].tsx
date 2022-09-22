@@ -31,6 +31,7 @@ import {
   SummerAvailabilityInstructor,
   TrainingInstructor,
   TypeVehicleInstructor,
+  useDeleteInstructorMutation,
   useEditInstructorMutation,
   useGetCenterGroupsQuery,
   useGetGroupQuery,
@@ -48,6 +49,7 @@ const EditInstructor: NextPage = () => {
     variables: {
       getInstructorId: router.query.id as string,
     },
+    fetchPolicy: "network-only",
   });
   const { data: dataCenters } = useSimpleCentersNameQuery({
     variables: {
@@ -155,8 +157,15 @@ const EditInstructor: NextPage = () => {
   const [loading2, setLoading2] = useState<boolean>(false);
   const [modalDeleteGroup, setModalDeleteGroup] = useState<boolean>(false);
   const [deleteGroupID, setDeleteGroupID] = useState<string>("");
+  const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
 
   //Mutations
+  const [deleteInstructorMutation] = useDeleteInstructorMutation({
+    variables: {
+      deleteInstructorId: router.query.id as string,
+    },
+  });
+
   const [setStatusInstructorMutation] = useSetStatusInstructorMutation();
 
   const [editInstructorMutation, { loading }] = useEditInstructorMutation({
@@ -277,8 +286,62 @@ const EditInstructor: NextPage = () => {
     areas,
   ]);
 
+  useEffect(() => {
+    if (data?.getInstructor) {
+      setName(data.getInstructor.name);
+      setEmailpro(data.getInstructor.corporateEmail || "");
+      setEmail(data.getInstructor.personalEmail || "");
+      setPhone(data.getInstructor.phone || "");
+      setNotes(data.getInstructor.notes || "");
+      setEducation(data.getInstructor.training);
+      setExperience(data.getInstructor.previousExperience);
+      setProgra(data.getInstructor.programmingExperience);
+      setKnowledge(data.getInstructor.knowledge || "");
+      setCV(data.getInstructor.urlCV || "");
+      setTools(data.getInstructor.materialsExperience || []);
+      setPlatforms(data.getInstructor.platformEducationExperience || []);
+      setLanguages(data.getInstructor.languages || []);
+      setSummer(data.getInstructor.summerAvailability || undefined);
+      setTimeTable(data.getInstructor.availability || []);
+      setGroups(data.getInstructor.groups as Group[]);
+    }
+  }, [data]);
+
   return (
     <>
+      {openModalDelete && (
+        <Modal
+          setModal={setOpenModalDelete}
+          title=""
+          children={
+            <ModalDiv>
+              <styles.BoldP2>
+                {t("pages.edit-student.delete-modal.title")}
+              </styles.BoldP2>
+              <styles.P4>{t("pages.edit-student.delete-modal.text")}</styles.P4>
+
+              <ButtonsModalDiv>
+                <Button
+                  text={t("pages.edit-center.delete-modal.button1")}
+                  deleteRed
+                  onClick={() => {
+                    deleteInstructorMutation().then(() => {
+                      router.push("/instructors");
+                    });
+                  }}
+                />
+                <Button
+                  text={t("pages.edit-center.delete-modal.button2")}
+                  secondary
+                  onClick={() => {
+                    setOpenModalDelete(false);
+                  }}
+                />
+              </ButtonsModalDiv>
+            </ModalDiv>
+          }
+        />
+      )}
       {modalDeleteGroup && (
         <Modal
           setModal={setModalDeleteGroup}
@@ -390,7 +453,7 @@ const EditInstructor: NextPage = () => {
               <Button
                 text={t("pages.edit-teacher.delete")}
                 onClick={() => {
-                  //setOpenModalDelete(true);
+                  setOpenModalDelete(true);
                 }}
                 deleteRed
               />

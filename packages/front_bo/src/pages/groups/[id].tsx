@@ -35,6 +35,7 @@ const EditGroup: NextPage = () => {
     variables: {
       getGroupId: router.query.id as string,
     },
+    fetchPolicy: "network-only",
   });
 
   const [deleteGroupMutation] = useDeleteGroupMutation({

@@ -1,0 +1,5 @@
+mutation DeleteInstructor($deleteInstructorId: String!) {
+  deleteInstructor(id: $deleteInstructorId) {
+    id
+  }
+}

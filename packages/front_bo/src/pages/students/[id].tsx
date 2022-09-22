@@ -39,6 +39,7 @@ const EditStudent: NextPage = () => {
     variables: {
       getStudentId: router.query.id as string,
     },
+    fetchPolicy: "network-only",
   });
 
   const [deleteStudentMutation] = useDeleteStudentMutation({

@@ -789,6 +789,13 @@ export type DeleteStudentMutationVariables = Exact<{
 
 export type DeleteStudentMutation = { __typename?: 'Mutation', deleteStudent: { __typename?: 'Student', id: string, name: string } };
 
+export type DeleteInstructorMutationVariables = Exact<{
+  deleteInstructorId: Scalars['String'];
+}>;
+
+
+export type DeleteInstructorMutation = { __typename?: 'Mutation', deleteInstructor: { __typename?: 'Instructor', id: string } };
+
 export type EditCenterMutationVariables = Exact<{
   editCenterId: Scalars['String'];
   center: EditCenterInput;
@@ -1233,6 +1240,39 @@ export function useDeleteStudentMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteStudentMutationHookResult = ReturnType<typeof useDeleteStudentMutation>;
 export type DeleteStudentMutationResult = Apollo.MutationResult<DeleteStudentMutation>;
 export type DeleteStudentMutationOptions = Apollo.BaseMutationOptions<DeleteStudentMutation, DeleteStudentMutationVariables>;
+export const DeleteInstructorDocument = gql`
+    mutation DeleteInstructor($deleteInstructorId: String!) {
+  deleteInstructor(id: $deleteInstructorId) {
+    id
+  }
+}
+    `;
+export type DeleteInstructorMutationFn = Apollo.MutationFunction<DeleteInstructorMutation, DeleteInstructorMutationVariables>;
+
+/**
+ * __useDeleteInstructorMutation__
+ *
+ * To run a mutation, you first call `useDeleteInstructorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInstructorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInstructorMutation, { data, loading, error }] = useDeleteInstructorMutation({
+ *   variables: {
+ *      deleteInstructorId: // value for 'deleteInstructorId'
+ *   },
+ * });
+ */
+export function useDeleteInstructorMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInstructorMutation, DeleteInstructorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInstructorMutation, DeleteInstructorMutationVariables>(DeleteInstructorDocument, options);
+      }
+export type DeleteInstructorMutationHookResult = ReturnType<typeof useDeleteInstructorMutation>;
+export type DeleteInstructorMutationResult = Apollo.MutationResult<DeleteInstructorMutation>;
+export type DeleteInstructorMutationOptions = Apollo.BaseMutationOptions<DeleteInstructorMutation, DeleteInstructorMutationVariables>;
 export const EditCenterDocument = gql`
     mutation EditCenter($editCenterId: String!, $center: EditCenterInput!) {
   editCenter(id: $editCenterId, center: $center) {
