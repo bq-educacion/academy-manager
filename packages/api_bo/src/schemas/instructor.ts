@@ -136,30 +136,30 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    checkCorporateEmail(email: String!): String!
+    checkCorporateEmail(email: String!): String! @auth
 
     getInstructors(
       instructors: GetInstructorsInput!
-    ): PaginatedInstructors!
+    ): PaginatedInstructors! @auth
 
-    getInstructor(id: String!): Instructor!
+    getInstructor(id: String!): Instructor! @auth
   }
 
   extend type Mutation {
     createInstructor(
       idGroups: [String!]!
       instructor: CreateInstructorInput!
-    ): Instructor!
+    ): Instructor! @auth
 
     editInstructor(
       id:String!
       instructor: EditInstructorInput!
       idGroups: [String!]
-    ): Instructor!
+    ): Instructor! @auth
 
-    deleteInstructor(id: String!): Instructor!
+    deleteInstructor(id: String!): Instructor! @auth
 
-    setStatusInstructor(id: String!, enrolled: Boolean!): Instructor!
+    setStatusInstructor(id: String!, enrolled: Boolean!): Instructor! @auth
   }
 
 `;
