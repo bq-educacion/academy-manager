@@ -24,6 +24,7 @@ import {
 } from "../centers";
 import CreateStudent from "../../components/CreateStudent";
 import { ApolloError } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const StudentsPage: NextPage = () => {
   const t = useTranslate();
@@ -84,6 +85,8 @@ const StudentsPage: NextPage = () => {
       );
     }
   }, [data]);
+
+  const router = useRouter();
 
   const [componentError, setComponentError] = useState<ApolloError | undefined>(
     undefined
@@ -181,6 +184,9 @@ const StudentsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Student> & { id: string }>
+            onClickRow={(id) => {
+              router.push(`/students/${id}`);
+            }}
             inactiveIndexes={inactiveIndexes}
             data={tableData}
             order={order}

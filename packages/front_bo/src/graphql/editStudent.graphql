@@ -1,0 +1,14 @@
+mutation EditStudent(
+  $editStudentId: String!
+  $idGroups: [String!], 
+  $student: EditStudentInput!,
+) {
+  editStudent(
+    idGroups: $idGroups,,
+    student: $student,
+    id: $editStudentId,
+  ) {
+    id
+    name
+  }
+}

@@ -358,13 +358,6 @@ export const instructors = {
           const groupsToAdd = groups.filter(
             (group) => !instructorGroupsIds.includes(group),
           );
-          //add instructor to new groups
-          if (groupsToAdd.length > 0) {
-            await groupCollection(ctx.db).updateMany(
-              { _id: { $in: groupsToAdd } },
-              { $push: { instructors: { $each: [new ObjectId(args.id)] } } },
-            );
-          }
 
           //remove instructor from old groups
           if (groupsToRemove.length > 0) {
@@ -373,6 +366,15 @@ export const instructors = {
               { $pull: { instructors: new ObjectId(args.id) } },
             );
           }
+
+          //add instructor to new groups
+          if (groupsToAdd.length > 0) {
+            await groupCollection(ctx.db).updateMany(
+              { _id: { $in: groupsToAdd } },
+              { $push: { instructors: { $each: [new ObjectId(args.id)] } } },
+            );
+          }
+
           //set groups to inactive if they don't have instructors
           const groupsWithoutInstructors: ObjectId[] = await groupCollection(
             ctx.db,
