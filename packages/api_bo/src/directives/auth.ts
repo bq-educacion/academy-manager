@@ -14,7 +14,7 @@ function authDirective(
         const authDirective = directives[directiveName];
         if (authDirective) {
           const { resolve = defaultFieldResolver } = fieldConfig;
-          fieldConfig.resolve = function (args: Context[]): any {
+          fieldConfig.resolve = function (args: Context[]) {
             const context = args[2] as Context;
             if (!context.user) {
               throw new Error("403, Not authorized");
