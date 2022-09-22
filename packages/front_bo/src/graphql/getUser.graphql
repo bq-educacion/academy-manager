@@ -3,5 +3,6 @@ query GetUser {
     id
     name
     email
+    picture
   }
 }
