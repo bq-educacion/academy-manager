@@ -867,26 +867,26 @@ const EditTeacherTimeTable: FC<{
         setChanges(true);
       }}
     >
-      <LeftCell className="Top" />
-      <Cell className="Top Left">
+      <LeftCell className="topheader" />
+      <Cell className="topheader Left">
         <styles.P4>{t("general.days.M")}</styles.P4>
       </Cell>
-      <Cell className="Top Left">
+      <Cell className="topheader Left">
         <styles.P4>{t("general.days.T")}</styles.P4>
       </Cell>
-      <Cell className="Top Left">
+      <Cell className="topheader Left">
         <styles.P4>{t("general.days.W")}</styles.P4>
       </Cell>
-      <Cell className="Top Left">
+      <Cell className="topheader Left">
         <styles.P4>{t("general.days.R")}</styles.P4>
       </Cell>
-      <Cell className="Top Left">
+      <Cell className="topheader Left">
         <styles.P4>{t("general.days.F")}</styles.P4>
       </Cell>
-      <Cell className="Top Left">
+      <Cell className="topheader Left">
         <styles.P4>{t("general.days.S")}</styles.P4>
       </Cell>
-      <Cell className="Top Left">
+      <Cell className="topheader Left">
         <styles.P4>{t("general.days.U")}</styles.P4>
       </Cell>
       <LeftCell className="top">
@@ -1235,7 +1235,7 @@ const Cell = styled.div`
   justify-content: center;
   height: 40px;
   border: 1px solid ${colors.colors.grayBlue};
-  &.Top {
+  &.topheader {
     border-top: none;
     border-bottom: 1px solid ${colors.colors.gray100};
   }
