@@ -102,36 +102,36 @@ export const typeDefs = gql`
   extend type Query {
     getStudents( 
       students: GetStudentsInput!
-    ): PaginatedStudents!
+    ): PaginatedStudents! @auth
 
-    getStudent(id: String!): Student!
+    getStudent(id: String!): Student! @auth
   }
   
   extend type Mutation {
     createStudent(
       idGroups: [String!]!
       student: CreateStudentInput!
-    ): Student!
+    ): Student! @auth
 
     addStudentContact(
       idStudent: String!
       contact: StudentContactInput!
-    ): StudentContact!
+    ): StudentContact! @auth
     
     editStudent(
       id:String!
       student: EditStudentInput!
       idGroups: [String!]
-    ): Student!
+    ): Student! @auth
 
     editStudentContact(
       idStudent: String!
       originEmail: String!
       contact: EditStudentContactInput!
-    ): StudentContact!
+    ): StudentContact! @auth
 
-    deleteStudent(id: String!): Student!
+    deleteStudent(id: String!): Student! @auth
     
-    setStatusStudent(id: String!, enrolled: Boolean!): Student!
+    setStatusStudent(id: String!, enrolled: Boolean!): Student! @auth
   }
 `;

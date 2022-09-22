@@ -45,9 +45,6 @@ export const students = {
       args: QueryGetStudentsArgs,
       ctx: Context,
     ): Promise<PaginatedStudents> => {
-      if (!ctx.user) {
-        throw new Error("403, Unauthorized");
-      }
       const filter: Filter<PaginatedStudents> = { $or: [{}] };
       if (args.students.searchText) {
         filter["$or"] = [
@@ -105,9 +102,6 @@ export const students = {
       ctx: Context,
     ): Promise<StudentModel> => {
       try {
-        if (!ctx.user) {
-          throw new Error("403, Unauthorized");
-        }
         const student = await studentCollection(ctx.db).findById(args.id);
         if (!student) {
           throw new Error("404, Student not found");
@@ -125,9 +119,6 @@ export const students = {
       ctx: Context,
     ): Promise<StudentModel> => {
       try {
-        if (!ctx.user) {
-          throw new Error("403, Unauthorized");
-        }
         checkNotNull(args.student);
 
         let newStudent = {
@@ -196,9 +187,6 @@ export const students = {
       ctx: Context,
     ): Promise<StudentContact> => {
       try {
-        if (!ctx.user) {
-          throw new Error("403, Unauthorized");
-        }
         checkNotNull(args.contact);
         const newStudentContact = await studentCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.idStudent) },
@@ -226,9 +214,6 @@ export const students = {
       ctx: Context,
     ): Promise<StudentModel> => {
       try {
-        if (!ctx.user) {
-          throw new Error("403, Unauthorized");
-        }
         checkNotNull(args.student);
         let updateStudent = { ...args.student } as Partial<StudentModel>;
 
@@ -407,9 +392,6 @@ export const students = {
       ctx: Context,
     ): Promise<StudentModel> => {
       try {
-        if (!ctx.user) {
-          throw new Error("403, Unauthorized");
-        }
         const student = await studentCollection(ctx.db).findById(args.id);
         if (!student) {
           throw new Error("404, Student not found");
@@ -448,9 +430,6 @@ export const students = {
       ctx: Context,
     ): Promise<StudentModel | undefined> => {
       try {
-        if (!ctx.user) {
-          throw new Error("403, Unauthorized");
-        }
         checkNotNull(args);
         let student: StudentModel | undefined = undefined;
 

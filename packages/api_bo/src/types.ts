@@ -943,6 +943,15 @@ export type ResolversParentTypes = ResolversObject<{
   trainingInstructorInput: TrainingInstructorInput;
 }>;
 
+export type AuthDirectiveArgs = {};
+
+export type AuthDirectiveResolver<
+  Result,
+  Parent,
+  ContextType = any,
+  Args = AuthDirectiveArgs,
+> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type AreaResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Area"] =
@@ -1573,4 +1582,8 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Timetable?: TimetableResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   trainingInstructor?: TrainingInstructorResolvers<ContextType>;
+}>;
+
+export type DirectiveResolvers<ContextType = any> = ResolversObject<{
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
 }>;
