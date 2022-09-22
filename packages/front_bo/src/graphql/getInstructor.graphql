@@ -1,0 +1,51 @@
+query GetInstructor($getInstructorId: String!) {
+  getInstructor(id: $getInstructorId) {
+    id
+    name
+    corporateEmail
+    personalEmail
+    phone
+    enrolled
+    active
+    notes
+    training {
+      careerInEducation
+      technicalCareer
+    }
+    previousExperience
+    programmingExperience
+    knowledge
+    urlCV
+    materialsExperience
+    platformEducationExperience
+    languages
+    availability {
+      id_day
+      day
+      hours
+    }
+    summerAvailability
+    vehicle
+    geographicalAvailability
+    areas
+    groups {
+      id
+      id_group
+      center {
+        name
+        id
+      }
+      name
+      timetable {
+        start
+        end
+        day
+        id_day
+      }
+      course {
+        EPO
+        ESO
+      }
+    }
+  }
+}

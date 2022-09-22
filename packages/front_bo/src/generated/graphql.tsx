@@ -769,6 +769,21 @@ export type GetCentersFQueryVariables = Exact<{
 
 export type GetCentersFQuery = { __typename?: 'Query', getCenters: { __typename?: 'PaginatedCenters', page: number, pageSize: number, totalPages: number, totalNumber: number, data: Array<{ __typename?: 'Center', id: string, name: string, languages: Array<Languages>, city: string, nature: CenterNature, type: Array<CenterActivityType>, active: boolean }> } };
 
+export type CreateAreaMutationVariables = Exact<{
+  name: Scalars['String'];
+  region: Region;
+}>;
+
+
+export type CreateAreaMutation = { __typename?: 'Mutation', createArea: { __typename?: 'Area', id: string, name: string, region: Region } };
+
+export type DeleteAreaMutationVariables = Exact<{
+  deleteAreaId: Scalars['String'];
+}>;
+
+
+export type DeleteAreaMutation = { __typename?: 'Mutation', deleteArea: { __typename?: 'Area', id: string, name: string, region: Region } };
+
 export type DeleteCenterMutationVariables = Exact<{
   deleteCenterId: Scalars['String'];
 }>;
@@ -789,6 +804,13 @@ export type DeleteStudentMutationVariables = Exact<{
 
 
 export type DeleteStudentMutation = { __typename?: 'Mutation', deleteStudent: { __typename?: 'Student', id: string, name: string } };
+
+export type DeleteInstructorMutationVariables = Exact<{
+  deleteInstructorId: Scalars['String'];
+}>;
+
+
+export type DeleteInstructorMutation = { __typename?: 'Mutation', deleteInstructor: { __typename?: 'Instructor', id: string } };
 
 export type EditCenterMutationVariables = Exact<{
   editCenterId: Scalars['String'];
@@ -815,6 +837,22 @@ export type EditStudentMutationVariables = Exact<{
 
 export type EditStudentMutation = { __typename?: 'Mutation', editStudent: { __typename?: 'Student', id: string, name: string } };
 
+export type EditInstructorMutationVariables = Exact<{
+  editInstructorId: Scalars['String'];
+  idGroups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  instructor: EditInstructorInput;
+}>;
+
+
+export type EditInstructorMutation = { __typename?: 'Mutation', editInstructor: { __typename?: 'Instructor', id: string } };
+
+export type QueryQueryVariables = Exact<{
+  regions: Array<Region> | Region;
+}>;
+
+
+export type QueryQuery = { __typename?: 'Query', getAreas: Array<{ __typename?: 'Area', id: string, name: string, region: Region }> };
+
 export type GetCenterQueryVariables = Exact<{
   getCenterId: Scalars['String'];
 }>;
@@ -835,6 +873,13 @@ export type GetGroupQueryVariables = Exact<{
 
 
 export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', id: string, id_group: any, name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
+
+export type GetInstructorQueryVariables = Exact<{
+  getInstructorId: Scalars['String'];
+}>;
+
+
+export type GetInstructorQuery = { __typename?: 'Query', getInstructor: { __typename?: 'Instructor', id: string, name: string, corporateEmail?: string | null, personalEmail?: string | null, phone?: string | null, enrolled: boolean, active: boolean, notes?: string | null, previousExperience: PreviousExperienceInstructor, programmingExperience: boolean, knowledge?: string | null, urlCV?: string | null, materialsExperience?: Array<string> | null, platformEducationExperience?: Array<string> | null, languages?: Array<Languages> | null, summerAvailability?: SummerAvailabilityInstructor | null, vehicle: TypeVehicleInstructor, geographicalAvailability: Array<Region>, areas: Array<string>, training: { __typename?: 'trainingInstructor', careerInEducation?: boolean | null, technicalCareer?: boolean | null }, availability: Array<{ __typename?: 'Availability', id_day: any, day: Days, hours: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, id_group: any, name: string, center?: { __typename?: 'Center', name: string, id: string } | null, timetable: Array<{ __typename?: 'Timetable', start: string, end: string, day: Days, id_day: any }>, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> } }> } };
 
 export type GetStudentQueryVariables = Exact<{
   getStudentId: Scalars['String'];
@@ -870,6 +915,14 @@ export type CreateInstructorMutationVariables = Exact<{
 
 
 export type CreateInstructorMutation = { __typename?: 'Mutation', createInstructor: { __typename?: 'Instructor', name: string, id: string } };
+
+export type SetStatusInstructorMutationVariables = Exact<{
+  setStatusInstructorId: Scalars['String'];
+  enrolled: Scalars['Boolean'];
+}>;
+
+
+export type SetStatusInstructorMutation = { __typename?: 'Mutation', setStatusInstructor: { __typename?: 'Instructor', id: string, name: string } };
 
 export type GetInstructorsQueryVariables = Exact<{
   instructors: GetInstructorsInput;
@@ -1044,6 +1097,77 @@ export function useGetCentersFLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCentersFQueryHookResult = ReturnType<typeof useGetCentersFQuery>;
 export type GetCentersFLazyQueryHookResult = ReturnType<typeof useGetCentersFLazyQuery>;
 export type GetCentersFQueryResult = Apollo.QueryResult<GetCentersFQuery, GetCentersFQueryVariables>;
+export const CreateAreaDocument = gql`
+    mutation CreateArea($name: String!, $region: Region!) {
+  createArea(name: $name, region: $region) {
+    id
+    name
+    region
+  }
+}
+    `;
+export type CreateAreaMutationFn = Apollo.MutationFunction<CreateAreaMutation, CreateAreaMutationVariables>;
+
+/**
+ * __useCreateAreaMutation__
+ *
+ * To run a mutation, you first call `useCreateAreaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAreaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAreaMutation, { data, loading, error }] = useCreateAreaMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      region: // value for 'region'
+ *   },
+ * });
+ */
+export function useCreateAreaMutation(baseOptions?: Apollo.MutationHookOptions<CreateAreaMutation, CreateAreaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAreaMutation, CreateAreaMutationVariables>(CreateAreaDocument, options);
+      }
+export type CreateAreaMutationHookResult = ReturnType<typeof useCreateAreaMutation>;
+export type CreateAreaMutationResult = Apollo.MutationResult<CreateAreaMutation>;
+export type CreateAreaMutationOptions = Apollo.BaseMutationOptions<CreateAreaMutation, CreateAreaMutationVariables>;
+export const DeleteAreaDocument = gql`
+    mutation DeleteArea($deleteAreaId: String!) {
+  deleteArea(id: $deleteAreaId) {
+    id
+    name
+    region
+  }
+}
+    `;
+export type DeleteAreaMutationFn = Apollo.MutationFunction<DeleteAreaMutation, DeleteAreaMutationVariables>;
+
+/**
+ * __useDeleteAreaMutation__
+ *
+ * To run a mutation, you first call `useDeleteAreaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAreaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAreaMutation, { data, loading, error }] = useDeleteAreaMutation({
+ *   variables: {
+ *      deleteAreaId: // value for 'deleteAreaId'
+ *   },
+ * });
+ */
+export function useDeleteAreaMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAreaMutation, DeleteAreaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAreaMutation, DeleteAreaMutationVariables>(DeleteAreaDocument, options);
+      }
+export type DeleteAreaMutationHookResult = ReturnType<typeof useDeleteAreaMutation>;
+export type DeleteAreaMutationResult = Apollo.MutationResult<DeleteAreaMutation>;
+export type DeleteAreaMutationOptions = Apollo.BaseMutationOptions<DeleteAreaMutation, DeleteAreaMutationVariables>;
 export const DeleteCenterDocument = gql`
     mutation DeleteCenter($deleteCenterId: String!) {
   deleteCenter(id: $deleteCenterId) {
@@ -1144,6 +1268,39 @@ export function useDeleteStudentMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteStudentMutationHookResult = ReturnType<typeof useDeleteStudentMutation>;
 export type DeleteStudentMutationResult = Apollo.MutationResult<DeleteStudentMutation>;
 export type DeleteStudentMutationOptions = Apollo.BaseMutationOptions<DeleteStudentMutation, DeleteStudentMutationVariables>;
+export const DeleteInstructorDocument = gql`
+    mutation DeleteInstructor($deleteInstructorId: String!) {
+  deleteInstructor(id: $deleteInstructorId) {
+    id
+  }
+}
+    `;
+export type DeleteInstructorMutationFn = Apollo.MutationFunction<DeleteInstructorMutation, DeleteInstructorMutationVariables>;
+
+/**
+ * __useDeleteInstructorMutation__
+ *
+ * To run a mutation, you first call `useDeleteInstructorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInstructorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInstructorMutation, { data, loading, error }] = useDeleteInstructorMutation({
+ *   variables: {
+ *      deleteInstructorId: // value for 'deleteInstructorId'
+ *   },
+ * });
+ */
+export function useDeleteInstructorMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInstructorMutation, DeleteInstructorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInstructorMutation, DeleteInstructorMutationVariables>(DeleteInstructorDocument, options);
+      }
+export type DeleteInstructorMutationHookResult = ReturnType<typeof useDeleteInstructorMutation>;
+export type DeleteInstructorMutationResult = Apollo.MutationResult<DeleteInstructorMutation>;
+export type DeleteInstructorMutationOptions = Apollo.BaseMutationOptions<DeleteInstructorMutation, DeleteInstructorMutationVariables>;
 export const EditCenterDocument = gql`
     mutation EditCenter($editCenterId: String!, $center: EditCenterInput!) {
   editCenter(id: $editCenterId, center: $center) {
@@ -1248,6 +1405,82 @@ export function useEditStudentMutation(baseOptions?: Apollo.MutationHookOptions<
 export type EditStudentMutationHookResult = ReturnType<typeof useEditStudentMutation>;
 export type EditStudentMutationResult = Apollo.MutationResult<EditStudentMutation>;
 export type EditStudentMutationOptions = Apollo.BaseMutationOptions<EditStudentMutation, EditStudentMutationVariables>;
+export const EditInstructorDocument = gql`
+    mutation EditInstructor($editInstructorId: String!, $idGroups: [String!], $instructor: EditInstructorInput!) {
+  editInstructor(
+    id: $editInstructorId
+    idGroups: $idGroups
+    instructor: $instructor
+  ) {
+    id
+  }
+}
+    `;
+export type EditInstructorMutationFn = Apollo.MutationFunction<EditInstructorMutation, EditInstructorMutationVariables>;
+
+/**
+ * __useEditInstructorMutation__
+ *
+ * To run a mutation, you first call `useEditInstructorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditInstructorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editInstructorMutation, { data, loading, error }] = useEditInstructorMutation({
+ *   variables: {
+ *      editInstructorId: // value for 'editInstructorId'
+ *      idGroups: // value for 'idGroups'
+ *      instructor: // value for 'instructor'
+ *   },
+ * });
+ */
+export function useEditInstructorMutation(baseOptions?: Apollo.MutationHookOptions<EditInstructorMutation, EditInstructorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditInstructorMutation, EditInstructorMutationVariables>(EditInstructorDocument, options);
+      }
+export type EditInstructorMutationHookResult = ReturnType<typeof useEditInstructorMutation>;
+export type EditInstructorMutationResult = Apollo.MutationResult<EditInstructorMutation>;
+export type EditInstructorMutationOptions = Apollo.BaseMutationOptions<EditInstructorMutation, EditInstructorMutationVariables>;
+export const QueryDocument = gql`
+    query Query($regions: [Region!]!) {
+  getAreas(regions: $regions) {
+    id
+    name
+    region
+  }
+}
+    `;
+
+/**
+ * __useQueryQuery__
+ *
+ * To run a query within a React component, call `useQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQueryQuery({
+ *   variables: {
+ *      regions: // value for 'regions'
+ *   },
+ * });
+ */
+export function useQueryQuery(baseOptions: Apollo.QueryHookOptions<QueryQuery, QueryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QueryQuery, QueryQueryVariables>(QueryDocument, options);
+      }
+export function useQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QueryQuery, QueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QueryQuery, QueryQueryVariables>(QueryDocument, options);
+        }
+export type QueryQueryHookResult = ReturnType<typeof useQueryQuery>;
+export type QueryLazyQueryHookResult = ReturnType<typeof useQueryLazyQuery>;
+export type QueryQueryResult = Apollo.QueryResult<QueryQuery, QueryQueryVariables>;
 export const GetCenterDocument = gql`
     query GetCenter($getCenterId: String!) {
   getCenter(id: $getCenterId) {
@@ -1503,6 +1736,87 @@ export function useGetGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetGroupQueryHookResult = ReturnType<typeof useGetGroupQuery>;
 export type GetGroupLazyQueryHookResult = ReturnType<typeof useGetGroupLazyQuery>;
 export type GetGroupQueryResult = Apollo.QueryResult<GetGroupQuery, GetGroupQueryVariables>;
+export const GetInstructorDocument = gql`
+    query GetInstructor($getInstructorId: String!) {
+  getInstructor(id: $getInstructorId) {
+    id
+    name
+    corporateEmail
+    personalEmail
+    phone
+    enrolled
+    active
+    notes
+    training {
+      careerInEducation
+      technicalCareer
+    }
+    previousExperience
+    programmingExperience
+    knowledge
+    urlCV
+    materialsExperience
+    platformEducationExperience
+    languages
+    availability {
+      id_day
+      day
+      hours
+    }
+    summerAvailability
+    vehicle
+    geographicalAvailability
+    areas
+    groups {
+      id
+      id_group
+      center {
+        name
+        id
+      }
+      name
+      timetable {
+        start
+        end
+        day
+        id_day
+      }
+      course {
+        EPO
+        ESO
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetInstructorQuery__
+ *
+ * To run a query within a React component, call `useGetInstructorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInstructorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInstructorQuery({
+ *   variables: {
+ *      getInstructorId: // value for 'getInstructorId'
+ *   },
+ * });
+ */
+export function useGetInstructorQuery(baseOptions: Apollo.QueryHookOptions<GetInstructorQuery, GetInstructorQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInstructorQuery, GetInstructorQueryVariables>(GetInstructorDocument, options);
+      }
+export function useGetInstructorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInstructorQuery, GetInstructorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInstructorQuery, GetInstructorQueryVariables>(GetInstructorDocument, options);
+        }
+export type GetInstructorQueryHookResult = ReturnType<typeof useGetInstructorQuery>;
+export type GetInstructorLazyQueryHookResult = ReturnType<typeof useGetInstructorLazyQuery>;
+export type GetInstructorQueryResult = Apollo.QueryResult<GetInstructorQuery, GetInstructorQueryVariables>;
 export const GetStudentDocument = gql`
     query GetStudent($getStudentId: String!) {
   getStudent(id: $getStudentId) {
@@ -1740,6 +2054,41 @@ export function useCreateInstructorMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateInstructorMutationHookResult = ReturnType<typeof useCreateInstructorMutation>;
 export type CreateInstructorMutationResult = Apollo.MutationResult<CreateInstructorMutation>;
 export type CreateInstructorMutationOptions = Apollo.BaseMutationOptions<CreateInstructorMutation, CreateInstructorMutationVariables>;
+export const SetStatusInstructorDocument = gql`
+    mutation SetStatusInstructor($setStatusInstructorId: String!, $enrolled: Boolean!) {
+  setStatusInstructor(id: $setStatusInstructorId, enrolled: $enrolled) {
+    id
+    name
+  }
+}
+    `;
+export type SetStatusInstructorMutationFn = Apollo.MutationFunction<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>;
+
+/**
+ * __useSetStatusInstructorMutation__
+ *
+ * To run a mutation, you first call `useSetStatusInstructorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetStatusInstructorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setStatusInstructorMutation, { data, loading, error }] = useSetStatusInstructorMutation({
+ *   variables: {
+ *      setStatusInstructorId: // value for 'setStatusInstructorId'
+ *      enrolled: // value for 'enrolled'
+ *   },
+ * });
+ */
+export function useSetStatusInstructorMutation(baseOptions?: Apollo.MutationHookOptions<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>(SetStatusInstructorDocument, options);
+      }
+export type SetStatusInstructorMutationHookResult = ReturnType<typeof useSetStatusInstructorMutation>;
+export type SetStatusInstructorMutationResult = Apollo.MutationResult<SetStatusInstructorMutation>;
+export type SetStatusInstructorMutationOptions = Apollo.BaseMutationOptions<SetStatusInstructorMutation, SetStatusInstructorMutationVariables>;
 export const GetInstructorsDocument = gql`
     query GetInstructors($instructors: GetInstructorsInput!) {
   getInstructors(instructors: $instructors) {

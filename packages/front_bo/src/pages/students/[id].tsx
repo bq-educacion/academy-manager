@@ -39,6 +39,7 @@ const EditStudent: NextPage = () => {
     variables: {
       getStudentId: router.query.id as string,
     },
+    fetchPolicy: "network-only",
   });
 
   const [deleteStudentMutation] = useDeleteStudentMutation({
@@ -277,17 +278,17 @@ const EditStudent: NextPage = () => {
 
   const [openAlertBad, setOpenAlertBad] = useState<boolean>(false);
   const [openAlertGood, setOpenAlertGood] = useState<boolean>(false);
-  const [loading2, setLoading2] = useState<boolean>(false);
+  const [loadingWithOffset, setloadingWithOffset] = useState<boolean>(false);
   const [studentState, setStudentState] = useState<boolean>(
     data?.getStudent.enrolled || false
   );
 
   useEffect(() => {
     if (loading) {
-      setLoading2(true);
+      setloadingWithOffset(true);
     }
     const timer = setTimeout(() => {
-      setLoading2(false);
+      setloadingWithOffset(false);
     }, 1000);
     return () => clearTimeout(timer);
   }, [loading]);
@@ -457,9 +458,9 @@ const EditStudent: NextPage = () => {
               }}
               deleteRed
             />
-            <GreyDivider loading={false} />
+            <GreyDivider loading={loadingWithOffset} />
 
-            {loading2 && (
+            {loadingWithOffset && (
               <LoadingAnimation>
                 <span className="dot"></span>
                 <span className="dot"></span>
@@ -1122,6 +1123,7 @@ const CheckDiv = styled.div`
   margin: 35px 0px 0px 0px;
   & > * {
     margin-right: 10px;
+    align-self: center;
   }
 `;
 
@@ -1132,6 +1134,7 @@ const CheckDiv1 = styled.div`
   margin: 10px 0px 0px 0px;
   & > * {
     margin-right: 10px;
+    align-self: center;
   }
 `;
 

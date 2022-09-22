@@ -44,9 +44,15 @@ const CreateGroup: FC<{
 
   //Mutations
   const { data: CentersData } = useSimpleCentersNameQuery({
+    variables: {
+      centers: {},
+    },
     fetchPolicy: "network-only",
   });
   const { data: InstructorsData } = useSimpleInstructorsNameQuery({
+    variables: {
+      instructors: {},
+    },
     fetchPolicy: "network-only",
   });
   const [createGroupMutation, { error }] = useCreateGroupMutation();
