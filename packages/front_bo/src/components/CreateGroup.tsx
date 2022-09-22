@@ -240,6 +240,9 @@ const CreateGroup: FC<{
             checkErrors={setTimeTableError}
             setTimeTable={setTimeTableOnChange}
           />
+          {timeTableError && (
+            <styles.P0Error>{t(`general.empty`)}</styles.P0Error>
+          )}
           <NavDiv>
             <Button
               secondary
@@ -250,9 +253,17 @@ const CreateGroup: FC<{
               create
               onClick={() => {
                 if (!timeTableError) {
-                  setFinished(true);
-                  changeTitle("");
-                  setStep(3);
+                  if (
+                    timeTableOnChange.every((elem) => {
+                      return elem.end.length > 0 && elem.start.length > 0;
+                    })
+                  ) {
+                    setFinished(true);
+                    changeTitle("");
+                    setStep(3);
+                  } else {
+                    setTimeTableError(true);
+                  }
                 }
               }}
               text={t("general.actions.create")}
