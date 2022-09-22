@@ -8,8 +8,17 @@ import {
   Popover,
   colors,
 } from "@academy-manager/ui";
+import { useApolloClient } from "@apollo/client";
 
-export const UserStuff: FC<{ token: string }> = () => {
+export const UserStuff: FC = () => {
+  const useClient = useApolloClient();
+  const onClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    useClient.resetStore();
+    document.cookie = `token="";path=/;`;
+    true && (window.location.href = "/login");
+  };
+
   return (
     <UserStuffLayout>
       <SecondActionButton />
@@ -17,7 +26,7 @@ export const UserStuff: FC<{ token: string }> = () => {
       <Popover
         title={<OptionsButton />}
         content={
-          <PopoverContent>
+          <PopoverContent onClick={onClick}>
             <styles.P4>Cerrar sesión</styles.P4>
           </PopoverContent>
         }

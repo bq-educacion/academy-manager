@@ -289,4 +289,4 @@ const GroupsPage: NextPage = () => {
   );
 };
 
-export default withApollo(GroupsPage, { requiresAccess: false });
+export default withApollo(GroupsPage, { requiresAccess: true });

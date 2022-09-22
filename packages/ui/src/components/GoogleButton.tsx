@@ -3,9 +3,11 @@ import { FC } from "react";
 import { colors } from "../theme";
 import { ImageLogoGoogle } from "../assets/images";
 
-const GoogleButton: FC = () => {
+const GoogleButton: FC<{ onClick: (e: React.MouseEvent) => void }> = ({
+  onClick,
+}) => {
   return (
-    <GButton>
+    <GButton onClick={(e) => onClick(e)}>
       <ImageLogoGoogle />
     </GButton>
   );

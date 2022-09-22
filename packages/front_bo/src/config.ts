@@ -154,3 +154,9 @@ export const zones: zone[] = [
     ],
   },
 ];
+
+export const googleAuthEndpoint =
+  "https://accounts.google.com/o/oauth2/v2/auth";
+
+export const googleScopes =
+  "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";

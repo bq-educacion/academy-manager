@@ -9,6 +9,8 @@
     "graphql": "https://deno.land/x/graphql_deno@v15.0.0/mod.ts",
     "objectId": "https://deno.land/x/web_bson@v0.2.4/mod.ts",
     "opine": "https://deno.land/x/opine@2.2.0/mod.ts",
-    "cors": "https://deno.land/x/cors@v1.2.2/mod.ts"
+    "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
+    "jwt": "https://deno.land/x/djwt@v2.7/mod.ts",
+    "axios":"https://deno.land/x/axiod@0.26.2/mod.ts"
   }
 }

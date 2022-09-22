@@ -7,6 +7,8 @@ import { NextApiRequest, NextPage } from "next";
 import React from "react";
 import { createApolloClient } from "./client";
 import redirect from "../lib/redirect";
+import cookie from "cookie";
+import { GetUserDocument } from "../generated/graphql";
 
 type TApolloClient = ApolloClient<NormalizedCacheObject>;
 
@@ -24,7 +26,16 @@ let globalApolloClient: TApolloClient;
  */
 function initApolloClient(initialState?: any, req?: NextApiRequest) { // eslint-disable-line
   const isServer = !!req;
-  const getToken = () => null; // TODO: Add getToken when session exists
+  const getToken = (req?: NextApiRequest): string | null => {
+    const cookies = cookie.parse(
+      req
+        ? req.headers.cookie || ""
+        : typeof document !== "undefined"
+        ? document.cookie
+        : ""
+    );
+    return cookies.token;
+  };
 
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
@@ -128,23 +139,24 @@ export default function withApollo(
       const apolloState = apolloClient.cache.extract();
 
       try {
-        // TODO: Uncomment when session exists
-        // const { data } = await apolloClient.query({
-        //   query: ME_QUERY,
-        //   errorPolicy: "all"
-        // })
-        const data = { me: undefined };
-
-        if (requiresAccess && (!data || !data.me)) {
+        let user = undefined;
+        if (requiresAccess) {
+          const { data } = await apolloClient.query({
+            query: GetUserDocument,
+            errorPolicy: "all",
+          });
+          user = data.getUser;
+        }
+        if (requiresAccess && !user) {
           redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
-        } else if (ctx.pathname === "/login" && data?.me) {
+        } else if (ctx.pathname === "/login" && user) {
           redirect(ctx, "/");
         }
 
         return {
           ...pageProps,
           apolloState,
-          userData: data.me,
+          userData: user,
         };
       } catch (e) {
         return {

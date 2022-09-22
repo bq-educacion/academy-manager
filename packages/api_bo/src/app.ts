@@ -6,6 +6,7 @@ import { groups } from "./resolvers/groups.ts";
 import { instructors } from "./resolvers/instructors.ts";
 import { students } from "./resolvers/students.ts";
 import { areas } from "./resolvers/areas.ts";
+import { users } from "./resolvers/users.ts";
 import { typeDefs as center } from "./schemas/center.ts";
 import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
@@ -13,9 +14,13 @@ import { typeDefs as group } from "./schemas/group.ts";
 import { typeDefs as scalars } from "./schemas/scalars.ts";
 import { typeDefs as enums } from "./schemas/enums.ts";
 import { typeDefs as area } from "./schemas/area.ts";
+import { typeDefs as user } from "./schemas/user.ts";
 import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
+import { Payload } from "jwt";
+import { userCollection, UserModel } from "./models/UserModel.ts";
+import { verifyJwt } from "./lib/jwt.ts";
 
 type Params = {
   variables?: Record<string, unknown>;
@@ -40,12 +45,15 @@ type Request = OpineRequest & {
 
 export type Context = {
   db: Database;
+  user: UserModel | undefined;
+  token: string;
   request: Request;
 };
 
 const MONGO_URL = Deno.env.get("MONGO_URL");
 const DB_NAME = Deno.env.get("DB_NAME");
 const PORT = Deno.env.get("PORT") || "3000";
+export const JWT_SECRET = Deno.env.get("JWT_SECRET") || "";
 
 if (!MONGO_URL) {
   throw new Error("MONGO_URL is not set");
@@ -62,8 +70,8 @@ try {
 
   const dec = new TextDecoder();
   const schema = makeExecutableSchema({
-    resolvers: [centers, groups, instructors, students, areas],
-    typeDefs: [center, student, instructor, group, area, scalars, enums],
+    resolvers: [centers, groups, instructors, students, areas, users],
+    typeDefs: [center, student, instructor, group, area, user, scalars, enums],
   });
 
   const app = opine();
@@ -85,8 +93,25 @@ try {
       const resp = await GraphQLHTTP<Request, Context>({
         schema,
         graphiql: true,
-        context: () => {
-          return { db: client.database(DB_NAME), request };
+        context: async () => {
+          const db = client.database(DB_NAME);
+          let emailUser = "";
+          const [type, token] = req.headers.get("authorization")?.split(" ") ||
+            [];
+          if (token && token !== "null") {
+            if (type === "Bearer") {
+              const check: Payload = await verifyJwt(token, JWT_SECRET);
+              emailUser = check.sub || "";
+            }
+          }
+          const user = await userCollection(db).findOne({ email: emailUser });
+
+          return {
+            db,
+            token,
+            user,
+            request,
+          };
         },
       })(request);
 

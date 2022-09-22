@@ -368,6 +368,7 @@ export type Mutation = {
   editInstructor: Instructor;
   editStudent: Student;
   editStudentContact: StudentContact;
+  login: Scalars["String"];
   setActiveCenter: Center;
   setStatusInstructor: Instructor;
   setStatusStudent: Student;
@@ -459,6 +460,10 @@ export type MutationEditStudentContactArgs = {
   contact: EditStudentContactInput;
   idStudent: Scalars["String"];
   originEmail: Scalars["String"];
+};
+
+export type MutationLoginArgs = {
+  token: Scalars["String"];
 };
 
 export type MutationSetActiveCenterArgs = {
@@ -564,6 +569,7 @@ export type Query = {
   getInstructors: PaginatedInstructors;
   getStudent: Student;
   getStudents: PaginatedStudents;
+  getUser: User;
 };
 
 export type QueryCheckCorporateEmailArgs = {
@@ -686,6 +692,14 @@ export enum TypeVehicleInstructor {
   Own = "OWN",
   PublicTransport = "PUBLIC_TRANSPORT",
 }
+
+export type User = {
+  __typename?: "User";
+  email: Scalars["String"];
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  picture: Scalars["String"];
+};
 
 export enum PreviousExperienceInstructor {
   No = "NO",
@@ -874,6 +888,7 @@ export type ResolversTypes = ResolversObject<{
   Timetable: ResolverTypeWrapper<Timetable>;
   TimetableInput: TimetableInput;
   TypeVehicleInstructor: TypeVehicleInstructor;
+  User: ResolverTypeWrapper<User>;
   previousExperienceInstructor: PreviousExperienceInstructor;
   summerAvailabilityInstructor: SummerAvailabilityInstructor;
   trainingInstructor: ResolverTypeWrapper<TrainingInstructor>;
@@ -923,6 +938,7 @@ export type ResolversParentTypes = ResolversObject<{
   StudentContactInput: StudentContactInput;
   Timetable: Timetable;
   TimetableInput: TimetableInput;
+  User: User;
   trainingInstructor: TrainingInstructor;
   trainingInstructorInput: TrainingInstructorInput;
 }>;
@@ -1259,6 +1275,12 @@ export type MutationResolvers<
       "contact" | "idStudent" | "originEmail"
     >
   >;
+  login?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, "token">
+  >;
   setActiveCenter?: Resolver<
     ResolversTypes["Center"],
     ParentType,
@@ -1407,6 +1429,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetStudentsArgs, "students">
   >;
+  getUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
 }>;
 
 export type StudentResolvers<
@@ -1498,6 +1521,18 @@ export type TimetableResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type UserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["User"] =
+    ResolversParentTypes["User"],
+> = ResolversObject<{
+  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  picture?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type TrainingInstructorResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["trainingInstructor"] =
@@ -1536,5 +1571,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Student?: StudentResolvers<ContextType>;
   StudentContact?: StudentContactResolvers<ContextType>;
   Timetable?: TimetableResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
   trainingInstructor?: TrainingInstructorResolvers<ContextType>;
 }>;

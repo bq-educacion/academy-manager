@@ -56,6 +56,9 @@ export const instructors = {
       ctx: Context,
     ): Promise<string> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         const instructor = await instructorCollection(ctx.db).findOne({
           corporateEmail: args.email,
         });
@@ -73,6 +76,9 @@ export const instructors = {
       args: QueryGetInstructorsArgs,
       ctx: Context,
     ): Promise<PaginatedInstructors> => {
+      if (!ctx.user) {
+        throw new Error("403, Unauthorized");
+      }
       const filter: Filter<PaginatedInstructors> = { $or: [{}] };
       if (args.instructors.searchText) {
         filter["$or"] = [
@@ -158,6 +164,9 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         const instructor = await instructorCollection(ctx.db).findById(args.id);
         if (!instructor) {
           throw new Error("404, Instructor not found");
@@ -175,6 +184,9 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         checkNotNull(args.instructor);
         if (
           args.instructor.training.careerInEducation === null ||
@@ -254,6 +266,9 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         checkNotNull(args.instructor);
         let updateInstructor = { ...args.instructor } as Partial<
           InstructorModel
@@ -409,6 +424,9 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         const instructor = await instructorCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
           {
@@ -469,6 +487,9 @@ export const instructors = {
       ctx: Context,
     ): Promise<InstructorModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         checkNotNull(args);
         let instructor = await instructorCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },

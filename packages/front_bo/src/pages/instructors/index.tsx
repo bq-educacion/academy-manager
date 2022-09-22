@@ -299,4 +299,4 @@ const InstructorsPage: NextPage = () => {
   );
 };
 
-export default withApollo(InstructorsPage, { requiresAccess: false });
+export default withApollo(InstructorsPage, { requiresAccess: true });

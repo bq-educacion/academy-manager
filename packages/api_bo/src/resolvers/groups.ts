@@ -73,6 +73,9 @@ export const groups = {
       args: QueryGetGroupsArgs,
       ctx: Context,
     ): Promise<PaginatedGroups> => {
+      if (!ctx.user) {
+        throw new Error("403, Unauthorized");
+      }
       const filter: Filter<PaginatedGroups> = { $or: [{}] };
       if (args.groups.searchText) {
         filter["$or"] = [
@@ -136,6 +139,9 @@ export const groups = {
       ctx: Context,
     ): Promise<{ group: GroupModel; totalStudents: number }> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         const group = await groupCollection(ctx.db).findById(args.id);
         if (!group) {
           throw new Error("400, Group not found");
@@ -154,6 +160,9 @@ export const groups = {
       ctx: Context,
     ): Promise<GroupModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         checkNotNull(args.group);
         const group = await groupCollection(ctx.db).findOne({
           center: new ObjectId(args.idCenter),
@@ -233,6 +242,9 @@ export const groups = {
       ctx: Context,
     ): Promise<GroupModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         checkNotNull(args.group);
         let activeGroups = false;
         let updateGroup = { ...args.group } as Partial<GroupModel>;
@@ -324,6 +336,9 @@ export const groups = {
       ctx: Context,
     ): Promise<GroupModel> => {
       try {
+        if (!ctx.user) {
+          throw new Error("403, Unauthorized");
+        }
         const deletedGroup = await groupCollection(ctx.db).findAndModify(
           { _id: new ObjectId(args.id) },
           {
