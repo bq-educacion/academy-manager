@@ -14,7 +14,7 @@ function authDirective(
         const authDirective = directives[directiveName];
         if (authDirective) {
           const { resolve = defaultFieldResolver } = fieldConfig;
-          // TODO(@pruizj): actualizar tipo de función
+          // TODO(@pruizj): actualizar tipo de función y quitar excepción del deno.json
           fieldConfig.resolve = function (...args: Context[]) {
             const context = args[2] as Context;
             if (!context.user) {
