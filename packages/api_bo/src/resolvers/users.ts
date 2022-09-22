@@ -1,8 +1,8 @@
 import { userCollection, UserModel } from "../models/UserModel.ts";
 import { Context, JWT_SECRET } from "../app.ts";
 import { MutationLoginArgs } from "../types.ts";
-import { axiod } from "axios";
 import { signJwt } from "../lib/jwt.ts";
+import { googleUser } from "../lib/googleUser.ts";
 
 export const users = {
   User: {
@@ -38,10 +38,18 @@ export const users = {
         if (!user) {
           throw new Error("403, Unauthorized");
         }
+
+        const { email, name, picture } = await googleUser(ctx.token) ||
+          {
+            name: user.name || user.email,
+            email: user.email,
+            picture: user.picture,
+          };
+
         user = await userCollection(ctx.db).findAndModify(
           { _id: user._id },
           {
-            update: { $set: { user } },
+            update: { $set: { name: name || email, email, picture } },
             new: true,
           },
         ) as UserModel;
@@ -60,31 +68,23 @@ export const users = {
       ctx: Context,
     ): Promise<string> => {
       try {
-        const googleUser = await axiod.get(
-          "https://www.googleapis.com/oauth2/v2/userinfo",
-          {
-            headers: {
-              Authorization: `Bearer ${args.token}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const data = await googleUser.data;
+        const { email, name, picture } = await googleUser(args.token);
 
         const user: UserModel | undefined = await userCollection(ctx.db)
           .findOne({
-            email: data.email,
+            email: email,
           });
 
         if (!user?._id) {
           await userCollection(ctx.db).insertOne({
-            name: data.name || data.email,
-            email: data.email,
+            name: name || email,
+            email: email,
+            picture: picture,
           });
         }
 
         const token = await signJwt({
-          userEmail: data.email,
+          userEmail: email,
           secretKey: JWT_SECRET,
         });
 

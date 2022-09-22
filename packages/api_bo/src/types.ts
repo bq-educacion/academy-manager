@@ -699,6 +699,7 @@ export type User = {
   email: Scalars["String"];
   id: Scalars["ID"];
   name: Scalars["String"];
+  picture: Scalars["String"];
 };
 
 export enum PreviousExperienceInstructor {
@@ -1530,6 +1531,7 @@ export type UserResolvers<
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  picture?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
