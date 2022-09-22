@@ -14,6 +14,7 @@ function authDirective(
         const authDirective = directives[directiveName];
         if (authDirective) {
           const { resolve = defaultFieldResolver } = fieldConfig;
+          // TODO(@pruizj): actualizar tipo de función
           fieldConfig.resolve = function (args: Context[]) {
             const context = args[2] as Context;
             if (!context.user) {
