@@ -5,11 +5,49 @@ import { InstructorModel } from "../models/InstructorModel.ts";
 import { StudentModel } from "../models/StudentModel.ts";
 import {
   InputMaybe,
+  OrderFilterCenter,
   PaginatedCenters,
   PaginatedGroups,
   PaginatedInstructors,
   PaginatedStudents,
 } from "../types.ts";
+
+export const sortFilter = (
+  filter: InputMaybe<OrderFilterCenter> | undefined,
+  order: InputMaybe<number> | undefined,
+  type: "centers" | "students" | "groups" | "instructors",
+  defaultField: string,
+) => {
+  let sortFilter = {};
+  let OrderFilter;
+  if (type === "centers") {
+    OrderFilter = {
+      name: "name",
+      nature: "nature",
+      languages: "languages",
+      city: "city",
+      type: "type",
+    };
+  }
+
+  if (filter && order) {
+    if (order !== 1 && order !== -1) {
+      throw new Error("400, wrong order (1 or -1)");
+    }
+    if (OrderFilter) {
+      sortFilter = {
+        [OrderFilter[filter]]: order,
+      };
+    }
+  } else if (filter && !order) {
+    throw new Error("400, order is required");
+  } else if (!filter && order) {
+    throw new Error("400, orderFilter is required");
+  } else {
+    sortFilter = { [defaultField]: 1 };
+  }
+  return sortFilter;
+};
 
 export const paginatedFilters = async (
   DBModel: Collection<

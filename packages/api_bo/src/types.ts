@@ -27,6 +27,14 @@ export type Scalars = {
   Number: number;
 };
 
+export type AdvancedGetCentersInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterCenter>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<AdvancedSearchTextInput>;
+};
+
 export type Area = {
   __typename?: "Area";
   id: Scalars["ID"];
@@ -558,6 +566,7 @@ export type PaginatedStudents = {
 
 export type Query = {
   __typename?: "Query";
+  advancedGetCenters: PaginatedCenters;
   checkCorporateEmail: Scalars["String"];
   getArea: Area;
   getAreas: Array<Area>;
@@ -570,6 +579,10 @@ export type Query = {
   getStudent: Student;
   getStudents: PaginatedStudents;
   getUser: User;
+};
+
+export type QueryAdvancedGetCentersArgs = {
+  centers: AdvancedGetCentersInput;
 };
 
 export type QueryCheckCorporateEmailArgs = {
@@ -699,6 +712,14 @@ export type User = {
   id: Scalars["ID"];
   name: Scalars["String"];
   picture: Scalars["String"];
+};
+
+export type AdvancedSearchTextInput = {
+  city?: InputMaybe<Array<Scalars["String"]>>;
+  languages?: InputMaybe<Array<Scalars["String"]>>;
+  name?: InputMaybe<Array<Scalars["String"]>>;
+  nature?: InputMaybe<Array<CenterNature>>;
+  type?: InputMaybe<Array<CenterActivityType>>;
 };
 
 export enum PreviousExperienceInstructor {
@@ -834,6 +855,7 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  AdvancedGetCentersInput: AdvancedGetCentersInput;
   Area: ResolverTypeWrapper<Area>;
   Availability: ResolverTypeWrapper<Availability>;
   AvailabilityInput: AvailabilityInput;
@@ -889,6 +911,7 @@ export type ResolversTypes = ResolversObject<{
   TimetableInput: TimetableInput;
   TypeVehicleInstructor: TypeVehicleInstructor;
   User: ResolverTypeWrapper<User>;
+  advancedSearchTextInput: AdvancedSearchTextInput;
   previousExperienceInstructor: PreviousExperienceInstructor;
   summerAvailabilityInstructor: SummerAvailabilityInstructor;
   trainingInstructor: ResolverTypeWrapper<TrainingInstructor>;
@@ -897,6 +920,7 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  AdvancedGetCentersInput: AdvancedGetCentersInput;
   Area: Area;
   Availability: Availability;
   AvailabilityInput: AvailabilityInput;
@@ -939,6 +963,7 @@ export type ResolversParentTypes = ResolversObject<{
   Timetable: Timetable;
   TimetableInput: TimetableInput;
   User: User;
+  advancedSearchTextInput: AdvancedSearchTextInput;
   trainingInstructor: TrainingInstructor;
   trainingInstructorInput: TrainingInstructorInput;
 }>;
@@ -1372,6 +1397,12 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes["Query"] =
     ResolversParentTypes["Query"],
 > = ResolversObject<{
+  advancedGetCenters?: Resolver<
+    ResolversTypes["PaginatedCenters"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryAdvancedGetCentersArgs, "centers">
+  >;
   checkCorporateEmail?: Resolver<
     ResolversTypes["String"],
     ParentType,

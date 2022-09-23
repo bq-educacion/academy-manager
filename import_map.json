@@ -1,17 +1,17 @@
 {
   "imports": {
-    "std/": "https://deno.land/std@0.152.0/",
-    "std": "https://deno.land/std@0.152.0",
+    "std/": "https://deno.land/std@0.157.0/",
+    "std": "https://deno.land/std@0.157.0",
     "graphql-tools": "https://deno.land/x/graphql_tools@0.0.2/mod.ts",
     "getDirectives": "https://deno.land/x/graphql_tools@0.0.2/utils/getDirectives.ts",
     "mapSchema": "https://deno.land/x/graphql_tools@0.0.2/utils/mapSchema.ts",
     "mapperKind": "https://deno.land/x/graphql_tools@0.0.2/utils/index.ts",
     "graphql-tag": "https://deno.land/x/graphql_tag@0.0.1/mod.ts",
     "gql": "https://deno.land/x/gql@1.1.2/mod.ts",
-    "mongo": "https://deno.land/x/mongo@v0.31.0/mod.ts",
+    "mongo": "https://deno.land/x/mongo@v0.31.1/mod.ts",
     "graphql": "https://deno.land/x/graphql_deno@v15.0.0/mod.ts",
-    "objectId": "https://deno.land/x/web_bson@v0.2.4/mod.ts",
-    "opine": "https://deno.land/x/opine@2.2.0/mod.ts",
+    "objectId": "https://deno.land/x/web_bson@v0.2.5/mod.ts",
+    "opine": "https://deno.land/x/opine@2.3.3/mod.ts",
     "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "jwt": "https://deno.land/x/djwt@v2.7/mod.ts",
     "axios":"https://deno.land/x/axiod@0.26.2/mod.ts"
