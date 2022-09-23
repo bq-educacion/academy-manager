@@ -5,6 +5,7 @@ import { FindById } from "./types.ts";
 
 export type UserModel = Omit<User, "id"> & {
   _id: ObjectId;
+  token: string;
 };
 
 export const userCollection = (

@@ -23,9 +23,9 @@ export const users = {
         if (!user) {
           throw new Error("403, Unauthorized");
         }
-
-        const { email, name, picture } = await googleUser(ctx.token) ||
-          {
+        const { email, name, picture } = user.token !== ""
+          ? await googleUser(user.token)
+          : {
             name: user.name || user.email,
             email: user.email,
             picture: user.picture,
@@ -65,6 +65,7 @@ export const users = {
             name: name || email,
             email: email,
             picture: picture,
+            token: args.token || "",
           });
         }
 
