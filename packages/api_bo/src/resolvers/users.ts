@@ -12,34 +12,13 @@ export const users = {
   },
 
   Query: {
-    getUser: async (
+    getUser: (
       _parent: unknown,
       _args: unknown,
       ctx: Context,
-    ): Promise<UserModel> => {
+    ): UserModel | undefined => {
       try {
-        let user = ctx.user;
-
-        if (!user) {
-          throw new Error("403, Unauthorized");
-        }
-        const { email, name, picture } = user.token !== ""
-          ? await googleUser(user.token)
-          : {
-            name: user.name || user.email,
-            email: user.email,
-            picture: user.picture,
-          };
-
-        user = await userCollection(ctx.db).findAndModify(
-          { _id: user._id },
-          {
-            update: { $set: { name: name || email, email, picture } },
-            new: true,
-          },
-        ) as UserModel;
-
-        return user;
+        return ctx.user;
       } catch (error) {
         throw new Error("500, " + error);
       }
@@ -65,7 +44,6 @@ export const users = {
             name: name || email,
             email: email,
             picture: picture,
-            token: args.token || "",
           });
         }
 
