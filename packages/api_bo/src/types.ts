@@ -176,6 +176,15 @@ export type CreateStudentInput = {
   signedMandate?: InputMaybe<Scalars["Boolean"]>;
 };
 
+export type Dashboard = {
+  __typename?: "Dashboard";
+  activeCenters: Scalars["Number"];
+  activeInstructors: Scalars["Number"];
+  activeStudents: Scalars["Number"];
+  groups: Scalars["Number"];
+  userName: Scalars["String"];
+};
+
 export enum Days {
   Friday = "FRIDAY",
   Monday = "MONDAY",
@@ -568,6 +577,7 @@ export type Query = {
   __typename?: "Query";
   advancedGetCenters: PaginatedCenters;
   checkCorporateEmail: Scalars["String"];
+  dashboard: Dashboard;
   getArea: Area;
   getAreas: Array<Area>;
   getCenter: CenterInfo;
@@ -872,6 +882,7 @@ export type ResolversTypes = ResolversObject<{
   CreateGroupInput: CreateGroupInput;
   CreateInstructorInput: CreateInstructorInput;
   CreateStudentInput: CreateStudentInput;
+  Dashboard: ResolverTypeWrapper<Dashboard>;
   Days: Days;
   EditCenterContactInput: EditCenterContactInput;
   EditCenterInput: EditCenterInput;
@@ -934,6 +945,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateGroupInput: CreateGroupInput;
   CreateInstructorInput: CreateInstructorInput;
   CreateStudentInput: CreateStudentInput;
+  Dashboard: Dashboard;
   EditCenterContactInput: EditCenterContactInput;
   EditCenterInput: EditCenterInput;
   EditGroupInput: EditGroupInput;
@@ -1062,6 +1074,23 @@ export type CourseResolvers<
 > = ResolversObject<{
   EPO?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
   ESO?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type DashboardResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Dashboard"] =
+    ResolversParentTypes["Dashboard"],
+> = ResolversObject<{
+  activeCenters?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  activeInstructors?: Resolver<
+    ResolversTypes["Number"],
+    ParentType,
+    ContextType
+  >;
+  activeStudents?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  groups?: Resolver<ResolversTypes["Number"], ParentType, ContextType>;
+  userName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1409,6 +1438,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryCheckCorporateEmailArgs, "email">
   >;
+  dashboard?: Resolver<ResolversTypes["Dashboard"], ParentType, ContextType>;
   getArea?: Resolver<
     ResolversTypes["Area"],
     ParentType,
@@ -1598,6 +1628,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   CenterContact?: CenterContactResolvers<ContextType>;
   CenterInfo?: CenterInfoResolvers<ContextType>;
   Course?: CourseResolvers<ContextType>;
+  Dashboard?: DashboardResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
   GroupInfo?: GroupInfoResolvers<ContextType>;
   Instructor?: InstructorResolvers<ContextType>;
