@@ -2,14 +2,38 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { colors, fonts } from "../theme";
 
-const UserButton: FC<{ disable?: boolean }> = ({ disable }) => {
+const UserButton: FC<{ disable?: boolean; name: string; picture: string }> = ({
+  disable,
+  name,
+  picture,
+}) => {
   const disabled = disable ? true : false;
   return (
     <Circle border={false} disable={disabled}>
-      <PUser>JL</PUser>
+      {picture.includes(
+        "ACNPEu9xUzGtoWl_5OWmcslkiCLwp1KhiEZQ6Wjm5Grm=s96-c"
+      ) && (
+        <PUser>
+          {name
+            .toUpperCase()
+            .split(" ")
+            .map((word) => word[0])
+            .join("")
+            .slice(0, 2)}
+        </PUser>
+      )}
+      {!picture.includes(
+        "ACNPEu9xUzGtoWl_5OWmcslkiCLwp1KhiEZQ6Wjm5Grm=s96-c"
+      ) && <CircleImg src={picture} />}
     </Circle>
   );
 };
+
+const CircleImg = styled.img`
+  width: 41px;
+  height: 41px;
+  border-radius: 50%;
+`;
 
 const Circle = styled.div<{ border: boolean; disable: boolean }>`
   display: flex;

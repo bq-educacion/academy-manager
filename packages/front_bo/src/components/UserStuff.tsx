@@ -1,14 +1,16 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import {
-  SecondActionButton,
-  UserButton,
-  OptionsButton,
-  styles,
-  Popover,
   colors,
+  OptionsButton,
+  Popover,
+  SecondActionButton,
+  styles,
+  UserButton,
 } from "@academy-manager/ui";
 import { useApolloClient } from "@apollo/client";
+import { useGetUserQuery } from "../generated/graphql";
+import withApollo from "../apollo/withApollo";
 
 export const UserStuff: FC = () => {
   const useClient = useApolloClient();
@@ -19,10 +21,14 @@ export const UserStuff: FC = () => {
     true && (window.location.href = "/login");
   };
 
+  const { data } = useGetUserQuery();
+
   return (
     <UserStuffLayout>
       <SecondActionButton />
-      <UserButton />
+      {data?.getUser && (
+        <UserButton name={data?.getUser.name} picture={data?.getUser.picture} />
+      )}
       <Popover
         title={<OptionsButton />}
         content={
@@ -34,8 +40,7 @@ export const UserStuff: FC = () => {
     </UserStuffLayout>
   );
 };
-
-export default UserStuff;
+export default withApollo(UserStuff, { requiresAccess: true });
 
 const UserStuffLayout = styled.div`
   display: flex;
