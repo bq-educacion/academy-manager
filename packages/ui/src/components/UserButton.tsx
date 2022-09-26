@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { colors, fonts } from "../theme";
+import { DefaultGoogleAvatar } from "../../../front_bo/src/config";
 
 const UserButton: FC<{ disable?: boolean; name: string; picture: string }> = ({
   disable,
@@ -22,9 +23,7 @@ const UserButton: FC<{ disable?: boolean; name: string; picture: string }> = ({
             .slice(0, 2)}
         </PUser>
       )}
-      {!picture.includes(
-        "ACNPEu9xUzGtoWl_5OWmcslkiCLwp1KhiEZQ6Wjm5Grm=s96-c"
-      ) && <CircleImg src={picture} />}
+      {!picture.includes(DefaultGoogleAvatar) && <CircleImg src={picture} />}
     </Circle>
   );
 };
