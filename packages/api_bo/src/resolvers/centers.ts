@@ -93,7 +93,6 @@ export const centers = {
     ): Promise<PaginatedCenters> => {
       const filter: Filter<PaginatedCenters> = { $or: [{}] };
       if (args.centers.searchText) {
-        filter["$or"] = [{}];
         const data = [];
         if (args.centers.searchText.name) {
           data.push(

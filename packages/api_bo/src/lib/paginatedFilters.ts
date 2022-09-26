@@ -18,55 +18,61 @@ import {
 export const sortFilter = (
   filter:
     | InputMaybe<OrderFilterCenter>
+    | InputMaybe<OrderFilterStudent>
     | InputMaybe<OrderFilterGroup>
     | InputMaybe<OrderFilterInstructor>
-    | InputMaybe<OrderFilterStudent>
     | undefined,
   order: InputMaybe<number> | undefined,
   type: "centers" | "students" | "groups" | "instructors",
   defaultField: string,
 ) => {
   let sortFilter = {};
+
   let OrderFilter;
-  if (type === "centers") {
-    OrderFilter = {
-      name: "name",
-      nature: "nature",
-      languages: "languages",
-      city: "city",
-      type: "type",
-    };
-  } else if (type === "groups") {
-    OrderFilter = {
-      id_group: "id_group",
-      modality: "modality",
-      course: "course",
-      instructors: "instructorsName.name",
-      center: "centersName.name",
-      id_day: "timetable.id_day",
-      start: "timetable.start",
-      end: "timetable.end",
-    };
-  } else if (type == "students") {
-    OrderFilter = {
-      name: "name",
-      course: "course",
-      state: "state",
-      center: "centersName.name",
-      group: "groupsName.name",
-    };
-  } else if (type == "instructors") {
-    OrderFilter = {
-      name: "name",
-      center: "centersName.name",
-      areas: "areas",
-      id_day: "availability.id_day",
-      state: "state",
-      id_group: "groupsId.id_group",
-      vehicle: "vehicle",
-      languages: "languages",
-      summerAvailability: "summerAvailability",
-    };
+  switch (type) {
+    case "centers":
+      OrderFilter = {
+        name: "name",
+        nature: "nature",
+        languages: "languages",
+        city: "city",
+        type: "type",
+      };
+      break;
+    case "students":
+      OrderFilter = {
+        name: "name",
+        course: "course",
+        state: "state",
+        center: "centersName.name",
+        group: "groupsName.name",
+      };
+      break;
+    case "groups":
+      OrderFilter = {
+        id_group: "id_group",
+        modality: "modality",
+        course: "course",
+        instructors: "instructorsName.name",
+        center: "centersName.name",
+        id_day: "timetable.id_day",
+        start: "timetable.start",
+        end: "timetable.end",
+      };
+      break;
+    case "instructors":
+      OrderFilter = {
+        name: "name",
+        center: "centersName.name",
+        areas: "areas",
+        id_day: "availability.id_day",
+        state: "state",
+        id_group: "groupsId.id_group",
+        vehicle: "vehicle",
+        languages: "languages",
+        summerAvailability: "summerAvailability",
+      };
+      break;
   }
 
   if (filter && order) {
@@ -78,9 +84,9 @@ export const sortFilter = (
         [
           OrderFilter[filter] as
             | OrderFilterCenter
+            | OrderFilterStudent
             | OrderFilterGroup
             | OrderFilterInstructor
-            | OrderFilterStudent
         ]: order,
       };
     }
