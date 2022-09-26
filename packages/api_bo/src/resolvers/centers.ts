@@ -104,12 +104,17 @@ export const centers = {
             advancedMongoSearchRegex(
               "languages",
               args.centers.searchText.languages,
+              true,
             ),
           );
         }
         if (args.centers.searchText.city) {
           data.push(
-            advancedMongoSearchRegex("city", args.centers.searchText.city),
+            advancedMongoSearchRegex(
+              "city",
+              args.centers.searchText.city,
+              true,
+            ),
           );
         }
         if (args.centers.searchText.type) {

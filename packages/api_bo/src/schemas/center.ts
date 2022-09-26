@@ -60,7 +60,7 @@ export const typeDefs = gql`
 
   input advancedSearchTextInput{
     name:[String!]
-    languages:[String!]
+    languages:[Languages!]
     city:[String!]
     type:[CenterActivityType!]
     nature:[CenterNature!]

@@ -726,7 +726,7 @@ export type User = {
 
 export type AdvancedSearchTextInput = {
   city?: InputMaybe<Array<Scalars["String"]>>;
-  languages?: InputMaybe<Array<Scalars["String"]>>;
+  languages?: InputMaybe<Array<Languages>>;
   name?: InputMaybe<Array<Scalars["String"]>>;
   nature?: InputMaybe<Array<CenterNature>>;
   type?: InputMaybe<Array<CenterActivityType>>;
