@@ -34,7 +34,6 @@ const ErrorContainer = styled.div`
   background-color: ${colors.colors.grayBlueTransparent};
   width: 100%;
   height: 100vh;
-  padding-left: 250px;
   & > div {
     display: flex;
     align-items: center;
