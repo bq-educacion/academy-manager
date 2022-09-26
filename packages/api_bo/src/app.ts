@@ -7,7 +7,7 @@ import { instructors } from "./resolvers/instructors.ts";
 import { students } from "./resolvers/students.ts";
 import { areas } from "./resolvers/areas.ts";
 import { users } from "./resolvers/users.ts";
-import { dashboardApp } from "./resolvers/dashboard.ts";
+import { dashboardBO } from "./resolvers/dashboard.ts";
 import { typeDefs as center } from "./schemas/center.ts";
 import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
@@ -76,7 +76,7 @@ try {
   const dec = new TextDecoder();
   let schema = makeExecutableSchema({
     resolvers: [
-      dashboardApp,
+      dashboardBO,
       centers,
       groups,
       instructors,

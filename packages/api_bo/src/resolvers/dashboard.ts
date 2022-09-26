@@ -4,7 +4,7 @@ import { groupCollection } from "../models/GroupModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
 import { studentCollection } from "../models/StudentModel.ts";
 
-export const dashboardApp = {
+export const dashboardBO = {
   Query: {
     dashboard: async (
       _parent: unknown,
