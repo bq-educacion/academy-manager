@@ -50,7 +50,6 @@ type Request = OpineRequest & {
 export type Context = {
   db: Database;
   user: UserModel | undefined;
-  token: string;
   request: Request;
 };
 
@@ -122,7 +121,6 @@ try {
 
           return {
             db,
-            token,
             user,
             request,
           };
