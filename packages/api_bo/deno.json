@@ -6,7 +6,7 @@
   "lint": {
     "files": {
       "include": ["src/"],
-      "exclude": ["src/types.ts"]
+      "exclude": ["src/types.ts","src/directives/auth.ts"]
     },
     "rules": {
       "tags": ["recommended"],

@@ -21,6 +21,10 @@ import { opineCors } from "cors";
 import { Payload } from "jwt";
 import { userCollection, UserModel } from "./models/UserModel.ts";
 import { verifyJwt } from "./lib/jwt.ts";
+import {
+  applyAuthSchemaTransform,
+  authDirectiveTypeDefs,
+} from "./directives/auth.ts";
 
 type Params = {
   variables?: Record<string, unknown>;
@@ -46,7 +50,6 @@ type Request = OpineRequest & {
 export type Context = {
   db: Database;
   user: UserModel | undefined;
-  token: string;
   request: Request;
 };
 
@@ -69,11 +72,21 @@ try {
   console.info("Mongo DB connected: ", MONGO_URL);
 
   const dec = new TextDecoder();
-  const schema = makeExecutableSchema({
+  let schema = makeExecutableSchema({
     resolvers: [centers, groups, instructors, students, areas, users],
-    typeDefs: [center, student, instructor, group, area, user, scalars, enums],
+    typeDefs: [
+      center,
+      student,
+      instructor,
+      group,
+      area,
+      user,
+      scalars,
+      enums,
+      authDirectiveTypeDefs("auth"),
+    ],
   });
-
+  schema = applyAuthSchemaTransform(schema);
   const app = opine();
 
   app
@@ -108,7 +121,6 @@ try {
 
           return {
             db,
-            token,
             user,
             request,
           };
