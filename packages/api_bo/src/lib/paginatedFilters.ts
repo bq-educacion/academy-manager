@@ -6,6 +6,9 @@ import { StudentModel } from "../models/StudentModel.ts";
 import {
   InputMaybe,
   OrderFilterCenter,
+  OrderFilterGroup,
+  OrderFilterInstructor,
+  OrderFilterStudent,
   PaginatedCenters,
   PaginatedGroups,
   PaginatedInstructors,
@@ -13,7 +16,12 @@ import {
 } from "../types.ts";
 
 export const sortFilter = (
-  filter: InputMaybe<OrderFilterCenter> | undefined,
+  filter:
+    | InputMaybe<OrderFilterCenter>
+    | InputMaybe<OrderFilterGroup>
+    | InputMaybe<OrderFilterInstructor>
+    | InputMaybe<OrderFilterStudent>
+    | undefined,
   order: InputMaybe<number> | undefined,
   type: "centers" | "students" | "groups" | "instructors",
   defaultField: string,
@@ -28,6 +36,37 @@ export const sortFilter = (
       city: "city",
       type: "type",
     };
+  } else if (type === "groups") {
+    OrderFilter = {
+      id_group: "id_group",
+      modality: "modality",
+      course: "course",
+      instructors: "instructorsName.name",
+      center: "centersName.name",
+      id_day: "timetable.id_day",
+      start: "timetable.start",
+      end: "timetable.end",
+    };
+  } else if (type == "students") {
+    OrderFilter = {
+      name: "name",
+      course: "course",
+      state: "state",
+      center: "centersName.name",
+      group: "groupsName.name",
+    };
+  } else if (type == "instructors") {
+    OrderFilter = {
+      name: "name",
+      center: "centersName.name",
+      areas: "areas",
+      id_day: "availability.id_day",
+      state: "state",
+      id_group: "groupsId.id_group",
+      vehicle: "vehicle",
+      languages: "languages",
+      summerAvailability: "summerAvailability",
+    };
   }
 
   if (filter && order) {
@@ -36,7 +75,13 @@ export const sortFilter = (
     }
     if (OrderFilter) {
       sortFilter = {
-        [OrderFilter[filter]]: order,
+        [
+          OrderFilter[filter] as
+            | OrderFilterCenter
+            | OrderFilterGroup
+            | OrderFilterInstructor
+            | OrderFilterStudent
+        ]: order,
       };
     }
   } else if (filter && !order) {

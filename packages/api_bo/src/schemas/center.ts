@@ -124,11 +124,11 @@ export const typeDefs = gql`
   type Query {
     getCenters(
       centers: GetCentersInput!
-    ): PaginatedCenters! @auth
+    ): PaginatedCenters!
 
     advancedGetCenters(
       centers: AdvancedGetCentersInput!
-    ): PaginatedCenters! @auth
+    ): PaginatedCenters!
 
     getCenter(id: String!): CenterInfo! @auth
   }
@@ -136,7 +136,7 @@ export const typeDefs = gql`
   type Mutation {
     createCenter(
       center: CreateCenterInput!
-    ): Center! @auth
+    ): Center!
 
     addCenterContact(
       idCenter: String!

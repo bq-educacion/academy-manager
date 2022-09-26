@@ -5,6 +5,11 @@ export const mongoSearchRegex = (
 export const advancedMongoSearchRegex = (
   field: string,
   data: string[],
+  enumType?: boolean,
 ) => (
-  { [field]: mongoSearchRegex(data.join("|")) }
+  {
+    [field]: mongoSearchRegex(
+      enumType ? `^(${data.join("|")})$` : data.join("|"),
+    ),
+  }
 );

@@ -24,8 +24,10 @@ import { studentCollection } from "../models/StudentModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
 import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 import { getUniqueItems } from "../lib/getUniqueItems.ts";
-import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
-import { advancedMongoSearchRegex } from "../lib/mongoSearchRegex.ts";
+import {
+  advancedMongoSearchRegex,
+  mongoSearchRegex,
+} from "../lib/mongoSearchRegex.ts";
 import { sortFilter } from "../lib/paginatedFilters.ts";
 
 export const centers = {
@@ -113,12 +115,20 @@ export const centers = {
         }
         if (args.centers.searchText.type) {
           data.push(
-            advancedMongoSearchRegex("type", args.centers.searchText.type),
+            advancedMongoSearchRegex(
+              "type",
+              args.centers.searchText.type,
+              true,
+            ),
           );
         }
         if (args.centers.searchText.nature) {
           data.push(
-            advancedMongoSearchRegex("nature", args.centers.searchText.nature),
+            advancedMongoSearchRegex(
+              "nature",
+              args.centers.searchText.nature,
+              true,
+            ),
           );
         }
         filter["$or"] = data;
