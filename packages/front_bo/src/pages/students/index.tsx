@@ -194,6 +194,7 @@ const StudentsPage: NextPage = () => {
       >
         <ContentDiv>
           <Table<Partial<Student> & { id: string }>
+            yellow
             onClickRow={(id) => {
               router.push(`/students/${id}`);
             }}
