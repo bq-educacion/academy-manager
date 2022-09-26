@@ -35,15 +35,6 @@ const EditStudent: NextPage = () => {
   const router = useRouter();
   const t = useTranslate();
 
-  const isBrowser = typeof window !== "undefined";
-  useEffect(() => {
-    if (window.document.cookie) {
-      if (window.document.cookie.split("=")[2].length === 2) {
-        window.location.href = "/login";
-      }
-    }
-  }, [isBrowser]);
-
   const { data } = useGetStudentQuery({
     variables: {
       getStudentId: router.query.id as string,

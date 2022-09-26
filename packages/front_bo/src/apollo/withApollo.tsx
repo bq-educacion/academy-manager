@@ -140,17 +140,15 @@ export default function withApollo(
 
       try {
         let user = undefined;
+        if (requiresAccess && !user) {
+          redirect(ctx, "/login");
+        }
         if (requiresAccess) {
           const { data } = await apolloClient.query({
             query: GetUserDocument,
             errorPolicy: "all",
           });
           user = data.getUser;
-        }
-        if (requiresAccess && !user) {
-          redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
-        } else if (ctx.pathname === "/login" && user) {
-          redirect(ctx, "/");
         }
 
         return {
