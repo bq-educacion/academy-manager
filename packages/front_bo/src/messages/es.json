@@ -5,6 +5,10 @@
     },
     "error-content": {
       "button": "Volver a inicio",
+      "401": {
+        "text": "Lo sentimos, no tienes permisos para poder continuar por este camino.",
+        "title": "Acceso privado"
+      },
       "403": {
         "text": "Lo sentimos, no tienes permisos para poder continuar por este camino.",
         "title": "Acceso privado"
