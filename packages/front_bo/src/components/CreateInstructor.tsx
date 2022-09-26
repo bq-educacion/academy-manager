@@ -9,7 +9,6 @@ import {
   Icon,
   InputSuper,
   OptionsBox,
-  OptionsBoxOrdered,
   RadioButton,
   styles,
   useTranslate,
@@ -17,7 +16,7 @@ import {
 import { ApolloError } from "@apollo/client";
 import styled from "@emotion/styled";
 import { FC, useEffect, useRef, useState } from "react";
-import { Platforms, schedule, Tools, zones } from "../config";
+import { Platforms, schedule, Tools } from "../config";
 import {
   AvailabilityInput,
   Days,
@@ -29,6 +28,7 @@ import {
   TypeVehicleInstructor,
   useCreateInstructorMutation,
 } from "../generated/graphql";
+import AddAreasCreateTeacher from "./AddAreasCreateTeacher";
 import AddCenter from "./AddCenter";
 
 const CreateInstructor: FC<{
@@ -76,14 +76,14 @@ const CreateInstructor: FC<{
     { day: "sunday", key: sunday, function: setSunday },
   ];
   const [vehicle, setVehicle] = useState<TypeVehicleInstructor>();
-  const [LocalZones, setLocalZones] = useState<string[]>([]);
-  const [orderName, setOrderName] = useState<boolean>(false);
-  const [especifyZones, setEspecifyZones] = useState<string[]>([]);
+  const [areas, setAreas] = useState<string[]>([]);
   const [centers, setCenters] = useState<string[]>([""]);
   const [groups, setGroups] = useState<string[]>([]);
   const [summer, setSummer] = useState<SummerAvailabilityInstructor>();
   const [errorCenters, setErrorCenters] = useState<boolean>(false);
   const [errorGroups, setErrorGroups] = useState<boolean>(false);
+  const [geographicalAvailability, setGeographicalAvailability] =
+    useState<Region>(Region.Madrid);
 
   //Mutations
   const [createInstructorMutation, { error }] = useCreateInstructorMutation();
@@ -751,59 +751,23 @@ const CreateInstructor: FC<{
               <styles.BoldP4>
                 {t("components.create-instructor.4.subtitle.zones")}
               </styles.BoldP4>
-              <DropDown
-                options={zones.map((elem) => {
-                  return {
-                    key: elem.name,
-                    label: elem.name,
-                  };
-                })}
+              <DropDownUnique
+                options={Object.values(Region).map((region) => ({
+                  key: region,
+                  label: region,
+                }))}
+                selected={geographicalAvailability}
+                setSelected={(region) => {
+                  setGeographicalAvailability(region as Region);
+                }}
                 width="296px"
-                setSelected={setLocalZones}
-                selected={LocalZones}
               />
             </FillIn>
-            {LocalZones.length > 0 && (
-              <FillIn>
-                <OptionsBoxOrdered
-                  options={[
-                    ...zones.map((elem) => {
-                      if (LocalZones.find((e) => e === elem.name)) {
-                        return elem.zones;
-                      } else {
-                        return [];
-                      }
-                    }),
-                  ]
-                    .flat()
-                    .map((elem) => {
-                      return {
-                        key: elem,
-                        label: elem,
-                      };
-                    })}
-                  orderName={orderName}
-                  setOrderName={setOrderName}
-                  results={especifyZones}
-                  setResults={setEspecifyZones}
-                  title={
-                    <ZonesTitle>
-                      <styles.BoldP4>
-                        {t("components.create-instructor.4.subtitle.zones-1")}
-                      </styles.BoldP4>
-                      {/* TODO: Onclick call back */}
-                      <AddZone>
-                        <Icon name="add" />
-                        <Icon name="map" />
-                        <styles.BoldP4>
-                          {t("components.create-instructor.4.subtitle.zones-2")}
-                        </styles.BoldP4>
-                      </AddZone>
-                    </ZonesTitle>
-                  }
-                />
-              </FillIn>
-            )}
+            <AddAreasCreateTeacher
+              Region={geographicalAvailability}
+              areas={areas}
+              setAreas={setAreas}
+            />
           </ScrollDiv>
           <NavDivScroll>
             <Button
@@ -901,8 +865,8 @@ const CreateInstructor: FC<{
                             summer || SummerAvailabilityInstructor.No,
                           vehicle:
                             vehicle || TypeVehicleInstructor.PublicTransport,
-                          areas: especifyZones,
-                          geographicalAvailability: [Region.Madrid],
+                          areas,
+                          geographicalAvailability: [geographicalAvailability],
                         },
                         idGroups: groups,
                       },
@@ -956,8 +920,8 @@ const CreateInstructor: FC<{
                             summer || SummerAvailabilityInstructor.No,
                           vehicle:
                             vehicle || TypeVehicleInstructor.PublicTransport,
-                          geographicalAvailability: [Region.Andalucia],
-                          areas: especifyZones,
+                          geographicalAvailability: [geographicalAvailability],
+                          areas,
                         },
                         idGroups: groups,
                       },
@@ -994,19 +958,6 @@ export default CreateInstructor;
 
 const EndButton = styled(Button)`
   align-self: flex-start;
-`;
-
-const ZonesTitle = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const AddZone = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  color: ${colors.colors.blue80};
 `;
 
 const Form = styled.div`
