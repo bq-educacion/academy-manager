@@ -18,7 +18,7 @@ function authDirective(
           fieldConfig.resolve = function (...args: Context[]) {
             const context = args[2] as Context;
             if (!context.user) {
-              throw new Error("403, Not authorized");
+              throw new Error("401, Not authorized");
             }
             return resolve.apply(this, args);
           };
