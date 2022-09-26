@@ -60,7 +60,7 @@ export const A = styled.a`
 export const RainbowDivider = styled.div`
   background-image: ${colors.gradient.rainbow};
   width: 100%;
-  height: 1px;
+  height: 3px;
 `;
 
 export default {
