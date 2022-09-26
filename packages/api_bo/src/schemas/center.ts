@@ -128,7 +128,7 @@ export const typeDefs = gql`
 
     advancedGetCenters(
       centers: AdvancedGetCentersInput!
-    ): PaginatedCenters!
+    ): PaginatedCenters! @auth
 
     getCenter(id: String!): CenterInfo! @auth
   }
