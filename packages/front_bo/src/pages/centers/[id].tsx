@@ -29,11 +29,18 @@ import {
   useSetActiveCenterMutation,
 } from "../../generated/graphql";
 
-//TODO: Mutation alta centro
-
 const EditCenter: NextPage = () => {
   const router = useRouter();
   const t = useTranslate();
+
+  const isBrowser = typeof window !== "undefined";
+  useEffect(() => {
+    if (window.document.cookie) {
+      if (window.document.cookie.split("=")[2].length === 2) {
+        window.location.href = "/login";
+      }
+    }
+  }, [isBrowser]);
 
   const { data } = useGetCenterQuery({
     variables: {

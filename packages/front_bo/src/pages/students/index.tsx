@@ -28,6 +28,16 @@ import { useRouter } from "next/router";
 
 const StudentsPage: NextPage = () => {
   const t = useTranslate();
+
+  const isBrowser = typeof window !== "undefined";
+  useEffect(() => {
+    if (window.document.cookie) {
+      if (window.document.cookie.split("=")[2].length === 2) {
+        window.location.href = "/login";
+      }
+    }
+  }, [isBrowser]);
+
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);

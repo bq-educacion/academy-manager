@@ -32,7 +32,7 @@ const ErrorContainer = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${colors.colors.grayBlueTransparent};
-  width: calc(100% - 250px);
+  width: 100%;
   height: 100vh;
   padding-left: 250px;
   & > div {
