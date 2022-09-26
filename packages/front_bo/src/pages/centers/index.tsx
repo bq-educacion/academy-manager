@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 
 const CentersPage: NextPage = () => {
   const t = useTranslate();
+
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [order, setOrder] = useState<{
@@ -262,7 +263,6 @@ const CentersPage: NextPage = () => {
   );
 };
 
-// export default withApollo(CentersPage);
 export default withApollo(CentersPage, { requiresAccess: true });
 
 export const ContentDiv = styled.div`

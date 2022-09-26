@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 
 const GroupsPage: NextPage = () => {
   const t = useTranslate();
+
   const [inputText, setInputText] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);

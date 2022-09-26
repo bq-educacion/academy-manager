@@ -29,8 +29,6 @@ import {
   useSetActiveCenterMutation,
 } from "../../generated/graphql";
 
-//TODO: Mutation alta centro
-
 const EditCenter: NextPage = () => {
   const router = useRouter();
   const t = useTranslate();

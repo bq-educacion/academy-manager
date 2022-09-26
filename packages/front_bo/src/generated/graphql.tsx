@@ -157,6 +157,15 @@ export type CreateStudentInput = {
   signedMandate?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type Dashboard = {
+  __typename?: 'Dashboard';
+  activeCenters: Scalars['Number'];
+  activeInstructors: Scalars['Number'];
+  activeStudents: Scalars['Number'];
+  groups: Scalars['Number'];
+  userName: Scalars['String'];
+};
+
 export enum Days {
   Friday = 'FRIDAY',
   Monday = 'MONDAY',
@@ -570,6 +579,7 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: 'Query';
   checkCorporateEmail: Scalars['String'];
+  dashboard: Dashboard;
   getArea: Area;
   getAreas: Array<Area>;
   getCenter: CenterInfo;
