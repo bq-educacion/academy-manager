@@ -115,21 +115,21 @@ export const typeDefs = gql`
   extend type Query {
     getGroups( 
       groups: GetGroupsInput!
-    ): PaginatedGroups!
+    ): PaginatedGroups! @auth
 
-    getGroup(id: String!): GroupInfo!
+    getGroup(id: String!): GroupInfo! @auth
   }
   extend type Mutation {
     createGroup(
       idCenter: String!
       group: CreateGroupInput!
-    ): Group!
+    ): Group! @auth
 
     editGroup(
       id:String!,
       group: EditGroupInput!
-    ): Group!
+    ): Group! @auth
 
-    deleteGroup(id: String!): Group!
+    deleteGroup(id: String!): Group! @auth
   }
 `;

@@ -108,34 +108,33 @@ export const typeDefs = gql`
   type Query {
     getCenters(
       centers: GetCentersInput!
-    ): PaginatedCenters!
-
-    getCenter(id: String!): CenterInfo!
+    ): PaginatedCenters! @auth
+    getCenter(id: String!): CenterInfo! @auth
   }
 
   type Mutation {
     createCenter(
       center: CreateCenterInput!
-    ): Center!
+    ): Center! @auth
 
     addCenterContact(
       idCenter: String!
       contact: CenterContactInput!
-    ): CenterContact!
+    ): CenterContact! @auth
 
     editCenter(
       id: String!
       center: EditCenterInput!
-    ): Center!
+    ): Center! @auth
 
     editCenterContact(
       idCenter: String!
       originEmail: String!
       contact: EditCenterContactInput!
-    ): CenterContact!
+    ): CenterContact! @auth
 
-    deleteCenter(id: String!): Center!
+    deleteCenter(id: String!): Center!  @auth
 
-    setActiveCenter(id:String!, active:Boolean!): Center!
+    setActiveCenter(id:String!, active:Boolean!): Center! @auth
   }
 `;

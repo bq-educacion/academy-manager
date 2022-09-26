@@ -11,16 +11,16 @@ export const typeDefs = gql`
   extend type Query {
     getAreas( 
       regions: [Region!]!
-    ): [Area!]!
+    ): [Area!]! @auth
 
-    getArea(id: String!): Area!
+    getArea(id: String!): Area! @auth
   }
   extend type Mutation {
     createArea(
       name: String!
       region: Region!
-    ): Area!
+    ): Area! @auth
 
-    deleteArea(id: String!): Area!
+    deleteArea(id: String!): Area! @auth
   }
 `;
