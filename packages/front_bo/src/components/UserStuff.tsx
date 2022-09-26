@@ -10,7 +10,6 @@ import {
 } from "@academy-manager/ui";
 import { useApolloClient } from "@apollo/client";
 import { useGetUserQuery } from "../generated/graphql";
-import withApollo from "../apollo/withApollo";
 
 export const UserStuff: FC = () => {
   const useClient = useApolloClient();
@@ -40,7 +39,8 @@ export const UserStuff: FC = () => {
     </UserStuffLayout>
   );
 };
-export default withApollo(UserStuff, { requiresAccess: true });
+
+export default UserStuff;
 
 const UserStuffLayout = styled.div`
   display: flex;
