@@ -7,6 +7,7 @@ import { instructors } from "./resolvers/instructors.ts";
 import { students } from "./resolvers/students.ts";
 import { areas } from "./resolvers/areas.ts";
 import { users } from "./resolvers/users.ts";
+import { dashboardApp } from "./resolvers/dashboard.ts";
 import { typeDefs as center } from "./schemas/center.ts";
 import { typeDefs as student } from "./schemas/student.ts";
 import { typeDefs as instructor } from "./schemas/instructor.ts";
@@ -15,6 +16,7 @@ import { typeDefs as scalars } from "./schemas/scalars.ts";
 import { typeDefs as enums } from "./schemas/enums.ts";
 import { typeDefs as area } from "./schemas/area.ts";
 import { typeDefs as user } from "./schemas/user.ts";
+import { typeDefs as dashboard } from "./schemas/dashboard.ts";
 import { opine, OpineRequest } from "opine";
 import { readAll } from "std/streams/conversion.ts";
 import { opineCors } from "cors";
@@ -73,8 +75,17 @@ try {
 
   const dec = new TextDecoder();
   let schema = makeExecutableSchema({
-    resolvers: [centers, groups, instructors, students, areas, users],
+    resolvers: [
+      dashboardApp,
+      centers,
+      groups,
+      instructors,
+      students,
+      areas,
+      users,
+    ],
     typeDefs: [
+      dashboard,
       center,
       student,
       instructor,
