@@ -60,25 +60,25 @@ export const A = styled.a`
 export const RainbowDivider = styled.div`
   background-image: ${colors.gradient.rainbow};
   width: 100%;
-  height: 3px;
+  height: 2px;
 `;
 
 export const BlueYellowDivider = styled.div`
   background-image: ${colors.gradient.blueYellow};
   width: 100%;
-  height: 3px;
+  height: 2px;
 `;
 
 export const OrangeDivider = styled.div`
   background-color: ${colors.colors.yellow80};
   width: 100%;
-  height: 3px;
+  height: 2px;
 `;
 
 export const RedDivider = styled.div`
   background-color: ${colors.colors.red80};
   width: 100%;
-  height: 3px;
+  height: 2px;
 `;
 
 export const RedPinkDivider = styled.div`
