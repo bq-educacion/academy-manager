@@ -14,11 +14,12 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import withApollo from "../../apollo/withApollo";
-import { AddTimeTableV2, Layout, Modal } from "../../components";
+import { AddTimeTableV2, Layout, Modal, Table } from "../../components";
 import { sections } from "../../config";
 import {
   GroupModality,
   GroupType,
+  OrderFilterStudent,
   TimetableInput,
   useDeleteGroupMutation,
   useEditGroupMutation,
@@ -101,6 +102,14 @@ const EditGroup: NextPage = () => {
         name: name,
       },
     },
+  });
+
+  const [order, setOrder] = useState<{
+    key: OrderFilterStudent;
+    direction: number;
+  }>({
+    key: OrderFilterStudent.Name,
+    direction: 1,
   });
 
   useLayoutEffect(() => {
@@ -192,6 +201,7 @@ const EditGroup: NextPage = () => {
   }, [openAlertBad, openAlertGood]);
 
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
+  const [showFolder4, setShowFolder4] = useState<boolean>(true);
 
   return (
     <>
@@ -333,6 +343,44 @@ const EditGroup: NextPage = () => {
               )}
             </BodyDiv>
           )
+        }
+        children3={
+          <BodyDiv>
+            <GateFolder>
+              <GateFolderButton onClick={() => setShowFolder4(!showFolder4)}>
+                <GateFolderArrow name="direction" open={showFolder4} />
+              </GateFolderButton>
+              <GateFolderTitle>
+                <styles.BoldP4>
+                  {t("pages.edit-teacher.students")}
+                </styles.BoldP4>
+              </GateFolderTitle>
+            </GateFolder>
+            {showFolder4 && (
+              <Table
+                inactiveIndexes={[]}
+                data={data?.getGroup.group.students || []}
+                order={order}
+                onSetOrder={(order) => {
+                  setOrder(
+                    order as { key: OrderFilterStudent; direction: number }
+                  );
+                }}
+                columns={[
+                  {
+                    label: t("pages.edit-group.student-name"),
+                    key: OrderFilterStudent.Name,
+                    content: (student) => <div>{student.name}</div>,
+                  },
+                  {
+                    label: t("pages.edit-group.student-course"),
+                    key: OrderFilterStudent.Course,
+                    content: (student) => <div>{student.course}</div>,
+                  },
+                ]}
+              />
+            )}
+          </BodyDiv>
         }
       >
         {data && (
