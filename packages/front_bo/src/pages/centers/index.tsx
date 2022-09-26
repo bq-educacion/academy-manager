@@ -331,7 +331,7 @@ export const Input = styled.input`
   width: 100%;
   border-radius: 5px;
   border: solid 1px ${colors.colors.gray};
-  padding-left: 20px;
+  padding: 0 35px 0 20px;
   font-size: 14px;
   line-height: 1.07;
 
