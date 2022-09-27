@@ -19,6 +19,7 @@ import {
   CrossBad,
   Alert,
   External,
+  Interrogation,
 } from "../assets/icons";
 import { colors } from "../theme";
 
@@ -72,6 +73,8 @@ const IconSVG: FC<IIconProps> = ({ className, name }) => {
       return <Alert {...rest} />;
     case "external":
       return <External {...rest} />;
+    case "interrogation":
+      return <Interrogation {...rest} />;
     default:
       // eslint-disable-next-line no-console
       console.warn("Icon not found");

@@ -16,15 +16,17 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import withApollo from "../../apollo/withApollo";
-import { AddContactFilterCenter, Layout, Modal } from "../../components";
+import { AddContactFilterCenter, Layout, Modal, Table } from "../../components";
 import { sections } from "../../config";
 import {
   CenterActivityType,
   CenterContact,
   CenterNature,
   Languages,
+  OrderFilterGroup,
   useDeleteCenterMutation,
   useEditCenterMutation,
+  useGetCenterGroupsQuery,
   useGetCenterQuery,
   useSetActiveCenterMutation,
 } from "../../generated/graphql";
@@ -43,6 +45,12 @@ const EditCenter: NextPage = () => {
   const [deleteCenterMutation] = useDeleteCenterMutation({
     variables: {
       deleteCenterId: router.query.id as string,
+    },
+  });
+
+  const { data: dataGroups } = useGetCenterGroupsQuery({
+    variables: {
+      getCenterId: router.query.id as string,
     },
   });
 
@@ -184,6 +192,15 @@ const EditCenter: NextPage = () => {
 
   const [openAlertBad, setOpenAlertBad] = useState<boolean>(false);
   const [openAlertGood, setOpenAlertGood] = useState<boolean>(false);
+
+  const [showFolder4, setShowFolder4] = useState<boolean>(true);
+  const [order, setOrder] = useState<{
+    key: OrderFilterGroup;
+    direction: number;
+  }>({
+    key: OrderFilterGroup.IdGroup,
+    direction: 1,
+  });
 
   //update hooks with data
   useEffect(() => {
@@ -405,6 +422,116 @@ const EditCenter: NextPage = () => {
               disabled={!changes}
             />
           </SubHeaderDiv>
+        }
+        children2={
+          <BodyDiv>
+            <GateFolder>
+              <GateFolderButton onClick={() => setShowFolder4(!showFolder4)}>
+                <GateFolderArrow name="direction" open={showFolder4} />
+              </GateFolderButton>
+              <GateFolderTitle>
+                <styles.BoldP4>{t("pages.edit-teacher.groups")}</styles.BoldP4>
+              </GateFolderTitle>
+            </GateFolder>
+            {showFolder4 && (
+              <Table
+                inactiveIndexes={[]}
+                data={dataGroups?.getCenter.center.groups || []}
+                order={order}
+                onSetOrder={(order) => {
+                  setOrder(
+                    order as { key: OrderFilterGroup; direction: number }
+                  );
+                }}
+                columns={[
+                  {
+                    label: t("components.table.id"),
+                    key: OrderFilterGroup.IdGroup,
+                    content: (item) => <div>{item.id_group}</div>,
+                  },
+                  {
+                    label: t("pages.edit-student.group-name"),
+                    key: OrderFilterGroup.IdGroup,
+                    content: (item) => <div>{item.name}</div>,
+                  },
+                  {
+                    label: t("components.table.start-time"),
+                    key: OrderFilterGroup.Start,
+                    content: (item) => (
+                      <div>
+                        {item.timetable?.every((elem) => elem.start !== "") &&
+                          item.timetable?.map((elem) => elem.start).join(", ")}
+                        {(item.timetable?.every((elem) => elem.start == "") ||
+                          item.timetable === undefined ||
+                          item.timetable?.length === 0) &&
+                          "-"}
+                      </div>
+                    ),
+                  },
+                  {
+                    label: t("components.table.end-time"),
+                    key: OrderFilterGroup.End,
+                    content: (item) => (
+                      <div>
+                        {item.timetable?.every((elem) => elem.end !== "") &&
+                          item.timetable?.map((elem) => elem.end).join(", ")}
+                        {(item.timetable?.every((elem) => elem.start == "") ||
+                          item.timetable === undefined ||
+                          item.timetable?.length === 0) &&
+                          "-"}
+                      </div>
+                    ),
+                  },
+                  {
+                    label: t("components.table.days"),
+                    key: OrderFilterGroup.IdDay,
+                    content: (item) => (
+                      <div>
+                        {item.timetable
+                          ?.map((elem) =>
+                            t(
+                              `components.table.time-table.${elem.day.toLowerCase()}`
+                            )
+                          )
+                          .join(" - ")}
+                        {(item.timetable === undefined ||
+                          item.timetable?.length === 0) &&
+                          "-"}
+                      </div>
+                    ),
+                  },
+                  {
+                    label: t("pages.edit-student.group-course"),
+                    key: OrderFilterGroup.Course,
+                    content: (item) =>
+                      (item.course.EPO.length > 0 ||
+                        item.course.ESO.length > 0) && (
+                        <>
+                          <styles.P4>
+                            {t("pages.edit-group.course")}
+                            {item.course.ESO &&
+                              item.course.EPO &&
+                              t(
+                                `general.courses.${
+                                  [...item.course.EPO].sort((a, b) =>
+                                    a.localeCompare(b)
+                                  )[0]
+                                }`
+                              ) +
+                                t("general.to") +
+                                t(
+                                  `general.courses.${[...item.course.ESO]
+                                    .sort((a, b) => a.localeCompare(b))
+                                    .at(-1)}`
+                                )}
+                          </styles.P4>
+                        </>
+                      ),
+                  },
+                ]}
+              />
+            )}
+          </BodyDiv>
         }
       >
         {data && (

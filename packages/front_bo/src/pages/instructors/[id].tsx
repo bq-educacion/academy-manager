@@ -147,12 +147,9 @@ const EditInstructor: NextPage = () => {
   const [vehicle, setVehicle] = useState<TypeVehicleInstructor | undefined>(
     data?.getInstructor.vehicle || undefined
   );
-  const [geographicalAvailability, setGeographicalAvailability] =
-    useState<Region>(
-      (data?.getInstructor.geographicalAvailability.at(0) as Region) || [
-        Region.Madrid,
-      ]
-    );
+  const [geographicalAvailability, setGeographicalAvailability] = useState<
+    Region[]
+  >(data?.getInstructor.geographicalAvailability || [Region.Madrid]);
   const [areas, setAreas] = useState<string[]>(data?.getInstructor.areas || []);
   const [loadingWithOffset, setloadingWithOffset] = useState<boolean>(false);
   const [modalDeleteGroup, setModalDeleteGroup] = useState<boolean>(false);
@@ -180,7 +177,7 @@ const EditInstructor: NextPage = () => {
         notes,
         areas,
         availability: timeTable,
-        geographicalAvailability: [geographicalAvailability],
+        geographicalAvailability: geographicalAvailability,
         previousExperience: experience,
         knowledge,
         languages,
@@ -876,16 +873,16 @@ const EditInstructor: NextPage = () => {
                           key: region,
                           label: region,
                         }))}
-                        selected={geographicalAvailability}
+                        selected={geographicalAvailability.at(0)}
                         setSelected={(region) => {
-                          setGeographicalAvailability(region as Region);
+                          setGeographicalAvailability([region as Region]);
                         }}
                         width="22.031vw"
                       />
                     </FillIn>
                   </BodyContent>
                   <AddAreasEditTeacher
-                    Region={geographicalAvailability}
+                    Region={geographicalAvailability.at(0) || Region.Andalucia}
                     areas={areas}
                     setAreas={setAreas}
                   />

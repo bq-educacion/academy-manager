@@ -361,6 +361,20 @@
     }
   },
   "pages": {
+    "dashboard": {
+      "sub-header-morning": "Buenos días, ",
+      "sub-header-afternoon": "Buenas tardes, ",
+      "sub-header-evening": "Buenas noches, ",
+      "sub-header2": "Resumen general",
+      "centers": "Centros",
+      "groups": "Grupos",
+      "students": "Alumnos",
+      "instructors": "Monitores",
+      "hover-centers": "Total de centros activos",
+      "hover-groups": "Total de grupos activos",
+      "hover-students": "Total de alumnos activos",
+      "hover-instructors": "Total de monitores activos"
+    },
     "edit-teacher": {
       "students": "Alumnos",
       "delete-modal": {
