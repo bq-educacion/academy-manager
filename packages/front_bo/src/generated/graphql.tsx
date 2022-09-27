@@ -886,7 +886,7 @@ export type GetGroupQueryVariables = Exact<{
 }>;
 
 
-export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', id: string, id_group: any, name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
+export type GetGroupQuery = { __typename?: 'Query', getGroup: { __typename?: 'GroupInfo', totalStudents: any, group: { __typename?: 'Group', id: string, id_group: any, name: string, modality: GroupModality, type: GroupType, notes?: string | null, createdAt: string, students: Array<{ __typename?: 'Student', name: string, course: string, id: string }>, course: { __typename?: 'Course', EPO: Array<string>, ESO: Array<string> }, center?: { __typename?: 'Center', id: string, name: string } | null, instructors: Array<{ __typename?: 'Instructor', name: string, id: string }>, timetable: Array<{ __typename?: 'Timetable', id_day: any, day: Days, start: string, end: string }> } } };
 
 export type GetInstructorQueryVariables = Exact<{
   getInstructorId: Scalars['String'];
@@ -1732,6 +1732,11 @@ export const GetGroupDocument = gql`
     group {
       id
       id_group
+      students {
+        name
+        course
+        id
+      }
       course {
         EPO
         ESO

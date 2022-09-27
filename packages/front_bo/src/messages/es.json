@@ -376,6 +376,7 @@
       "hover-instructors": "Total de monitores activos"
     },
     "edit-teacher": {
+      "students": "Alumnos",
       "delete-modal": {
         "title": "Eliminar monitor",
         "text": "Eliminando al monitor se borrará toda su información de la base de datos del back office. Estos datos no son recuperables una vez eliminados."
@@ -471,6 +472,8 @@
       "group-course": "Cursos"
     },
     "edit-group": {
+      "student-name": "Nommbre del alumno",
+      "student-course": "Curso",
       "error-top": "Este grupo no tiene monitores",
       "delete": "Eliminar grupo",
       "info": "Información del grupo",

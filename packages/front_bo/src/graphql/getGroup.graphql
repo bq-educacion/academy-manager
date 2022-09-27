@@ -3,6 +3,11 @@ query GetGroup($getGroupId: String!) {
     group {
       id
       id_group
+      students {
+        name
+        course
+        id
+      }
       course {
         EPO
         ESO
