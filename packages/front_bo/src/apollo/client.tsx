@@ -85,6 +85,11 @@ export function createApolloClient(
             console.error(
               `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
             );
+            if (message === "401, Not authorized") {
+              if (typeof window !== "undefined") {
+                window.location.href = "/login";
+              }
+            }
           });
         }
         if (networkError) {
