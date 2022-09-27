@@ -157,6 +157,15 @@ export type CreateStudentInput = {
   signedMandate?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type Dashboard = {
+  __typename?: 'Dashboard';
+  activeCenters: Scalars['Number'];
+  activeInstructors: Scalars['Number'];
+  activeStudents: Scalars['Number'];
+  groups: Scalars['Number'];
+  userName: Scalars['String'];
+};
+
 export enum Days {
   Friday = 'FRIDAY',
   Monday = 'MONDAY',
@@ -570,6 +579,7 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: 'Query';
   checkCorporateEmail: Scalars['String'];
+  dashboard: Dashboard;
   getArea: Area;
   getAreas: Array<Area>;
   getCenter: CenterInfo;
@@ -775,6 +785,11 @@ export type CreateAreaMutationVariables = Exact<{
 
 
 export type CreateAreaMutation = { __typename?: 'Mutation', createArea: { __typename?: 'Area', id: string, name: string, region: Region } };
+
+export type DashboardQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DashboardQuery = { __typename?: 'Query', dashboard: { __typename?: 'Dashboard', userName: string, activeCenters: any, groups: any, activeInstructors: any, activeStudents: any } };
 
 export type DeleteAreaMutationVariables = Exact<{
   deleteAreaId: Scalars['String'];
@@ -1132,6 +1147,44 @@ export function useCreateAreaMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateAreaMutationHookResult = ReturnType<typeof useCreateAreaMutation>;
 export type CreateAreaMutationResult = Apollo.MutationResult<CreateAreaMutation>;
 export type CreateAreaMutationOptions = Apollo.BaseMutationOptions<CreateAreaMutation, CreateAreaMutationVariables>;
+export const DashboardDocument = gql`
+    query Dashboard {
+  dashboard {
+    userName
+    activeCenters
+    groups
+    activeInstructors
+    activeStudents
+  }
+}
+    `;
+
+/**
+ * __useDashboardQuery__
+ *
+ * To run a query within a React component, call `useDashboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDashboardQuery(baseOptions?: Apollo.QueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, options);
+      }
+export function useDashboardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, options);
+        }
+export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
+export type DashboardLazyQueryHookResult = ReturnType<typeof useDashboardLazyQuery>;
+export type DashboardQueryResult = Apollo.QueryResult<DashboardQuery, DashboardQueryVariables>;
 export const DeleteAreaDocument = gql`
     mutation DeleteArea($deleteAreaId: String!) {
   deleteArea(id: $deleteAreaId) {

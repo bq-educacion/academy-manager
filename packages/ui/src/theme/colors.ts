@@ -85,6 +85,8 @@ const gradient = {
   rainbow:
     "linear-gradient(to right, #44b8af, #f6a001 33%, #e4002b 67%, #6d2077)",
 
+  blueYellow: "linear-gradient(to right, #44b8af, #f6a001)",
+
   pink100: "linear-gradient(266deg, #56195e, #bf0226)",
   pink80: "linear-gradient(266deg, #6d2077, #e4002b)",
   pink60: "linear-gradient(266deg, #8a4d92, #ff1842)",

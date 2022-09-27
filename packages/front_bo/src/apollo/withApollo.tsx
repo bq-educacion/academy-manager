@@ -6,7 +6,6 @@ import {
 import { NextApiRequest, NextPage } from "next";
 import React from "react";
 import { createApolloClient } from "./client";
-import redirect from "../lib/redirect";
 import cookie from "cookie";
 import { GetUserDocument } from "../generated/graphql";
 
@@ -140,17 +139,13 @@ export default function withApollo(
 
       try {
         let user = undefined;
+
         if (requiresAccess) {
           const { data } = await apolloClient.query({
             query: GetUserDocument,
             errorPolicy: "all",
           });
           user = data.getUser;
-        }
-        if (requiresAccess && !user) {
-          redirect(ctx, `/login?page=${encodeURIComponent(ctx.asPath)}`);
-        } else if (ctx.pathname === "/login" && user) {
-          redirect(ctx, "/");
         }
 
         return {
