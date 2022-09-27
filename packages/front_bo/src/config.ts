@@ -57,6 +57,9 @@ export const Platforms: DropDownItem[] = [
   { label: "general.platforms.tinker", key: "tinker" },
 ];
 
+export const DefaultGoogleAvatar =
+  "ACNPEu9xUzGtoWl_5OWmcslkiCLwp1KhiEZQ6Wjm5Grm=s96-c";
+
 export const schedule: string[] = [
   "8:00 a 8:59",
   "9:00 a 9:59",

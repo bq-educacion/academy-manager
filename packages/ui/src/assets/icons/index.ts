@@ -16,6 +16,7 @@ import Direction from "./direction.svg";
 import CrossBad from "./bad-cross.svg";
 import Alert from "./alert.svg";
 import External from "./external.svg";
+import Interrogation from "./round-questionmark.svg";
 
 export {
   ClosePannel,
@@ -36,4 +37,5 @@ export {
   CrossBad,
   Alert,
   External,
+  Interrogation,
 };
