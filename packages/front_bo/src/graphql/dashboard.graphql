@@ -1,0 +1,9 @@
+query Dashboard {
+  dashboard {
+    userName
+    activeCenters
+    groups
+    activeInstructors
+    activeStudents
+  }
+}
