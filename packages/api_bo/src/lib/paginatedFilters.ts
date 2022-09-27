@@ -5,11 +5,100 @@ import { InstructorModel } from "../models/InstructorModel.ts";
 import { StudentModel } from "../models/StudentModel.ts";
 import {
   InputMaybe,
+  OrderFilterCenter,
+  OrderFilterGroup,
+  OrderFilterInstructor,
+  OrderFilterStudent,
   PaginatedCenters,
   PaginatedGroups,
   PaginatedInstructors,
   PaginatedStudents,
 } from "../types.ts";
+
+export const sortFilter = (
+  filter:
+    | InputMaybe<OrderFilterCenter>
+    | InputMaybe<OrderFilterStudent>
+    | InputMaybe<OrderFilterGroup>
+    | InputMaybe<OrderFilterInstructor>
+    | undefined,
+  order: InputMaybe<number> | undefined,
+  type: "centers" | "students" | "groups" | "instructors",
+  defaultField: string,
+) => {
+  let sortFilter = {};
+
+  let OrderFilter;
+  switch (type) {
+    case "centers":
+      OrderFilter = {
+        name: "name",
+        nature: "nature",
+        languages: "languages",
+        city: "city",
+        type: "type",
+      };
+      break;
+    case "students":
+      OrderFilter = {
+        name: "name",
+        course: "course",
+        state: "state",
+        center: "centersName.name",
+        group: "groupsName.name",
+      };
+      break;
+    case "groups":
+      OrderFilter = {
+        id_group: "id_group",
+        modality: "modality",
+        course: "course",
+        instructors: "instructorsName.name",
+        center: "centersName.name",
+        id_day: "timetable.id_day",
+        start: "timetable.start",
+        end: "timetable.end",
+      };
+      break;
+    case "instructors":
+      OrderFilter = {
+        name: "name",
+        center: "centersName.name",
+        areas: "areas",
+        id_day: "availability.id_day",
+        state: "state",
+        id_group: "groupsId.id_group",
+        vehicle: "vehicle",
+        languages: "languages",
+        summerAvailability: "summerAvailability",
+      };
+      break;
+  }
+
+  if (filter && order) {
+    if (order !== 1 && order !== -1) {
+      throw new Error("400, wrong order (1 or -1)");
+    }
+    if (OrderFilter) {
+      sortFilter = {
+        [
+          OrderFilter[filter] as
+            | OrderFilterCenter
+            | OrderFilterStudent
+            | OrderFilterGroup
+            | OrderFilterInstructor
+        ]: order,
+      };
+    }
+  } else if (filter && !order) {
+    throw new Error("400, order is required");
+  } else if (!filter && order) {
+    throw new Error("400, orderFilter is required");
+  } else {
+    sortFilter = { [defaultField]: 1 };
+  }
+  return sortFilter;
+};
 
 export const paginatedFilters = async (
   DBModel: Collection<

@@ -50,6 +50,22 @@ export const typeDefs = gql`
     pageSize: Int
   }
 
+  input AdvancedGetCentersInput{
+    searchText: advancedSearchTextInput
+    orderFilter: OrderFilterCenter
+    order: Number
+    page: Int
+    pageSize: Int
+  }
+
+  input advancedSearchTextInput{
+    name:[String!]
+    languages:[Languages!]
+    city:[String!]
+    type:[CenterActivityType!]
+    nature:[CenterNature!]
+  }
+
   input CreateCenterInput {
     name: String!
     address: String!
@@ -109,6 +125,11 @@ export const typeDefs = gql`
     getCenters(
       centers: GetCentersInput!
     ): PaginatedCenters! @auth
+
+    advancedGetCenters(
+      centers: AdvancedGetCentersInput!
+    ): PaginatedCenters! @auth
+
     getCenter(id: String!): CenterInfo! @auth
   }
 

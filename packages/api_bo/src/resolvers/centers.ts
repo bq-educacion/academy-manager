@@ -5,6 +5,7 @@ import {
   MutationDeleteCenterArgs,
   MutationSetActiveCenterArgs,
   PaginatedCenters,
+  QueryAdvancedGetCentersArgs,
   QueryGetCenterArgs,
   QueryGetCentersArgs,
 } from "../types.ts";
@@ -23,7 +24,11 @@ import { studentCollection } from "../models/StudentModel.ts";
 import { instructorCollection } from "../models/InstructorModel.ts";
 import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
 import { getUniqueItems } from "../lib/getUniqueItems.ts";
-import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
+import {
+  advancedMongoSearchRegex,
+  mongoSearchRegex,
+} from "../lib/mongoSearchRegex.ts";
+import { sortFilter } from "../lib/paginatedFilters.ts";
 
 export const centers = {
   Center: {
@@ -64,34 +69,87 @@ export const centers = {
         ];
       }
 
-      let sortFilter = {};
-      const OrderFilter = {
-        name: "name",
-        nature: "nature",
-        languages: "languages",
-        city: "city",
-        type: "type",
-      };
-      if (args.centers.orderFilter && args.centers.order) {
-        if (args.centers.order !== 1 && args.centers.order !== -1) {
-          throw new Error("400, wrong order (1 or -1)");
-        }
-        sortFilter = {
-          [OrderFilter[args.centers.orderFilter]]: args.centers.order,
-        };
-      } else if (args.centers.orderFilter && !args.centers.order) {
-        throw new Error("400, order is required");
-      } else if (!args.centers.orderFilter && args.centers.order) {
-        throw new Error("400, orderFilter is required");
-      } else {
-        sortFilter = { name: 1 };
-      }
+      const sort = sortFilter(
+        args.centers.orderFilter,
+        args.centers.order,
+        "centers",
+        "name",
+      );
 
       return paginatedFilters(
         centerCollection(ctx.db),
         filter,
         "centers",
-        sortFilter,
+        sort,
+        args.centers.page,
+        args.centers.pageSize,
+      ) as Promise<PaginatedCenters>;
+    },
+
+    advancedGetCenters: (
+      _parent: unknown,
+      args: QueryAdvancedGetCentersArgs,
+      ctx: Context,
+    ): Promise<PaginatedCenters> => {
+      const filter: Filter<PaginatedCenters> = { $or: [{}] };
+      if (args.centers.searchText) {
+        const data = [];
+        if (args.centers.searchText.name) {
+          data.push(
+            advancedMongoSearchRegex("name", args.centers.searchText.name),
+          );
+        }
+        if (args.centers.searchText.languages) {
+          data.push(
+            advancedMongoSearchRegex(
+              "languages",
+              args.centers.searchText.languages,
+              true,
+            ),
+          );
+        }
+        if (args.centers.searchText.city) {
+          data.push(
+            advancedMongoSearchRegex(
+              "city",
+              args.centers.searchText.city,
+              true,
+            ),
+          );
+        }
+        if (args.centers.searchText.type) {
+          data.push(
+            advancedMongoSearchRegex(
+              "type",
+              args.centers.searchText.type,
+              true,
+            ),
+          );
+        }
+        if (args.centers.searchText.nature) {
+          data.push(
+            advancedMongoSearchRegex(
+              "nature",
+              args.centers.searchText.nature,
+              true,
+            ),
+          );
+        }
+        filter["$or"] = data;
+      }
+
+      const sort = sortFilter(
+        args.centers.orderFilter,
+        args.centers.order,
+        "centers",
+        "name",
+      );
+
+      return paginatedFilters(
+        centerCollection(ctx.db),
+        filter,
+        "centers",
+        sort,
         args.centers.page,
         args.centers.pageSize,
       ) as Promise<PaginatedCenters>;
