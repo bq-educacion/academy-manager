@@ -77,6 +77,25 @@ export const typeDefs = gql`
     pageSize: Int
   }
 
+  input AdvancedGetGroupsInput{
+    searchText: advancedSearchTextGroupInput
+    orderFilter: OrderFilterGroup
+    order: Number
+    page: Int
+    pageSize: Int
+  }
+  
+   input advancedSearchTextGroupInput{
+    id_group:[Number!]
+    center:[String!]
+    instructors:[String!]
+    start:[String!]
+    end:[String!]
+    day:[Days!]
+    course:[String!]
+    modality:[GroupModality!]
+  }
+
   input CreateGroupInput {
     name: String!
     modality: GroupModality!
@@ -115,6 +134,10 @@ export const typeDefs = gql`
   extend type Query {
     getGroups( 
       groups: GetGroupsInput!
+    ): PaginatedGroups! @auth
+
+    advancedGetGroups (
+      groups: AdvancedGetGroupsInput!
     ): PaginatedGroups! @auth
 
     getGroup(id: String!): GroupInfo! @auth
