@@ -35,6 +35,14 @@ export type AdvancedGetCentersInput = {
   searchText?: InputMaybe<AdvancedSearchTextInput>;
 };
 
+export type AdvancedGetGroupsInput = {
+  order?: InputMaybe<Scalars["Number"]>;
+  orderFilter?: InputMaybe<OrderFilterGroup>;
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+  searchText?: InputMaybe<AdvancedSearchTextGroupInput>;
+};
+
 export type Area = {
   __typename?: "Area";
   id: Scalars["ID"];
@@ -576,6 +584,7 @@ export type PaginatedStudents = {
 export type Query = {
   __typename?: "Query";
   advancedGetCenters: PaginatedCenters;
+  advancedGetGroups: PaginatedGroups;
   checkCorporateEmail: Scalars["String"];
   dashboard: Dashboard;
   getArea: Area;
@@ -593,6 +602,10 @@ export type Query = {
 
 export type QueryAdvancedGetCentersArgs = {
   centers: AdvancedGetCentersInput;
+};
+
+export type QueryAdvancedGetGroupsArgs = {
+  groups: AdvancedGetGroupsInput;
 };
 
 export type QueryCheckCorporateEmailArgs = {
@@ -722,6 +735,17 @@ export type User = {
   id: Scalars["ID"];
   name: Scalars["String"];
   picture: Scalars["String"];
+};
+
+export type AdvancedSearchTextGroupInput = {
+  center?: InputMaybe<Array<Scalars["String"]>>;
+  course?: InputMaybe<Array<Scalars["String"]>>;
+  day?: InputMaybe<Array<Days>>;
+  end?: InputMaybe<Array<Scalars["String"]>>;
+  id_group?: InputMaybe<Array<Scalars["Number"]>>;
+  instructors?: InputMaybe<Array<Scalars["String"]>>;
+  modality?: InputMaybe<Array<GroupModality>>;
+  start?: InputMaybe<Array<Scalars["String"]>>;
 };
 
 export type AdvancedSearchTextInput = {
@@ -866,6 +890,7 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   AdvancedGetCentersInput: AdvancedGetCentersInput;
+  AdvancedGetGroupsInput: AdvancedGetGroupsInput;
   Area: ResolverTypeWrapper<Area>;
   Availability: ResolverTypeWrapper<Availability>;
   AvailabilityInput: AvailabilityInput;
@@ -922,6 +947,7 @@ export type ResolversTypes = ResolversObject<{
   TimetableInput: TimetableInput;
   TypeVehicleInstructor: TypeVehicleInstructor;
   User: ResolverTypeWrapper<User>;
+  advancedSearchTextGroupInput: AdvancedSearchTextGroupInput;
   advancedSearchTextInput: AdvancedSearchTextInput;
   previousExperienceInstructor: PreviousExperienceInstructor;
   summerAvailabilityInstructor: SummerAvailabilityInstructor;
@@ -932,6 +958,7 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   AdvancedGetCentersInput: AdvancedGetCentersInput;
+  AdvancedGetGroupsInput: AdvancedGetGroupsInput;
   Area: Area;
   Availability: Availability;
   AvailabilityInput: AvailabilityInput;
@@ -975,6 +1002,7 @@ export type ResolversParentTypes = ResolversObject<{
   Timetable: Timetable;
   TimetableInput: TimetableInput;
   User: User;
+  advancedSearchTextGroupInput: AdvancedSearchTextGroupInput;
   advancedSearchTextInput: AdvancedSearchTextInput;
   trainingInstructor: TrainingInstructor;
   trainingInstructorInput: TrainingInstructorInput;
@@ -1431,6 +1459,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryAdvancedGetCentersArgs, "centers">
+  >;
+  advancedGetGroups?: Resolver<
+    ResolversTypes["PaginatedGroups"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryAdvancedGetGroupsArgs, "groups">
   >;
   checkCorporateEmail?: Resolver<
     ResolversTypes["String"],

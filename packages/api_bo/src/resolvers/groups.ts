@@ -9,11 +9,12 @@ import {
 import {
   MutationDeleteGroupArgs,
   PaginatedGroups,
+  QueryAdvancedGetGroupsArgs,
   QueryGetGroupArgs,
   QueryGetGroupsArgs,
 } from "../types.ts";
 import { Filter } from "mongo";
-import { paginatedFilters } from "../lib/paginatedFilters.ts";
+import { paginatedFilters, sortFilter } from "../lib/paginatedFilters.ts";
 import {
   Course,
   MutationCreateGroupArgs,
@@ -26,7 +27,11 @@ import { setIdDays } from "../lib/setIdDays.ts";
 import { checkNotNull } from "../lib/checkNotNull.ts";
 import { validHour } from "../lib/validHour.ts";
 import { setActiveToFalse } from "../lib/setActiveToFalse.ts";
-import { mongoSearchRegex } from "../lib/mongoSearchRegex.ts";
+import {
+  advancedMongoSearchRegex,
+  advancedMongoSearchRegexNumber,
+  mongoSearchRegex,
+} from "../lib/mongoSearchRegex.ts";
 
 export const groups = {
   Group: {
@@ -76,7 +81,7 @@ export const groups = {
       const filter: Filter<PaginatedGroups> = { $or: [{}] };
       if (args.groups.searchText) {
         filter["$or"] = [
-          { id_group: mongoSearchRegex(args.groups.searchText) },
+          { id_group: parseInt(args.groups.searchText) },
           { name: mongoSearchRegex(args.groups.searchText) },
           { type: mongoSearchRegex(args.groups.searchText) },
           { modality: mongoSearchRegex(args.groups.searchText) },
@@ -93,38 +98,118 @@ export const groups = {
         ];
       }
 
-      let sortFilter = {};
-      const OrderFilter = {
-        id_group: "id_group",
-        modality: "modality",
-        course: "course",
-        instructors: "instructorsName.name",
-        center: "centersName.name",
-        id_day: "timetable.id_day",
-        start: "timetable.start",
-        end: "timetable.end",
-      };
-
-      if (args.groups.orderFilter && args.groups.order) {
-        if (args.groups.order !== 1 && args.groups.order !== -1) {
-          throw new Error("400, wrong order (1 or -1)");
-        }
-        sortFilter = {
-          [OrderFilter[args.groups.orderFilter]]: args.groups.order,
-        };
-      } else if (args.groups.orderFilter && !args.groups.order) {
-        throw new Error("400, order is required");
-      } else if (!args.groups.orderFilter && args.groups.order) {
-        throw new Error("400, orderFilter is required");
-      } else {
-        sortFilter = { id_group: 1 };
-      }
+      const sort = sortFilter(
+        args.groups.orderFilter,
+        args.groups.order,
+        "groups",
+        "id_group",
+      );
 
       return paginatedFilters(
         groupCollection(ctx.db),
         filter,
         "groups",
-        sortFilter,
+        sort,
+        args.groups.page,
+        args.groups.pageSize,
+      ) as Promise<PaginatedGroups>;
+    },
+
+    advancedGetGroups: (
+      _parent: unknown,
+      args: QueryAdvancedGetGroupsArgs,
+      ctx: Context,
+    ): Promise<PaginatedGroups> => {
+      const filter: Filter<PaginatedGroups> = { $or: [{}] };
+      if (args.groups.searchText) {
+        const data = [];
+        if (args.groups.searchText.id_group) {
+          data.push(
+            advancedMongoSearchRegexNumber(
+              "id_group",
+              args.groups.searchText.id_group,
+            ),
+          );
+        }
+        if (args.groups.searchText.center) {
+          data.push(
+            advancedMongoSearchRegex(
+              "centersName.name",
+              args.groups.searchText.center,
+            ),
+          );
+        }
+        if (args.groups.searchText.instructors) {
+          data.push(
+            advancedMongoSearchRegex(
+              "instructorsName.name",
+              args.groups.searchText.instructors,
+            ),
+          );
+        }
+        if (args.groups.searchText.start) {
+          data.push(
+            advancedMongoSearchRegex(
+              "timetable.start",
+              args.groups.searchText.start,
+            ),
+          );
+        }
+        if (args.groups.searchText.end) {
+          data.push(
+            advancedMongoSearchRegex(
+              "timetable.end",
+              args.groups.searchText.end,
+            ),
+          );
+        }
+        if (args.groups.searchText.day) {
+          data.push(
+            advancedMongoSearchRegex(
+              "timetable.day",
+              args.groups.searchText.day,
+              true,
+            ),
+          );
+        }
+        if (args.groups.searchText.course) {
+          data.push(
+            advancedMongoSearchRegex(
+              "course.ESO",
+              args.groups.searchText.course,
+            ),
+          );
+          data.push(
+            advancedMongoSearchRegex(
+              "course.EPO",
+              args.groups.searchText.course,
+            ),
+          );
+        }
+        if (args.groups.searchText.modality) {
+          data.push(
+            advancedMongoSearchRegex(
+              "modality",
+              args.groups.searchText.modality,
+              true,
+            ),
+          );
+        }
+        filter["$or"] = data;
+      }
+
+      const sort = sortFilter(
+        args.groups.orderFilter,
+        args.groups.order,
+        "groups",
+        "id_group",
+      );
+
+      return paginatedFilters(
+        groupCollection(ctx.db),
+        filter,
+        "groups",
+        sort,
         args.groups.page,
         args.groups.pageSize,
       ) as Promise<PaginatedGroups>;

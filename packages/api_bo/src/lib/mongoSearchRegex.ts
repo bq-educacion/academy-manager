@@ -13,3 +13,12 @@ export const advancedMongoSearchRegex = (
     ),
   }
 );
+
+export const advancedMongoSearchRegexNumber = (
+  field: string,
+  data: number[],
+) => (
+  {
+    [field]: { $in: data },
+  }
+);

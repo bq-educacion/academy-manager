@@ -18,16 +18,15 @@ import {
 export const sortFilter = (
   filter:
     | InputMaybe<OrderFilterCenter>
-    | InputMaybe<OrderFilterStudent>
     | InputMaybe<OrderFilterGroup>
     | InputMaybe<OrderFilterInstructor>
+    | InputMaybe<OrderFilterStudent>
     | undefined,
   order: InputMaybe<number> | undefined,
   type: "centers" | "students" | "groups" | "instructors",
   defaultField: string,
 ) => {
   let sortFilter = {};
-
   let OrderFilter;
   switch (type) {
     case "centers":
@@ -43,7 +42,7 @@ export const sortFilter = (
       OrderFilter = {
         name: "name",
         course: "course",
-        state: "state",
+        state: "enrolled",
         center: "centersName.name",
         group: "groupsName.name",
       };
@@ -66,7 +65,7 @@ export const sortFilter = (
         center: "centersName.name",
         areas: "areas",
         id_day: "availability.id_day",
-        state: "state",
+        state: "enrolled",
         id_group: "groupsId.id_group",
         vehicle: "vehicle",
         languages: "languages",
@@ -84,9 +83,9 @@ export const sortFilter = (
         [
           OrderFilter[filter] as
             | OrderFilterCenter
-            | OrderFilterStudent
             | OrderFilterGroup
             | OrderFilterInstructor
+            | OrderFilterStudent
         ]: order,
       };
     }
